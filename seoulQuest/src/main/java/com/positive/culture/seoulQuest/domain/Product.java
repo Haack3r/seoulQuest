@@ -57,5 +57,25 @@ public class Product {
 
     public void changeDel(boolean delFlag){this.delFlag =delFlag;}
 
+    //------------------------------------------------------
+    //이미지 정보 추가
+    public void addImage(ProductImage productImage){
+        productImage.setOrd(this.imageList.size());
+        imageList.add(productImage);
+    }
+
+    //이미지 파일 이름 추가
+    public void addImageString(String fileName){
+        ProductImage productImage = ProductImage.builder()
+                .fileName(fileName)
+                .build();
+        addImage(productImage);
+    }
+
+    //productImage 리스트를 삭제
+    public void clearLsit(){
+        this.imageList.clear();
+    }
+
 
 }
