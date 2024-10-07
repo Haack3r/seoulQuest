@@ -11,7 +11,7 @@ import lombok.*;
 public class ProductImage {
     private String fileName;
     private int ord;
-    private String category;
+    private String category_name;
 
     public void setOrd(int ord){
         this.ord= ord;
