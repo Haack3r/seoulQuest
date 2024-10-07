@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Builder
 @AllArgsConstructor
@@ -16,24 +19,48 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
+    private String memberId;
+
     private String name;
     private String email;
     private String nickName;
     private String password;
     private String phoneNumber;
-    private String address;
 
     @Embedded
     private Address address;
 
-    @Embeddable
-    @AllArgsConstructor
-    @NoArgsConstructor
-    private static class Address {
-        private String street;
-        private String city;
-        private String state;
-        private String zipCode;
+    @ElementCollection
+    private List<MemberRole> memberRoleList = new ArrayList<>();
+
+    public void addRole(MemberRole memberRole) {
+        memberRoleList.add(memberRole);
+    }
+
+    public void deleteRole(MemberRole memberRole) {
+        memberRoleList.remove(memberRole);
+    }
+
+    public void changeEmail(String email) {
+        this.email = email;
+    }
+
+    public void changeNick(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void changePw(String password) {
+        this.password = password;
+    }
+
+    public void changePhone(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void changeAddress(Address address) {
+        this.address = address;
     }
 
 }
