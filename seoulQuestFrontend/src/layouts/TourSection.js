@@ -29,7 +29,7 @@ const initState = {
 }
 const TourSection = () => {
   const { exceptionHandle } = useCustomLogin()
-  const { page, size, refresh, moveToList, moveToRead } = useCustomMove()
+  const { page, size, refresh, moveToList, moveToReadProductFromMain } = useCustomMove()
   const [serverData, setServerData] = useState(initState)
 
   //for FetchingModal
@@ -56,7 +56,7 @@ const TourSection = () => {
             {serverData.dtoList.map(product => (
               <Card key={product.pno}
               className='bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden'
-              onClick={() => moveToRead(product.pno)}>
+              onClick={() => moveToReadProductFromMain(product.pno)}>
                 <div className="relative overflow-hidden">
                   <img src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`} alt={product.pname} className="object-cover w-full h-64 transition-transform duration-300 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">

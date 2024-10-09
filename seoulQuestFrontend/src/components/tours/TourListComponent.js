@@ -57,7 +57,7 @@ const TourListComponent = () => {
             <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="mb-12 text-4xl font-bold text-center text-gray-900 tracking-wide">Curated Cultural Experiences</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {serverData.dtoList.map(product => (
               <Card key={product.pno}
               className='bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden'

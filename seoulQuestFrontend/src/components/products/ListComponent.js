@@ -55,35 +55,32 @@ const ListComponent = () => {
         <div className='border-2 border-blue-100 mt-10 mr-2 ml-2'>
             {/* 로딩중 모달 */}
             {fetching ? <FetchingModal /> : <></>}
-            <section className="py-24 bg-white">
+            <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-12 text-4xl font-bold text-center text-gray-900 tracking-wide">Curated Cultural Experiences</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <h2 className="mb-12 text-4xl font-bold text-center text-gray-900 tracking-wide">Artisan Treasures</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {serverData.dtoList.map(product => (
               <Card key={product.pno}
-              className='bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden'
-              onClick={() => moveToRead(product.pno)}>
+              onClick={() => moveToRead(product.pno)}
+               className="overflow-hidden transition-all duration-300 hover:shadow-xl border-0 bg-white group">
                 <div className="relative overflow-hidden">
-                  <img src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`} alt={product.pname} className="object-cover w-full h-64 transition-transform duration-300 group-hover:scale-110" />
+                  <img src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`} alt={product.pname} className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <Button className="bg-white text-gray-900 hover:bg-gray-100">Learn More</Button>
+                    <div className="text-center">
+                      <CardTitle className="text-lg font-semibold tracking-wide text-white">{product.pname}</CardTitle>
+                      <CardDescription className="font-medium text-rose-400">{product.price}</CardDescription>
+                      <Button variant="outline" className="mt-2 text-white hover:text-gray-900 hover:bg-white font-medium tracking-wide border-white">
+                        Add to Collection
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                <CardHeader className="text-center">
-                  <CardTitle className="text-xl font-semibold tracking-wide text-gray-900">{product.pname}</CardTitle>
-                  <CardDescription className="font-medium text-rose-600">{product.price} per person</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium tracking-wide">Reserve Now</Button>
-                </CardContent>
               </Card>
             ))}
           </div>
         </div>
       </section>
             
-            
-
             {/* page list */}
             <PageComponent serverData={serverData} movePage={moveToList}></PageComponent>
         </div>

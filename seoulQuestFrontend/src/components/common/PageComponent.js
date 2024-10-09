@@ -1,14 +1,16 @@
 import React from 'react'
+import { Pagination } from 'antd';
 
 const PageComponent = ({ serverData, movePage }) => {
     // listComponent에서 자식으로 사용할건데 props로 전달되면 그것을 여기서 사용함
     // console.log('Page Component: serverData', serverData, movePage)
   return (
     <div className='m-6 flex justify-center'>
+    
         {serverData.prev ?
         <div>
             <div className='m-2 p-2 w-16 text-center font-bold text-gray-900' 
-            onClick={() => movePage({page: serverData.prevPage})}>이전</div>
+            onClick={() => movePage({page: serverData.prevPage})}>Prev</div>
         </div> : <></>}
 
         {serverData.pageNumList.map(pageNum =>
@@ -23,7 +25,7 @@ const PageComponent = ({ serverData, movePage }) => {
         {serverData.next?
         <div className='m-2 p-2 w-16 text-center font-bold text-gray-900'
             onClick={() => movePage({page: serverData.nextPage})}>
-        다음
+        Next
         </div> : <></>}
     </div>
   )

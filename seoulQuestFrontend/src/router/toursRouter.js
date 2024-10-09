@@ -5,7 +5,7 @@ const toursRouter = () => {
     
   const Loading = <div>Loading...</div>
   const ToursList = lazy(() => import("../pages/tours/TourListPage"))
-//   const ToursRead = lazy(() => import("../pages/products/ReadPage"))
+  const ToursRead = lazy(() => import("../pages/tours/TourReadPage"))
 
   return [
     {
@@ -15,6 +15,10 @@ const toursRouter = () => {
     {
       path: "",
       element: <Navigate replace to="/tours/list" />
+    },
+    {
+      path: "read/:pno",
+      element: <Suspense fallback={Loading}><ToursRead /></Suspense>
     },
     // {
     //   path: "read/:pno",
