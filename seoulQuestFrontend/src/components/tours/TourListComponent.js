@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/Card";
@@ -31,28 +30,28 @@ const initState = {
     current: 0
 }
 
-const ListComponent = () => {
+const TourListComponent = () => {
+  
+  const { exceptionHandle } = useCustomLogin()
+  const { page, size, refresh, moveToList, moveToRead } = useCustomMove()
+  const [serverData, setServerData] = useState(initState)
 
-    const { exceptionHandle } = useCustomLogin()
-    const { page, size, refresh, moveToList, moveToRead } = useCustomMove()
-    const [serverData, setServerData] = useState(initState)
-
-    //for FetchingModal
-    const [fetching, setFetching] = useState(false)
+  //for FetchingModal
+  const [fetching, setFetching] = useState(false)
 
 
-    useEffect(() => {
-        setFetching(true)
+  useEffect(() => {
+      setFetching(true)
 
-        getList({ page, size }).then(data => {
-            console.log(data)
-            setServerData(data)
-            setFetching(false)
-        }).catch(err => exceptionHandle(err))
-    }, [page, size, refresh])
+      getList({ page, size }).then(data => {
+          console.log(data)
+          setServerData(data)
+          setFetching(false)
+      }).catch(err => exceptionHandle(err))
+  }, [page, size, refresh])
 
-    return (
-        <div className='border-2 border-blue-100 mt-10 mr-2 ml-2'>
+  return (
+    <div className='border-2 border-blue-100 mt-10 mr-2 ml-2'>
             {/* 로딩중 모달 */}
             {fetching ? <FetchingModal /> : <></>}
             <section className="py-24 bg-white">
@@ -87,7 +86,7 @@ const ListComponent = () => {
             {/* page list */}
             <PageComponent serverData={serverData} movePage={moveToList}></PageComponent>
         </div>
-    )
+  )
 }
 
-export default ListComponent
+export default TourListComponent

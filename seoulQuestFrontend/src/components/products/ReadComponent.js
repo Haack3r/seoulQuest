@@ -53,6 +53,7 @@ const ReadComponent = ({ pno }) => {
                 {fetching ? <FetchingModal /> : null}
 
                 {/* Product Images */}
+                
                 <div className='w-1/2 justify-center flex flex-col m-auto items-center'>
                     {product.uploadFileNames.map((i, idx) => (
                         <img

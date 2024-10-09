@@ -10,8 +10,8 @@ const BgElement = Element.BgElement;
 
 const MainImage = () => {
   return (
-    <div className="h-[50vh] bg-white font-sans">
-    <section className="pt-16 bg-gray-50">
+    <div className="h-[60vh] bg-white font-sans">
+    <section className="pt-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="w-full h-[50vh] rounded-lg overflow-hidden">
             <BannerAnim autoPlay style={{ height: '100%' }}>

@@ -25,10 +25,10 @@ const BasicMenu = () => {
       {/* Navigation links */}
       <nav className="flex-grow flex justify-center">
         <ul className="flex space-x-8">
-          <li><Link to="/" className="text-gray-600 hover:text-gray-900">Tours</Link></li>
-          <li><Link to={'/'} className="text-gray-600 hover:text-gray-900">Souvenirs</Link></li>
+          <li><Link to="/tours/" className="text-gray-600 hover:text-gray-900">Tours</Link></li>
+          <li><Link to='/products/' className="text-gray-600 hover:text-gray-900">Souvenirs</Link></li>
           <li><Link to="/about/" className="text-gray-600 hover:text-gray-900">About</Link></li>
-          <li><Link to={'/contact/'} className="text-gray-600 hover:text-gray-900">Contact</Link></li>
+          <li><Link to='/contact/' className="text-gray-600 hover:text-gray-900">Contact</Link></li>
         </ul>
       </nav>
 

@@ -5,20 +5,19 @@ import ListComponent from '../components/products/ListComponent'
 import MainImage from '../layouts/MainImage';
 import SeoulCultureQuest from './SeoulCultureQuest';
 import BasicMenu from '../components/menus/BasicMenu';
+import TourSection from '../layouts/TourSection';
+import ProductSection from '../layouts/ProductSection';
 
 const MainPage = () => {
     return (
-        <>
-        <BasicMenu />
-        <MainImage />
-            {/* <SeoulCultureQuest /> */}
-            
-            
-            </>
-    // <BasicLayout>
-    //   <MainImage />
-    // </BasicLayout>
-
+      <>
+    <BasicLayout>
+      <MainImage />
+      <ProductSection />
+      <TourSection />
+    </BasicLayout>
+    <SeoulCultureQuest />
+    </>
   );
 }
 
