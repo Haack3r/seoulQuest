@@ -9,8 +9,11 @@ import BasicMenu from '../components/menus/BasicMenu';
 const MainPage = () => {
     return (
         <>
-            <SeoulCultureQuest />
-            {/* <BasicMenu /> */}
+        <BasicMenu />
+        <MainImage />
+            {/* <SeoulCultureQuest /> */}
+            
+            
             </>
     // <BasicLayout>
     //   <MainImage />

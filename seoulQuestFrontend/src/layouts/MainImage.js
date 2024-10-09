@@ -1,47 +1,99 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import BannerAnim, { Element } from 'rc-banner-anim';
+import TweenOne from 'rc-tween-one';
+import 'rc-banner-anim/assets/index.css';
+import Button from '../components/ui/Button';
+import Input from '../components/ui/Input';
+import { SearchIcon } from 'lucide-react';
 
+const BgElement = Element.BgElement;
 
 const MainImage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-
   return (
-    <div className="bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <h1 className="text-2xl font-serif font-bold text-gray-900"></h1>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="pl-10 pr-4 py-2 rounded-full bg-gray-100 text-gray-900 placeholder-gray-500 border border-gray-300 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 outline-none"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+    <div className="h-[50vh] bg-white font-sans">
+    <section className="pt-16 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="w-full h-[50vh] rounded-lg overflow-hidden">
+            <BannerAnim autoPlay style={{ height: '100%' }}>
+            <Element prefixCls="banner-user-elem" key="0" style={{ height: '100%' }}>
+            <BgElement
+              key="bg"
+              className="bg "
+              style={{
+                background: '#364D79',
+              }}
             />
-            <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Image Section */}
-      <section className="relative h-[75vh] overflow-hidden"> {/* Changed to h-screen */}
-        <img
-          src="https://i.pinimg.com/564x/50/90/c2/5090c2983c4fd4dfdc4318a4f2d812b7.jpg" // Make sure this path is correct
-          alt="Hero image"
-          className="w-full h-full object-cover" // Cover the full section
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-4xl md:text-6xl font-serif text-white mb-4">Elevate Your Space</h2>
-            <p className="text-xl md:text-2xl text-white mb-8">Discover our curated collection of lifestyle essentials</p>
-            <Link to="/products" className="inline-block bg-white text-gray-900 hover:bg-gray-100 px-6 py-2 rounded transition duration-300">
-              Shop Now
-            </Link>
+            <TweenOne
+              animation={{ y: 30, opacity: 0, type: 'from', delay: 100 }}
+              className="relative w-full h-full"
+            >
+              <img
+                src="https://cdn.pixabay.com/photo/2020/12/14/19/40/palace-5831869_1280.jpg"
+                alt="Banner 1"
+                className="object-cover w-full h-full"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                <h1 className="text-5xl font-bold text-white tracking-wide text-center">
+                  Discover Seoul's Soul
+                </h1>
+              </div>
+            </TweenOne>
+            </Element>
+            <Element prefixCls="banner-user-elem" key="1" style={{ height: '100%' }}>
+            <BgElement
+              key="bg"
+              className="bg"
+              style={{
+                background: '#64CBCC',
+              }}
+            />
+            <TweenOne
+              animation={{ y: 30, opacity: 0, type: 'from', delay: 100 }}
+              className="relative w-full h-full"
+            >
+              <img
+                src="https://cdn.pixabay.com/photo/2015/05/02/00/57/aluminous-749358_1280.jpg"
+                alt="Banner 2"
+                className="object-cover w-full h-full"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                <h1 className="text-5xl font-bold text-white tracking-wide text-center">
+                  Experience Seoul's Culture
+                </h1>
+              </div>
+            </TweenOne>
+          </Element>
+          <Element prefixCls="banner-user-elem" key="1" style={{ height: '100%' }}>
+            <BgElement
+              key="bg"
+              className="bg"
+              style={{
+                background: '#64CBCC',
+              }}
+            />
+            <TweenOne
+              animation={{ y: 30, opacity: 0, type: 'from', delay: 100 }}
+              className="relative w-full h-full"
+            >
+              <img
+                src="https://cdn.pixabay.com/photo/2023/03/12/07/50/samulnori-7846017_1280.jpg"
+                alt="Banner 2"
+                className="object-cover w-full h-full"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                <h1 className="text-5xl font-bold text-white tracking-wide text-center">
+                Embrace Modern Korea
+                </h1>
+              </div>
+            </TweenOne>
+          </Element>
+            </BannerAnim>
           </div>
         </div>
       </section>
-    </div>
+      </div>
+
   );
-}
+};
 
 export default MainImage;
