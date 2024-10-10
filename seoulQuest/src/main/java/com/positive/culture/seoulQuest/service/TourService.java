@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface TourService {
 
     //전체 조회
-    PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO);
+    PageResponseDTO<TourDTO> getList(PageRequestDTO pageRequestDTO);
 
     //하나 조회
     TourDTO get(Long tno);
