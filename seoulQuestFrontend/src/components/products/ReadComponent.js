@@ -4,7 +4,7 @@ import useCustomMove from '../../hooks/useCustomMove';
 import { getOne } from '../../api/productsApi';
 import FetchingModal from '../common/FetchingModal';
 import useCustomCart from '../../hooks/useCustomCart';
-import useCustomLogin from '../../hooks/useCustomLogin';
+// import useCustomLogin from '../../hooks/useCustomLogin';
 import CartComponent from '../menus/CartComponent';
 
 const initState = {
@@ -20,22 +20,22 @@ const ReadComponent = ({ pno }) => {
     const [product, setProduct] = useState(initState);
     const { moveToList, moveToModify, page, size } = useCustomMove();
     const [fetching, setFetching] = useState(false);
-    const { changeCart, cartItems } = useCustomCart();
-    const { loginState } = useCustomLogin();
+    // const { changeCart, cartItems } = useCustomCart();
+    // const { loginState } = useCustomLogin();
 
-    const handleClickAddCart = () => {
-        let qty = 1;
+    // const handleClickAddCart = () => {
+    //     let qty = 1;
 
-        const addedItem = cartItems.filter(item => item.pno === parseInt(pno))[0];
+    //     const addedItem = cartItems.filter(item => item.pno === parseInt(pno))[0];
 
-        if (addedItem) {
-            if (window.confirm("이미 추가된 상품입니다. 추가하시겠습니까? ") === false) {
-                return;
-            }
-            qty = addedItem.qty + 1;
-        }
-        changeCart({ email: loginState.email, pno: pno, qty: qty });
-    };
+    //     if (addedItem) {
+    //         if (window.confirm("이미 추가된 상품입니다. 추가하시겠습니까? ") === false) {
+    //             return;
+    //         }
+    //         qty = addedItem.qty + 1;
+    //     }
+    //     changeCart({ email: loginState.email, pno: pno, qty: qty });
+    // };
 
     useEffect(() => {
         setFetching(true);
@@ -98,14 +98,14 @@ const ReadComponent = ({ pno }) => {
                     <button
                         type='button'
                         className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
-                        onClick={handleClickAddCart}
+                        //onClick={handleClickAddCart}
                     >
                         Add to Cart
                     </button>
                     <button
                         type='button'
                         className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
-                        onClick={() => moveToModify(pno)}
+                        //onClick={() => moveToModify(pno)}
                     >
                         Modify
                     </button>
@@ -120,9 +120,9 @@ const ReadComponent = ({ pno }) => {
             </div>
 
             {/* Cart Section */}
-            <div className='col-span-1 border-2 p-4 rounded-lg shadow-md'>
+            {/* <div className='col-span-1 border-2 p-4 rounded-lg shadow-md'>
                 <CartComponent />
-            </div>
+            </div> */}
         </div>
     );
 };

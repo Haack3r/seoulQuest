@@ -25,14 +25,14 @@ const MainImage = () => {
             />
             <TweenOne
               animation={{ y: 30, opacity: 0, type: 'from', delay: 100 }}
-              className="relative w-full h-full"
+              className="relative w-full h-full "
             >
               <img
                 src="https://cdn.pixabay.com/photo/2020/12/14/19/40/palace-5831869_1280.jpg"
                 alt="Banner 1"
                 className="object-cover w-full h-full"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+              <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                 <h1 className="text-5xl font-bold text-white tracking-wide text-center">
                   Discover Seoul's Soul
                 </h1>
@@ -56,7 +56,7 @@ const MainImage = () => {
                 alt="Banner 2"
                 className="object-cover w-full h-full"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+              <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                 <h1 className="text-5xl font-bold text-white tracking-wide text-center">
                   Experience Seoul's Culture
                 </h1>
@@ -80,7 +80,7 @@ const MainImage = () => {
                 alt="Banner 2"
                 className="object-cover w-full h-full"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+              <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                 <h1 className="text-5xl font-bold text-white tracking-wide text-center">
                 Embrace Modern Korea
                 </h1>

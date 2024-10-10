@@ -3,7 +3,7 @@ import useCustomMove from '../hooks/useCustomMove';
 import { getListForMain } from '../api/productsApi';
 import FetchingModal from '../components/common/FetchingModal';
 import { API_SERVER_HOST } from '../api/todoApi';
-import useCustomLogin from '../hooks/useCustomLogin';
+// import useCustomLogin from '../hooks/useCustomLogin';
 import Button from '../components/ui/Button';
 import {
   Card,
@@ -28,7 +28,7 @@ const initState = {
     current: 0
 }
 const ProductSection = () => {
-    const { exceptionHandle } = useCustomLogin()
+    // const { exceptionHandle } = useCustomLogin()
     const { page, size, refresh, moveToList, moveToReadProductFromMain } = useCustomMove()
     const [serverData, setServerData] = useState(initState)
   
@@ -43,7 +43,7 @@ const ProductSection = () => {
             console.log(data)
             setServerData(data)
             setFetching(false)
-        }).catch(err => exceptionHandle(err))
+        })//.catch(err => exceptionHandle(err))
     }, [page, size, refresh])
   return (
     <div className='mt-10 mr-2 ml-2'>
