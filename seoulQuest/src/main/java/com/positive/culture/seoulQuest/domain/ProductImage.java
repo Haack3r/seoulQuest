@@ -2,7 +2,7 @@ package com.positive.culture.seoulQuest.domain;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
-@Embeddable
+@Embeddable //VO로써 Product엔티티에 @ElementCollection으로 매핑됨
 @Getter
 @ToString
 @Builder
@@ -11,7 +11,7 @@ import lombok.*;
 public class ProductImage {
     private String fileName;
     private int ord;
-    private String category_name;
+    private String categoryName;
 
     public void setOrd(int ord){
         this.ord= ord;

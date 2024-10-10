@@ -18,44 +18,55 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long product_id;
-    private String product_name;
-    private String product_desc;
+    private Long pno;
+    private String pname;
+    private String pdesc;
     private int price;
     private int quantity;
-    private String category_name;
-    private Long shipping_cost;
-    private LocalDate create_at;
-    private LocalDate update_at;
+    private String categoryName;
+    private Long shippingCost;
+
+    //통계를 내거나 정보를 확인할 때 사용
+    private LocalDate createAt; //생성 일자
+    private LocalDate updateAt; //수정 일자
+
     private boolean delFlag; //상품 삭제여부
 
+    //실행시 , 자동으로 product_image_list table이 생성됨.
+    //하나의 엔티티가 여러개의 VO(값타입 객체)를 담을때 사용, 자동으로 이에 해당하는 테이블이 생성됨
     @ElementCollection
     @Builder.Default
     private List<ProductImage> imageList = new ArrayList<>();
 
-    public void changeName(String product_name){this.product_name = product_name;}
-
-    public void changeDesc(String product_desc){this.product_desc = product_desc;}
-
+    public void changeName(String pname){this.pname = pname;}
+    public void changeDesc(String pdesc){this.pdesc = pdesc;}
     public void changePrice(int price){this.price=price;}
-
     public void changeQuantity(int quantity){this.quantity=quantity;}
+    public void changeCategoryName(String categoryName){this.categoryName = categoryName;}
+    public void changeShippingCost(Long shippingCost) {this.shippingCost = shippingCost;}
+    public void changeCreateAt(LocalDate createAt){this.createAt = createAt;}
+    public void changeUpdateAt(LocalDate updateAt){this.updateAt = updateAt;}
+    public void changeDel(boolean delFlag){this.delFlag =delFlag;}
 
-    public void changeCategoryName(String category_name){this.category_name= category_name;}
-
-    public Long changeShippingCost(int price, int quantity) {
-        int totalPrice = price * quantity;
-        if (totalPrice >= 50000) {
-            return this.shipping_cost = 0l;
-        } else {
-            return this.shipping_cost = 2500l;
-        }
+    //------------------------------------------------------
+    //이미지 정보 추가
+    public void addImage(ProductImage productImage){
+        productImage.setOrd(this.imageList.size());
+        imageList.add(productImage);
     }
 
-    public void changeCreateAt(LocalDate create_at){this.create_at = create_at;}
-    public void changeUpdateAt(LocalDate update_at){this.update_at = update_at;}
+    //이미지 파일 이름 추가
+    public void addImageString(String fileName){
+        ProductImage productImage = ProductImage.builder()
+                .fileName(fileName)
+                .build();
+        addImage(productImage);
+    }
 
-    public void changeDel(boolean delFlag){this.delFlag =delFlag;}
+    //productImage 리스트를 삭제
+    public void clearList(){
+        this.imageList.clear();
+    }
 
 
 }
