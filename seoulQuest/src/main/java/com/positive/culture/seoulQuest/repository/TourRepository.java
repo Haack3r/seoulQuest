@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface TourRepository extends JpaRepository<Tour,Long> {
 
     //전체 조회
-    @Query("select t, ti from Tour t left join t.tourImageList ti where ti.ord = 0 and p.delFlag=false")
+    @Query("select t, ti from Tour t left join t.tourImageList ti where ti.ord = 0 and t.delFlag=false")
     Page<Object[]> selectList(Pageable pageable);
 
     //하나 조회

@@ -87,7 +87,6 @@ public class TourController {
 
         //수정작업
         tourService.modify(tourDTO);
-
         //지워져야하는 목록찾기
         if(oldFileNames !=null && oldFileNames.size()>0){
             List<String> removeFiles = oldFileNames
