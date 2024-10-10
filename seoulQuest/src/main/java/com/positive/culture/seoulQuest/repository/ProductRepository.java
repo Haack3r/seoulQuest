@@ -12,14 +12,19 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
-    @EntityGraph(attributePaths = "imageList") //해당속성 조인처리
+
+    //전체 조회
+    @Query("select p, pi from Product p left join p.imageList pi where pi.ord = 0 and p.delFlag=false")
+    Page<Object[]> selectList(Pageable pageable);
+
+    //하나 조회
+    @EntityGraph(attributePaths = "imageList") //해당 속성 조인처리하여 쿼리 실행 횟수 줄임
     @Query("select p from Product p where p.pno = :pno")
     Optional<Product> selectOne(@Param("pno")Long pno);
 
+    //상품 삭제 (delete 대신 update로 삭제여부를 true/false 처리 - Soft Delete)
     @Modifying
     @Query("update Product p set p.delFlag = :flag where p.pno = :pno")
     void updateToDelete(@Param("pno")Long pno, @Param("flag") boolean flag);
 
-    @Query("select p, pi from Product p left join p.imageList pi where pi.ord = 0 and p.delFlag=false")
-    Page<Object[]> selectList(Pageable pageable);
 }

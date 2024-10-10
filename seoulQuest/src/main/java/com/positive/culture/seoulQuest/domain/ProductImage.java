@@ -2,7 +2,7 @@ package com.positive.culture.seoulQuest.domain;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
-@Embeddable
+@Embeddable //VO로써 Product엔티티에 @ElementCollection으로 매핑됨
 @Getter
 @ToString
 @Builder

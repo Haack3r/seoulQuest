@@ -1,6 +1,5 @@
 package com.positive.culture.seoulQuest.dto;
 
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,17 +8,15 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Data
-public class PageResponseDTO<E> {
-    private List<E> dtoList;
-    // Element, generalization 사용자가 보내는 것에 따라 형식이 달라짐
-    private List<Integer> pageNumList;
-    // 각 페이지 묶음을 담고있는 리스트
-    private PageRequestDTO pageRequestDTO;
-    private boolean prev, next;
-    // 현재 페이지를 기준으로 이전, 이후 페이지가 있는지 여부 저장
+public class PageResponseDTO<E> { //타입에 상관없이 활용할수 있도록 제너럴 타입 사용
 
+    private List<E> dtoList; // Element, generalization 사용자가 보내는 것에 따라 형식이 달라짐
+    private List<Integer> pageNumList; // 각 페이지 묶음을 담고있는 리스트
+    private PageRequestDTO pageRequestDTO;
+    private boolean prev, next; // 현재 페이지를 기준으로 이전, 이후 페이지가 있는지 여부 저장
     private int totalCount, prevPage, nextPage, totalPage, current;
 
+    //가독성, 유지보수성을 위해 커스텀 빌더 메서드로 생성자를 구현함
     @Builder(builderMethodName = "withAll")
     public PageResponseDTO(List<E> dtoList, PageRequestDTO pageRequestDTO, long totalCount) {
         this.dtoList = dtoList;
