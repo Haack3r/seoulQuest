@@ -24,6 +24,8 @@ public class ProductController {
     private final CustomFileUtil fileUtil;
     private final ProductService productService;
 
+    //시큐리티 구현 후 각 메서드에 @PreAuthorize 권한 추가하기
+    //@PreAuthorize("hasAnyRole('ROLE', 'R)")
     //전체 목록 조회 - test 성공 (유저 , 관리자)
     @GetMapping("/list")
     public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO){

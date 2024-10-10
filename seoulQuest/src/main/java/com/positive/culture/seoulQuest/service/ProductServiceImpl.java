@@ -119,7 +119,7 @@ public class ProductServiceImpl implements ProductService{
         //업로드 처리가 끝난 파일들의 이름 리스트
         List<String> uploadFileNames = productDTO.getUploadFileNames();
 
-        if(uploadFileNames== null){
+        if(uploadFileNames == null){
             return product;
         }
 
