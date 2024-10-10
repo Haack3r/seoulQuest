@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Builder
+@Table(name = "tbl_member")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,12 +24,12 @@ public class Member {
 
     @Column(unique = true)
     private String memberId;
-
     private String name;
     private String email;
     private String nickName;
     private String password;
     private String phoneNumber;
+    private LocalDate birthday;
 
     @Embedded
     private Address address;
@@ -62,5 +64,7 @@ public class Member {
     public void changeAddress(Address address) {
         this.address = address;
     }
+
+    public void changeBirth(LocalDate birthday) { this.birthday = birthday; }
 
 }

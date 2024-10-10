@@ -15,4 +15,9 @@ public class Address {
     private String city;
     private String state;
     private String zipCode;
+
+    @Override
+    public String toString() {
+        return String.format("'%s', '%s', '%s', '%s'", street, city, state, zipCode);
+    }
 }
