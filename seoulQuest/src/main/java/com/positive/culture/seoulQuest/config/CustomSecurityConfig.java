@@ -58,6 +58,7 @@ public class CustomSecurityConfig {
 //        return http.build();
 //    }
 
+    //시큐리티 구현 후 사용할 CORS 설정
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
