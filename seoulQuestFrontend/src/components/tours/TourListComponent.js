@@ -39,7 +39,6 @@ const TourListComponent = () => {
   //for FetchingModal
   const [fetching, setFetching] = useState(false)
 
-
   useEffect(() => {
       setFetching(true)
 
@@ -58,19 +57,19 @@ const TourListComponent = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="mb-12 text-4xl font-bold text-center text-gray-900 tracking-wide">Curated Cultural Experiences</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            {serverData.dtoList.map(product => (
-              <Card key={product.pno}
+            {serverData.dtoList.map( tour => (
+              <Card key={tour.tno}
               className='bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden'
-              onClick={() => moveToRead(product.pno)}>
+              onClick={() => moveToRead(tour.tno)}>
                 <div className="relative overflow-hidden">
-                  <img src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`} alt={product.pname} className="object-cover w-full h-64 transition-transform duration-300 group-hover:scale-110" />
+                  <img src={`${host}/api/tours/view/s_${tour.uploadFileNames[0]}`} alt={tour.pname} className="object-cover w-full h-64 transition-transform duration-300 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                     <Button className="bg-white text-gray-900 hover:bg-gray-100">Learn More</Button>
                   </div>
                 </div>
                 <CardHeader className="text-center">
-                  <CardTitle className="text-xl font-semibold tracking-wide text-gray-900">{product.pname}</CardTitle>
-                  <CardDescription className="font-medium text-rose-600">{product.price} per person</CardDescription>
+                  <CardTitle className="text-xl font-semibold tracking-wide text-gray-900">{tour.tname}</CardTitle>
+                  <CardDescription className="font-medium text-rose-600">{tour.tprice} per person</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium tracking-wide">Reserve Now</Button>
