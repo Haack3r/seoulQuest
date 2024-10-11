@@ -3,7 +3,9 @@ package com.positive.culture.seoulQuest.controller;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
+import com.positive.culture.seoulQuest.dto.TourDTO;
 import com.positive.culture.seoulQuest.service.ProductService;
+import com.positive.culture.seoulQuest.service.TourService;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,33 +21,31 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/api/products")
-public class ProductController {
+@RequestMapping("/api/tours")
+public class TourController {
     private final CustomFileUtil fileUtil;
-    private final ProductService productService;
+    private final TourService tourService;
 
-    //시큐리티 구현후 권한 추가
-    //@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     //전체 목록 조회 - test 성공 (유저 , 관리자)
     @GetMapping("/list")
-    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO){
+    public PageResponseDTO<TourDTO> list(PageRequestDTO pageRequestDTO){
         log.info("list.........." + pageRequestDTO);
-        return productService.getList(pageRequestDTO);
+        return tourService.getList(pageRequestDTO);
     }
 
     //파일 등록 - test 성공 (관리자)
     @PostMapping("/")
-    public Map<String , Long> register(ProductDTO productDTO){
-        log.info("register: " + productDTO);
-        List<MultipartFile> files =  productDTO.getFiles(); //사용자가 등록한 실제 파일들을 가져와서 새 리스트에 저장
+    public Map<String , Long> register(TourDTO tourDTO){
+        log.info("register: " + tourDTO);
+        List<MultipartFile> files =  tourDTO.getFiles(); //사용자가 등록한 실제 파일들을 가져와서 새 리스트에 저장
         List<String> uploadFileNames = fileUtil.saveFiles(files); //실제 등록한 파일들의 이름을 문자열로 반환하여 리스트에 저장.
 
-        productDTO.setUploadFileNames(uploadFileNames);
+        tourDTO.setUploadFileNames(uploadFileNames);
 
         log.info(uploadFileNames);
 
-        Long pno = productService.register(productDTO);
-        return Map.of("RESULT",pno);
+        Long tno = tourService.register(tourDTO);
+        return Map.of("RESULT",tno);
     }
 
     //업로드된 파일 보여주기 (유저, 관리자)
@@ -57,28 +57,28 @@ public class ProductController {
     }
 
     //단일 상품 조회 - test 성공 (유저, 관리자)
-    @GetMapping("/{pno}")
-    public ProductDTO read(@PathVariable(name="pno") Long pno){
-        return productService.get(pno);
+    @GetMapping("/{tno}")
+    public TourDTO read(@PathVariable(name="tno") Long tno){
+        return tourService.get(tno);
     }
 
     //수정 - test 성공 (관리자)
-    @PutMapping("/{pno}")
-    public Map<String, String> modify(@PathVariable(name="pno")Long pno, ProductDTO productDTO){
-        productDTO.setPno(pno); //값의 일관성을 보장하기 위해 pno를 다시 저장
-        ProductDTO oldProductDTO = productService.get(pno); //pno로 기존 정보를 가져와서 저장
+    @PutMapping("/{tno}")
+    public Map<String, String> modify(@PathVariable(name="tno")Long tno, TourDTO tourDTO){
+        tourDTO.setTno(tno); //값의 일관성을 보장하기 위해 pno를 다시 저장
+        TourDTO oldTourDTO = tourService.get(tno); //pno로 기존 정보를 가져와서 저장
 
         //기존의 파일들( DB에 존재하는 파일들 - 수정과정에서 삭제되었을수 있음)
-        List<String> oldFileNames = oldProductDTO.getUploadFileNames();
+        List<String> oldFileNames = oldTourDTO.getUploadFileNames();
 
         //새로 업로드 해야하는 파일들
-        List<MultipartFile> files = productDTO.getFiles();
+        List<MultipartFile> files = tourDTO.getFiles();
 
         //새로 업로드 되어서 만들어진 파일 이름들
         List<String> currentUploadFileNames =fileUtil.saveFiles(files);
 
         //화면에서 변화없이 계속 유지된 파일들
-        List<String> uploadedFileNames = productDTO.getUploadFileNames();
+        List<String> uploadedFileNames = tourDTO.getUploadFileNames();
 
         //유지되는 파일들 + 새로 업로드 된 파일 이름들이 저장해야하는 파일 목록이 됨
         if(currentUploadFileNames != null && currentUploadFileNames.size() >0){
@@ -86,8 +86,7 @@ public class ProductController {
         }
 
         //수정작업
-        productService.modify(productDTO);
-
+        tourService.modify(tourDTO);
         //지워져야하는 목록찾기
         if(oldFileNames !=null && oldFileNames.size()>0){
             List<String> removeFiles = oldFileNames
@@ -102,12 +101,12 @@ public class ProductController {
     }
 
     //상품 삭제 - test 성공 (관리자)
-    @DeleteMapping("/{pno}")
-    public Map<String, String> remove(@PathVariable("pno")Long pno){
+    @DeleteMapping("/{tno}")
+    public Map<String, String> remove(@PathVariable("tno")Long tno){
         //삭제 해야할 파일들 알아내기
-        List<String> oldFileNames = productService.get(pno).getUploadFileNames();
+        List<String> oldFileNames = tourService.get(tno).getUploadFileNames();
 
-        productService.remove(pno);
+        tourService.remove(tno);
         fileUtil.deleteFiles(oldFileNames);
 
         return Map.of("RESULT","SUCCESS");
