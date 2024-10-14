@@ -1,6 +1,10 @@
 import React, { useCallback } from 'react'
 import BasicLayout from '../../layouts/BasicLayout'
 import { Outlet, useNavigate } from 'react-router-dom'
+<<<<<<< HEAD
+=======
+import { HomeOutlined, UnorderedListOutlined } from '@ant-design/icons';
+>>>>>>> origin/hyein
 
 const TourIndexPage = () => {
     const navigate = useNavigate()
@@ -14,6 +18,7 @@ const TourIndexPage = () => {
     
   return (
     <BasicLayout>
+<<<<<<< HEAD
     <div className='text-black font-extrabold -mt-10'>
         Products Menus
     </div>
@@ -26,6 +31,19 @@ const TourIndexPage = () => {
         <div className='text-xl m-1 p-2 w-20 font-extrabold text-center underline'
         onClick={handleClickAdd}>추가</div>
     </div>
+=======
+
+    {/* <div className='text-black font-extrabold mt-20'>
+        Tours
+    </div>
+
+    <div className='w-full flex m-2 p-2'> */}
+      <div className='text-xl mt-20 ml-10 p-2 w-20 font-extrabold text-center cursor-pointer'
+        onClick={handleClickList}> <UnorderedListOutlined /> List</div>
+        {/* <div className='text-xl m-1 p-2 w-20 font-extrabold text-center underline'
+        onClick={handleClickAdd}>추가</div>
+    </div> */}
+>>>>>>> origin/hyein
 
     <div className='flex flex-wrap w-full'>
         <Outlet />

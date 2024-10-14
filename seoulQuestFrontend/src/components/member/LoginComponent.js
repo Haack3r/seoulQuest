@@ -11,7 +11,11 @@ const initState = {
 };
 const LoginComponent = () => {
   const [loginParam, setLoginParam] = useState({ ...initState });
+<<<<<<< HEAD
   const { doLogin, moveToPath } = useCustomLogin();
+=======
+  // const { doLogin, moveToPath } = useCustomLogin();
+>>>>>>> origin/hyein
   // const navigate = useNavigate()
   // const dispatch = useDispatch()
 
@@ -26,6 +30,7 @@ const LoginComponent = () => {
 
     // dispatch(loginPostAsync(loginParam)) // loginSlice 비동기 호출
     // .unwrap()
+<<<<<<< HEAD
     doLogin(loginParam) // hook 사용
       .then((data) => {
         console.log(data);
@@ -44,6 +49,26 @@ const LoginComponent = () => {
       <div className="flex justify-center">
         <div className="text-4xl m-4 p-4 font-extrabold text-blue-500">
           Login Component
+=======
+    // doLogin(loginParam) // hook 사용
+    //   .then((data) => {
+    //     console.log(data);
+    //     if (data.error) {
+    //       alert("Check your Email or Password");
+    //     } else {
+    //       alert("Success");
+    //       // 홈화면 이동 후 뒤로가기 하면 로그인화면 표시 X
+    //       // navigate({ pathname: '/' }, { replace: true })
+    //       moveToPath("/"); // hook 사용
+    //     }
+    //   });
+  };
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="flex justify-center">
+        <div className="text-4xl m-4 p-4 font-extrabold text-orange-500">
+          Login
+>>>>>>> origin/hyein
         </div>
       </div>
       <div className="flex justify-center">
@@ -74,7 +99,11 @@ const LoginComponent = () => {
         <div className="relative mb-4 flex w-full flex-wrap justify-center">
           <div className="w-2/5 p-6 flex justify-center font-bold">
             <button
+<<<<<<< HEAD
               className="rounded p-4 w-36 bg-blue-500 text-xl text-white"
+=======
+              className="rounded p-4 w-36 bg-orange-500 text-xl text-white"
+>>>>>>> origin/hyein
               onClick={handleClickLogin}
             >
               LOGIN
@@ -82,7 +111,11 @@ const LoginComponent = () => {
           </div>
         </div>
       </div>
+<<<<<<< HEAD
       <KakaoLoginComponent />
+=======
+      {/* <KakaoLoginComponent /> */}
+>>>>>>> origin/hyein
     </div>
   );
 };
