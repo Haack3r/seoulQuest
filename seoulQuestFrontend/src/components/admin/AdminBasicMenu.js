@@ -3,12 +3,55 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Button from "../ui/Button";
 import {
-  ShoppingBagIcon,
   UserIcon,
   LogInIcon
 } from "lucide-react";
+import SearchIcon from '@mui/icons-material/Search';
 
-const BasicMenu = () => {
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  width: '100%',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
+
+
+const AdminBasicMenu = () => {
   const loginState = useSelector(state => state.loginSlice)
 
   return (
@@ -21,19 +64,23 @@ const BasicMenu = () => {
               Seoul<span className="text-orange-500">Culture</span>Quest
             </Link>
           </div>
-
           {/* Navigation links */}
-          <nav className="flex-grow flex justify-center">
+          <nav className="flex-grow flex justify-center float-right">
             <ul className="flex space-x-8">
-              <li><Link to="/tours/" className="text-gray-600 hover:text-gray-900">Tours</Link></li>
-              <li><Link to='/products/' className="text-gray-600 hover:text-gray-900">Souvenirs</Link></li>
-              <li><Link to="/about/" className="text-gray-600 hover:text-gray-900">About</Link></li>
               <li><Link to='/contact/' className="text-gray-600 hover:text-gray-900">Contact</Link></li>
             </ul>
           </nav>
-
           {/* User controls */}
           <ul className="flex space-x-4 items-center">
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon className="bg-orange-600" />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
             {!loginState.email ? (
               <>
                 <li><Link to={'/member/login/'} className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"><LogInIcon className="h-5 w-5 mr-2" />Login</Link></li>
@@ -41,9 +88,8 @@ const BasicMenu = () => {
             ) : (
               <>
                 <li><Link to={'/member/logout/'} className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">Logout</Link></li>
-                <li><Link to={'/cart/'} className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">
-                  <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
-                </Link></li>
+                <Notification className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                <SearchIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
               </>
             )}
             <Button
@@ -61,4 +107,4 @@ const BasicMenu = () => {
   )
 }
 
-export default BasicMenu
+export default AdminBasicMenu
