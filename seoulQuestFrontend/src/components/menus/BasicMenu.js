@@ -34,10 +34,10 @@ const BasicMenu = () => {
 
       {/* User controls */}
       <ul className="flex space-x-4 items-center">
-        {!loginState.email ? (
-          <>
+        {/* {!loginState.email ? (
+          <> */}
             <li><Link to={'/member/login/'} className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"><LogInIcon className="h-5 w-5 mr-2" />Login</Link></li>
-          </>
+          {/* </>
         ) : (
           <>
             <li><Link to={'/member/logout/'} className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">Logout</Link></li>
@@ -45,7 +45,7 @@ const BasicMenu = () => {
               <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
             </Link></li>
           </>
-        )}
+        )} */}
         <Button
               variant="default"
               size="sm"

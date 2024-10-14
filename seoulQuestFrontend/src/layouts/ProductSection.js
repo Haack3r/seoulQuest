@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/Card";
+import { useNavigate } from 'react-router-dom';
 
 const host = API_SERVER_HOST
 
@@ -28,6 +29,7 @@ const initState = {
     current: 0
 }
 const ProductSection = () => {
+    const navigate = useNavigate()
     // const { exceptionHandle } = useCustomLogin()
     const { page, size, refresh, moveToList, moveToReadProductFromMain } = useCustomMove()
     const [serverData, setServerData] = useState(initState)
@@ -50,8 +52,16 @@ const ProductSection = () => {
     {/* 로딩중 모달 */}
     {fetching ? <FetchingModal /> : <></>}
     <section className="py-24 bg-gray-50">
-<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  <h2 className="mb-12 text-4xl font-bold text-center text-gray-900 tracking-wide">Artisan Treasures</h2>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex w-full items-stretch mb-12 justify-between">
+          <h2 className="text-4xl font-bold text-center text-gray-900 tracking-wide">
+            Artisan Treasures
+          </h2>
+          <Button className="text-2xl text-center text-gray-900 hover:bg-gray-100 "
+                    onClick={() => navigate({pathname: `/products/list`})}>
+                      View More
+          </Button>
+        </div>  
   <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
     {serverData.dtoList.map(product => (
       <Card key={product.pno}
@@ -62,9 +72,9 @@ const ProductSection = () => {
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
             <div className="text-center">
               <CardTitle className="text-lg font-semibold tracking-wide text-white">{product.pname}</CardTitle>
-              <CardDescription className="font-medium text-rose-400">{product.price}</CardDescription>
+              <CardDescription className="font-medium text-rose-400">₩{product.price}</CardDescription>
               <Button variant="outline" className="mt-2 text-white hover:text-gray-900 hover:bg-white font-medium tracking-wide border-white">
-                Add to Collection
+                Learn More
               </Button>
             </div>
           </div>

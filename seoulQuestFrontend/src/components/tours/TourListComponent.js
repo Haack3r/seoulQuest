@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useCustomMove from './../../hooks/useCustomMove';
-import { getList } from '../../api/productsApi';
+
 import FetchingModal from '../common/FetchingModal';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import PageComponent from '../common/PageComponent';
@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/Card";
+import { getList } from '../../api/tourApi';
 
 
 const host = API_SERVER_HOST
@@ -32,7 +33,7 @@ const initState = {
 
 const TourListComponent = () => {
   
-  const { exceptionHandle } = useCustomLogin()
+  //const { exceptionHandle } = useCustomLogin()
   const { page, size, refresh, moveToList, moveToRead } = useCustomMove()
   const [serverData, setServerData] = useState(initState)
 
@@ -42,12 +43,12 @@ const TourListComponent = () => {
   useEffect(() => {
       setFetching(true)
 
-      getList({ page, size }).then(data => {
-          console.log(data)
-          setServerData(data)
-          setFetching(false)
-      }).catch(err => exceptionHandle(err))
-  }, [page, size, refresh])
+    getList({ page, size }).then(data => {
+      console.log(data)
+      setServerData(data)
+      setFetching(false)
+    });//.catch(err => exceptionHandle(err))
+  }, [page, size, refresh]) //page, size, refresh 중 하나가 바뀔때마다 실행
 
   return (
     <div className='border-2 border-blue-100 mt-10 mr-2 ml-2'>
@@ -59,7 +60,8 @@ const TourListComponent = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {serverData.dtoList.map( tour => (
               <Card key={tour.tno}
-              className='bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden'
+                className="overflow-hidden transition-all duration-300 hover:shadow-xl border-0 bg-white group"
+              // className='bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden'
               onClick={() => moveToRead(tour.tno)}>
                 <div className="relative overflow-hidden">
                   <img src={`${host}/api/tours/view/s_${tour.uploadFileNames[0]}`} alt={tour.pname} className="object-cover w-full h-64 transition-transform duration-300 group-hover:scale-110" />
@@ -69,7 +71,7 @@ const TourListComponent = () => {
                 </div>
                 <CardHeader className="text-center">
                   <CardTitle className="text-xl font-semibold tracking-wide text-gray-900">{tour.tname}</CardTitle>
-                  <CardDescription className="font-medium text-rose-600">{tour.tprice} per person</CardDescription>
+                  <CardDescription className="font-medium text-rose-600">₩{tour.tprice} per person</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium tracking-wide">Reserve Now</Button>

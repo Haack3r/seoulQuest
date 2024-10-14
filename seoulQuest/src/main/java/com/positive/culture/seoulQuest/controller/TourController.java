@@ -91,7 +91,7 @@ public class TourController {
         if(oldFileNames !=null && oldFileNames.size()>0){
             List<String> removeFiles = oldFileNames
                     .stream()
-                    .filter(fileName->uploadedFileNames.indexOf(fileName)==-1)
+                    .filter(fileName->uploadedFileNames.indexOf(fileName)==-1) //조건이 참인 경우를 만족하는 요소들을 리스트로 저장
                     .collect(Collectors.toList());
 
             //실제 파일 삭제

@@ -82,7 +82,7 @@ const ReadComponent = ({ pno }) => {
                     <div className='relative mb-4 flex w-full items-stretch'>
                         <div className='w-1/5 p-6 text-right font-bold'>PRICE</div>
                         <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                            ${product.price}
+                            {product.price}원
                         </div>
                     </div>
                     <div className='relative mb-4 flex w-full items-stretch'>
@@ -105,7 +105,7 @@ const ReadComponent = ({ pno }) => {
                     <button
                         type='button'
                         className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
-                        //onClick={() => moveToModify(pno)}
+                        onClick={() => moveToModify(pno)}
                     >
                         Modify
                     </button>

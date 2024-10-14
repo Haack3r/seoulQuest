@@ -38,7 +38,7 @@ export const getOne = async (tno) => {
 //수정
 export const putOne = async (tno, tour) => {
     const header = { headers: { "Content-Type": "multipart/form-data" } }
-    const res = await axios.put(`${host}/${pno}`, product, header);
+    const res = await axios.put(`${host}/${tno}`, tour, header);
     return res.data;
 }
 

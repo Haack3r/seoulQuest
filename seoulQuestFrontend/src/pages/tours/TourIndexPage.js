@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import BasicLayout from '../../layouts/BasicLayout'
 import { Outlet, useNavigate } from 'react-router-dom'
+import { HomeOutlined, UnorderedListOutlined } from '@ant-design/icons';
 
 const TourIndexPage = () => {
     const navigate = useNavigate()
@@ -14,18 +15,17 @@ const TourIndexPage = () => {
     
   return (
     <BasicLayout>
-    <div className='text-black font-extrabold -mt-10'>
-        Products Menus
+
+    {/* <div className='text-black font-extrabold mt-20'>
+        Tours
     </div>
 
-    <div className='w-full flex m-2 p-2'>
-
-        <div className='text-xl m-1 p-2 w-20 font-extrabold text-center underline'
-        onClick={handleClickList}>목록</div>
-        
-        <div className='text-xl m-1 p-2 w-20 font-extrabold text-center underline'
+    <div className='w-full flex m-2 p-2'> */}
+      <div className='text-xl mt-20 ml-10 p-2 w-20 font-extrabold text-center cursor-pointer'
+        onClick={handleClickList}> <UnorderedListOutlined /> List</div>
+        {/* <div className='text-xl m-1 p-2 w-20 font-extrabold text-center underline'
         onClick={handleClickAdd}>추가</div>
-    </div>
+    </div> */}
 
     <div className='flex flex-wrap w-full'>
         <Outlet />
