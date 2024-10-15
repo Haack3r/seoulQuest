@@ -8,8 +8,8 @@ const ReadPage = () => {
 
   return (
     <div className='p-4 w-full bg-white'>
-        <div className='text-3xl font-extrabold'>
-            Product Read Page
+        <div className='m-10 text-3xl font-extrabold'>
+            Souvenirs
         </div>
         <ReadComponent pno={pno}></ReadComponent>
     </div>

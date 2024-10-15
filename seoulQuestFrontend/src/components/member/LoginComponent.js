@@ -4,6 +4,9 @@ import React, { useState } from "react";
 // import { replace, useNavigate } from 'react-router-dom'
 import useCustomLogin from "../../hooks/useCustomLogin";
 import KakaoLoginComponent from "./KakaoLoginComponent";
+import {Card,CardContent,CardFooter,CardHeader,CardTitle,} from "../ui/Card";
+import Button from "../ui/Button";
+
 
 const initState = {
   email: "",
@@ -40,12 +43,65 @@ const LoginComponent = () => {
     //   });
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="flex justify-center">
-        <div className="text-4xl m-4 p-4 font-extrabold text-orange-500">
-          Login
-        </div>
-      </div>
+    <div className="min-h-screen flex items-center justify-center">
+
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-center text-orange-500">
+            Login
+          </CardTitle>
+        </CardHeader>
+        
+        <CardContent>
+          <div className="relative mb-4 flex w-full flex-wrap items-stretch">
+            <div className="w-full p-3 text-left font-bold">Email</div>
+            <input
+              className="w-full p-3 rounded-r border border-solid border-neutral-500 shadow-md"
+                name="email"
+                type={"text"}
+                value={loginParam.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+              />
+          </div>
+            
+          <div className="relative mb-4 flex w-full flex-wrap items-stretch">
+            <div className="w-full p-3 text-left font-bold">Password</div>
+            <input
+              className="w-full p-3 rounded-r border border-solid border-neutral-500 shadow-md"
+              name="pw"
+              type={"password"}
+              value={loginParam.pw}
+              onChange={handleChange}
+              placeholder="Enter your password"
+            ></input>
+          </div>
+            
+            <Button
+              className="rounded p-4 w-full bg-orange-500 text-xl text-white"
+              onClick={handleClickLogin}
+            >Log In</Button>
+
+            {/* <KakaoLoginComponent />  */}
+        </CardContent>
+
+        <CardFooter className="flex flex-col space-y-2">
+            <Button className="text-sm text-muted-foreground">
+              Find Password
+            </Button>
+            <div className="text-sm text-muted-foreground">
+              Not a user?{' '}
+              <Button className="p-0 h-auto font-semibold">
+                Sign Up
+              </Button>
+            </div>
+        </CardFooter>
+
+      </Card>
+
+{/* -------------------------변경 전------------------------------------ */}
+{/* 
+
       <div className="flex justify-center">
         <div className="relative mb-4 flex w-full flex-wrap items-stretch">
           <div className="w-full p-3 text-left font-bold">Email</div>
@@ -82,7 +138,8 @@ const LoginComponent = () => {
           </div>
         </div>
       </div>
-      {/* <KakaoLoginComponent /> */}
+      <KakaoLoginComponent /> 
+      */}
     </div>
   );
 };

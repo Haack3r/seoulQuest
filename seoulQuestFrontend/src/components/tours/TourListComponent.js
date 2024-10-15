@@ -51,30 +51,28 @@ const TourListComponent = () => {
   }, [page, size, refresh]) //page, size, refresh 중 하나가 바뀔때마다 실행
 
   return (
-    <div className='border-2 border-blue-100 mt-10 mr-2 ml-2'>
-            {/* 로딩중 모달 */}
-            {fetching ? <FetchingModal /> : <></>}
-            <section className="py-24 bg-white">
+    <div className='border-2 border-blue-100 mr-2 ml-2'>
+      {/* 로딩중 모달 */}
+      {fetching ? <FetchingModal /> : <></>}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="mb-12 text-4xl font-bold text-center text-gray-900 tracking-wide">Curated Cultural Experiences</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {serverData.dtoList.map( tour => (
               <Card key={tour.tno}
                 className="overflow-hidden transition-all duration-300 hover:shadow-xl border-0 bg-white group"
-              // className='bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden'
-              onClick={() => moveToRead(tour.tno)}>
+                onClick={() => moveToRead(tour.tno)}>
                 <div className="relative overflow-hidden">
                   <img src={`${host}/api/tours/view/s_${tour.uploadFileNames[0]}`} alt={tour.pname} className="object-cover w-full h-64 transition-transform duration-300 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <Button className="bg-white text-gray-900 hover:bg-gray-100">Learn More</Button>
-                  </div>
                 </div>
                 <CardHeader className="text-center">
                   <CardTitle className="text-xl font-semibold tracking-wide text-gray-900">{tour.tname}</CardTitle>
                   <CardDescription className="font-medium text-rose-600">₩{tour.tprice} per person</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium tracking-wide">Reserve Now</Button>
+                  <Button className="w-full bg-gray-900 hover:bg-gray-200 text-white hover:text-gray-900 hover:font-bold font-medium tracking-wide">
+                    Reserve Now
+                  </Button>
                 </CardContent>
               </Card>
             ))}

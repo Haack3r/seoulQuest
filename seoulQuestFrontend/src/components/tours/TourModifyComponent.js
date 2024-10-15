@@ -106,7 +106,7 @@ const TourModifyComponent = ({ tno }) => {
                     <div className='w-1/5 p-6 text-right font-bold'>DESC</div>
                     <textarea className='w-4/5 p-6 rounded-r border border-solid border-neutral-300 shadow-md resize-y'
                         name='tdesc'
-                        rows='4'
+                        rows='10'
                         onChange={handleChangeTour}
                         value={tour.tdesc}
                         ></textarea>

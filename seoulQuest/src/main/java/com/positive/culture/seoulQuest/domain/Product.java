@@ -20,6 +20,8 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pno;
     private String pname;
+
+    @Column(length = 10000)
     private String pdesc;
     private int price;
     private int quantity;

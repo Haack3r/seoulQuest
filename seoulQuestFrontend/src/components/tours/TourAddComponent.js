@@ -17,7 +17,7 @@ const TourAddComponent = () => {
     const [fetching, setFetching] = useState(false)
     const [result, setResult] = useState(null)
     const uploadRef = useRef()
-    const { moveToList } = useCustomMove()
+    const { moveToList, page, size } = useCustomMove()
 
     const handleChangeTour = (e) => {
         tour[e.target.name] = e.target.value
