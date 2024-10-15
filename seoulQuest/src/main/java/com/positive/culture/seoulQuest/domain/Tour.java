@@ -20,6 +20,8 @@ public class Tour {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tno;
     private String tname;
+
+    @Column(length = 10000)
     private String tdesc;
     private int tprice;
     private String tlocation;

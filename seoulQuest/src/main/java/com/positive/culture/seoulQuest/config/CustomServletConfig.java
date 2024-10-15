@@ -15,14 +15,14 @@ public class CustomServletConfig implements WebMvcConfigurer {
     }
 
     //시큐리티 구현전 써야할 CORS config -> 시큐리티 구현 후에는 이 메서드를 삭제하여도 된다.
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("HEAD","GET","POST","PUT","DELETE","OPTIONS")
-                .maxAge(300)
-                .allowedHeaders("Authorization","Cache-Control","Content-Type");
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//
+//        registry.addMapping("/**")
+//                .allowedOrigins("*")
+//                .allowedMethods("HEAD","GET","POST","PUT","DELETE","OPTIONS")
+//                .maxAge(300)
+//                .allowedHeaders("Authorization","Cache-Control","Content-Type");
+//    }
 
 }

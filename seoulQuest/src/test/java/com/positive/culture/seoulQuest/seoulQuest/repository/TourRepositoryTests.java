@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,13 +23,15 @@ public class TourRepositoryTests {
 
     @Test
     public void testInsert(){
-        for(int i= 0; i<10; i++){
+        for(int i= 0; i<100; i++){
             Tour tour = Tour.builder()
                     .tname("투어"+i)
+                    .tcategoryName("activity")
                     .tdesc("투어설명"+i)
                     .tprice(100*i)
                     .seatRemain(i)
                     .tlocation("투어장소"+i)
+                    .tDate(LocalDate.of(2024,10,14))
                     .build();
             tour.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE1.jpg");
             tour.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE2.jpg");

@@ -12,10 +12,14 @@ import org.springframework.context.annotation.Configuration;
 //import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.http.SessionCreationPolicy;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.web.SecurityFilterChain;
 //import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,6 +31,27 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 //@EnableMethodSecurity  // 메서드 별 권한 체크
 public class CustomSecurityConfig {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Enable CORS and disable CSRF (since you're using JWT and stateless sessions)
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS using the corsConfigurationSource
+                .csrf(csrf -> csrf.disable());
+
+        // Stateless session management (JWT-based)
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // Allow unauthenticated access to the products list and product view endpoints
+//        http.authorizeHttpRequests(auth -> {
+//            auth
+//                    .requestMatchers("/api/products/list", "/api/products/view/**", "/api/products/read/", "/api/products/{pno}").permitAll() // Public access
+//                    .anyRequest().authenticated(); // Protect other endpoints
+//        });
+
+        // Add your JWT check filter only for authenticated routes
+//        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 
     // @Configuration 아래 @Bean 을 만들면 스프링에서 객체를 관리함
 //    @Bean
@@ -72,9 +97,9 @@ public class CustomSecurityConfig {
         return source;
     }
 
-//    // p303
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(); // 암호 알고리즘 (중요함!!)
-//    }
+    // p303
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // 암호 알고리즘 (중요함!!)
+    }
 }
