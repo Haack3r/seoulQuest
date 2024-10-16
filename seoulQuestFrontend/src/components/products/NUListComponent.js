@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useCustomMove from "../../hooks/useCustomMove";
-import { getList } from "../../api/productsApi";
+
 import FetchingModal from "../common/FetchingModal";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
-// import useCustomLogin from "../../hooks/useCustomLogin";
 import Button from "../ui/Button";
 import {
   Card,
@@ -14,6 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/Card";
+import { getListNU } from "../../api/nuProductApi";
+
 
 const host = API_SERVER_HOST;
 
@@ -31,9 +32,9 @@ const initState = {
 };
 
 const NUListComponent = () => {
-  // const { exceptionHandle } = useCustomLogin()
   const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
+  const [error, setError] = useState(null); // Error handling state
 
   //for FetchingModal
   const [fetching, setFetching] = useState(false);
@@ -41,12 +42,28 @@ const NUListComponent = () => {
   useEffect(() => {
     setFetching(true);
 
-    getList({ page, size }).then((data) => {
-      console.log(data);
-      setServerData(data);
-      setFetching(false);
-    }); //.catch(err => exceptionHandle(err))
+    getListNU({ page, size })
+      .then(data => {
+        console.log("API Response:", data);
+        setServerData(data);
+        setFetching(false); // Stop loading after success
+      })
+      .catch(err => {
+        console.error("API Error:", err);
+        setError("Failed to load product data"); // Set error state
+        setFetching(false); // Stop loading after error
+      });
   }, [page, size, refresh]);
+  // Render error if present
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  // Render loading modal
+  if (fetching) {
+    return <FetchingModal />;
+  }
+
 
   return (
     <div className="border-2 border-blue-100 mt-10 mr-2 ml-2">
@@ -59,7 +76,7 @@ const NUListComponent = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {serverData.dtoList && serverData.dtoList.length > 0 ? (
-  serverData.dtoList.map((product) => (
+            serverData.dtoList.map((product) => (
               <Card
                 key={product.pno}
                 onClick={() => moveToRead(product.pno)}

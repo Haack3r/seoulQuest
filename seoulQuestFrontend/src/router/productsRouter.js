@@ -16,7 +16,7 @@ const productsRouter = () => {
     },
     {
       path: "",
-      element: <Navigate replace to="/products/list" />
+      element: <Navigate replace to="/user/products/list" />
     },
     {
       path: "add",

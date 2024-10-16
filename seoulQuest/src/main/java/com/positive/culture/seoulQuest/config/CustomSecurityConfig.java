@@ -5,6 +5,7 @@ package com.positive.culture.seoulQuest.config;
 //import com.positive.culture.seoulQuest.security.CustomAccessDeniedHandler;
 //import com.positive.culture.seoulQuest.security.JWTCheckFilter;
 
+import com.positive.culture.seoulQuest.security.filter.JWTCheckFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -41,14 +42,14 @@ public class CustomSecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // Allow unauthenticated access to the products list and product view endpoints
-//        http.authorizeHttpRequests(auth -> {
-//            auth
-//                    .requestMatchers("/api/products/list", "/api/products/view/**", "/api/products/read/", "/api/products/{pno}").permitAll() // Public access
-//                    .anyRequest().authenticated(); // Protect other endpoints
-//        });
+        http.authorizeHttpRequests(auth -> {
+            auth
+                    .requestMatchers("/api/products/list", "/api/products/view/**", "/api/products/read/", "/api/products/{pno}").permitAll() // Public access
+                    .anyRequest().authenticated(); // Protect other endpoints
+        });
 
         // Add your JWT check filter only for authenticated routes
-//        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -13,7 +13,7 @@ const MainPage = () => {
       <>
     <BasicLayout>
       <MainImage />
-      <TourSection />
+      {/* <TourSection /> */}
       <ProductSection />
     </BasicLayout>
     <SeoulCultureQuest />

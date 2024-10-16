@@ -26,7 +26,7 @@ public class ProductController {
     private final ProductService productService;
 
     //시큐리티 구현후 권한 추가
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     //전체 목록 조회 - test 성공 (유저 , 관리자)
     @GetMapping("/list")
     public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO){

@@ -31,7 +31,7 @@ const initState = {
 };
 
 const ListComponent = () => {
-  // const { exceptionHandle } = useCustomLogin()
+  const { exceptionHandle } = useCustomLogin()
   const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
 
@@ -45,7 +45,7 @@ const ListComponent = () => {
       console.log(data);
       setServerData(data);
       setFetching(false);
-    }); //.catch(err => exceptionHandle(err))
+    }).catch(err => exceptionHandle(err))
   }, [page, size, refresh]);
 
   return (
@@ -66,7 +66,7 @@ const ListComponent = () => {
               >
                 <div className="relative overflow-hidden">
                   <img
-                    src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`}
+                    src={`${host}/api/user/products/view/s_${product.uploadFileNames[0]}`}
                     alt={product.pname}
                     className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
                   />

@@ -19,13 +19,6 @@ export const getList = async (pageParam) => {
   return res.data;
 };
 
-export const getListForMain = async (pageParam) => {
-  const { page, size } = pageParam;
-  const res = await jwtAxios.get(`${host}/list`, {
-    params: { page: page, size: 3 },
-  });
-  return res.data;
-};
 
 //p273, Axios로 특정 상품 데이터 조회
 export const getOne = async (pno) => {

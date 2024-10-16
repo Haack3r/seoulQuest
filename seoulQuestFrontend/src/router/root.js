@@ -4,6 +4,7 @@ import todoRouter from "./todoRouter";
 import productsRouter from "./productsRouter";
 import memberRouter from "./memberRouter";
 import toursRouter from "./toursRouter";
+import nuProductsRouter from "./nuProductsRouter";
 const { createBrowserRouter } = require("react-router-dom")
 
 const Loading = <div><SyncLoader /></div>
@@ -45,7 +46,7 @@ const root = createBrowserRouter([
         path: "products",
         element: <Suspense fallback={Loading}><NUProductsIndex /></Suspense>,
         // 중첩 라우팅
-        children: productsRouter()
+        children: nuProductsRouter()
     },
     {
         path: "tours",

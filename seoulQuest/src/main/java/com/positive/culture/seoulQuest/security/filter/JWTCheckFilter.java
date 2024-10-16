@@ -33,9 +33,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         // api/member 경로의 호출은 체크 안함
         if (path.startsWith("/api/member/")) return true;
 
-        if (path.startsWith("/api/products/") || path.startsWith("/api/products/view/")) {
+        if (path.startsWith("/api/products/"))
             return true; // Do not apply this filter for these paths
-        }
+
+        if (path.startsWith("/api/products/view/**"))
+            return true;
+        if (path.startsWith("/api/products/{pno}}"))
+            return true;
 
         return false;
     }

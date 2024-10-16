@@ -22,18 +22,18 @@ public class NUProductController {
     private final ProductService productService;
 
     @GetMapping("/list")
-    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO){
+    public PageResponseDTO<ProductDTO> listNU(PageRequestDTO pageRequestDTO){
         log.info("list.........." + pageRequestDTO);
         return productService.getList(pageRequestDTO);
     }
     @GetMapping("/view/{fileName}")
-    public ResponseEntity<Resource> viewFileGetnu(@PathVariable String fileName){
+    public ResponseEntity<Resource> viewFileGetNU(@PathVariable String fileName){
         return fileUtil.getFile(fileName);
     }
 
     //단일 상품 조회 - test 성공 (유저, 관리자)
     @GetMapping("/{pno}")
-    public ProductDTO readnu(@PathVariable(name="pno") Long pno){
+    public ProductDTO readNU(@PathVariable(name="pno") Long pno){
         return productService.get(pno);
     }
 

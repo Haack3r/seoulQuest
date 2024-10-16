@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import useCustomMove from '../../hooks/useCustomMove';
-import { getOne } from '../../api/productsApi';
+
 import FetchingModal from '../common/FetchingModal';
 import useCustomCart from '../../hooks/useCustomCart';
 // import useCustomLogin from '../../hooks/useCustomLogin';
 import CartComponent from '../menus/CartComponent';
+import { getOneNU } from '../../api/nuProductApi';
 
 const initState = {
     pno: 0,
@@ -40,7 +41,7 @@ const NUReadComponent = ({ pno }) => {
     useEffect(() => {
         setFetching(true);
 
-        getOne(pno).then(data => {
+        getOneNU(pno).then(data => {
             setProduct(data);
             setFetching(false);
         });
