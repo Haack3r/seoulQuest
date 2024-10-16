@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/api/products")
+@RequestMapping("/api/user/products")
 public class ProductController {
     private final CustomFileUtil fileUtil;
     private final ProductService productService;
