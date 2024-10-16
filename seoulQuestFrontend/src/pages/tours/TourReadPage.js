@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import TourReadComponent from '../../components/tours/TourReadComponent'
 import { useParams } from 'react-router-dom'
 
 const TourReadPage = () => {
 
-    const {pno} = useParams()
-
+  const {tno} = useParams()
+  
   return (
     <div className='p-4 w-full bg-white'>
         <div className='text-3xl font-extrabold'>
-            Tour Read Page
+          Tour Reservation
         </div>
-        <TourReadComponent pno={pno}></TourReadComponent>
+        <TourReadComponent tno={tno}></TourReadComponent>
     </div>
   )
 }

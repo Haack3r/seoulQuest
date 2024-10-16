@@ -6,6 +6,9 @@ import FetchingModal from '../common/FetchingModal';
 import useCustomCart from '../../hooks/useCustomCart';
 // import useCustomLogin from '../../hooks/useCustomLogin';
 import CartComponent from '../menus/CartComponent';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/Card"
+import { Button } from 'antd';
+import {ShoppingCartOutlined} from '@ant-design/icons';
 
 const initState = {
     pno: 0,
@@ -20,6 +23,7 @@ const ReadComponent = ({ pno }) => {
     const [product, setProduct] = useState(initState);
     const { moveToList, moveToModify, page, size } = useCustomMove();
     const [fetching, setFetching] = useState(false);
+    const [currentImage, setCurrentImage] = useState(0)
     // const { changeCart, cartItems } = useCustomCart();
     // const { loginState } = useCustomLogin();
 
@@ -49,80 +53,95 @@ const ReadComponent = ({ pno }) => {
     return (
         <div className='grid grid-cols-3 gap-6 mt-10 m-4'>
             {/* Product Details Section */}
-            <div className='col-span-2 border-2 p-4 rounded-lg shadow-md'>
-                {fetching ? <FetchingModal /> : null}
-
-                {/* Product Images */}
+            <Card className='col-span-2 border-2 p-4 rounded-lg shadow-md'>
+                <CardHeader className="space-y-1">
+                    {fetching ? <FetchingModal /> : null}
+                    <div className='border w-20 rounded-2xl border-solid text-center font-bold mb-2'>No.{product.pno}</div>
+                    <CardTitle className='text-4xl font-bold'>{product.pname}</CardTitle>
+                </CardHeader>
                 
-                <div className='w-1/2 justify-center flex flex-col m-auto items-center'>
-                    {product.uploadFileNames.map((i, idx) => (
-                        <img
-                            alt='product'
-                            key={idx}
-                            className='p-4 w-full rounded-md'
-                            src={`${host}/api/products/view/${i}`}
-                        />
-                    ))}
-                </div>
-
-                {/* Product Information */}
-                <div className='flex flex-col mt-10'>
-                    <div className='relative mb-4 flex w-full items-stretch'>
-                        <div className='w-1/5 p-6 text-right font-bold'>PNO</div>
-                        <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                            {product.pno}
+{/*--------------------------- Product Images ---------------------------------------------------------------------------*/}
+                <CardContent className="grid gap-6 md:grid-cols-2">
+                    <div className="space-y-4">
+                        <div className="aspect-square relative">
+                            <img
+                                src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
+                                alt={product.pname}
+                                className="rounded-lg object-cover w-full h-full"
+                            />
+                        </div>
+                        <div className="flex space-x-2">
+                            {product.uploadFileNames.map((image, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentImage(index)}
+                                className={`w-20 h-20 relative rounded-md overflow-hidden ${
+                                currentImage === index ? 'ring-2 ring-primary' : ''
+                                }`}
+                            >
+                            <img
+                                src={`${host}/api/products/view/${image}`}
+                                alt={`${product.pname} thumbnail ${index + 1}`}
+                                className="rounded-lg object-cover w-full h-full"
+                            />
+                            </button>
+                            ))}
                         </div>
                     </div>
-                    <div className='relative mb-4 flex w-full items-stretch'>
-                        <div className='w-1/5 p-6 text-right font-bold'>PNAME</div>
-                        <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                            {product.pname}
+                    <div className="space-y-6">
+                        <div>
+                            <h3 className="text-3xl font-semibold">Description</h3>
+                            <p className="mt-2 text-gray-600">{product.pdesc}</p>
+                        </div>
+                    
+                        <div className="space-y-2">
+                            <h3 className="text-2xl font-bold">{product.price.toLocaleString()}원</h3>
+                        </div>
+                        {/* Action Buttons */}
+                        <div className='flex justify-end p-4 space-x-4'>
+                            <button
+                                type='button'
+                                className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
+                                //onClick={handleClickAddCart}
+                            >
+                                <ShoppingCartOutlined /> Add to Cart
+                            </button>
+                            <button
+                                type='button'
+                                className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
+                                // onClick={() => moveToModify(pno)}
+                            >
+                                Buy Now
+                            </button>
+                            <button
+                                type='button'
+                                className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
+                                onClick={() => moveToModify(pno)}
+                            >
+                                Modify
+                            </button>
+                            <button
+                                type='button'
+                                className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
+                                onClick={() => moveToList({ page, size })}
+                            >
+                                List
+                            </button>
                         </div>
                     </div>
-                    <div className='relative mb-4 flex w-full items-stretch'>
-                        <div className='w-1/5 p-6 text-right font-bold'>PRICE</div>
-                        <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                            ${product.price}
-                        </div>
-                    </div>
-                    <div className='relative mb-4 flex w-full items-stretch'>
-                        <div className='w-1/5 p-6 text-right font-bold'>PDESC</div>
-                        <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                            {product.pdesc}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className='flex justify-end p-4 space-x-4'>
-                    <button
-                        type='button'
-                        className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
-                        //onClick={handleClickAddCart}
-                    >
-                        Add to Cart
-                    </button>
-                    <button
-                        type='button'
-                        className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
-                        //onClick={() => moveToModify(pno)}
-                    >
-                        Modify
-                    </button>
-                    <button
-                        type='button'
-                        className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
-                        onClick={() => moveToList({ page, size })}
-                    >
-                        List
-                    </button>
-                </div>
-            </div>
+                </CardContent>
+            
+                <CardFooter className="justify-between">
+                    <p className="text-sm text-gray-500">Free shipping on orders over 50,000won</p>
+                    <p className="text-sm text-gray-500">30-day return policy</p>
+                </CardFooter>
+            </Card>
 
             {/* Cart Section */}
             {/* <div className='col-span-1 border-2 p-4 rounded-lg shadow-md'>
                 <CartComponent />
             </div> */}
+         
         </div>
     );
 };

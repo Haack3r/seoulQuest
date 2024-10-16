@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
 
 const getNum = (param, defaultValue) => {
@@ -58,10 +58,19 @@ const useCustomMove = () => {
         // 조회로 이동, 여기에서 navigate에 객체로 인자를 전달하면서 path와 검색어를 전달하고
         // 그것을 나중에 사용하려고 하고 custom hook을 이용하여 재활용함
         console.log(queryDefault)
-        navigate({ pathname: `/products/read/${num}`, search: queryDefault })
+        
+        navigate({ pathname: `/products/read/${num}`, search: queryDefault }) 
+    }
+
+     const moveToReadTourFromMain = (num) => {
+        // 조회로 이동, 여기에서 navigate에 객체로 인자를 전달하면서 path와 검색어를 전달하고
+        // 그것을 나중에 사용하려고 하고 custom hook을 이용하여 재활용함
+        console.log(queryDefault)
+        
+        navigate({ pathname: `/tours/read/${num}`, search: queryDefault }) 
     }
 
     //여기에서 정의된 함수 객체를 컴포넌트에서 반환하므로 사용하는 곳에서 destructuring해서 호출가능함
-    return { moveToList, moveToModify, page, size, moveToRead, refresh, navigate, moveToReadProductFromMain }
+    return { moveToList, moveToModify, page, size, moveToRead, refresh, navigate, moveToReadProductFromMain,moveToReadTourFromMain }
 }
 export default useCustomMove
