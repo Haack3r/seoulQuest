@@ -12,6 +12,7 @@ const Main = lazy(() => import("../pages/MainPage"))
 const About = lazy(() => import("../pages/AboutPage"))
 const TodoIndex = lazy(() => import("../pages/todo/IndexPage"))
 const ProductsIndex = lazy(() => import("../pages/products/IndexPage"))
+const NUProductsIndex = lazy(() => import("../pages/products/NUIndexPage"))
 const ToursIndex = lazy(() => import("../pages/tours/TourIndexPage"))
 const Cart = lazy(() => import("../pages/Cart"))
 
@@ -35,8 +36,14 @@ const root = createBrowserRouter([
         children: todoRouter()
     },
     {
-        path: "products",
+        path: "user/products",
         element: <Suspense fallback={Loading}><ProductsIndex /></Suspense>,
+        // 중첩 라우팅
+        children: productsRouter()
+    },
+    {
+        path: "products",
+        element: <Suspense fallback={Loading}><NUProductsIndex /></Suspense>,
         // 중첩 라우팅
         children: productsRouter()
     },
