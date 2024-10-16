@@ -1,45 +1,75 @@
 package com.positive.culture.seoulQuest.domain;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Builder
+@Table(name = "tbl_member")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = "memberRoleList")
 
 public class Member {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
+    private String memberId;
+    private String name;
     private String email;
-    private String pw;
-    private String nickname;
-
+    private String nickName;
+    private String password;
     private boolean social;
+    private String phoneNumber;
+    private LocalDate birthday;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @Embedded
+    private Address address;
+
+    @ElementCollection
     @Builder.Default
     private List<MemberRole> memberRoleList = new ArrayList<>();
+
     public void addRole(MemberRole memberRole) {
         memberRoleList.add(memberRole);
     }
-    public void clearRole(MemberRole memberRole) {
-        memberRoleList.clear();
+
+    public void deleteRole(MemberRole memberRole) {
+        memberRoleList.remove(memberRole);
     }
-    public void changeNickname(String nickname) {
-        this.nickname = nickname;
+
+    public void changeEmail(String email) {
+        this.email = email;
     }
-    public void changePw(String pw) {
-        this.pw = pw;
+
+    public void changeNick(String nickName) {
+        this.nickName = nickName;
     }
-    public void changeSocial(boolean social) {
-        this.social = social;
+
+    public void changePw(String password) {
+        this.password = password;
     }
+
+    public void changeSocial(boolean social) {this.social = social;}
+
+    public void changePhone(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void changeAddress(Address address) {
+        this.address = address;
+    }
+
+    public void changeBirth(LocalDate birthday) { this.birthday = birthday; }
+
+
 }
