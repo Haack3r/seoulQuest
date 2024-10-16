@@ -10,10 +10,14 @@ import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,6 +29,8 @@ import java.util.stream.Collectors;
 public class TourController {
     private final CustomFileUtil fileUtil;
     private final TourService tourService;
+
+
 
     //전체 목록 조회 - test 성공 (유저 , 관리자)
     @GetMapping("/list")
@@ -110,5 +116,21 @@ public class TourController {
         fileUtil.deleteFiles(oldFileNames);
 
         return Map.of("RESULT","SUCCESS");
+    }
+
+    @GetMapping("/date")
+    public ResponseEntity<List<TourDTO>> getDate(String date){
+
+        LocalDate localdate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+
+        List<TourDTO> dtoList =new ArrayList<>();
+        tourService.getTourBytDateA(localdate).forEach(i->{
+
+            TourDTO dto = tourService.entityChangeDTO(i);
+
+            dtoList.add(dto);
+        });
+        log.info("동작하는가");
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 }

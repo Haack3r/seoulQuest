@@ -10,9 +10,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface TourRepository extends JpaRepository<Tour,Long> {
+
 
     //전체 조회
     @Query("select t, ti from Tour t left join t.tourImageList ti where ti.ord = 0 and t.delFlag=false")
@@ -27,5 +30,7 @@ public interface TourRepository extends JpaRepository<Tour,Long> {
     @Modifying
     @Query("update Tour t set t.delFlag = :flag where t.tno = :tno")
     void updateToDelete(@Param("tno")Long tno, @Param("flag") boolean flag);
+
+    List<Tour> getTourBytDate(LocalDate date);
 
 }

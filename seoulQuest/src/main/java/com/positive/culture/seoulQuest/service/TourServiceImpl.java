@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,24 +82,24 @@ public class TourServiceImpl implements TourService{
     }
 
     //엔티티를 DTO로 변환해주는 메서드  -> getList와 get에 사용
-    private TourDTO entityChangeDTO(Tour tour){
-        TourDTO tourDTO = TourDTO.builder()
-                .tno(tour.getTno())
-                .tname(tour.getTname())
-                .tdesc(tour.getTdesc())
-                .tprice(tour.getTprice())
-                .tcategoryName(tour.getTcategoryName())
-                .tlocation(tour.getTlocation())
-                .zipcode(tour.getZipcode())
-                .seatRemain(tour.getSeatRemain())
-                .tDate(tour.getTDate())
-                .createAt(tour.getCreateAt())
-                .updateAt(tour.getUpdateAt())
-                .build();
-        return tourDTO;
-    }
-
-    //---------------------------------------------------------------
+//    public TourDTO entityChangeDTO(Tour tour){
+//        TourDTO tourDTO = TourDTO.builder()
+//                .tno(tour.getTno())
+//                .tname(tour.getTname())
+//                .tdesc(tour.getTdesc())
+//                .tprice(tour.getTprice())
+//                .tcategoryName(tour.getTcategoryName())
+//                .tlocation(tour.getTlocation())
+//                .zipcode(tour.getZipcode())
+//                .seatRemain(tour.getSeatRemain())
+//                .tDate(tour.getTDate())
+//                .createAt(tour.getCreateAt())
+//                .updateAt(tour.getUpdateAt())
+//                .build();
+//        return tourDTO;
+//    }
+//
+//    //---------------------------------------------------------------
 
     //등록 --(관리자)
     @Override
@@ -109,7 +110,7 @@ public class TourServiceImpl implements TourService{
     }
 
     //DTO를 엔티티로 변환해주는 메서드 -> register에 사용
-    private Tour dtoToEntity(TourDTO tourDTO){
+    public Tour dtoToEntity(TourDTO tourDTO){
         Tour tour =Tour.builder()
                 .tno(tourDTO.getTno())
                 .tname(tourDTO.getTname())
@@ -177,6 +178,11 @@ public class TourServiceImpl implements TourService{
     @Override
     public void remove(Long tno) {
         tourRepository.updateToDelete(tno, true);
+    }
+
+    @Override
+    public List<Tour> getTourBytDateA(LocalDate date) {
+        return tourRepository.getTourBytDate(date);
     }
 
 }

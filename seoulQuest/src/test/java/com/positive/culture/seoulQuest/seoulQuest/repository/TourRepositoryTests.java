@@ -2,6 +2,7 @@ package com.positive.culture.seoulQuest.seoulQuest.repository;
 
 import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.domain.Tour;
+import com.positive.culture.seoulQuest.formatter.LocalDateFormatter;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -79,5 +82,11 @@ public class TourRepositoryTests {
 //
 //    }
 
-
+    @Test
+    public void testDate(){
+        String string = "2024-10-14";
+        LocalDate date = LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
+        System.out.println(date);
+        tourRepository.getTourBytDate(date);
+    }
 }

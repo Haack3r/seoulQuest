@@ -5,7 +5,10 @@ import FetchingModal from '../common/FetchingModal';
 // import useCustomCart from '../../hooks/useCustomCart';
 // import useCustomLogin from '../../hooks/useCustomLogin';
 // import CartComponent from '../menus/CartComponent';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/Card"
 import { getOne } from '../../api/tourApi';
+import { Calendar, DatePicker, theme } from "antd";
+import axios from 'axios';
 
 const initState = {
     tno: 0,
@@ -19,10 +22,28 @@ const initState = {
 };
 const host = API_SERVER_HOST;
 
+// -------------calendar----------------
+const onPanelChange = (value, mode) => {
+    console.log(value.format('YYYY-MM-DD'), mode);
+    };
+//---------------------------------------------------
+
+
 const TourReadComponent = ({ tno }) => {
     const [tour, setTour] = useState(initState);
     const { moveToList, moveToModify, page, size } = useCustomMove();
     const [fetching, setFetching] = useState(false);
+    const [currentImage, setCurrentImage] = useState(0)
+
+    // -------------calendar---------------------------------
+    const { token } = theme.useToken();
+     const wrapperStyle = {
+        width: 300,
+        border: `1px solid ${token.colorBorderSecondary}`,
+        borderRadius: token.borderRadiusLG,
+     };
+
+    //--------------cart---------------------------------------
     //const { changeCart, cartItems } = useCustomCart();
     //const { loginState } = useCustomLogin();
 
@@ -49,15 +70,26 @@ const TourReadComponent = ({ tno }) => {
         });
     }, [tno]); //tno값이 바뀔때마다 useEffect가 실행됨
 
+    const ff = async(e) => {
+        // console.log("들어오나", e.$d)
+        const res = await axios.get("http://localhost:8080/api/tours/date", e.$d)
+        console.log(res.data);
+        return res.data;
+    }
+
+
   return (
     <div className='grid grid-cols-3 gap-6 mt-10 m-4'>
     {/* Tour Details Section */}
-    <div className='col-span-2 border-2 p-4 rounded-lg shadow-md'>
-        {fetching ? <FetchingModal /> : null}
-
+        <Card className='col-span-2 border-2 p-4 rounded-lg shadow-md'>
+            <CardHeader className="space-y-1">
+                {fetching ? <FetchingModal /> : null}
+                <div className='border w-20 rounded-2xl border-solid text-center font-bold mb-2'>No.{tour.tno}</div>
+                <CardTitle className='text-4xl font-bold'>{tour.tname}</CardTitle>
+            </CardHeader>
         {/* Tour Images */}
         
-        <div className='w-1/2 justify-center flex flex-col m-auto items-center'>
+        {/* <div className='w-1/2 justify-center flex flex-col m-auto items-center'>
             {tour.uploadFileNames.map((i, idx) => (
                 <img
                     alt='tour'
@@ -66,9 +98,10 @@ const TourReadComponent = ({ tno }) => {
                     src={`${host}/api/tours/view/${i}`}
                 />
             ))}
-        </div>
+        </div> */}
 
         {/* Product Information */}
+        <CardContent className="grid gap-6 md:grid-cols-2">
         <div className='flex flex-col mt-10'>
             <div className='relative mb-4 flex w-full items-stretch'>
                 <div className='w-1/5 p-6 text-right font-bold'>TNO</div>
@@ -102,8 +135,15 @@ const TourReadComponent = ({ tno }) => {
             </div>
             <div className='relative mb-4 flex w-full items-stretch'>
                 <div className='w-1/5 p-6 text-right font-bold'>TDATE</div>
-                <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
+                    <DatePicker fullscreen={false} onPanelChange={onPanelChange} onChange={ff}/>
+                {/* <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
                     {tour.tDate}
+                </div> */}
+            </div>
+            <div className='relative mb-4 flex w-full items-stretch'>
+                <div className='w-1/5 p-6 text-right font-bold'>SeatRemain</div>
+                <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
+                    {tour.seatRemain}
                 </div>
             </div>
             <div className='relative mb-4 flex w-full items-stretch'>
@@ -138,9 +178,14 @@ const TourReadComponent = ({ tno }) => {
             >
                 List
             </button>
-        </div>
-    </div>
-
+            </div>
+        </CardContent>
+    
+        <CardFooter className="justify-between">
+            <p className="text-sm text-gray-500">Free shipping on orders over 50,000won</p>
+            <p className="text-sm text-gray-500">30-day return policy</p>
+        </CardFooter>
+    </Card>
     {/* Cart Section */}
     {/* <div className='col-span-1 border-2 p-4 rounded-lg shadow-md'>
         <CartComponent />
