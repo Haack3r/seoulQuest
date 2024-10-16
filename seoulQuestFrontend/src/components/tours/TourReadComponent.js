@@ -70,12 +70,25 @@ const TourReadComponent = ({ tno }) => {
         });
     }, [tno]); //tno값이 바뀔때마다 useEffect가 실행됨
 
-    const ff = async(e) => {
-        // console.log("들어오나", e.$d)
-        const res = await axios.get("http://localhost:8080/api/tours/date", e.$d)
-        console.log(res.data);
-        return res.data;
+    const ff = async (e) => {
+        try {
+            console.log("들어오나", e);
+            console.log("들어오나", e.$d.toJSON());
+    
+            // 예시: 쿼리 파라미터로 변환하여 요청 보내기
+            const res = await axios.get("http://localhost:8080/api/tours/date", {
+                params: {
+                    date: e.$d.toJSON() // 서버에서 요구하는 포맷에 맞춰 쿼리 파라미터로 전달
+                }
+            });
+            
+            console.log(res.data);
+            return res.data;
+        } catch (error) {
+            console.error("오류 발생:", error);
+        }
     }
+    
 
 
   return (

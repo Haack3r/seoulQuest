@@ -10,6 +10,7 @@ import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -119,17 +120,17 @@ public class TourController {
     }
 
     @GetMapping("/date")
-    public ResponseEntity<List<TourDTO>> getDate(String date){
-
-        LocalDate localdate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
-
+    public ResponseEntity<List<TourDTO>> getDate(@RequestBody Map<String,String> date){
+        log.info(date);
+//        LocalDate localdate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+//
         List<TourDTO> dtoList =new ArrayList<>();
-        tourService.getTourBytDateA(localdate).forEach(i->{
-
-            TourDTO dto = tourService.entityChangeDTO(i);
-
-            dtoList.add(dto);
-        });
+//        tourService.getTourBytDateA(localdate).forEach(i->{
+//
+//            TourDTO dto = tourService.entityChangeDTO(i);
+//
+//            dtoList.add(dto);
+//        });
         log.info("동작하는가");
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
