@@ -181,8 +181,9 @@ public class TourServiceImpl implements TourService{
     }
 
     @Override
-    public List<Tour> getTourBytDateA(LocalDate date) {
-        return tourRepository.getTourBytDate(date);
+    public Tour getTourBytDateA(LocalDate date, Long tno) {
+        Tour tour = tourRepository.getTourBytDate(date,tno);
+        return tour;
     }
 
 }

@@ -31,6 +31,6 @@ public interface TourRepository extends JpaRepository<Tour,Long> {
     @Query("update Tour t set t.delFlag = :flag where t.tno = :tno")
     void updateToDelete(@Param("tno")Long tno, @Param("flag") boolean flag);
 
-    List<Tour> getTourBytDate(LocalDate date);
+    Tour getTourBytDate(LocalDate date, Long tno);
 
 }

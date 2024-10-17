@@ -7,8 +7,9 @@ import FetchingModal from '../common/FetchingModal';
 // import CartComponent from '../menus/CartComponent';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/Card"
 import { getOne } from '../../api/tourApi';
-import { Calendar, DatePicker, theme } from "antd";
+import { DatePicker, theme } from "antd";
 import axios from 'axios';
+import {ApartmentOutlined, MergeOutlined, PushpinFilled, ShoppingCartOutlined, UserOutlined} from '@ant-design/icons';
 
 const initState = {
     tno: 0,
@@ -73,14 +74,13 @@ const TourReadComponent = ({ tno }) => {
     const ff = async (e) => {
         try {
             console.log("들어오나", e);
-            console.log("들어오나", e.$d.toJSON());
+            console.log("들어오나", e.$d.toISOString());
     
+            
+            const dateString = e.$d.toISOString().split('T')[0];
+            const params = new URLSearchParams({ date: dateString });
             // 예시: 쿼리 파라미터로 변환하여 요청 보내기
-            const res = await axios.get("http://localhost:8080/api/tours/date", {
-                params: {
-                    date: e.$d.toJSON() // 서버에서 요구하는 포맷에 맞춰 쿼리 파라미터로 전달
-                }
-            });
+            const res = await axios.get(`http://localhost:8080/api/tours/date?${params.toString()}`);
             
             console.log(res.data);
             return res.data;
@@ -101,73 +101,71 @@ const TourReadComponent = ({ tno }) => {
                 <CardTitle className='text-4xl font-bold'>{tour.tname}</CardTitle>
             </CardHeader>
         {/* Tour Images */}
-        
-        {/* <div className='w-1/2 justify-center flex flex-col m-auto items-center'>
-            {tour.uploadFileNames.map((i, idx) => (
-                <img
-                    alt='tour'
-                    key={idx}
-                    className='p-4 w-full rounded-md'
-                    src={`${host}/api/tours/view/${i}`}
-                />
-            ))}
-        </div> */}
+         <CardContent>
+            <div className="space-y-4">
+                <div className="aspect-square relative">
+                    <img
+                        src={`${host}/api/tours/view/${tour.uploadFileNames[currentImage]}`}
+                        alt={tour.tname}
+                        className="rounded-lg object-cover w-full h-full"
+                            />
+                        </div>
+                        <div className="flex space-x-2">
+                            {tour.uploadFileNames.map((image, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentImage(index)}
+                                className={`w-20 h-20 relative rounded-md overflow-hidden ${
+                                currentImage === index ? 'ring-2 ring-primary' : ''
+                                }`}
+                            >
+                            <img
+                                src={`${host}/api/products/view/${image}`}
+                                alt={`${tour.tname} thumbnail ${index + 1}`}
+                                className="rounded-lg object-cover w-full h-full"
+                            />
+                            </button>
+                            ))}
+                        </div>
+                    </div>
 
         {/* Product Information */}
-        <CardContent className="grid gap-6 md:grid-cols-2">
+       
         <div className='flex flex-col mt-10'>
-            <div className='relative mb-4 flex w-full items-stretch'>
-                <div className='w-1/5 p-6 text-right font-bold'>TNO</div>
-                <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                    {tour.tno}
-                </div>
-            </div>
-            <div className='relative mb-4 flex w-full items-stretch'>
-                <div className='w-1/5 p-6 text-right font-bold'>TNAME</div>
-                <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                    {tour.tname}
-                </div>
-            </div>
+            
              <div className='relative mb-4 flex w-full items-stretch'>
-                <div className='w-1/5 p-6 text-right font-bold'>TCategory</div>
                 <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                    {tour.tcategoryName}
+                    <MergeOutlined />{tour.tcategoryName}
                 </div>
             </div>
             <div className='relative mb-4 flex w-full items-stretch'>
-                <div className='w-1/5 p-6 text-right font-bold'>PRICE</div>
                 <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                    {tour.tprice} 원
+                    {tour.tprice.toLocaleString()}won
                 </div>
             </div>
+            
             <div className='relative mb-4 flex w-full items-stretch'>
-                <div className='w-1/5 p-6 text-right font-bold'>TDESC</div>
-                <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                    {tour.tdesc}
-                </div>
-            </div>
-            <div className='relative mb-4 flex w-full items-stretch'>
-                <div className='w-1/5 p-6 text-right font-bold'>TDATE</div>
                     <DatePicker fullscreen={false} onPanelChange={onPanelChange} onChange={ff}/>
                 {/* <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
                     {tour.tDate}
                 </div> */}
             </div>
             <div className='relative mb-4 flex w-full items-stretch'>
-                <div className='w-1/5 p-6 text-right font-bold'>SeatRemain</div>
+                
                 <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                    {tour.seatRemain}
+                    <UserOutlined />{tour.seatRemain}
                 </div>
             </div>
+            
             <div className='relative mb-4 flex w-full items-stretch'>
-                <div className='w-1/5 p-6 text-right font-bold'>TLocation</div>
-                <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                    {tour.tlocation}
-                </div>
-                {/* 지도 API 추가 */}
+                {/* <div className='w-4/5 p-6 rounded border border-solid shadow-md'> */}
+                    {tour.tdesc}
+                {/* </div> */}
             </div>
         </div>
 
+       
+    
         {/* Action Buttons */}
         <div className='flex justify-end p-4 space-x-4'>
             <button
@@ -175,7 +173,7 @@ const TourReadComponent = ({ tno }) => {
                 className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
                 //onClick={handleClickAddCart}
             >
-                Add to Cart
+                <ShoppingCartOutlined />Add to Cart
             </button>
             <button
                 type='button'
@@ -192,11 +190,9 @@ const TourReadComponent = ({ tno }) => {
                 List
             </button>
             </div>
-        </CardContent>
-    
-        <CardFooter className="justify-between">
-            <p className="text-sm text-gray-500">Free shipping on orders over 50,000won</p>
-            <p className="text-sm text-gray-500">30-day return policy</p>
+       </CardContent>
+            
+        <CardFooter className="relative justify-between">
         </CardFooter>
     </Card>
     {/* Cart Section */}

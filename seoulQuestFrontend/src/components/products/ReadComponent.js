@@ -7,7 +7,6 @@ import useCustomCart from '../../hooks/useCustomCart';
 // import useCustomLogin from '../../hooks/useCustomLogin';
 import CartComponent from '../menus/CartComponent';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/Card"
-import { Button } from 'antd';
 import {ShoppingCartOutlined} from '@ant-design/icons';
 
 const initState = {
@@ -95,7 +94,7 @@ const ReadComponent = ({ pno }) => {
                         </div>
                     
                         <div className="space-y-2">
-                            <h3 className="text-2xl font-bold">{product.price.toLocaleString()}원</h3>
+                            <h3 className="text-2xl font-bold">{product.price.toLocaleString()}won</h3>
                         </div>
                         {/* Action Buttons */}
                         <div className='flex justify-end p-4 space-x-4'>

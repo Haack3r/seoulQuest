@@ -85,8 +85,9 @@ public class TourRepositoryTests {
     @Test
     public void testDate(){
         String string = "2024-10-14";
+        long num = 1l;
         LocalDate date = LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
         System.out.println(date);
-        tourRepository.getTourBytDate(date);
+        tourRepository.getTourBytDate(date,num);
     }
 }
