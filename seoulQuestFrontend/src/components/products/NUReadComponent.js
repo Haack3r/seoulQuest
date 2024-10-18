@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import useCustomMove from '../../hooks/useCustomMove';
+import { StarIcon, ShoppingCartIcon, HeartIcon } from 'lucide-react'
 
-import FetchingModal from '../common/FetchingModal';
 import useCustomCart from '../../hooks/useCustomCart';
-// import useCustomLogin from '../../hooks/useCustomLogin';
+import useCustomLogin from '../../hooks/useCustomLogin';
 import CartComponent from '../menus/CartComponent';
 import { getOneNU } from '../../api/nuProductApi';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { Link } from 'react-router-dom';
 
 const initState = {
     pno: 0,
@@ -21,22 +25,29 @@ const NUReadComponent = ({ pno }) => {
     const [product, setProduct] = useState(initState);
     const { moveToList, moveToModify, page, size } = useCustomMove();
     const [fetching, setFetching] = useState(false);
-    // const { changeCart, cartItems } = useCustomCart();
+    const [currentImage, setCurrentImage] = useState(0)
+    const [value, setValue] = React.useState(0);
+    const { loginState } = useCustomLogin();
+
+
+    const handleChange = (event, newValue) => {
+      setValue(newValue);
+    };
+    const { changeCart, cartItems } = useCustomCart();
     // const { loginState } = useCustomLogin();
+  
 
-    // const handleClickAddCart = () => {
-    //     let qty = 1;
+    const handleClickAddCart = () => {
+        // let qty = 1;
 
-    //     const addedItem = cartItems.filter(item => item.pno === parseInt(pno))[0];
+        // const addedItem = cartItems.filter(item => item.pno === parseInt(pno))[0];
 
-    //     if (addedItem) {
-    //         if (window.confirm("이미 추가된 상품입니다. 추가하시겠습니까? ") === false) {
-    //             return;
-    //         }
-    //         qty = addedItem.qty + 1;
-    //     }
-    //     changeCart({ email: loginState.email, pno: pno, qty: qty });
-    // };
+        // if (addedItem) {
+            
+        // }
+        // changeCart({ email: loginState.email, pno: pno, qty: qty });
+        
+    };
 
     useEffect(() => {
         setFetching(true);
@@ -48,84 +59,132 @@ const NUReadComponent = ({ pno }) => {
     }, [pno]);
 
     return (
-        <div className='grid grid-cols-3 gap-6 mt-10 m-4'>
-            {/* Product Details Section */}
-            <div className='col-span-2 border-2 p-4 rounded-lg shadow-md'>
-                {fetching ? <FetchingModal /> : null}
+        <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Product Image */}
+          <div className="relative h-96 md:h-full">
+          <div className="space-y-4">
+                        <div className="aspect-square relative">
+                            <img
+                                src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
+                                alt={product.pname}
+                                className="rounded-lg object-cover w-full h-full"
+                            />
+                        </div>
+                        <div className="flex space-x-2">
+                            {product.uploadFileNames.map((image, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentImage(index)}
+                                className={`w-20 h-20 relative rounded-md overflow-hidden ${
+                                currentImage === index ? 'ring-2 ring-primary' : ''
+                                }`}
+                            >
+                            <img
+                                src={`${host}/api/products/view/${image}`}
+                                alt={`${product.pname} thumbnail ${index + 1}`}
+                                className="rounded-lg object-cover w-full h-full"
+                            />
+                            </button>
+                            ))}
+                        </div>
+                    </div>
+          </div>
 
-                {/* Product Images */}
-                
-                <div className='w-1/2 justify-center flex flex-col m-auto items-center'>
-                    {product.uploadFileNames.map((i, idx) => (
-                        <img
-                            alt='product'
-                            key={idx}
-                            className='p-4 w-full rounded-md'
-                            src={`${host}/api/products/view/${i}`}
-                        />
-                    ))}
-                </div>
+          {/* Product Details */}
+          <div>
+            <h1 className="text-4xl font-light tracking-wide text-gray-900 mb-4">{product.pname}</h1>
+            <div className="flex items-center mb-4">
+              {[...Array(5)].map((_, i) => (
+                <StarIcon key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+              ))}
+              <span className="ml-2 text-gray-600">(4.8) 24 reviews</span>
+            </div>
+            <p className="text-2xl font-light text-gray-900 mb-6">₩{product.price.toLocaleString()}</p>
+            <p className="text-gray-700 mb-6">
+            {product.pdesc}
+            </p>
 
-                {/* Product Information */}
-                <div className='flex flex-col mt-10'>
-                    <div className='relative mb-4 flex w-full items-stretch'>
-                        <div className='w-1/5 p-6 text-right font-bold'>PNO</div>
-                        <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                            {product.pno}
-                        </div>
-                    </div>
-                    <div className='relative mb-4 flex w-full items-stretch'>
-                        <div className='w-1/5 p-6 text-right font-bold'>PNAME</div>
-                        <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                            {product.pname}
-                        </div>
-                    </div>
-                    <div className='relative mb-4 flex w-full items-stretch'>
-                        <div className='w-1/5 p-6 text-right font-bold'>PRICE</div>
-                        <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                            {product.price}원
-                        </div>
-                    </div>
-                    <div className='relative mb-4 flex w-full items-stretch'>
-                        <div className='w-1/5 p-6 text-right font-bold'>PDESC</div>
-                        <div className='w-4/5 p-6 rounded border border-solid shadow-md'>
-                            {product.pdesc}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className='flex justify-end p-4 space-x-4'>
-                    <button
-                        type='button'
-                        className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
-                        //onClick={handleClickAddCart}
-                    >
-                        Add to Cart
-                    </button>
-                    <button
-                        type='button'
-                        className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
-                        onClick={() => moveToModify(pno)}
-                    >
-                        Modify
-                    </button>
-                    <button
-                        type='button'
-                        className='rounded p-4 text-xl bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-300'
-                        onClick={() => moveToList({ page, size })}
-                    >
-                        List
-                    </button>
-                </div>
+            {/* Size Selection */}
+            <div className="mb-6">
+              <label htmlFor="size" className="text-gray-700 mb-2 block">Size</label>
+              <select
+                id="size"
+                className="w-full border border-gray-300 p-2 rounded-lg"
+                // value={selectedSize}
+                // onChange={(e) => setSelectedSize(e.target.value)}
+              >
+                <option value="">Select size</option>
+                <option value="s">Small</option>
+                <option value="m">Medium</option>
+                <option value="l">Large</option>
+                <option value="xl">X-Large</option>
+              </select>
             </div>
 
-            {/* Cart Section */}
-            {/* <div className='col-span-1 border-2 p-4 rounded-lg shadow-md'>
-                <CartComponent />
-            </div> */}
+            {/* Quantity Selection */}
+            <div className="flex items-center mb-6">
+              <label htmlFor="quantity" className="text-gray-700 mr-4">Quantity</label>
+              <input
+                id="quantity"
+                type="number"
+                min="1"
+                // value={quantity}
+                // onChange={(e) => setQuantity(parseInt(e.target.value))}
+                className="w-20 border-gray-300 p-2 rounded-lg"
+              />
+            </div>
+
+            {/* Add to Cart and Wishlist Buttons */}
+            <div className="flex space-x-4 mb-8">
+              <button 
+                className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white p-1 rounded-lg w-full" 
+                onClick={handleClickAddCart}
+              ><Link to="/user/products"><ShoppingCartIcon className="mr-2 h-4 w-4" /> Add to Cart</Link>
+                
+              </button>
+              <button className="border border-gray-300 text-gray-700 hover:bg-gray-100 p-3 rounded-lg">
+                <HeartIcon className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Product Details */}
+            <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+              <h2 className="text-gray-900 text-lg font-semibold mb-2">Product Details</h2>
+              <ul className="list-disc list-inside text-gray-700">
+                <li>Material: 100% premium silk</li>
+                <li>Handcrafted in Seoul, South Korea</li>
+                <li>Includes both jeogori (jacket) and chima (skirt)</li>
+                <li>Decorative norigae (hanging ornament) included</li>
+                <li>Dry clean only</li>
+              </ul>
+            </div>
+          </div>
         </div>
-    );
-};
+
+        {/* Product Tabs */}
+        <div className="mt-16">
+          <div className="flex space-x-4 bg-gray-100 p-2 rounded-t-lg">
+            <button className="px-4 py-2 rounded-lg focus:outline-none focus:bg-white">Description</button>
+            <button className="px-4 py-2 rounded-lg focus:outline-none focus:bg-white">Specifications</button>
+            <button className="px-4 py-2 rounded-lg focus:outline-none focus:bg-white">Reviews</button>
+          </div>
+
+          <div className="bg-white p-6 border border-gray-200 rounded-b-lg">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">About this Hanbok</h3>
+            <p className="text-gray-700">
+              Our Traditional Korean Hanbok is a stunning representation of Korea's rich cultural heritage. 
+              Each piece is meticulously crafted by skilled artisans in Seoul, ensuring authenticity and 
+              the highest quality. The vibrant colors and intricate patterns are inspired by royal court 
+              attire from the Joseon Dynasty, making this hanbok perfect for special occasions, cultural 
+              events, or as a unique addition to your wardrobe.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default NUReadComponent;
