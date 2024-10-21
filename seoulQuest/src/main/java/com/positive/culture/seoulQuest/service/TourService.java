@@ -29,7 +29,7 @@ public interface TourService {
     void remove(Long tno);
 
 
-    Tour getTourBytDateA(LocalDate date,Long tno);
+//    Tour getTourBytDateA(LocalDate date,Long tno);
 
     default  //DTO를 엔티티로 변환해주는 메서드 -> register에 사용
     public Tour dtoToEntity(TourDTO tourDTO){

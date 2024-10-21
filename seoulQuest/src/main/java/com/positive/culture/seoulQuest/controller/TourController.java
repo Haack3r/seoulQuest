@@ -119,19 +119,20 @@ public class TourController {
         return Map.of("RESULT", "SUCCESS");
     }
 
-    @GetMapping("/date")
-    public ResponseEntity<List<TourDTO>> getDate(@Param("date") String date, Long tno) {
-        log.info(date);
-
-        // 날짜 문자열을 LocalDate로 변환 (ISO_DATE 형식: YYYY-MM-DD)
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
-        log.info(localDate.plusDays(1));
-//        // Service 호출하여 특정 날짜에 해당하는 Tour 데이터 가져오기
-        List<TourDTO> dtoList = new ArrayList<>();
-//        dtoList.add(tourService.getTourBytDateA(localDate.plusDays(1)));
-
-
-        return new ResponseEntity<>(dtoList, HttpStatus.OK);
-    }
+    //연습용
+//    @GetMapping("/date")
+//    public ResponseEntity<List<TourDTO>> getDate(@Param("date") String date, Long tno) {
+//        log.info(date);
+//
+//        // 날짜 문자열을 LocalDate로 변환 (ISO_DATE 형식: YYYY-MM-DD)
+//        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+//        log.info(localDate.plusDays(1));
+////        // Service 호출하여 특정 날짜에 해당하는 Tour 데이터 가져오기
+//        List<TourDTO> dtoList = new ArrayList<>();
+////        dtoList.add(tourService.getTourBytDateA(localDate.plusDays(1)));
+//
+//
+//        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+//    }
 
 }

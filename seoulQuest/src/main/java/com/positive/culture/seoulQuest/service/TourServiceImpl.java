@@ -180,10 +180,10 @@ public class TourServiceImpl implements TourService{
         tourRepository.updateToDelete(tno, true);
     }
 
-    @Override
-    public Tour getTourBytDateA(LocalDate date, Long tno) {
-        Tour tour = tourRepository.getTourBytDate(date,tno);
-        return tour;
-    }
+//    @Override
+//    public Tour getTourBytDateA(LocalDate date, Long tno) {
+//        Tour tour = tourRepository.getTourBytDate(date,tno);
+//        return tour;
+//    }
 
 }

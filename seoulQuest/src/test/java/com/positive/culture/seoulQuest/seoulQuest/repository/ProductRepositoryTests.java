@@ -22,9 +22,9 @@ public class ProductRepositoryTests {
     public void testInsert(){
         for(int i= 0; i<10; i++){
             Product product = Product.builder()
-                    .pname("상품"+i)
+                    .pname("product"+i)
                     .price(100*i)
-                    .pdesc("상품설명" + i)
+                    .pdesc("Discover the charm of Korea with our beautifully crafted Korean tea set. This set includes traditional ceramic cups and a teapot, showcasing intricate patterns inspired by Korean art. Perfect for experiencing the rich culture and flavors of Korean tea, it makes a thoughtful gift or a unique addition to any home.Discover the charm of Korea with our beautifully crafted Korean tea set. This set includes traditional ceramic cups and a teapot, showcasing intricate patterns inspired by Korean art. Perfect for experiencing the rich culture and flavors of Korean tea, it makes a thoughtful gift or a unique addition to any home." )
                     .build();
             product.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE1.jpg");
             product.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE2.jpg");
