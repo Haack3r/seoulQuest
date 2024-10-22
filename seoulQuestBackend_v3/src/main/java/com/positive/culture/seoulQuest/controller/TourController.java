@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Log4j2
 @RequestMapping("/api/user/tours")
+@PreAuthorize("hasAnyRole('ROLE_USER')")
 public class TourController {
     private final CustomFileUtil fileUtil;
     private final TourService tourService;

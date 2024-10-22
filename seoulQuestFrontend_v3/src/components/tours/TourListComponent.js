@@ -33,7 +33,7 @@ const initState = {
 
 const TourListComponent = () => {
   
-  //const { exceptionHandle } = useCustomLogin()
+  const { exceptionHandle } = useCustomLogin()
   const { page, size, refresh, moveToList, moveToRead } = useCustomMove()
   const [serverData, setServerData] = useState(initState)
 
@@ -47,7 +47,7 @@ const TourListComponent = () => {
       console.log(data)
       setServerData(data)
       setFetching(false)
-    });//.catch(err => exceptionHandle(err))
+    }).catch(err => exceptionHandle(err))
   }, [page, size, refresh]) //page, size, refresh 중 하나가 바뀔때마다 실행
 
   return (

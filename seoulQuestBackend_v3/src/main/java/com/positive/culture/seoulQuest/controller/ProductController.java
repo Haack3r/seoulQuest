@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Log4j2
 @RequestMapping("/api/user/products")
+@PreAuthorize("hasAnyRole('ROLE_USER')")
 public class ProductController {
     private final CustomFileUtil fileUtil;
     private final ProductService productService;

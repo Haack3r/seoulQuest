@@ -24,8 +24,8 @@ public class MemberDTO extends User {
 
     private List<String> roleNames = new ArrayList<>();
 
-    public MemberDTO(String email, String pw, String nickname, boolean social, List<String> roleNames) {
-        super(email, pw, roleNames.stream().map(str -> new
+    public MemberDTO(String email, String password, String nickname, boolean social, List<String> roleNames) {
+        super(email, password, roleNames.stream().map(str -> new
                 SimpleGrantedAuthority("ROLE_"+str)).collect(Collectors.toList()));
 
         this.email = email;

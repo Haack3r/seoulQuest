@@ -53,8 +53,8 @@ const BasicMenu = () => {
               <ul className="flex space-x-8">
                 <li><Link to="/user/tours/" className="text-gray-600 hover:text-gray-900">Tours</Link></li>
                 <li><Link to='/user/products/' className="text-gray-600 hover:text-gray-900">Souvenirs</Link></li>
-                <li><Link to="/user/about/" className="text-gray-600 hover:text-gray-900">About</Link></li>
-                <li><Link to='/user/contact/' className="text-gray-600 hover:text-gray-900">Contact</Link></li>
+                <li><Link to="/about/" className="text-gray-600 hover:text-gray-900">About</Link></li>
+                <li><Link to='/contact/' className="text-gray-600 hover:text-gray-900">Contact</Link></li>
               </ul>
             </nav>
             <div>
