@@ -1,6 +1,7 @@
 package com.positive.culture.seoulQuest.advice;
 
 //import com.positive.culture.seoulQuest.util.CustomJWTException;
+import com.positive.culture.seoulQuest.util.CustomJWTException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,9 +29,9 @@ public class CustomControllerAdvice {
     }
 
     //토큰 관련
-//    @ExceptionHandler (CustomJWTException.class)
-//    protected ResponseEntity<?> handleJWTException(CustomJWTException e) {
-//        String message = e.getMessage();
-//        return ResponseEntity.ok().body(Map.of("error", message));
-//    }
+    @ExceptionHandler (CustomJWTException.class)
+    protected ResponseEntity<?> handleJWTException(CustomJWTException e) {
+        String msg = e.getMessage();
+        return ResponseEntity.ok().body(Map.of("error", msg));
+    }
 }

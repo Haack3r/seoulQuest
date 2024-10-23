@@ -1,12 +1,13 @@
 package com.positive.culture.seoulQuest.controller;
 
+
 import com.positive.culture.seoulQuest.util.CustomJWTException;
 import com.positive.culture.seoulQuest.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -17,9 +18,8 @@ import java.util.Map;
 
 public class APIRefreshController {
     // p342
-    @GetMapping("/api/member/refresh")
     @RequestMapping("/api/member/refresh")
-    public Map<String, Object> refresh(@RequestHeader("Authorization") String authHeader, String refreshToken) {
+    public Map<String, Object> refresh(@RequestHeader("Authorization") String authHeader,  @RequestParam("refreshToken")String refreshToken) {
         if (refreshToken == null) throw new CustomJWTException("NULL_REFRESH");
         if (authHeader == null || authHeader.length() < 7) throw new CustomJWTException("INVALID_STRING");
         String accessToken = authHeader.substring(7);

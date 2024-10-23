@@ -40,13 +40,35 @@ const ListComponent = () => {
 
   useEffect(() => {
     setFetching(true);
-
-    getList({ page, size }).then((data) => {
-      console.log(data);
-      setServerData(data);
-      setFetching(false);
-    }).catch(err => exceptionHandle(err))
+  
+    getList({ page, size })
+      .then(data => {
+        console.log("Fetched data:", data); // Log the data to inspect its structure
+        if (data && Array.isArray(data.dtoList)) {
+          setServerData(data);
+        } else {
+          console.error("Unexpected data structure:", data);
+          setServerData(initState); // Fallback to initial state if data is incorrect
+        }
+        setFetching(false);
+      })
+      .catch(err => {
+        console.error("Error fetching data:", err);
+        exceptionHandle(err);
+        setFetching(false); // Reset fetching state on error
+      });
   }, [page, size, refresh]);
+  
+    
+//   useEffect(() => {
+//     setFetching(true)
+
+//     getList({ page, size }).then(data => {
+//         console.log(data)
+//         setServerData(data)
+//         setFetching(false)
+//     }).catch(err => exceptionHandle(err))
+// }, [page, size, refresh])
 
   return (
     <div className="border-2 border-blue-100 mr-2 ml-2">

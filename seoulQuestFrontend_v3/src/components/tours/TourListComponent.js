@@ -41,15 +41,21 @@ const TourListComponent = () => {
   const [fetching, setFetching] = useState(false)
 
   useEffect(() => {
-      setFetching(true)
-
-    getList({ page, size }).then(data => {
-      console.log(data)
-      setServerData(data)
-      setFetching(false)
-    }).catch(err => exceptionHandle(err))
-  }, [page, size, refresh]) //page, size, refresh 중 하나가 바뀔때마다 실행
-
+    setFetching(true)
+    getList({ page, size })
+      .then(data => {
+        console.log("API Response:", data)  // Check the structure of data
+        if (!data || !data.dtoList) {
+          throw new Error("Invalid data structure");
+        }
+        setServerData(data)
+        setFetching(false)
+      })
+      .catch(err => {
+        console.error(err)  // Log any errors
+        exceptionHandle(err)
+      })
+  }, [page, size, refresh])
   return (
     <div className='border-2 border-blue-100 mr-2 ml-2'>
       {/* 로딩중 모달 */}

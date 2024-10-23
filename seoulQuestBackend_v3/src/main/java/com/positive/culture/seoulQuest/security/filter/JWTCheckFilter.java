@@ -30,7 +30,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         log.info("check uri....."+path);
 
-        // api/member 경로의 호출은 체크 안함
+        //        // api/member 경로의 호출은 체크 안함
         if (path.startsWith("/api/member/")) return true;
 
         if (path.startsWith("/api/products/"))
@@ -48,43 +48,97 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/api/tours/{pno}}"))
             return true;
-
         return false;
     }
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("----- JWTCheckFilter -----");
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+//        log.info("----- JWTCheckFilter -----");
+//
+//        String authHeaderStr = request.getHeader("Authorization");
+//
+//        try{
+//            // Bearer accessToken
+//            String accessToken = authHeaderStr.substring(7);
+//            Map<String, Object> claims = JWTUtil.validateToken(accessToken);
+//
+//            log.info("JWT claims : "+claims);
+//
+//            // p336
+//            String email = (String) claims.get("email");
+//            String pw = (String) claims.get("pw");
+//            String nickname = (String) claims.get("nickname");
+//            Boolean social = (Boolean) claims.get("social");
+//            List<String> roleNames = (List<String>) claims.get("roleNames");
+//            roleNames.forEach(System.out::println);
+//            MemberDTO memberDTO = new MemberDTO(email, pw, nickname, social.booleanValue(), roleNames);
+//
+//            log.info("----------");
+//            log.info(memberDTO);
+//            log.info(memberDTO.getAuthorities());
+//
+//            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, pw, memberDTO.getAuthorities());
+//            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//
+//            filterChain.doFilter(request, response);
+//        } catch (Exception e) {
+//            log.error("JWT Check Error......");
+//            log.error(e.getMessage());
+//
+//            Gson gson = new Gson();
+//            String msg = gson.toJson(Map.of("error", "ERROR_ACCESS_TOKEN"));
+//
+//            response.setContentType("application/json");
+//            PrintWriter printWriter = response.getWriter();
+//            printWriter.print(msg);
+//            printWriter.close();
+//        }
+//    }
+@Override
+protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
+    log.info("----- JWTCheckFilter -----");
 
-        String authHeaderStr = request.getHeader("Authorization");
+    String authHeaderStr = request.getHeader("Authorization");
 
-        try{
-            // Bearer accessToken
-            String accessToken = authHeaderStr.substring(7);
+    if (authHeaderStr != null && authHeaderStr.startsWith("Bearer ")) {
+        String accessToken = authHeaderStr.substring(7); // Remove "Bearer " prefix
+
+        try {
             Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 
-            log.info("JWT claims : "+claims);
+            if (claims == null) {
+                throw new RuntimeException("Invalid JWT claims");
+            }
 
-            // p336
+            log.info("JWT claims : " + claims);
+
             String email = (String) claims.get("email");
-            String password = (String) claims.get("password");
+            String pw = (String) claims.get("pw");
             String nickname = (String) claims.get("nickname");
             Boolean social = (Boolean) claims.get("social");
             List<String> roleNames = (List<String>) claims.get("roleNames");
-            roleNames.forEach(System.out::println);
-            MemberDTO memberDTO = new MemberDTO(email, password, nickname, social.booleanValue(), roleNames);
+
+            if (roleNames == null) {
+                log.warn("Role names are null in the JWT claims");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token: No roles found.");
+                return; // Stop processing
+            }
+
+            // Create MemberDTO
+            MemberDTO memberDTO = new MemberDTO(email, pw, nickname, social != null && social, roleNames);
 
             log.info("----------");
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities());
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password, memberDTO.getAuthorities());
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(email, pw, memberDTO.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            log.error("JWT Check Error......");
-            log.error(e.getMessage());
+            log.error("JWT Check Error: " + e.getMessage());
 
             Gson gson = new Gson();
             String msg = gson.toJson(Map.of("error", "ERROR_ACCESS_TOKEN"));
@@ -94,5 +148,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             printWriter.print(msg);
             printWriter.close();
         }
+    } else {
+        log.warn("Authorization header is missing or does not start with Bearer");
+        filterChain.doFilter(request, response); // Proceed without authentication
     }
+}
+
 }

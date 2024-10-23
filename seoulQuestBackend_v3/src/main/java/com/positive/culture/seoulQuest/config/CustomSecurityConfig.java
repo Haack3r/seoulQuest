@@ -1,9 +1,6 @@
 package com.positive.culture.seoulQuest.config;
 
-//import com.positive.culture.seoulQuest.security.APILoginFailHandler;
-//import com.positive.culture.seoulQuest.security.APILoginSuccessHandler;
-//import com.positive.culture.seoulQuest.security.CustomAccessDeniedHandler;
-//import com.positive.culture.seoulQuest.security.JWTCheckFilter;
+
 
 import com.positive.culture.seoulQuest.security.filter.JWTCheckFilter;
 import com.positive.culture.seoulQuest.security.handler.APILoginFailHandler;
@@ -13,15 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -35,6 +27,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 //@EnableMethodSecurity  // 메서드 별 권한 체크
 public class CustomSecurityConfig {
+    // @Configuration 아래 @Bean 을 만들면 스프링에서 객체를 관리함
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        // Enable CORS and disable CSRF (since you're using JWT and stateless sessions)
@@ -48,7 +41,6 @@ public class CustomSecurityConfig {
 //        http.authorizeHttpRequests(auth -> {
 //            auth
 //                    .requestMatchers("/api/products/list", "/api/products/view/**", "/api/products/read/", "/api/products/{pno}").permitAll() // Public access
-//                    .requestMatchers("/api/tours/list", "/api/tours/view/**", "/api/tours/read/", "/api/tours/{pno}").permitAll() // Public access
 //                    .anyRequest().authenticated(); // Protect other endpoints
 //        });
 //
@@ -57,8 +49,6 @@ public class CustomSecurityConfig {
 //
 //        return http.build();
 //    }
-
-    // @Configuration 아래 @Bean 을 만들면 스프링에서 객체를 관리함
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("----security config----");
@@ -88,7 +78,6 @@ public class CustomSecurityConfig {
         return http.build();
     }
 
-    //시큐리티 구현 후 사용할 CORS 설정
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
