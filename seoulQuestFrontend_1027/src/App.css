@@ -10,7 +10,7 @@
 }
 
 .link-animation-color:hover {
-  color: #f9dc74; /* Bright color on hover */
+  color: #f3f3f3; /* Bright color on hover */
   letter-spacing: 0.1em; /* Expand spacing on hover */
 }
 
@@ -62,3 +62,58 @@
   z-index: 2;
 }
 
+.process-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start; /* 각 항목이 위쪽에 정렬되도록 설정 */
+  padding: 20px 0;
+  position: relative;
+}
+
+.process-step {
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column; /* 세로로 정렬 */
+  align-items: center;
+}
+
+.process-step-icon {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2; /* 아이콘이 점선 위에 표시되도록 설정 */
+}
+
+.process-step-title {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.process-description {
+  margin-top: 10px;
+  color: #555;
+  font-size: 0.9em;
+}
+
+/* 기본 점선 스타일 */
+.process-connector {
+  width: 100px;
+  height: 2px;
+  background: repeating-linear-gradient(
+    to right,
+    #ccc 0,
+    #ccc 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  transition: 0.3s ease; /* 부드러운 전환 */
+  margin-top: 10px; /* 아이콘 아래에 점선을 배치 */
+  z-index: 1; /* 점선이 아이콘 아래로 가도록 설정 */
+}
+
+/* hover 시 실선으로 변경 */
+.process-step:hover .process-connector {
+  background: #000; /* hover 시 실선 */
+}

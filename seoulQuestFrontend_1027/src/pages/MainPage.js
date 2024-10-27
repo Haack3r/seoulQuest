@@ -8,6 +8,7 @@ import BasicMenu from '../components/menus/BasicMenu';
 import TourSection from '../layouts/TourSection';
 import ProductSection from '../layouts/ProductSection';
 import EntryPage from './EntryPage';
+import ProcessSteps from './../layouts/ProcessSteps';
 
 const MainPage = () => {
     return (
