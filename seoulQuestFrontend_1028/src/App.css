@@ -4,13 +4,13 @@
   display: inline-block;
   color: #f3f3f3; /* Initial color */
   text-decoration: none;
-  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+  /* text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3); Subtle shadow */
   letter-spacing: -0.05em; /* Condensed letter spacing */
   transition: letter-spacing 0.5s ease, color 0.5s ease;
 }
 
 .link-animation-color:hover {
-  color: #f3f3f3; /* Bright color on hover */
+  color: #fcd862; /* Bright color on hover */
   letter-spacing: 0.1em; /* Expand spacing on hover */
 }
 

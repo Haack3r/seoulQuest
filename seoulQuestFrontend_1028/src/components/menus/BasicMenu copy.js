@@ -8,6 +8,8 @@ import {
     UserIcon,
     LogInIcon
 } from "lucide-react";
+import "../../Menu.css";
+
 
 const BasicMenu = () => {
   const loginState = useSelector(state => state.loginSlice)
@@ -27,15 +29,15 @@ const BasicMenu = () => {
          {!loginState.email ? (
           <>
           <nav className="flex-grow flex justify-center">
-            <ul className="flex space-x-8 navLinks">
-              <li>OUR SERVICE
+            <ul className="flex space-x-8 navLinks ">
+              <li className='menu-animation-color'>OUR SERVICE
               <ul className='dropdown'>
               <li><Link to="/tours/" className="text-gray-600 hover:text-gray-900">Tours</Link></li>
               <li><Link to='/products/' className="text-gray-600 hover:text-gray-900">Souvenirs</Link></li>
             </ul>
             </li>
-              <li><Link to="/about/" className="text-gray-600 hover:text-gray-900">About</Link></li>
-              <li><Link to='/contact/' className="text-gray-600 hover:text-gray-900">Contact</Link></li>       
+              <li><Link to="/about/" className="menu-animation-color">About</Link></li>
+              <li><Link to='/contact/' className="menu-animation-color">Contact</Link></li>       
             </ul>
           </nav>
           <div>
