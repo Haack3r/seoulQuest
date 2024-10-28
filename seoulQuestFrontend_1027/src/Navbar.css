@@ -1,0 +1,55 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #ffffff;
+  color: #fff;
+}
+
+.brand {
+  font-size: 1.5em;
+}
+
+.navLinks {
+  list-style-type: none;
+  display: flex;
+  gap: 15px;
+}
+
+.navLinks li {
+  position: relative; /* 하위 메뉴를 위한 상대 위치 설정 */
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navLinks li:hover {
+  color: #f0a500; /* hover 시 텍스트 색상 변경 */
+}
+
+.navLinks li:hover .dropdown {
+  display: block; /* hover 시 하위 메뉴 보이기 */
+}
+
+.dropdown {
+  display: none; /* 기본적으로 숨김 */
+  position: absolute;
+  top: 100%; /* 부모 li 바로 아래에 위치 */
+  left: 0;
+  background: #f3f3f3;
+  opacity: 0.8;
+  color: #fff;
+  padding: 10px 0;
+  list-style-type: none;
+  min-width: 150px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown li {
+  padding: 10px 20px;
+  white-space: nowrap; /* 긴 텍스트 줄바꿈 방지 */
+}
+
+.dropdown li:hover {
+  background: #c9c8c8;
+  color: #f0a500; /* hover 시 하위 메뉴 항목의 색상 변경 */
+}
