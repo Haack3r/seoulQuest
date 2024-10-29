@@ -18,7 +18,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
    @Query("select ci from CartItem ci inner join Cart c on ci.cart = c where c.owner.email = :email and ci.product.pno=:pno")
    public CartItem getItemOfPno(@Param("email") String email, @Param("pno")Long pno);
 
-//   @Query("select c.cno from Cart c inner join CartItem ci on ci.ac")
 
    //-----카트아이템번호로 카트아이템을 찾아줌
    public Optional<CartItem> findCartItemByCino(Long cartItemNo);

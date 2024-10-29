@@ -29,7 +29,7 @@ public class CartController {
             log.info(cartItemListDTOList);
             return cartItemListDTOList;
         }
-
+        log.info("여기로 와서 addOrModify 실행 ");
         List<CartItemListDTO> cartItemListDTOList =  cartService.addOrModify(itemDTO);
         return cartItemListDTOList;
     }
