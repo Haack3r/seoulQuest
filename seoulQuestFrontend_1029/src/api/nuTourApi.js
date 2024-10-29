@@ -7,7 +7,7 @@ const host = `${API_SERVER_HOST}/api/tours`;
 export const getListTNU = async (pageParam) => {
     const { page, size } = pageParam;
     const res = await axios.get(`${host}/list`, {
-        params: { page: page, size: 10 },
+        params: { page: page, size: 6 },
     });
     return res.data;
 }

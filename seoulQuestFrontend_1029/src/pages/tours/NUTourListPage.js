@@ -21,7 +21,7 @@ const NUTourListPage = () => {
         {/* Content */}
         <div className="mt-2">
                 <TourImage onScrollToAbout={scrollToAbout} />
-                {/* <NUTourListComponent /> */}
+                <NUTourListComponent />
           {/* Add a ref to the AboutToursComponent */}
           <div ref={aboutRef}>
             <AboutToursComponent />
