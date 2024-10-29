@@ -74,7 +74,7 @@ public class TourRepositoryTests {
         for(int i = 10; i<19 ; i++){
             TourDate tourDate = TourDate.builder()
                     .available_capacity((int)(Math.random()*30)+1)
-                    .tour(tourRepository.selectOne(15l).get())
+                    .tour(tourRepository.selectOne(1l).get())
                     .tourDate(LocalDate.parse("2024-10-"+ i, DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .build();
             tourDateRepository.save(tourDate);

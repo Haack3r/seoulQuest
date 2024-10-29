@@ -14,9 +14,9 @@ public interface ReservationItemRepository extends JpaRepository<ReservationItem
     public List<ReservationItem> findReservationItemByReservationRno(Long reservationRno);
 
     //reservation에 새로운 tour를 추가할때 기존 reservation에 tour가 있는지 확인하기 위한 쿼리
-    @Query("select ri from ReservationItem ri inner join Reservation r on ri.reservation = r where r.owner.email = :email")
-    public ReservationItem getItemOfRno(@Param("email") String email, @Param("rno")Long rno);
+    @Query("select ri from ReservationItem ri inner join Reservation r on ri.reservation = r where r.owner.email = :email and ri.tour.tno = :tno")
+    public ReservationItem getItemOfTno(@Param("email") String email, @Param("tno")Long tno);
 
     //reservationItem 번호로 reservationItem을 찾아줌
-    public Optional<ReservationItem> findReservationItemByRino(Long reservationNo);
+    public Optional<ReservationItem> findReservationItemByRino(Long rino);
 }

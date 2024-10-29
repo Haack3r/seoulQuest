@@ -8,10 +8,11 @@ import com.positive.culture.seoulQuest.repository.ReservationItemRepository;
 import com.positive.culture.seoulQuest.repository.ReservationRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,15 +54,26 @@ public class ReservationRepositoryTests {
 
         ReservationItem reservationItem = ReservationItem.builder()
                 .reservation(reservation)
-                .tour(tourRepository.selectOne(1l).orElseThrow())
+                .tour(tourRepository.selectOne(1L).orElseThrow())
                 .tqty(5)
                 .build();
 
         reservationItemRepository.save(reservationItem);
-
-        List<ReservationItem> reservationList = reservationItemRepository.findReservationItemByReservationRno(ReservationId);
-        log.info(reservationList);
-
     }
+
+    @Test
+    @Transactional
+    public void getItemOfTnoTest(){
+        String email = "user1@gmail.com";
+        Long tno = 1L;
+
+        ReservationItem reservationItem1 = reservationItemRepository.getItemOfTno(email,tno);
+        System.out.println("reservationItem1 ," + reservationItem1);
+
+        Long rino = reservationItem1.getRino();
+        Optional<ReservationItem> reservationItem2 = reservationItemRepository.findReservationItemByRino(rino);
+        System.out.println("reservationItem2"+ reservationItem2);
+    }
+
 
 }
