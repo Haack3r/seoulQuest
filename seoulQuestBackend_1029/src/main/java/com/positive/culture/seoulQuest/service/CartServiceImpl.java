@@ -52,12 +52,11 @@ public class CartServiceImpl implements CartService{
         //=====================================================================
         if(cino!=null){ // 이미 카트에 담겨있는 카트 아이템일경우.
             Optional<CartItem> cartItemResult = cartItemRepository.findById(cino);
-            System.out.println("cartItemResult  1)"+cartItemResult);
             CartItem cartItem =  cartItemResult.orElseThrow();
-            System.out.println("cartItem  2)"+cartItem);
+
             cartItem.changeProductQuantity(pqty);
             cartItemRepository.save(cartItem); //상품 수량 변경후 db에 저장
-            System.out.println("3)");
+
             //해당 카트에 있는 카트 아이템리스트를 email로 조회하여 반환
             return getCartItems(email);
         }
@@ -90,7 +89,6 @@ public class CartServiceImpl implements CartService{
 
 
     //2. 사용자의 장바구니가 없었다면 새로운 장바구니를 생성하고 반환
-
     private Cart getCart(String email){
         System.out.println("getCart 실행 !");
         Cart cart = null;
@@ -102,14 +100,12 @@ public class CartServiceImpl implements CartService{
             log.info("member:" + member);
             Cart tempCart = Cart.builder().owner(member).build();
             log.info("email: " +  tempCart.getOwner().getEmail());
-            cart=  cartRepository.save(tempCart);
+            cart =  cartRepository.save(tempCart);
         }else {
             cart = result.get();
         }
         return cart;
     }
-
-
 
     //3.멤버 아이디로 카트를 조회하여 해당 카트의 카트아이템리스트를 반환
 
@@ -133,39 +129,21 @@ public class CartServiceImpl implements CartService{
         //해당 카트 번호에 맞는 카트 아이템들을 조회하여 리스트로 변환
         List<CartItem> cartItemList = cartItemRepository.findCartItemByCartCno(cart.getCno());
 
-//        cartItemList.forEach(cartItem -> Hibernate.initialize(cartItem.getProduct().getProductImageList()));
-
         System.out.println("6 ) "+ cartItemList);
 
         //리스트 안의 cartItem entity를 cartItem dto로 변환
-        List<CartItemListDTO> cartItemListdtos = cartItemList.stream().map(i->{
-        System.out.println("i.getProduct().getImageList().get(0).getFileName():" + i.getProduct().getProductImageList().get(0).getFileName());
-            return CartItemListDTO.builder()
-                    .cino(i.getCino())
-                    .email(i.getCart().getOwner().getEmail())
-                    .pname(i.getProduct().getPname())
-                    .pno(i.getProduct().getPno())
-                    .pfiles(i.getProduct().getProductImageList().get(0).getFileName())
-                    .pprice(i.getProduct().getPprice())
-                    .pqty(i.getPqty())
-                    .build();
-        }).toList();
-        System.out.println("cartItemListdtos: " +cartItemListdtos);
 
-        return cartItemListdtos;
+        return cartItemEntityToDTO(cartItemList);
     }
 
 
     //4. 특정 카트 아이템을 삭제하고 나머지 cartItemList를 반환
     @Override
     public List<CartItemListDTO> remove(Long cino) {
-        log.info("1)");
         //cartItem 번호로  cartItem을 조회하여 cart 번호를 반환하여 저장해둠
         Optional<CartItem> cartItem = cartItemRepository.findCartItemByCino(cino);
-        log.info("2)  cartItem :" +  cartItem );
-        Long cno = cartItem.orElseThrow().getCart().getCno();
 
-        log.info("cno:"+ cno);
+        Long cno = cartItem.orElseThrow().getCart().getCno();
 
         //카트아이템 삭제
         cartItemRepository.deleteById(cino);
@@ -174,18 +152,7 @@ public class CartServiceImpl implements CartService{
         List<CartItem> cartItemList = cartItemRepository.findCartItemByCartCno(cno);
 
         //List안의 CartItemEntity-> CartItemDTO로 변경
-        List<CartItemListDTO> cartItemListdtos = cartItemList.stream().map(i->{
-            return CartItemListDTO.builder()
-                    .cino(i.getCino())
-                    .email(i.getCart().getOwner().getEmail())
-                    .pname(i.getProduct().getPname())
-                    .pno(i.getProduct().getPno())
-                    .pfiles(i.getProduct().getProductImageList().get(0).getFileName())
-                    .pprice(i.getProduct().getPprice())
-                    .pqty(i.getPqty())
-                    .build();
-        }).toList();
 
-        return cartItemListdtos;
+        return cartItemEntityToDTO(cartItemList);
     }
 }

@@ -1,5 +1,6 @@
 package com.positive.culture.seoulQuest.service;
 
+import com.positive.culture.seoulQuest.domain.CartItem;
 import com.positive.culture.seoulQuest.dto.CartItemDTO;
 import com.positive.culture.seoulQuest.dto.CartItemListDTO;
 import jakarta.transaction.Transactional;
@@ -18,5 +19,20 @@ public interface CartService {
 
     //4. cartItem 삭제하고 cartitemlist 반환
     public List<CartItemListDTO> remove(Long cino);
+
+
+    default List<CartItemListDTO> cartItemEntityToDTO(List<CartItem> cartItemList){
+        List<CartItemListDTO> cartItemListDTOs = cartItemList.stream().map(i-> CartItemListDTO.builder()
+                .cino(i.getCino())
+                .email(i.getCart().getOwner().getEmail())
+                .pname(i.getProduct().getPname())
+                .pno(i.getProduct().getPno())
+                .pfiles(i.getProduct().getProductImageList().get(0).getFileName())
+                .pprice(i.getProduct().getPprice())
+                .pqty(i.getPqty())
+                .build()).toList();
+
+        return cartItemListDTOs;
+    }
 
 }

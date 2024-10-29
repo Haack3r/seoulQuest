@@ -11,12 +11,12 @@ import java.util.Optional;
 public interface ReservationItemRepository extends JpaRepository<ReservationItem,Long> {
 
     //예약 번호로 예약 아이템 리스트를 찾아줌
-    public List<ReservationItem> findReservationItemByReservationRno(Long reservationRno);
+    public List<ReservationItem> findByReservationRno(Long rno);
 
     //reservation에 새로운 tour를 추가할때 기존 reservation에 tour가 있는지 확인하기 위한 쿼리
     @Query("select ri from ReservationItem ri inner join Reservation r on ri.reservation = r where r.owner.email = :email and ri.tour.tno = :tno")
     public ReservationItem getItemOfTno(@Param("email") String email, @Param("tno")Long tno);
 
     //reservationItem 번호로 reservationItem을 찾아줌
-    public Optional<ReservationItem> findReservationItemByRino(Long rino);
+    public Optional<ReservationItem> findByRino(Long rino);
 }

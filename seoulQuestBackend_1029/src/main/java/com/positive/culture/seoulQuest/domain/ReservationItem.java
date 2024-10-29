@@ -3,6 +3,8 @@ package com.positive.culture.seoulQuest.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Builder
@@ -28,6 +30,9 @@ public class ReservationItem {
 
     private int tqty;
 
+    private LocalDate tdate;
+
     public void changeTourQuantity(int tqty){this.tqty = tqty;}
 
+    public void changeTourDate(LocalDate tdate){this.tdate = tdate;}
 }

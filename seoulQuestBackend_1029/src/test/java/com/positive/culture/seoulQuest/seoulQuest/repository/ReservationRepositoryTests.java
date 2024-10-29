@@ -3,6 +3,8 @@ package com.positive.culture.seoulQuest.seoulQuest.repository;
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.Reservation;
 import com.positive.culture.seoulQuest.domain.ReservationItem;
+import com.positive.culture.seoulQuest.domain.Tour;
+import com.positive.culture.seoulQuest.dto.ReservationItemListDTO;
 import com.positive.culture.seoulQuest.repository.MemberRepository;
 import com.positive.culture.seoulQuest.repository.ReservationItemRepository;
 import com.positive.culture.seoulQuest.repository.ReservationRepository;
@@ -12,8 +14,10 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,16 +50,20 @@ public class ReservationRepositoryTests {
     }
 
     @Test
+    @Commit
+    @Transactional
     public void insertReservationItems(){
         Member member = memberRepository.findByEmail("user1@gmail.com").orElseThrow();
         Optional<Reservation> reservationOptional = reservationRepository.getReservationOfMember(member.getEmail());
         Reservation reservation = reservationOptional.orElseThrow();
-        Long ReservationId =reservation.getRno();
+        Tour tour = tourRepository.findById(1L).orElseThrow();
+        System.out.println(tour.getTDate().get(0).getTourDate());
 
         ReservationItem reservationItem = ReservationItem.builder()
                 .reservation(reservation)
-                .tour(tourRepository.selectOne(1L).orElseThrow())
+                .tour(tour)
                 .tqty(5)
+                .tdate(tour.getTDate().get(0).getTourDate())
                 .build();
 
         reservationItemRepository.save(reservationItem);
@@ -63,7 +71,7 @@ public class ReservationRepositoryTests {
 
     @Test
     @Transactional
-    public void getItemOfTnoTest(){
+    public void test(){
         String email = "user1@gmail.com";
         Long tno = 1L;
 
@@ -71,9 +79,7 @@ public class ReservationRepositoryTests {
         System.out.println("reservationItem1 ," + reservationItem1);
 
         Long rino = reservationItem1.getRino();
-        Optional<ReservationItem> reservationItem2 = reservationItemRepository.findReservationItemByRino(rino);
+        Optional<ReservationItem> reservationItem2 = reservationItemRepository.findByRino(rino);
         System.out.println("reservationItem2"+ reservationItem2);
     }
-
-
 }

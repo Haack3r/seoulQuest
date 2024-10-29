@@ -8,7 +8,7 @@ import {UserOutlined} from '@ant-design/icons';
 import FetchingModal from "../common/FetchingModal";
 import ReservationComponent from "../menus/ReservationComponent";
 import useCustomReservation from "../../hooks/useCustomReservation";
-// import useCustomLogin from '../../hooks/useCustomLogin';
+import useCustomLogin from '../../hooks/useCustomLogin';
 
 
 const initState = {
@@ -34,24 +34,22 @@ const TourReadComponent = ({ tno }) => {
   const [quantity, setQuantity] = useState(1);
   const [calendarMode, setCalendarMode] = useState('month'); // 초기 모드는 월
   const [dateInfo,setDateInfo] = useState()
-  // const { changeCart, cartItems } = useCustomCart();
+  const {changeReservation, reservationItems} = useCustomReservation();
+  const { loginState } = useCustomLogin();
 
-  //const { changeCart, cartItems } = useCustomCart();
-  //const { loginState } = useCustomLogin();
+  const handleClickAddCart = () => {
+      let qty = 1;
 
-  // const handleClickAddCart = () => {
-  //     let qty = 1;
+      const addedItem = reservationItems.filter(item => item.tno === parseInt(tno))[0];
 
-  //     const addedItem = cartItems.filter(item => item.tno === parseInt(tno))[0];
-
-  //     if (addedItem) {
-  //         if (window.confirm("이미 추가된 상품입니다. 추가하시겠습니까? ") === false) {
-  //             return;
-  //         }
-  //         qty = addedItem.qty + 1;
-  //     }
-  //     changeCart({ email: loginState.email, tno: tno, qty: qty });
-  // };
+      if (addedItem) {
+          if (window.confirm("이미 추가된 상품입니다. 추가하시겠습니까? ") === false) {
+              return;
+          }
+          qty = addedItem.qty + 1;
+      }
+      changeReservation({ email: loginState.email, tno: tno, tqty: qty });
+  };
 
   useEffect(() => {
     setFetching(true);
@@ -267,8 +265,7 @@ const onSelect = (e) => {
           </div>
       {/* Reservation Section */}
       <div className='col-span-1 border-2 p-4 rounded-lg shadow-md'>
-      Reservation 창
-        {/* <ReservationComponent /> */}
+        <ReservationComponent />
       </div>
     </div>
   );

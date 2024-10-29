@@ -25,13 +25,13 @@ public class CartController {
     public List<CartItemListDTO> changeCart(@RequestBody CartItemDTO itemDTO){
         //카트에 아이템이 없을때
         if(itemDTO.getPqty()<=0){
-            List<CartItemListDTO> cartItemListDTOList = cartService.remove(itemDTO.getCino());
-            log.info(cartItemListDTOList);
-            return cartItemListDTOList;
+            List<CartItemListDTO> cartItemListDTOs = cartService.remove(itemDTO.getCino());
+            log.info(cartItemListDTOs);
+            return cartItemListDTOs;
         }
         log.info("여기로 와서 addOrModify 실행 ");
-        List<CartItemListDTO> cartItemListDTOList =  cartService.addOrModify(itemDTO);
-        return cartItemListDTOList;
+        List<CartItemListDTO> cartItemListDTOs =  cartService.addOrModify(itemDTO);
+        return cartItemListDTOs;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER')")
