@@ -1,0 +1,28 @@
+@keyframes colorChange {
+    0% {
+      background-position: 100% 50%; /* Start from the right */
+    }
+    25% {
+      background-position: 50% 50%; /* Move to the middle */
+    }
+    50% {
+      background-position: 0% 50%; /* Move to the left */
+    }
+    75% {
+      background-position: 50% 50%; /* Back to the middle */
+    }
+    100% {
+      background-position: 100% 50%; /* Return to the right */
+    }
+  }
+  
+  .animate-text {
+    /* Ensures the text is inline for background clip */
+    background: linear-gradient(to right, rgb(255, 0, 0), rgb(63, 169, 255), orange);
+    background-size: 200% 100%; /* Double the width for smooth transitions */
+    animation: colorChange 8s ease-in-out infinite; /* Applies the animation with easing */
+    -webkit-background-clip: text; /* For Safari */
+    background-clip: text; /* For other browsers */
+    color: transparent; /* Hides the default text color */
+  }
+  
