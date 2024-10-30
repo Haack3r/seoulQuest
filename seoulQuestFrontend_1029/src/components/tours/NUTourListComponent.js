@@ -5,7 +5,6 @@ import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
 import { getListTNU } from "../../api/nuTourApi";
 
-
 const host = API_SERVER_HOST;
 
 const initState = {
@@ -29,7 +28,6 @@ const NUTourListComponent = () => {
 
   useEffect(() => {
     setFetching(true);
-
     getListTNU({ page, size })
       .then((data) => {
         setServerData(data);
@@ -51,56 +49,47 @@ const NUTourListComponent = () => {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen py-10" style={{ backgroundColor: "#f5f1e9" }}>
-      <section className="px-6 max-w-6xl mx-auto">
-        <h2 className="mb-12 text-4xl font-semibold text-center text-gray-800 tracking-wide">
-          Curated Cultural Experiences
+    <div className="py-12">
+      <section className="px-4 max-w-5xl mx-auto mb-16">
+        <h2 className="mb-10 text-3xl font-bold uppercase text-center text-gray-800 tracking-widest">
+          Curated Experiences
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
           {serverData.dtoList.map((tour) => (
             <div
               key={tour.tno}
-              className="relative flex flex-col items-center bg-white shadow-lg transition-transform duration-300 cursor-pointer"
+              className="flex flex-col items-center transition-transform duration-300 cursor-pointer group"
               onClick={() => moveToRead(tour.tno)}
-              style={{
-                width: "340px", // Wider polaroid size
-                height: "360px", // Taller for polaroid look
-                padding: "16px", // Inner padding for polaroid feel
-              }}
             >
-              {/* Pin Element */}
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 w-4 h-4 bg-red-500 rounded-full shadow-md z-20"></div>
+              {/* Outer Frame */}
+              <div className="relative w-[320px] h-[360px] rounded-lg border border-white border-opacity-40 p-4 bg-opacity-20 backdrop-blur-lg">
+                {/* Image with Black Overlay */}
+                <div className="relative w-full h-48 mb-3 rounded-lg overflow-hidden">
+                  <div
+                    className="w-full h-full bg-cover bg-center opacity-80 transition-opacity duration-300 group-hover:opacity-90"
+                    style={{
+                      backgroundImage: `url(${host}/api/tours/view/s_${tour.uploadFileNames[0]})`,
+                    }}
+                  ></div>
+                  <div className="absolute inset-0 bg-black opacity-40 group-hover:opacity-50 transition-opacity"></div>
+                </div>
 
-              {/* Polaroid Image with Gradient Overlay */}
-              <div className="relative w-full h-48 mb-4 overflow-hidden">
-                <div
-                  className="w-full h-full bg-cover bg-center transition duration-300 group-hover:brightness-110"
-                  style={{
-                    backgroundImage: `url(${host}/api/tours/view/s_${tour.uploadFileNames[0]})`,
-                  }}
-                ></div>
-                {/* Bright Light Effect Overlay */}
-                <div className="absolute inset-0 "></div>
-              </div>
-
-              {/* Bottom White Area for "Handwritten" Title */}
-              <div className="flex flex-col items-center justify-start bg-white w-full h-28 pt-4" style={{ borderTop: "1px solid #eaeaea" }}>
-                <h3 className="text-lg font-bold text-gray-800 mb-1" style={{ fontFamily: "'Patrick Hand', cursive", letterSpacing: '1px' }}>
-                  {tour.tname}
-                </h3>
-                <p className="text-md font-medium text-gray-600 mb-3">
-                  ₩{tour.tprice} per person
-                </p>
-                <button className="px-4 py-1 bg-gray-800 text-white font-medium rounded-md text-sm transition hover:bg-gray-900">
-                  Reserve Now
-                </button>
+                {/* Text and Button Area */}
+                <div className="relative z-10 flex flex-col items-center justify-center text-center text-white uppercase tracking-widest">
+                  <h3 className="text-lg font-bold mb-1">{tour.tname}</h3>
+                  <p className="text-sm font-medium mb-2 opacity-90">
+                    ₩{tour.tprice} per person
+                  </p>
+                  <button className="px-6 py-2 mt-4 bg-white bg-opacity-50 text-black font-semibold rounded-lg text-sm transition-opacity duration-300 hover:bg-opacity-80 ">
+                    Reserve
+                  </button>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Pagination Component */}
       <PageComponent serverData={serverData} movePage={moveToList} />
     </div>
   );
