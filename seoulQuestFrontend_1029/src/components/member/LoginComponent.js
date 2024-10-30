@@ -55,10 +55,10 @@ const LoginComponent = () => {
       });
   };
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center ">
+      <Card className="w-full max-w-md bg-white">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center text-orange-500">
+          <CardTitle className="text-2xl font-bold text-center text-gray-500">
             Login
           </CardTitle>
         </CardHeader>
@@ -89,7 +89,7 @@ const LoginComponent = () => {
           </div>
 
           <Button
-            className="rounded p-4 w-full bg-orange-500 text-xl text-white"
+            className="rounded p-4 w-full bg-gray-500 text-xl text-white"
             onClick={handleClickLogin}
           >
             Log In
@@ -98,13 +98,15 @@ const LoginComponent = () => {
           {/* <KakaoLoginComponent />  */}
         </CardContent>
 
-        <CardFooter className="flex flex-col space-y-2">
+        <CardFooter className="flex flex-col space-y-2 text-gray-500">
           <Button className="text-sm text-muted-foreground">
             Find Password
           </Button>
           <div className="text-sm text-muted-foreground">
             Not a user?{" "}
-            <Button className="p-0 h-auto font-semibold">Sign Up</Button>
+            <a href="/member/signup">
+              <Button className="p-0 h-auto font-semibold">Sign Up</Button>
+            </a>
           </div>
         </CardFooter>
       </Card>

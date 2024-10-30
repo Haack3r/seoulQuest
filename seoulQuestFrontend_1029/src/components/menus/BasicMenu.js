@@ -49,7 +49,9 @@ const BasicMenu = () => {
               to={"/"}
               className="text-2xl font-semibold tracking-wide text-gray-900"
             >
-              Seoul<span className="text-orange-500">Culture</span>Quest
+              Seoul
+              <span className="text-red-800">Culture</span>
+              <span className="text-blue-900">Quest</span>
             </Link>
           </div>
 
@@ -87,13 +89,15 @@ const BasicMenu = () => {
                   >
                     <LogInIcon className="h-5 w-5 mr-2" /> Login
                   </Link>
-                  <Button
-                    variant="default"
-                    size="sm"
-                    className="bg-orange-600 hover:bg-rose-700 text-white font-medium"
-                  >
-                    <UserIcon className="h-5 w-5 mr-2" /> Sign up
-                  </Button>
+                  <Link to="/member/signup" className="no-underline">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="text-gray-600 hover:text-gray-900 font-medium"
+                    >
+                      <UserIcon className="h-5 w-5 mr-2" /> Sign up
+                    </Button>
+                  </Link>
                 </>
               ) : (
                 <>
@@ -141,13 +145,15 @@ const BasicMenu = () => {
                   >
                     <LogInIcon className="h-5 w-5 mr-2" /> Login
                   </Link>
-                  <Button
-                    variant="default"
-                    size="sm"
-                    className="bg-orange-600 hover:bg-rose-700 text-white font-medium"
-                  >
-                    <UserIcon className="h-5 w-5 mr-2" /> Sign up
-                  </Button>
+                  <Link to="/member/signup" className="no-underline">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="bg-orange-600 hover:bg-rose-700 text-white font-medium w-full"
+                    >
+                      <UserIcon className="h-5 w-5 mr-2" /> Sign up
+                    </Button>
+                  </Link>
                 </>
               ) : (
                 <>
