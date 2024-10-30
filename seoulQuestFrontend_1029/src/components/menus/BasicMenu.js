@@ -54,12 +54,19 @@ const BasicMenu = () => {
           </div>
 
           {/* Desktop Menu - Hidden on small screens */}
-          <div className="hidden lg:flex lg:flex-grow lg:justify-between lg:items-center">
-            <nav className="flex space-x-8">
-              <Link to="/tours/" className="menu-animation-color">
+          <div className="hidden lg:flex lg:flex-grow lg:justify-between lg:items-center px-8">
+            {/* Left section with navigation links */}
+            <nav className="flex items-center space-x-8">
+              <Link
+                to={loginState.email ? "/user/tours/" : "/tours/"}
+                className="menu-animation-color"
+              >
                 Tours
               </Link>
-              <Link to="/products/" className="menu-animation-color">
+              <Link
+                to={loginState.email ? "/user/products/" : "/products/"}
+                className="menu-animation-color"
+              >
                 Souvenirs
               </Link>
               <Link to="/about/" className="menu-animation-color">
@@ -69,11 +76,13 @@ const BasicMenu = () => {
                 Contact
               </Link>
             </nav>
+
+            {/* Right section with login/sign-up or cart/logout */}
             <div className="flex items-center space-x-4">
               {!loginState.email ? (
                 <>
                   <Link
-                    to={"/member/login/"}
+                    to="/member/login/"
                     className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                   >
                     <LogInIcon className="h-5 w-5 mr-2" /> Login
@@ -89,13 +98,13 @@ const BasicMenu = () => {
               ) : (
                 <>
                   <Link
-                    to={"/cart/"}
+                    to="/cart/"
                     className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                   >
                     <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                   </Link>
                   <Link
-                    to={"/member/logout/"}
+                    to="/member/logout/"
                     className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                   >
                     Logout
@@ -109,23 +118,23 @@ const BasicMenu = () => {
         {/* Mobile Menu - Visible when `menuOpen` is true */}
         {menuOpen && (
           <div className="lg:hidden mt-2 mobile-menu">
-            <nav className="flex flex-col space-y-4">
-              <Link to="user/tours/" className="menu-animation-color">
-                Tours
-              </Link>
-              <Link to="/user/products/" className="menu-animation-color">
-                Souvenirs
-              </Link>
-              <Link to="/about/" className="menu-animation-color">
-                About
-              </Link>
-              <Link to="/contact/" className="menu-animation-color">
-                Contact
-              </Link>
-            </nav>
             <div className="flex flex-col space-y-4 mt-4">
               {!loginState.email ? (
                 <>
+                  <nav className="flex flex-col space-y-4">
+                    <Link to="/tours/" className="menu-animation-color">
+                      Tours
+                    </Link>
+                    <Link to="/products/" className="menu-animation-color">
+                      Souvenirs
+                    </Link>
+                    <Link to="/about/" className="menu-animation-color">
+                      About
+                    </Link>
+                    <Link to="/contact/" className="menu-animation-color">
+                      Contact
+                    </Link>
+                  </nav>
                   <Link
                     to={"/member/login/"}
                     className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
@@ -142,6 +151,20 @@ const BasicMenu = () => {
                 </>
               ) : (
                 <>
+                  <nav className="flex flex-col space-y-4">
+                    <Link to="/user/tours/" className="menu-animation-color">
+                      Tours
+                    </Link>
+                    <Link to="/user/products/" className="menu-animation-color">
+                      Souvenirs
+                    </Link>
+                    <Link to="/about/" className="menu-animation-color">
+                      About
+                    </Link>
+                    <Link to="/contact/" className="menu-animation-color">
+                      Contact
+                    </Link>
+                  </nav>
                   <Link
                     to={"/cart/"}
                     className="flex items-center space-x-2 menu-animation-color"

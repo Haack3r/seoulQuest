@@ -35,7 +35,7 @@ const NUTourListComponent = () => {
       })
       .catch((err) => {
         console.error("API Error:", err);
-        setError("Failed to load product data");
+        setError("Failed to load tour data");
         setFetching(false);
       });
   }, [page, size, refresh]);
@@ -50,20 +50,20 @@ const NUTourListComponent = () => {
 
   return (
     <div className="py-12">
-      <section className="px-4 max-w-5xl mx-auto mb-16">
+      <section className="px-4 max-w-5xl mx-auto mb-1">
         <h2 className="mb-10 text-3xl font-bold uppercase text-center text-gray-800 tracking-widest">
           Curated Experiences
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20">
           {serverData.dtoList.map((tour) => (
             <div
               key={tour.tno}
               className="flex flex-col items-center transition-transform duration-300 cursor-pointer group"
               onClick={() => moveToRead(tour.tno)}
             >
-              {/* Outer Frame */}
-              <div className="relative w-[320px] h-[360px] rounded-lg border border-white border-opacity-40 p-4 bg-opacity-20 backdrop-blur-lg">
-                {/* Image with Black Overlay */}
+              {/* Card Frame with Unified Hover Effect */}
+              <div className="relative w-[320px] h-[430px] rounded-lg border border-white border-opacity-40 p-4 bg-opacity-20 backdrop-blur-lg transition-all duration-300 transform group-hover:scale-105 group-hover:shadow-lg">
+                {/* Image with Overlay */}
                 <div className="relative w-full h-48 mb-3 rounded-lg overflow-hidden">
                   <div
                     className="w-full h-full bg-cover bg-center opacity-80 transition-opacity duration-300 group-hover:opacity-90"
@@ -80,7 +80,7 @@ const NUTourListComponent = () => {
                   <p className="text-sm font-medium mb-2 opacity-90">
                     ₩{tour.tprice} per person
                   </p>
-                  <button className="px-6 py-2 mt-4 bg-white bg-opacity-50 text-black font-semibold rounded-lg text-sm transition-opacity duration-300 hover:bg-opacity-80 ">
+                  <button className="px-6 py-2  bg-white bg-opacity-50 text-black font-semibold rounded-lg text-sm transition-all duration-300 hover:bg-opacity-80 hover:shadow-md">
                     Reserve
                   </button>
                 </div>

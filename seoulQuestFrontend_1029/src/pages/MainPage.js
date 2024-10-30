@@ -15,11 +15,8 @@ const MainPage = () => {
       <>
     <BasicLayout>
       <EntryPage />
-      {/* <MainImage />
-      <TourSection />
-      <ProductSection /> */}
     </BasicLayout>
-    {/* <SeoulCultureQuest /> */}
+    
     </>
   );
 }

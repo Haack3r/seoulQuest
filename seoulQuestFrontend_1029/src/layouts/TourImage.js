@@ -30,8 +30,8 @@ const TourImage = ({ onScrollToAbout }) => {
             backgroundImage: "url('https://cdn.pixabay.com/photo/2020/12/01/18/02/forest-5797458_1280.jpg')",
           }}
         >
-          <div className="absolute inset-0 bg-black opacity-30" />
-          <div className="relative z-10 text-white font-bold text-center">
+          <div className="absolute inset-0 " />
+          <div className="relative z-10 text-gray-500 font-bold text-center">
             <h3 className="text-lg font-semibold">Tailored Adventures Await</h3>
             <p className="text-sm">
               We create personalized travel experiences tailored to your passions.

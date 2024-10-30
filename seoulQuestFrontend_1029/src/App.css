@@ -80,6 +80,7 @@
 }
 
 .process-step-icon {
+    margin-top: 0.5em;
   font-size: 2.5em;
   margin-bottom: 10px;
   position: relative;
@@ -94,13 +95,13 @@
 .process-description {
   margin-top: 10px;
   color: #555;
-  font-size: 0.9em;
+  font-size: 0.7em;
 }
 
 /* 기본 점선 스타일 */
 .process-connector {
   width: 100px;
-  height: 2px;
+  height: 10px;
   background: repeating-linear-gradient(
     to right,
     #ccc 0,
@@ -115,5 +116,5 @@
 
 /* hover 시 실선으로 변경 */
 .process-step:hover .process-connector {
-  background: #000; /* hover 시 실선 */
+  background: #7e7c7c; /* hover 시 실선 */
 }
