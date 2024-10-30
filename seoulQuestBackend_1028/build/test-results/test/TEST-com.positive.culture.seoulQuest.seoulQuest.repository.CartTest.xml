@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.positive.culture.seoulQuest.seoulQuest.repository.CartTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-29T07:04:58" hostname="DESKTOP-D9J3Q40" time="0.555">
+  <properties/>
+  <testcase name="insertCart()" classname="com.positive.culture.seoulQuest.seoulQuest.repository.CartTest" time="0.555"/>
+  <system-out><![CDATA[16:04:53.600 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.positive.culture.seoulQuest.seoulQuest.repository.CartTest]: CartTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:04:53.701 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.positive.culture.seoulQuest.SeoulQuestApplication for test class com.positive.culture.seoulQuest.seoulQuest.repository.CartTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.4)
+
+2024-10-29T16:04:54.037+09:00  INFO 13484 --- [seoulQuest] [    Test worker] c.p.c.s.seoulQuest.repository.CartTest   : Starting CartTest using Java 17.0.12 with PID 13484 (started by asd in D:\hyein\seoulQuest\seoulQuestBackend_1028)
+2024-10-29T16:04:54.039+09:00  INFO 13484 --- [seoulQuest] [    Test worker] c.p.c.s.seoulQuest.repository.CartTest   : No active profile set, falling back to 1 default profile: "default"
+2024-10-29T16:04:54.637+09:00  INFO 13484 --- [seoulQuest] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-29T16:04:54.703+09:00  INFO 13484 --- [seoulQuest] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 66 ms. Found 7 JPA repository interfaces.
+2024-10-29T16:04:55.196+09:00  INFO 13484 --- [seoulQuest] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-29T16:04:55.251+09:00  INFO 13484 --- [seoulQuest] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-10-29T16:04:55.287+09:00  INFO 13484 --- [seoulQuest] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-10-29T16:04:55.552+09:00  INFO 13484 --- [seoulQuest] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-29T16:04:55.590+09:00  INFO 13484 --- [seoulQuest] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-10-29T16:04:55.842+09:00  INFO 13484 --- [seoulQuest] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4d174189
+2024-10-29T16:04:55.844+09:00  INFO 13484 --- [seoulQuest] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-10-29T16:04:56.796+09:00  INFO 13484 --- [seoulQuest] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    alter table tbl_product 
+       modify column pdesc TEXT
+Hibernate: 
+    alter table tbl_tours 
+       modify column tdesc TEXT
+2024-10-29T16:04:56.920+09:00  INFO 13484 --- [seoulQuest] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-29T16:04:57.142+09:00  INFO 13484 --- [seoulQuest] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-29T16:04:57.619+09:00  INFO 13484 --- [seoulQuest] [    Test worker] c.p.c.seoulQuest.util.CustomFileUtil     : =======================================
+2024-10-29T16:04:57.619+09:00  INFO 13484 --- [seoulQuest] [    Test worker] c.p.c.seoulQuest.util.CustomFileUtil     : D:\hyein\seoulQuest\seoulQuestBackend_1028\upload
+2024-10-29T16:04:57.695+09:00  WARN 13484 --- [seoulQuest] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-29T16:04:57.724+09:00  INFO 13484 --- [seoulQuest] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-10-29T16:04:57.753+09:00  INFO 13484 --- [seoulQuest] [    Test worker] c.p.c.s.config.CustomSecurityConfig      : ----security config----
+2024-10-29T16:04:57.802+09:00 DEBUG 13484 --- [seoulQuest] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JWTCheckFilter, UsernamePasswordAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter
+2024-10-29T16:04:58.171+09:00  WARN 13484 --- [seoulQuest] [    Test worker] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2024-10-29T16:04:58.335+09:00  INFO 13484 --- [seoulQuest] [    Test worker] c.p.c.s.seoulQuest.repository.CartTest   : Started CartTest in 4.507 seconds (process running for 5.487)
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.city,
+        m1_0.state,
+        m1_0.street,
+        m1_0.zip_code,
+        m1_0.birthday,
+        m1_0.email,
+        m1_0.name,
+        m1_0.nick_name,
+        m1_0.password,
+        m1_0.phone_number,
+        m1_0.social 
+    from
+        tbl_member m1_0 
+    where
+        m1_0.email=?
+Hibernate: 
+    insert 
+    into
+        tbl_cart
+        (member_owner, status) 
+    values
+        (?, ?)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
