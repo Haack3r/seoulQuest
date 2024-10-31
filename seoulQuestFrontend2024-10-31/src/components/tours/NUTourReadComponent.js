@@ -17,7 +17,7 @@ const initState = {
     tlocation:'',
     uploadFileNames: [],
     tDate: [],
-    max_capacity:0,
+    maxCapacity:0,
 };
 const host = API_SERVER_HOST;
 

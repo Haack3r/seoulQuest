@@ -100,7 +100,7 @@ public class TourServiceImpl implements TourService{
         tour.changeName(tourDTO.getTname());
         tour.changeDesc(tourDTO.getTdesc());
         tour.changePrice(tourDTO.getTprice());
-        tour.changeMaxCapacity(tourDTO.getMax_capacity());
+        tour.changeMaxCapacity(tourDTO.getMaxCapacity());
         tour.changeLocation(tourDTO.getTlocation());
         tour.preUpdate();
 

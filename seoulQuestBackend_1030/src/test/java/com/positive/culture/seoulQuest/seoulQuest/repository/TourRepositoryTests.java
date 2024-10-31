@@ -57,7 +57,7 @@ public class TourRepositoryTests {
                     .tname("투어"+(i+1))
                     .tdesc(tourDescriptions[i])
                     .tprice(100*(i+1))
-                    .max_capacity(2*(i+1))
+                    .maxCapacity(2*(i+1))
                     .tlocation("투어장소"+(i+1))
                     .category(categoryRepository.getReferenceById(20l))
                     .build();
@@ -74,7 +74,7 @@ public class TourRepositoryTests {
         for(int i = 10; i<19 ; i++){
             TourDate tourDate = TourDate.builder()
                     .available_capacity((int)(Math.random()*30)+1)
-                    .tour(tourRepository.selectOne(14l).get())
+                    .tour(tourRepository.selectOne(15l).get())
                     .tourDate(LocalDate.parse("2024-10-"+ i, DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .build();
             tourDateRepository.save(tourDate);

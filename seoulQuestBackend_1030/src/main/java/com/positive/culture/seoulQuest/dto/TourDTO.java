@@ -24,7 +24,7 @@ public class TourDTO {
 
     private String tdesc;
     private int tprice;
-    private int max_capacity;
+    private int maxCapacity;
     private String tlocation;
     private int likeCount;
 

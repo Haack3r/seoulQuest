@@ -33,7 +33,8 @@ public class Tour {
     private String tdesc;
 
     private int tprice;
-    private int max_capacity;
+    private int maxCapacity;
+
     private String tlocation;
 
     //통계를 내거나 정보를 확인할 때 사용
@@ -58,7 +59,7 @@ public class Tour {
     public void changeName(String tname){this.tname = tname;}
     public void changeDesc(String tdesc){this.tdesc = tdesc;}
     public void changePrice(int tprice){this.tprice=tprice;}
-    public void changeMaxCapacity(int max_capacity){this.max_capacity=max_capacity;}
+    public void changeMaxCapacity(int maxCapacity){this.maxCapacity=maxCapacity;}
     public void changeLocation(String tlocation){this.tlocation=tlocation;}
 
     @PrePersist

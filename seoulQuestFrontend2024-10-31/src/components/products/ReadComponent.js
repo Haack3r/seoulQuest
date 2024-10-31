@@ -206,7 +206,7 @@ const ReadComponent = ({ pno }) => {
         </div>
       </div>
            {/* Cart Section */}
-           <div className='col-span-1 border-2 p-4 rounded-lg shadow-md'>
+           <div className='col-span-1 w-full'>
                 <CartComponent />
             </div>
       </div>

@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { API_SERVER_HOST } from "../../api/todoApi";
-import useCustomMove from "../../hooks/useCustomMove";
-import { StarIcon, ShoppingCartIcon, HeartIcon } from 'lucide-react'
+// import useCustomMove from "../../hooks/useCustomMove";
+import { StarIcon,HeartIcon } from 'lucide-react'
 import { getOne } from "../../api/tourApi";
-import { Modal, Calendar, Popover} from "antd";
-import { CalendarOutline,UserOutlined, CalendarOutlined} from '@ant-design/icons';
+import { Calendar, Popover} from "antd";
+import {UserOutlined, CalendarOutlined} from '@ant-design/icons';
 import FetchingModal from "../common/FetchingModal";
 import ReservationComponent from "../menus/ReservationComponent";
 import useCustomReservation from "../../hooks/useCustomReservation";
 import useCustomLogin from '../../hooks/useCustomLogin';
-import TourDetails from "./TourDetails";
 
 const initState = {
   tno: 0,
@@ -20,21 +19,20 @@ const initState = {
   tlocation:'',
   uploadFileNames: [],
   tDate: [],
-  max_capacity:0,
+  maxCapacity:0,
+  availableCapacity:0
 };
 const host = API_SERVER_HOST;
 
 const TourReadComponent = ({ tno }) => {
-  console.log("여기는 tour"+tno)
+  // const { moveToList, moveToModify, page, size } = useCustomMove();
+  console.log("여기는 tourRead"+tno)
   const [tour, setTour] = useState(initState);
-  const { moveToList, moveToModify, page, size } = useCustomMove();
   const [fetching, setFetching] = useState(false);
   const [currentImage, setCurrentImage] = useState(0)
-  const [value, setValue] = useState(0);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const [calendarMode, setCalendarMode] = useState('month'); // 초기 모드는 월
-  const [dateInfo,setDateInfo] = useState()
+  const [calendarMode, setCalendarMode] = useState('month'); 
   const {reservationItems,changeReservation} = useCustomReservation();
   const { loginState } = useCustomLogin();
   const [visible, setVisible] = useState(false); // 팝업 표시 여부
@@ -45,132 +43,119 @@ const TourReadComponent = ({ tno }) => {
     };
 
     // //날짜 클릭시 날짜에 해당하는 예약 가능 인원 출력하는 함수 -> 클릭한 날짜를 서버로 보내는 것도 처리해야함.
-const onSelect = (e) => {
-  setVisible(false); // 날짜 선택 후 팝업 닫기
-  // console.log(e);
-  console.log("클릭된 날짜 포맷 :"+ e.format('YYYY-MM-DD'));
-
-  const formattedDate = e.format('YYYY-MM-DD');
-  // 예약 가능한 날짜 찾기
-  const newDateInfo = tour.tDate.find(i => i.tourDate === formattedDate);
-  
-  if (newDateInfo) {
-    console.log("예약할 날짜: " , newDateInfo.tourDate)
-
-    setDateInfo(newDateInfo)
-  } else {
-      console.log("예약 불가"); // 예약 불가능한 경우
-  }
- 
-  };
-  
-    // 팝업 내에 표시할 내용(달력 컴포넌트)
-    const calendarContent = (
-      <div style={{ width: 300 }}>
-        <Calendar
-          fullscreen={false}
-          onSelect={onSelect}
-        />
-        <div style={{ textAlign: "center", marginTop: "10px", color: "#888" }}>
-          Prices shown in $US Dollar
-        </div>
-      </div>
-    );
-
-  const handleClickAddReservation = () => {
-    let qty = 1;
-    let date = null;
-    console.log("여기에 클릭한 날짜 " ,dateInfo.tourDate)
-    console.log("예약되어있는 아이템",reservationItems)
-
-    if(reservationItems.length !== 0){ //이미 추가된 상품이 있을때
-    
-      const addedItem = reservationItems.filter(item => item.tno === parseInt(tno))[0];
-      console.log("추가되어있는 아이템의 날짜: " , addedItem.tdate)
+    const onSelect = (e) => {
+      setVisible(false); // 날짜 선택 후 팝업 닫기
       
-      //클릭한 날짜와 추가 되어있는 아이템의 날짜가 다를때
-      if (addedItem.tdate !== dateInfo.tourDate ) {
-          // if (window.confirm("이미 추가된 투어입니다. 투어 날짜를 변경하시겠습니까? ") === false) {
-          //     return;
-          // }
-          qty = addedItem.qty + selectedQuantity;  
-          date = addedItem.tdate;
-     
-        // }else{ //클릭한 날짜와 추가되있는 날짜가 같을때 
-        // qty = addedItem.qty + selectedQuantity;
+      console.log("클릭된 날짜 포맷 :"+ e.format('YYYY-MM-DD'));
+
+      const formattedDate = e.format('YYYY-MM-DD');
+      // 예약 가능한 날짜 찾기
+      const selectedDate = tour.tDate.find(i => i.tourDate === formattedDate).tourDate;
+      
+      
+      if (selectedDate) {
+        console.log("예약할 날짜: " , selectedDate)
+
+        setSelectedDate(selectedDate)
+      } else {
+          console.log("예약 불가"); // 예약 불가능한 경우
       }
-
-      changeReservation({ email: loginState.email, tno: tno, tqty: qty, tdate: date });
-    }
     
-    console.log("날짜를 넣을 거다 " ,dateInfo.tourDate)
-    //추가된 상품이 없을때 
-    changeReservation({ email: loginState.email, tno: tno, tqty: selectedQuantity , tdate: dateInfo.tourDate });
-    // changeReservation({ email: loginState.email, tno: tno, tqty: selectedQuantity });
-  };
+      };
 
-  useEffect(() => {
-    console.log("여기 들어옴")
-    setFetching(true);
 
-    getOne(tno).then((data) => {
-      setTour({
-        ...initState,
-        ...data,
-        tDate: data.tdate
-      });
-      setFetching(false);
-    });
-    
-    console.log(dateInfo)
-  }, [tno, dateInfo]); //tno값이 바뀔때마다 useEffect가 실행됨
+      //예약가능한 날짜만 선택할수 있게 하는 함수 
+      const disabledDate = (current) => {
+        
+        if (calendarMode === 'year') {
+            return false; //  년도 뷰에서는 활성화
+        }
 
-// -------------------------------------------Calendar-------------------------------
-const wrapperStyle = {
-  width: 300,
-  border: '1px solid #d9d9d9', 
-  borderRadius: 4,
-};
+        // 날짜 뷰일 때만 예약된 날짜가 아닌 날짜를 비활성화
+        const formattedDate = current.format('YYYY-MM-DD');
+        return !tour.tDate.some(date => date.tourDate === formattedDate);
+      };
 
-const handleChange = (event, newValue) => {
-setValue(newValue);
-};
+      const onPanelChange = (value, mode) => {
+        setCalendarMode(mode); // 현재 모드를 업데이트
+        console.log(value.format('YYYY-MM-DD'), mode);
+      };
 
-const onPanelChange = (value, mode) => {
-  setCalendarMode(mode); // 현재 모드를 업데이트
-  console.log(value.format('YYYY-MM-DD'), mode);
-};
+      //예약가능한 날짜만 밑줄 생기는 함수 
+      const dateCellRender = (value) => {
+        const formattedDate = value.format('YYYY-MM-DD');
+        const checkDate = tour.tDate.find(date => date.tourDate === formattedDate); //서버에서 받아온 날짜와 일치하는 날짜를 체크 
 
-//예약가능한 날짜만 밑줄 생기는 함수 
-const dateCellRender = (value) => {
-  const formattedDate = value.format('YYYY-MM-DD');
-  const checkDate = tour.tDate.find(date => date.tourDate === formattedDate); //서버에서 받아온 날짜와 일치하는 날짜를 체크 
+        return (
+            <div className={`${checkDate ? 'border-b-2 border-blue-500' : ''}`}></div>  //예약 가능한 날짜에만 밑줄, 클릭가능 
+        );
+      };
 
-  return (
-      <div className={`${checkDate ? 'border-b-2 border-blue-500' : ''}`}></div>  //예약 가능한 날짜에만 밑줄, 클릭가능 
-  );
-};
-
-//예약가능한 날짜만 선택할수 있게 하는 함수 
-const disabledDate = (current) => {
   
-  if (calendarMode === 'year') {
-      return false; //  년도 뷰에서는 활성화
-  }
+      // 팝업 내에 표시할 내용(달력 컴포넌트)
+      const calendarContent = (
+        <div style={{ width: 300 }}>
+          <Calendar
+            fullscreen={false}
+            onPanelChange={onPanelChange}
+            cellRender={dateCellRender}
+            onSelect={onSelect}
+            disabledDate ={disabledDate}
+            
+          />
+          <div style={{ textAlign: "center", marginTop: "10px", color: "#888" }}>
+            Only available dates can be selected
+          </div>
+        </div>
+      );
 
-  // 날짜 뷰일 때만 예약된 날짜가 아닌 날짜를 비활성화
-  const formattedDate = current.format('YYYY-MM-DD');
-  return !tour.tDate.some(date => date.tourDate === formattedDate);
-};
+      const handleClickAddReservation = () => {
+        let qty = selectedQuantity;
+        let date = selectedDate;
+        
+        if(!date){
+          const confirmChange = window.confirm("예약 날짜를 선택해주세요.");
+          if (confirmChange) return;
+        }
+        // 같은 투어가 이미 예약되어 있는지 확인
+        const existingItem = reservationItems.find(item => item.tno === parseInt(tno));
+    
+        if (existingItem) {
+            // 날짜가 다르거나 수량이 변경된 경우에만 확인 창을 띄우고 예약을 변경
+            if (existingItem.tdate !== selectedDate || existingItem.qty !== selectedQuantity) {
+                const confirmChange = window.confirm("이미 추가된 투어입니다. 예약 내역을 변경하시겠습니까?");
+                if (!confirmChange) return;
+    
+                qty = selectedQuantity; // 수량을 선택된 수량으로 변경 
+                date = selectedDate; // 날짜를 선택된 날짜로 변경
+            } 
+        }
+        // 변경 사항을 적용하여 예약을 업데이트
+        changeReservation({ email: loginState.email, tno, tqty: qty, tdate: date });
+        console.log("예약이 업데이트되었습니다:", { tno, qty, date });
+    };
+    
+    useEffect(() => {
+      setFetching(true);
 
-
+      getOne(tno).then((data) => {
+        setTour({
+          ...initState,
+          ...data,
+          tDate: data.tdate
+        });
+        setFetching(false);
+      });
+      
+      console.log(selectedDate)
+    }, [tno, selectedDate]); //tno값이 바뀔때마다 useEffect가 실행됨
 
   return (
-    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8 grid grid-cols-3 gap-6 mt-20 m-4">
-      <div className="col-span-2 p-4 rounded-lg ">
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8 grid gap-6 mt-20 m-4 md:grid-cols-3">
+      <div className="md:col-span-2 p-4 rounded-lg w-full">
       {/* Tour modal*/}
         {fetching ? <FetchingModal /> : null}
-{/* -------------------------------------------------------------------- */}
+      {/* -------------------------------------------------------------------- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Tour Images */}
           <div className="relative h-96 md:h-full">
@@ -201,8 +186,8 @@ const disabledDate = (current) => {
                   </div>
               </div>
           </div>
-      {/* tour Details */}
-          <div>
+      {/* tour content*/}
+          <div className="p-4 md:p-8">
               <h1 className="text-4xl font-light tracking-wide text-gray-900 mb-4">{tour.tname}</h1>
                 <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
@@ -212,97 +197,77 @@ const disabledDate = (current) => {
                 </div>
                 <p className="text-2xl font-light text-gray-900 mb-6">₩{tour.tprice.toLocaleString()}</p>
                 <p className="text-gray-700 mb-6">
-                {tour.tdesc}
+                  {tour.tdesc}
                 </p>
 
-
-     
-     
-{/* 날짜 선택 버튼 */}
-<Popover
-    content={calendarContent}
-    trigger="click"
-    visible={visible}
-    onVisibleChange={handleVisibleChange}
-    placement="bottom"
->
-    <button 
-        className="flex items-center p-3 border border-gray-300 rounded-lg w-full max-w-xs hover:bg-gray-100"
-        style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            fontSize: '16px',
-            cursor: 'pointer',
-        }}
-    >
-        <CalendarOutlined style={{ marginRight: '8px' }} />
-        <span>{selectedDate ? selectedDate.format('dddd, MMM DD, YYYY') : 'Select a date'}</span>
-    </button>
-</Popover>
-
-{/* 참가자 수 선택 */}
-<div className="mt-4 w-full">
-    <label htmlFor="quantity" className="text-gray-700 flex items-center mb-2">
-        <UserOutlined className="mr-2" /> Number of Participants
-    </label>
-    
-    {dateInfo && (
-        <input
-            id="quantity"
-            type="number"
-            min="1"
-            max={dateInfo.available_capacity} // 최대 인원 제한
-            value={selectedQuantity}
-            onChange={(e) => setSelectedQuantity(parseInt(e.target.value))}
-            className="w-full border border-gray-300 p-3 rounded-lg text-center"
-        />
-    )}
-</div>
-
-{/* 최대 인원 및 가능한 참가자 수 정보 */}
-{/* <div className="border border-gray-300 rounded-lg p-3 mt-4 text-gray-700 w-full">
-    <div className="flex items-center mb-2">
-        <UserOutlined className="mr-2" /> Max Participants: {tour.max_capacity}
-    </div>
-    
-    {dateInfo && (
-        <div className="flex items-center">
-            <UserOutlined className="mr-2" /> Available Participants: {dateInfo.available_capacity}
-        </div>
-    )}
-</div> */}
-                
-                {/* Add to Cart and Wishlist Buttons */}
-                <div className="flex space-x-4 mb-10 mt-8"> 
-                  <button
-                    className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white p-3 rounded-lg w-full"
-                    onClick={handleClickAddReservation}
+              <div className="flex justify-between items-center space-x-4 border-t-2">
+              {/* 날짜 선택 버튼 */}
+              <div className="w-1/2 mt-5">
+              <label htmlFor="quantity" className="text-gray-700 flex items-center mb-2">
+                      <CalendarOutlined className="mr-2 text-bold" /> Tour of Date
+                  </label>
+                  <Popover
+                      content={calendarContent}
+                      trigger="click"
+                      open={visible}
+                      onOpenChange={handleVisibleChange}
+                      placement="bottom"
                   >
-                    <CalendarOutlined  className="mr-2 h-4 w-4" /> Refresh Options
-                  </button>
+
+                      <button 
+                          className="flex items-center justify-center p-3 border border-gray-300 rounded-lg w-full hover:bg-gray-100 text-base cursor-pointer"
+                      >
+                          <span className="text-center">{selectedDate ? selectedDate : 'Select a date'}</span>
+                      </button>
+                  </Popover>
+              </div>
+
+              {/* 참가자 수 선택 */}
+              <div className="w-1/2 mt-5">
+                  <label htmlFor="quantity" className="text-gray-700 flex items-center mb-2">
+                      <UserOutlined className="mr-2 text-bold" /> Number of Participants
+                  </label>
+                  
+                  <input
+                      id="quantity"
+                      type="number"
+                      min="1"
+                      max={selectedDate ? tour.maxCapacity : 1 }
+                      // max={selectedDate ? tour.availableCapacity : 1 } //나중에 이거로 바꾸기
+                      value={selectedQuantity}
+                      onChange={(e) => setSelectedQuantity(parseInt(e.target.value))}
+                      className="w-full border border-gray-300 p-3 rounded-lg text-center"
+                  />
             
-                <button className="border border-gray-300 text-gray-700 hover:bg-gray-100 p-3 rounded-lg">
-                    <HeartIcon className="h-4 w-4" />
+              </div>
+          </div>
+              {/* Add to Cart and Wishlist Buttons */}
+              <div className="flex space-x-4 mb-10 mt-8"> 
+                <button
+                  className="flex items-center justify-center bg-stone-400 hover:bg-stone-600 text-white p-3 rounded-lg w-full"
+                  onClick={handleClickAddReservation}
+                >
+                  <CalendarOutlined  className="mr-2 h-4 w-4" /> Update Availability
                 </button>
-                </div>
+          
+              <button className="border border-gray-300 text-gray-700 hover:bg-gray-100 p-3 rounded-lg">
+                  <HeartIcon className="h-4 w-4" />
+              </button>
+              </div>
 
-                {/* tour Details */}
-                <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
-                    <h2 className="text-gray-900 text-lg font-semibold mb-2">
-                        Tour Details
-                    </h2>
-                    <ul className="list-disc list-inside text-gray-700">
-                        <li>Duration: 3 hours</li>
-                        <li>Meeting Point: Gyeongbokgung Palace Main Gate</li>
-                        <li>Max Group Size: 15 people</li>
-                        <li>Available: Tuesday, Thursday, Saturday</li>
-                    </ul>
-                </div>
-
-
-               
-            </div>
+              {/* tour Details */}
+              <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                  <h2 className="text-gray-900 text-lg font-semibold mb-2">
+                      Tour Details
+                  </h2>
+                  <ul className="list-disc list-inside text-gray-700">
+                      <li>Duration: 3 hours</li>
+                      <li>Meeting Point: Gyeongbokgung Palace Main Gate</li>
+                      <li>Max Group Size: 15 people</li>
+                      <li>Available: Tuesday, Thursday, Saturday</li>
+                  </ul>
+              </div>
+          </div>
           </div>
             {/* tour Tabs */}
             <div className="mt-16">
@@ -329,8 +294,10 @@ const disabledDate = (current) => {
             </div>
           </div>
       {/* Reservation Section */}
-      <div className='col-span-1 border-2 p-4 rounded-lg shadow-md'>
-        <ReservationComponent/>
+      <div className='col-span-1 w-full'>
+        <ReservationComponent maxCapacity={tour.maxCapacity}
+                              availableCapacity = {tour.availableCapacity}
+        />
       </div>
     </div>
   );

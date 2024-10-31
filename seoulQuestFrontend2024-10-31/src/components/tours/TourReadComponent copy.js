@@ -19,7 +19,7 @@ const initState = {
   tlocation:'',
   uploadFileNames: [],
   tDate: [],
-  max_capacity:0,
+  maxCapacity:0,
 };
 const host = API_SERVER_HOST;
 
@@ -90,10 +90,6 @@ const wrapperStyle = {
   width: 300,
   border: '1px solid #d9d9d9', 
   borderRadius: 4,
-};
-
-const handleChange = (event, newValue) => {
-setValue(newValue);
 };
 
 const onPanelChange = (value, mode) => {
@@ -212,7 +208,7 @@ const onSelect = (e) => {
                         id="quantity"
                         type="number"
                         min="1"
-                        max={dateInfo.available_capacity} // max에 tour.max_capacity를 사용
+                        max={dateInfo.available_capacity} 
                         value={selectedQuantity}
                         onChange={(e) => setSelectedQuantity(parseInt(e.target.value))}
                         className="w-20 border border-gray-300 p-2 rounded-lg mt-5"

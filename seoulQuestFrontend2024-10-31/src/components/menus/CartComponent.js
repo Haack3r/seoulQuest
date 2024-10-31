@@ -29,15 +29,12 @@ const CartComponent = () => {
     }, [isLogin]);
 
     return (
-        <div className="flex flex-col items-center w-full mt-10 px-4">
+        <div className="flex flex-col items-center w-full px-4">
             {isLogin ? (
                 <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg">
                     {/* Cart Header */}
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-3xl font-bold">{loginState.nickname}'s Cart</h2>
-                        <div className="bg-orange-600 text-white font-bold rounded-full py-2 px-4">
-                            Items: {cartItems.length}
-                        </div>
+                    <div className="mb-6 border-b pb-4">
+                        <h2 className="text-2xl font-semibold text-gray-800">Cart</h2>   
                     </div>
 
                     {/* Cart Items */}
@@ -59,14 +56,14 @@ const CartComponent = () => {
                     </div>
 
                     {/* Total Amount */}
-                    <div className="text-right mb-6">
+                    <div className="flex justify-between items-center mt-6">
                         {total && <p className="text-2xl font-bold">Total: ₩{total.toFixed(2)}</p>}
                     </div>
 
                     {/* Checkout Button */}
                     <div className="flex justify-center">
                         <button
-                            className="w-full max-w-xs bg-green-600 text-white text-lg font-semibold py-3 rounded-full hover:bg-green-500 transition-colors duration-300"
+                            className="text-white font-semibold py-2 px-6 rounded-lg bg-stone-400 hover:bg-stone-600 transition duration-300"
                             type="button"
                         >
                             Proceed to Checkout
