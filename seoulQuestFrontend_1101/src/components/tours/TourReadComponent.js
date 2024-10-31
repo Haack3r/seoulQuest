@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API_SERVER_HOST } from "../../api/todoApi";
 // import useCustomMove from "../../hooks/useCustomMove";
-import { StarIcon,HeartIcon } from 'lucide-react'
+import { StarIcon,HeartIcon, CloudCog } from 'lucide-react'
 import { getOne } from "../../api/tourApi";
 import { Calendar, Popover} from "antd";
 import {UserOutlined, CalendarOutlined} from '@ant-design/icons';
@@ -31,7 +31,7 @@ const TourReadComponent = ({ tno }) => {
   const [fetching, setFetching] = useState(false);
   const [currentImage, setCurrentImage] = useState(0)
   const [selectedDate, setSelectedDate] = useState('');
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [selectedQuantity, setSelectedQuantity] = useState(0);
   const [calendarMode, setCalendarMode] = useState('month'); 
   const {reservationItems,changeReservation} = useCustomReservation();
   const { loginState } = useCustomLogin();
@@ -42,6 +42,17 @@ const TourReadComponent = ({ tno }) => {
       setVisible(visible);
     };
 
+    const onchangeQty = (e) => {
+      
+      // 날짜가 선택되지 않은 경우 경고창을 띄우고 수량을 업데이트하지 않음
+      if (!selectedDate) {
+          window.alert("Please select a reservation date.");
+          return;
+      }
+  
+      // 날짜가 선택된 경우에만 수량을 업데이트
+      setSelectedQuantity(e.target.value);
+  };
     // //날짜 클릭시 날짜에 해당하는 예약 가능 인원 출력하는 함수 -> 클릭한 날짜를 서버로 보내는 것도 처리해야함.
     const onSelect = (e) => {
       setVisible(false); // 날짜 선택 후 팝업 닫기
@@ -55,7 +66,7 @@ const TourReadComponent = ({ tno }) => {
       
       if (selectedDate) {
         console.log("예약할 날짜: " , selectedDate)
-
+       
         setSelectedDate(selectedDate)
       } else {
           console.log("예약 불가"); // 예약 불가능한 경우
@@ -114,16 +125,21 @@ const TourReadComponent = ({ tno }) => {
         let date = selectedDate;
         
         if(!date){
-          const confirmChange = window.confirm("예약 날짜를 선택해주세요.");
-          if (confirmChange) return;
+          window.alert("Please select a reservation date.");
+          return;
+        }
+
+        if(date && !qty){
+          window.alert("To proceed with booking, please choose the number of participants for the tour.");
+          return;
         }
         // 같은 투어가 이미 예약되어 있는지 확인
-        const existingItem = reservationItems.find(item => item.tno === parseInt(tno));
+        const existingItem = reservationItems.find( item => item.tno === parseInt(tno));
     
         if (existingItem) {
             // 날짜가 다르거나 수량이 변경된 경우에만 확인 창을 띄우고 예약을 변경
             if (existingItem.tdate !== selectedDate || existingItem.qty !== selectedQuantity) {
-                const confirmChange = window.confirm("이미 추가된 투어입니다. 예약 내역을 변경하시겠습니까?");
+                const confirmChange = window.confirm("This tour is already reserved. Would you like to update your reservation?");
                 if (!confirmChange) return;
     
                 qty = selectedQuantity; // 수량을 선택된 수량으로 변경 
@@ -131,9 +147,8 @@ const TourReadComponent = ({ tno }) => {
             } 
         }
         // 변경 사항을 적용하여 예약을 업데이트
-        changeReservation({ email: loginState.email, tno, tqty: qty, tdate: date });
-        console.log("예약이 업데이트되었습니다:", { tno, qty, date });
-    };
+        changeReservation({ email: loginState.email, tno, tqty: qty, tdate: date});
+      };
     
     useEffect(() => {
       setFetching(true);
@@ -204,7 +219,7 @@ const TourReadComponent = ({ tno }) => {
               {/* 날짜 선택 버튼 */}
               <div className="w-1/2 mt-5">
               <label htmlFor="quantity" className="text-gray-700 flex items-center mb-2">
-                      <CalendarOutlined className="mr-2 text-bold" /> Tour of Date
+                      <CalendarOutlined className="mr-2 text-bold" /> Date
                   </label>
                   <Popover
                       content={calendarContent}
@@ -213,7 +228,6 @@ const TourReadComponent = ({ tno }) => {
                       onOpenChange={handleVisibleChange}
                       placement="bottom"
                   >
-
                       <button 
                           className="flex items-center justify-center p-3 border border-gray-300 rounded-lg w-full hover:bg-gray-100 text-base cursor-pointer"
                       >
@@ -225,22 +239,24 @@ const TourReadComponent = ({ tno }) => {
               {/* 참가자 수 선택 */}
               <div className="w-1/2 mt-5">
                   <label htmlFor="quantity" className="text-gray-700 flex items-center mb-2">
-                      <UserOutlined className="mr-2 text-bold" /> Number of Participants
+                      <UserOutlined className="mr-2 text-bold" /> Person
                   </label>
                   
                   <input
                       id="quantity"
                       type="number"
                       min="1"
-                      max={selectedDate ? tour.maxCapacity : 1 }
+                      max={selectedDate ? tour.tqty : 1 }
                       // max={selectedDate ? tour.availableCapacity : 1 } //나중에 이거로 바꾸기
                       value={selectedQuantity}
-                      onChange={(e) => setSelectedQuantity(parseInt(e.target.value))}
+                      onChange={onchangeQty}
                       className="w-full border border-gray-300 p-3 rounded-lg text-center"
                   />
-            
+                  
               </div>
           </div>
+              {/* Capacity Information */} 
+              <div className="ml-1 text-sm text-end font-semibold text-gray-400">Max Participants: {tour.maxCapacity}</div>
               {/* Add to Cart and Wishlist Buttons */}
               <div className="flex space-x-4 mb-10 mt-8"> 
                 <button
@@ -295,9 +311,7 @@ const TourReadComponent = ({ tno }) => {
           </div>
       {/* Reservation Section */}
       <div className='col-span-1 w-full'>
-        <ReservationComponent maxCapacity={tour.maxCapacity}
-                              availableCapacity = {tour.availableCapacity}
-        />
+        <ReservationComponent maxCapacity={tour.maxCapacity}/>
       </div>
     </div>
   );

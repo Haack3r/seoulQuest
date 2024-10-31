@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import useCustomMove from '../../hooks/useCustomMove';
-import { StarIcon, ShoppingCartIcon, HeartIcon, CalendarOutlined  } from 'lucide-react'
+import { StarIcon, ShoppingCartIcon, HeartIcon } from 'lucide-react'
 import { getOne } from '../../api/productsApi';
 import FetchingModal from '../common/FetchingModal';
 import useCustomCart from '../../hooks/useCustomCart';
@@ -20,8 +20,8 @@ const initState = {
 const host = API_SERVER_HOST;
 
 const ReadComponent = ({ pno }) => {
+  const { moveToList, moveToModify, page, size } = useCustomMove();
     const [product, setProduct] = useState(initState);
-    const { moveToList, moveToModify, page, size } = useCustomMove();
     const [fetching, setFetching] = useState(false);
     const [currentImage, setCurrentImage] = useState(0)
     const { changeCart, cartItems } = useCustomCart();
@@ -29,31 +29,27 @@ const ReadComponent = ({ pno }) => {
     const [selectedQuantity, setSelectedQuantity] = useState(0);
 
     const handleClickAddCart = () => {
-        let pqty = 1;
+        let pqty = selectedQuantity;
 
+        if(selectedQuantity===0){
+          window.alert("Please select a quantity.")
+          return
+        }
         console.log("cartitems", cartItems)
-        if(cartItems.error!=='ERROR_ACCESS_TOKEN'){
-       
-          const addedItem = cartItems.filter(function(item) {
-            console.log(item)
-            return item.pno === parseInt(pno)})[0];
 
+        const addedItem = cartItems.find( item=> item.pno === parseInt(pno));
+        
+        if(cartItems.error!=='ERROR_ACCESS_TOKEN'){
           //카트에 있는 상품일때
           if (addedItem) {
-              if (window.confirm("이미 추가된 상품입니다. 추가하시겠습니까? ") === false) {
+              if (window.confirm("This item is already in the cart. Do you want to add it again?") === false) {
                   return;
               }
-              pqty = selectedQuantity + addedItem.pqty;
-              changeCart({ email: loginState.email, pno: pno, pqty: pqty });
-          
-          } else{
-              //카트에 없는 상품일 때 
-              changeCart({ email: loginState.email, pno: pno, pqty: selectedQuantity });
+              pqty += addedItem.pqty;
           }
-        }else{
-            changeCart({ email: loginState.email, pno: pno, pqty: selectedQuantity });
-        }
-    };
+              changeCart({ email: loginState.email, pno: pno, pqty: pqty });
+        };
+    }
 
     const handleChangeQuantity =(e) =>{
         setSelectedQuantity(parseInt(e.target.value))
@@ -72,6 +68,7 @@ const ReadComponent = ({ pno }) => {
     return (
         <div className='grid grid-cols-3 gap-6 mt-10 m-4'>
         <div className='col-span-2 p-4 rounded-lg'>
+        {fetching ? <FetchingModal /> : null}
         <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -79,31 +76,31 @@ const ReadComponent = ({ pno }) => {
           {/* Product Image */}
           <div className="relative h-96 md:h-full">
             <div className="space-y-4">
-                            <div className="aspect-square relative">
-                                <img
-                                    src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
-                                    alt={product.pname}
-                                    className="rounded-lg object-cover w-full h-full"
-                                />
-                            </div>
-                            <div className="flex space-x-2">
-                                {product.uploadFileNames.map((image, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setCurrentImage(index)}
-                                    className={`w-20 h-20 relative rounded-md overflow-hidden ${
-                                    currentImage === index ? 'ring-2 ring-primary' : ''
-                                    }`}
-                                >
-                                <img
-                                    src={`${host}/api/products/view/${image}`}
-                                    alt={`${product.pname} thumbnail ${index + 1}`}
-                                    className="rounded-lg object-cover w-full h-full"
-                                />
-                                </button>
-                                ))}
-                            </div>
-                        </div>
+              <div className="aspect-square relative">
+                  <img
+                      src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
+                      alt={product.pname}
+                      className="rounded-lg object-cover w-full h-full"
+                  />
+              </div>
+              <div className="flex space-x-2">
+                  {product.uploadFileNames.map((image, index) => (
+                  <button
+                      key={index}
+                      onClick={() => setCurrentImage(index)}
+                      className={`w-20 h-20 relative rounded-md overflow-hidden ${
+                      currentImage === index ? 'ring-2 ring-primary' : ''
+                      }`}
+                  >
+                  <img
+                      src={`${host}/api/products/view/${image}`}
+                      alt={`${product.pname} thumbnail ${index + 1}`}
+                      className="rounded-lg object-cover w-full h-full"
+                  />
+                  </button>
+                  ))}
+              </div>
+          </div>
             </div>
             
             {/* Product Details */}
@@ -155,10 +152,9 @@ const ReadComponent = ({ pno }) => {
             {/* Add to Cart and Wishlist Buttons */}
             <div className="flex space-x-4 mb-8">
               <button 
-                className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white p-1 rounded-lg w-full" 
+                className="flex items-center justify-center bg-stone-400 hover:bg-stone-600 text-white p-3 rounded-lg w-full" 
                 onClick={handleClickAddCart}
               ><ShoppingCartIcon className="mr-2 h-4 w-4" /> Add to Cart
-                
               </button>
               <button className="border border-gray-300 text-gray-700 hover:bg-gray-100 p-3 rounded-lg">
                 <HeartIcon className="h-4 w-4" />
@@ -206,7 +202,7 @@ const ReadComponent = ({ pno }) => {
         </div>
       </div>
            {/* Cart Section */}
-           <div className='col-span-1 w-full'>
+           <div className='col-span-1 w-full sticky top-20 transition-all duration-300'>
                 <CartComponent />
             </div>
       </div>
