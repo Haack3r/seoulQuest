@@ -56,7 +56,7 @@ public class ReservationRepositoryTests {
         Member member = memberRepository.findByEmail("user1@gmail.com").orElseThrow();
         Optional<Reservation> reservationOptional = reservationRepository.getReservationOfMember(member.getEmail());
         Reservation reservation = reservationOptional.orElseThrow();
-        Tour tour = tourRepository.findById(14L).orElseThrow();
+        Tour tour = tourRepository.findById(15L).orElseThrow();
         System.out.println(tour.getTDate().get(0).getTourDate());
 
         ReservationItem reservationItem = ReservationItem.builder()
