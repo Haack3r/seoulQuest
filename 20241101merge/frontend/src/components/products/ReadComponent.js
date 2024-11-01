@@ -20,7 +20,7 @@ const initState = {
 const host = API_SERVER_HOST;
 
 const ReadComponent = ({ pno }) => {
-  const { moveToList, moveToModify, page, size } = useCustomMove();
+  // const { moveToList, moveToModify, page, size } = useCustomMove();
     const [product, setProduct] = useState(initState);
     const [fetching, setFetching] = useState(false);
     const [currentImage, setCurrentImage] = useState(0)
@@ -172,8 +172,6 @@ const ReadComponent = ({ pno }) => {
                 <li>Dry clean only</li>
               </ul>
             </div>
-            
-            
           </div>
         </div>
 

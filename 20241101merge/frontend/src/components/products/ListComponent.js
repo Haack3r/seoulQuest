@@ -6,14 +6,7 @@ import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import Button from "../ui/Button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/Card";
+import {Card, CardDescription,CardTitle} from "../ui/Card";
 
 const host = API_SERVER_HOST;
 

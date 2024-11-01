@@ -61,7 +61,7 @@ public class CustomSecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check", "/api/member/login").permitAll() // Permit OPTIONS requests
                 .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/login","/api/user/tours/view/**","/api/user/products/view/**").permitAll()
-                .requestMatchers("/api/products/**", "/api/tours/**").permitAll()// Allow unauthenticated access
+                .requestMatchers("/api/products/**", "/api/tours/**", "/api/member/info").permitAll()// Allow unauthenticated access
                 .anyRequest().authenticated());
 
         http.formLogin(config -> {

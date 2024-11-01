@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @RestController
@@ -48,6 +49,16 @@ public class SignUpController {
         System.out.println("회원 등록 controller : " + dto);
         Member member = memberService.save(dto);
         return new ResponseEntity<>("회원등록 완료", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping("/api/member/info")
+    public MemberDTO getInfoForMyPage(Principal principal){
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email).orElseThrow();
+        MemberDTO memberDTO = memberService.entityToDTO(member);
+        System.out.println("memberdto: " + memberDTO);
+        return memberDTO;
     }
 
 

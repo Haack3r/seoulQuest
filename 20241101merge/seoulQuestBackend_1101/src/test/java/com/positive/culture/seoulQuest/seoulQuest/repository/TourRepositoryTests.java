@@ -57,7 +57,7 @@ public class TourRepositoryTests {
                     .tname("투어"+(i+1))
                     .tdesc(tourDescriptions[i])
                     .tprice(100*(i+1))
-                    .max_capacity(2*(i+1))
+                    .maxCapacity(2*(i+1))
                     .tlocation("투어장소"+(i+1))
                     .category(categoryRepository.getReferenceById(20l))
                     .build();

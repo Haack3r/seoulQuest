@@ -6,7 +6,7 @@ const MyPage = () => {
 
   return (
     <BasicLayout>
-        <div className='flex flex-wrap w-full'>
+        <div className="p-4 w-full" style={{ backgroundColor: "#E0DCD0" }}>
             <MyPageComponent/>
         </div>
     </BasicLayout>

@@ -2,94 +2,82 @@ import React, { useEffect, useState } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import useCustomMove from '../../hooks/useCustomMove';
 import { StarIcon, ShoppingCartIcon, HeartIcon } from 'lucide-react'
-
 import useCustomCart from '../../hooks/useCustomCart';
 import useCustomLogin from '../../hooks/useCustomLogin';
-import CartComponent from '../menus/CartComponent';
 import { getOneNU } from '../../api/nuProductApi';
-import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import FetchingModal from '../common/FetchingModal';
 
 const initState = {
-    pno: 0,
-    pname: '',
-    pdesc: '',
-    pprice: 0,
-    uploadFileNames: []
+  pno: 0,
+  pname: '',
+  pdesc: '',
+  pprice: 0,
+  pqty: 0,
+  uploadFileNames: []
 };
 const host = API_SERVER_HOST;
 
 const NUReadComponent = ({ pno }) => {
-    const [product, setProduct] = useState(initState);
-    const { moveToList, moveToModify, page, size } = useCustomMove();
-    const [fetching, setFetching] = useState(false);
-    const [currentImage, setCurrentImage] = useState(0)
-    const [value, setValue] = React.useState(0);
-    const { loginState } = useCustomLogin();
+  // const { moveToList, moveToModify, page, size } = useCustomMove();
+  const [product, setProduct] = useState(initState);
+  const [fetching, setFetching] = useState(false);
+  const [currentImage, setCurrentImage] = useState(0)
+  const { changeCart, cartItems } = useCustomCart();
+  const { loginState } = useCustomLogin();
+  const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const navigate = useNavigate();
 
+  const handleClickAddCart = () => {
+    window.alert("Please log in first to purchase the product.")
+    navigate('/member/login')
+  }
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
-    const { changeCart, cartItems } = useCustomCart();
-    // const { loginState } = useCustomLogin();
-  
+  const handleChangeQuantity = (e) => {
+    setSelectedQuantity(parseInt(e.target.value))
+  }
 
-    const handleClickAddCart = () => {
-        // let qty = 1;
+  useEffect(() => {
+    setFetching(true);
 
-        // const addedItem = cartItems.filter(item => item.pno === parseInt(pno))[0];
+    getOneNU(pno).then(data => {
+      setProduct(data);
+      setFetching(false);
+    });
+  }, [pno]);
 
-        // if (addedItem) {
-            
-        // }
-        // changeCart({ email: loginState.email, pno: pno, qty: qty });
-        
-    };
-
-    useEffect(() => {
-        setFetching(true);
-
-        getOneNU(pno).then(data => {
-            setProduct(data);
-            setFetching(false);
-        });
-    }, [pno]);
-
-    return (
-      <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+  return (
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
+        {fetching ? <FetchingModal /> : null}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Product Image */}
           <div className="relative h-96 md:h-full">
-          <div className="space-y-4">
-                        <div className="aspect-square relative">
-                            <img
-                                src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
-                                alt={product.pname}
-                                className="rounded-lg object-cover w-full h-full"
-                            />
-                        </div>
-                        <div className="flex space-x-2">
-                            {product.uploadFileNames.map((image, index) => (
-                            <button
-                                key={index}
-                                onClick={() => setCurrentImage(index)}
-                                className={`w-20 h-20 relative rounded-md overflow-hidden ${
-                                currentImage === index ? 'ring-2 ring-primary' : ''
-                                }`}
-                            >
-                            <img
-                                src={`${host}/api/products/view/${image}`}
-                                alt={`${product.pname} thumbnail ${index + 1}`}
-                                className="rounded-lg object-cover w-full h-full"
-                            />
-                            </button>
-                            ))}
-                        </div>
-                    </div>
+            <div className="space-y-4">
+              <div className="aspect-square relative">
+                <img
+                  src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
+                  alt={product.pname}
+                  className="rounded-lg object-cover w-full h-full"
+                />
+              </div>
+              <div className="flex space-x-2">
+                {product.uploadFileNames.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImage(index)}
+                    className={`w-20 h-20 relative rounded-md overflow-hidden ${currentImage === index ? 'ring-2 ring-primary' : ''
+                      }`}
+                  >
+                    <img
+                      src={`${host}/api/products/view/${image}`}
+                      alt={`${product.pname} thumbnail ${index + 1}`}
+                      className="rounded-lg object-cover w-full h-full"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Product Details */}
@@ -103,7 +91,7 @@ const NUReadComponent = ({ pno }) => {
             </div>
             <p className="text-2xl font-light text-gray-900 mb-6">₩{product.pprice.toLocaleString()}</p>
             <p className="text-gray-700 mb-6">
-            {product.pdesc}
+              {product.pdesc}
             </p>
 
             {/* Size Selection */}
@@ -112,8 +100,8 @@ const NUReadComponent = ({ pno }) => {
               <select
                 id="size"
                 className="w-full border border-gray-300 p-2 rounded-lg"
-                // value={selectedSize}
-                // onChange={(e) => setSelectedSize(e.target.value)}
+              // value={selectedSize}
+              // onChange={(e) => setSelectedSize(e.target.value)}
               >
                 <option value="">Select size</option>
                 <option value="s">Small</option>
@@ -130,19 +118,19 @@ const NUReadComponent = ({ pno }) => {
                 id="quantity"
                 type="number"
                 min="1"
-                // value={quantity}
-                // onChange={(e) => setQuantity(parseInt(e.target.value))}
-                className="w-20 border-gray-300 p-2 rounded-lg"
+                max={product.pqty}
+                placeholder='0'
+                value={selectedQuantity}
+                onChange={handleChangeQuantity}
+                className="w-20 border border-gray-300 p-2 rounded-lg"
               />
             </div>
-
             {/* Add to Cart and Wishlist Buttons */}
             <div className="flex space-x-4 mb-8">
-              <button 
-                className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white p-1 rounded-lg w-full" 
+              <button
+                className="flex items-center justify-center bg-stone-400 hover:bg-stone-600 text-white p-3 rounded-lg w-full"
                 onClick={handleClickAddCart}
-              ><Link to="/user/products"><ShoppingCartIcon className="mr-2 h-4 w-4" /> Add to Cart</Link>
-                
+              ><ShoppingCartIcon className="mr-2 h-4 w-4" /> Add to Cart
               </button>
               <button className="border border-gray-300 text-gray-700 hover:bg-gray-100 p-3 rounded-lg">
                 <HeartIcon className="h-4 w-4" />
@@ -174,10 +162,10 @@ const NUReadComponent = ({ pno }) => {
           <div className="bg-white p-6 border border-gray-200 rounded-b-lg">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">About this Hanbok</h3>
             <p className="text-gray-700">
-              Our Traditional Korean Hanbok is a stunning representation of Korea's rich cultural heritage. 
-              Each piece is meticulously crafted by skilled artisans in Seoul, ensuring authenticity and 
-              the highest quality. The vibrant colors and intricate patterns are inspired by royal court 
-              attire from the Joseon Dynasty, making this hanbok perfect for special occasions, cultural 
+              Our Traditional Korean Hanbok is a stunning representation of Korea's rich cultural heritage.
+              Each piece is meticulously crafted by skilled artisans in Seoul, ensuring authenticity and
+              the highest quality. The vibrant colors and intricate patterns are inspired by royal court
+              attire from the Joseon Dynasty, making this hanbok perfect for special occasions, cultural
               events, or as a unique addition to your wardrobe.
             </p>
           </div>

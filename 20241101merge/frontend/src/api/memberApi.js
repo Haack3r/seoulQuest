@@ -15,6 +15,7 @@ export const loginPost = async (loginParam) => {
   const res = await axios.post(`${host}/login`, form, header);
   return res.data;
 };
+
 export const modifyMember = async (member) => {
   const res = await jwtAxios.put(`${host}/modify`, member);
   return res.data;
@@ -46,6 +47,11 @@ export const registerMember = async (obj) => {
   } catch (error) {
     throw new Error(error.response?.data?.message || "Registration failed");
   }
+};
+
+export const getUserInfo = async () => {
+  const res = await jwtAxios.get(`${host}/info`);
+  return res.data;
 };
 
 // export const registerMember = async (obj) => {

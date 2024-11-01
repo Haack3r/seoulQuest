@@ -38,10 +38,10 @@ const TourReadComponent = ({ tno }) => {
   const { loginState } = useCustomLogin();
   const [visible, setVisible] = useState(false); // 팝업 표시 여부
 
-    // 팝업을 보여주고 닫는 핸들러
-    const handleVisibleChange = (visible) => {
-      setVisible(visible);
-    };
+   // 팝업을 보여주고 닫는 핸들러
+   const handleVisibleChange = (visible) => {
+    setVisible(visible);
+  };
 
     const onchangeQty = (e) => {
       
@@ -216,7 +216,7 @@ const TourReadComponent = ({ tno }) => {
                   {tour.tdesc}
                 </p>
 
-              <div className="flex justify-between items-center space-x-4 border-t-2">
+            <div className="flex justify-between items-center space-x-4 border-t-2">
               {/* 날짜 선택 버튼 */}
               <div className="w-1/2 mt-5">
               <label htmlFor="quantity" className="text-gray-700 flex items-center mb-2">
