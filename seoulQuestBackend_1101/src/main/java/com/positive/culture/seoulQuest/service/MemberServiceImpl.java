@@ -1,4 +1,5 @@
 package com.positive.culture.seoulQuest.service;
+import com.positive.culture.seoulQuest.domain.Address;
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.MemberRole;
 import com.positive.culture.seoulQuest.dto.MemberDTO;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
@@ -64,18 +66,60 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Member save(UserDTO dto) {
-        Member member = Member.builder()
-                .name(dto.getName())
-                .email(dto.getEmail())
-                .password(passwordEncoder.encode(dto.getPassword())) // Ensure password is hashed
-                .build();
-
-        // Assign a default role if required
-        member.addRole(MemberRole.USER);
-
-        return memberRepository.save(member);
+    public Optional<Member> findByNickname(String nickName) {
+        System.out.println("서비스  nickname:" +nickName);
+        return memberRepository.findByNickName(nickName);
     }
+
+    //    @Override
+//    public Member save(UserDTO dto) {
+//        System.out.println(dto.getPhoneNumber1());
+//        Member member = Member.builder()
+//                .name(dto.getName())
+//                .nickName(dto.getNickName())
+//                .email(dto.getEmail())
+//                .phoneNumber(dto.getPhoneNumber1()+"-"+dto.getPhoneNumber2()+"-"+dto.getPhoneNumber3())
+//                .birthday(dto.getBirthday())
+//                .address(new Address(dto.getStreet(),dto.getCity(),dto.getState(),dto.getZipcode(), dto.getCountry()))
+//                .password(passwordEncoder.encode(dto.getPassword())) // Ensure password is hashed
+//                .build();
+//
+//        // Assign a default role if required
+//        member.addRole(MemberRole.USER);
+//
+//        return memberRepository.save(member);
+//    }
+@Override
+public Member save(UserDTO dto) {
+
+    // Assemble phone number, handling any missing parts
+    String phoneNumber = String.join("-",
+            dto.getPhoneNumber1(),
+            dto.getPhoneNumber2(),
+            dto.getPhoneNumber3()
+    );
+
+    // Create a new Member instance
+    Member member = Member.builder()
+            .name(dto.getFirstname()+" "+dto.getLastname())
+            .nickName(dto.getNickName())
+            .email(dto.getEmail())
+            .phoneNumber(phoneNumber.trim())
+            .birthday(dto.getBirthday())  // Default to today if missing
+            .address(new Address(
+                    dto.getStreet(),
+                    dto.getCity(),
+                    dto.getState() ,
+                    dto.getZipcode(),
+                    dto.getCountry()
+            ))
+            .password(passwordEncoder.encode(dto.getPassword()))
+            .build();
+
+    member.addRole(MemberRole.USER);
+
+    return memberRepository.save(member);
+}
 
 
 //    public Member save(UserDTO dto) {

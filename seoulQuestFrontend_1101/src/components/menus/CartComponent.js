@@ -1,7 +1,10 @@
-import useCustomLogin from "../../hooks/useCustomLogin";
-import { useEffect, useMemo } from "react";
-import useCustomCart from "../../hooks/useCustomCart";
-import CartItemComponent from "../cart/CartItemComponent";
+import React, { useEffect, useMemo } from "react"; // useEffect, useMemo import 추가
+import useCustomLogin from "../../hooks/useCustomLogin"; // useCustomLogin import 추가
+import useCustomCart from "../../hooks/useCustomCart"; // useCustomCart import 추가
+import CartItemComponent from "../cartAndReservation/CartItemComponent"; // CartItemComponent import 추가
+import { ShoppingCartOutlined } from "@ant-design/icons"; // ShoppingCartOutlined import 추가
+
+
 
 const CartComponent = () => {
     const { isLogin, loginState } = useCustomLogin();
@@ -9,10 +12,13 @@ const CartComponent = () => {
 
     const total = useMemo(() => {
         let total = 0;
-        for (const item of cartItems) {
-            total += item.price * item.qty;
+        if (cartItems.length !== 0) {
+            if (cartItems.error === 'ERROR_ACCESS_TOKEN') return;
+            for (const item of cartItems) {
+                total += item.pprice * item.pqty;
+            }
+            return total;
         }
-        return total;
     }, [cartItems]);
 
     useEffect(() => {
@@ -22,15 +28,13 @@ const CartComponent = () => {
     }, [isLogin]);
 
     return (
-        <div className="flex flex-col items-center w-full mt-10 px-4">
+        <div className="flex flex-col items-center w-full px-4 sm:px-6 lg:px-8">
             {isLogin ? (
-                <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg">
+                <div className="w-full max-w-3xl bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-xl">
                     {/* Cart Header */}
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-3xl font-bold">{loginState.nickname}'s Cart</h2>
-                        <div className="bg-orange-600 text-white font-bold rounded-full py-2 px-4">
-                            Items: {cartItems.length}
-                        </div>
+                    <div className="mb-6 border-b pb-4 flex items-center space-x-2">
+                        <ShoppingCartOutlined className="text-2xl sm:text-3xl text-gray-700" />
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Shopping Cart</h2>   
                     </div>
 
                     {/* Cart Items */}
@@ -52,14 +56,19 @@ const CartComponent = () => {
                     </div>
 
                     {/* Total Amount */}
-                    <div className="text-right mb-6">
-                        <p className="text-2xl font-bold">Total: ${total.toFixed(2)}</p>
+                    <div className="flex flex-col sm:flex-row justify-between items-center mt-6 border-t pt-4">
+                        {total && (
+                            <p className="text-lg sm:text-xl font-bold text-gray-800">
+                                Total: ₩{total.toFixed(2)}
+                            </p>
+                        )}
+                        <p className="text-gray-600">{cartItems.length} items</p>
                     </div>
 
                     {/* Checkout Button */}
-                    <div className="flex justify-center">
+                    <div className="flex justify-center mt-6">
                         <button
-                            className="w-full max-w-xs bg-green-600 text-white text-lg font-semibold py-3 rounded-full hover:bg-green-500 transition-colors duration-300"
+                            className="text-white font-semibold py-2 px-6 rounded-lg bg-stone-400 hover:bg-stone-600 transition duration-300 shadow-md w-full sm:w-auto"
                             type="button"
                         >
                             Proceed to Checkout
@@ -67,10 +76,9 @@ const CartComponent = () => {
                     </div>
                 </div>
             ) : (
-                <p className="text-center text-gray-500">Please log in to see your cart.</p>
+                <p className="text-center text-gray-500 mt-12">Please log in to see your cart.</p>
             )}
         </div>
     );
 };
-
 export default CartComponent;

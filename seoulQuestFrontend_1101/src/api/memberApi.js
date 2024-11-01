@@ -28,6 +28,18 @@ export const checkEmail = async (email) => {
   });
   return res.data;
 };
+export const checkNickname = async (nickName) => {
+  console.log("checkNickname", nickName);
+  const headers = { "Content-Type": "application/json" };
+  const res = await axios.post(
+    `${host}/checknickname`,
+    JSON.stringify({ nickName }),
+    {
+      headers,
+    }
+  );
+  return res.data;
+};
 export const registerMember = async (obj) => {
   console.log("obj:", obj);
   const headers = { "Content-Type": "application/json" };
@@ -36,8 +48,19 @@ export const registerMember = async (obj) => {
     const res = await axios.post(
       `${host}/signup`,
       {
-        name: obj.name,
+        firstname: obj.firstname,
+        lastname: obj.lastname,
+        nickName: obj.nickName,
         email: obj.email,
+        phoneNumber1: obj.phoneNumber1,
+        phoneNumber2: obj.phoneNumber2,
+        phoneNumber3: obj.phoneNumber3,
+        birthday: obj.birthday,
+        country: obj.country,
+        state: obj.state,
+        city: obj.city,
+        street: obj.street,
+        zipcode: obj.zipcode,
         password: obj.password,
       },
       { headers }

@@ -16,5 +16,6 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Member getWithRoles(@Param("email") String email);
 
     Optional<Member> findByEmail(String email); //Test용
+    Optional<Member> findByNickName(String nickName); //Test용
     Member save(UserDTO dto);
 }

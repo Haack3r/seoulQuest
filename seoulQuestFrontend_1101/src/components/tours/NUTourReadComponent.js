@@ -2,18 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import useCustomMove from '../../hooks/useCustomMove';
 import { StarIcon, ShoppingCartIcon, HeartIcon } from 'lucide-react'
-
-import useCustomCart from '../../hooks/useCustomCart';
-import useCustomLogin from '../../hooks/useCustomLogin';
-import CartComponent from '../menus/CartComponent';
-import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/Card"
 import { getOneTNU } from '../../api/nuTourApi';
 import { Calendar } from "antd";
-import { MergeOutlined, ShoppingCartOutlined, UserOutlined} from '@ant-design/icons';
+import {UserOutlined} from '@ant-design/icons';
+import FetchingModal from "../common/FetchingModal";
 
 const initState = {
     tno: 0,
@@ -24,7 +17,7 @@ const initState = {
     tlocation:'',
     uploadFileNames: [],
     tDate: [],
-    max_capacity:0,
+    maxCapacity:0,
 };
 const host = API_SERVER_HOST;
 
@@ -34,37 +27,10 @@ const NUTourReadComponent = ({ tno }) => {
     const [fetching, setFetching] = useState(false);
     const [currentImage, setCurrentImage] = useState(0)
     const [value, setValue] = useState(0);
-    const { loginState } = useCustomLogin();
     const [selectedDate, setSelectedDate] = useState('');
     const [quantity, setQuantity] = useState(1);
     const [calendarMode, setCalendarMode] = useState('month'); // 초기 모드는 월
     const [dateInfo,setDateInfo] = useState()
-
-    // calendar style
-    const wrapperStyle = {
-        width: 300,
-        border: '1px solid #d9d9d9', 
-        borderRadius: 4,
-    };
-
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
-    const { changeCart, cartItems } = useCustomCart();
-    // const { loginState } = useCustomLogin();
-  
-
-    const handleClickAddCart = () => {
-        // let qty = 1;
-
-        // const addedItem = cartItems.filter(item => item.pno === parseInt(pno))[0];
-
-        // if (addedItem) {
-            
-        // }
-        // changeCart({ email: loginState.email, pno: pno, qty: qty });
-        
-    };
 
     useEffect(() => {
         setFetching(true);
@@ -79,6 +45,17 @@ const NUTourReadComponent = ({ tno }) => {
             console.log(data.tdate);
         });
     }, [tno]);
+
+    // --------------------------Calendar-------------------------------
+    const wrapperStyle = {
+        width: 300,
+        border: '1px solid #d9d9d9', 
+        borderRadius: 4,
+    };
+
+    const handleChange = (event, newValue) => {
+    setValue(newValue);
+    };
 
     const onPanelChange = (value, mode) => {
         setCalendarMode(mode); // 현재 모드를 업데이트
@@ -130,6 +107,8 @@ const NUTourReadComponent = ({ tno }) => {
 
     return (
         <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8 mt-20">
+            {/* Tour modal*/}
+            {fetching ? <FetchingModal /> : null}
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {/* Tour Image */}
@@ -199,7 +178,7 @@ const NUTourReadComponent = ({ tno }) => {
                             max={dateInfo.available_capacity} // max에 tour.max_capacity를 사용
                             value={quantity}
                             onChange={(e) => setQuantity(parseInt(e.target.value))}
-                            className="w-20 border-gray-300 p-2 rounded-lg"
+                            className="w-20 border border-gray-300 p-2 rounded-lg mt-5"
                         />
                     )}
             

@@ -7,10 +7,7 @@ const ReadPage = () => {
     const {pno} = useParams()
 
   return (
-    <div className='p-4 w-full bg-white'>
-        <div className='m-10 text-3xl font-extrabold'>
-            Souvenirs
-        </div>
+    <div className='p-4 w-full bg-white mt-20'>
         <ReadComponent pno={pno}></ReadComponent>
     </div>
   )

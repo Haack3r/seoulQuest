@@ -15,6 +15,7 @@ public interface MemberService {
 
     void modifyMember(MemberModifyDTO memberModifyDTO);
     Optional<Member> findByEmail(String email);
+    Optional<Member> findByNickname(String email);
     Member save(UserDTO dto);
 
     default MemberDTO entityToDTO(Member member) {

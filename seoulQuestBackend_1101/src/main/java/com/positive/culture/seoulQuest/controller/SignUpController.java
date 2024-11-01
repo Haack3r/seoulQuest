@@ -42,6 +42,22 @@ public class SignUpController {
         }
 
     }
+    @PostMapping("/api/member/checknickname")
+    public ResponseEntity<String> showNicknameCheck(@RequestBody UserDTO dto) {
+        System.out.println("닉네임 check controller : " +dto);
+        Optional<Member> member = memberService.findByNickname(dto.getNickName());
+
+        if (member.isPresent()) {
+            // 会員が存在する場合
+            String e = member.get().getNickName(); // メールアドレスを取得
+            System.out.println(e);
+            return new ResponseEntity<>("This nickname is already taken", HttpStatus.OK);
+        } else {
+            // 会員が存在しない場合
+            return new ResponseEntity<>("This nickname is available", HttpStatus.OK);
+        }
+
+    }
 
     @PostMapping("/api/member/signup")
     public ResponseEntity<String> showSignUpForm(@RequestBody UserDTO dto) {

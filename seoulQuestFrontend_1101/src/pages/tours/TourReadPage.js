@@ -8,10 +8,7 @@ const TourReadPage = () => {
   
   return (
     <div className='p-4 w-full bg-white'>
-        <div className='text-3xl font-extrabold'>
-          Tour Reservation
-        </div>
-        <TourReadComponent tno={tno}></TourReadComponent>
+      <TourReadComponent tno={tno}></TourReadComponent>
     </div>
   )
 }

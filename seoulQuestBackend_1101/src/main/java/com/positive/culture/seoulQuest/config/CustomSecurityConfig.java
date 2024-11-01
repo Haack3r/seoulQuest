@@ -59,8 +59,8 @@ public class CustomSecurityConfig {
                 .csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check", "/api/member/login").permitAll() // Permit OPTIONS requests
-                .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/login","/api/user/tours/view/**","/api/user/products/view/**").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check", "/api/member/checknickname","/api/member/login").permitAll() // Permit OPTIONS requests
+                .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/checknickname", "/api/member/login","/api/user/tours/view/**","/api/user/products/view/**").permitAll()
                 .requestMatchers("/api/products/**", "/api/tours/**").permitAll()// Allow unauthenticated access
                 .anyRequest().authenticated());
 
@@ -110,18 +110,12 @@ public class CustomSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Allow all origins for specific paths
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS")); // Include OPTIONS for preflight
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","HEAD","OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/member/signup", configuration);
-        source.registerCorsConfiguration("/api/member/check", configuration);
-        source.registerCorsConfiguration("/api/products/**", configuration);
-        source.registerCorsConfiguration("/api/tours/**", configuration);
-        source.registerCorsConfiguration("/api/user/products/**", configuration);
-        source.registerCorsConfiguration("/api/user/tours/**", configuration);
-        source.registerCorsConfiguration("/api/member/login", configuration);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

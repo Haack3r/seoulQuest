@@ -34,22 +34,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         log.info("check uri....."+path);
 
         //        // api/member 경로의 호출은 체크 안함
-        if (path.startsWith("/api/member/login")) return true;
+        if (path.startsWith("/api/member/")) return true;
 
         if (path.startsWith("/api/products/"))
             return true; // Do not apply this filter for these paths
 
         if (path.startsWith("/api/products/view/**"))
             return true;
-        // 회원가입 경로("/api/member/signup")에서는 필터링을 생략하도록 설정
-        if (path.equals("/api/member/signup")) {
-            return true;
-        }
-
-        if (path.equals("/api/member/check")) {
-            return true;
-        }
-
         if (path.startsWith("/api/user/products/view/**"))
             return true;
         if (path.startsWith("/api/products/{pno}"))
@@ -60,8 +51,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         if (path.startsWith("/api/tours/view/**"))
             return true;
-        if (path.startsWith("/api/user/tours/view/**"))
-            return true;
         if (path.startsWith("/api/tours/{pno}"))
             return true;
 
@@ -69,7 +58,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         return false;
     }
 
-//    @Override
+    //    @Override
 //    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 //        log.info("----- JWTCheckFilter -----");
 //
@@ -171,64 +160,64 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 //        filterChain.doFilter(request, response); // Proceed without authentication
 //    }
 //}
-@Override
-protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    log.info("----- JWTCheckFilter -----");
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("----- JWTCheckFilter -----");
 
-    String authHeaderStr = request.getHeader("Authorization");
+        String authHeaderStr = request.getHeader("Authorization");
 
-    if (authHeaderStr == null || !authHeaderStr.startsWith("Bearer ")) {
-        log.warn("Authorization header is missing or does not start with Bearer");
-        filterChain.doFilter(request, response); // continue with the filter chain
-        return;
+        if (authHeaderStr == null || !authHeaderStr.startsWith("Bearer ")) {
+            log.warn("Authorization header is missing or does not start with Bearer");
+            filterChain.doFilter(request, response); // continue with the filter chain
+            return;
+        }
+
+        try {
+            // Extract the accessToken from the header
+            String accessToken = authHeaderStr.substring(7);
+            Map<String, Object> claims = JWTUtil.validateToken(accessToken);
+
+            log.info("JWT claims : " + claims);
+
+            // Retrieve user details from the claims
+            String email = (String) claims.get("email");
+            String password = (String) claims.get("password"); // Store securely!
+            String nickname = (String) claims.get("nickname");
+            Boolean social = (Boolean) claims.get("social");
+            List<String> roleName = (List<String>) claims.get("roleName");
+
+            // Convert role names to GrantedAuthority
+            List<GrantedAuthority> authorities = roleName.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
+            MemberDTO memberDTO = new MemberDTO(email, password, nickname, social, roleName);
+
+            log.info("----------");
+            log.info(memberDTO);
+            log.info(memberDTO.getAuthorities());
+
+            // Create authentication token with the extracted authorities
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(email, password, authorities);
+
+            // Set the authentication in the SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            // Proceed with the filter chain
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            log.error("JWT Check Error......");
+            log.error(e.getMessage());
+
+            // Handle error response
+            Gson gson = new Gson();
+            String msg = gson.toJson(Map.of("error", "ERROR_ACCESS_TOKEN"));
+
+            response.setContentType("application/json");
+            PrintWriter printWriter = response.getWriter();
+            printWriter.print(msg);
+            printWriter.close();
+        }
     }
-
-    try {
-        // Extract the accessToken from the header
-        String accessToken = authHeaderStr.substring(7);
-        Map<String, Object> claims = JWTUtil.validateToken(accessToken);
-
-        log.info("JWT claims : " + claims);
-
-        // Retrieve user details from the claims
-        String email = (String) claims.get("email");
-        String password = (String) claims.get("password"); // Store securely!
-        String nickname = (String) claims.get("nickname");
-        Boolean social = (Boolean) claims.get("social");
-        List<String> roleName = (List<String>) claims.get("roleName");
-
-        // Convert role names to GrantedAuthority
-        List<GrantedAuthority> authorities = roleName.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-
-        MemberDTO memberDTO = new MemberDTO(email, password, nickname, social, roleName);
-
-        log.info("----------");
-        log.info(memberDTO);
-        log.info(memberDTO.getAuthorities());
-
-        // Create authentication token with the extracted authorities
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(email, password, authorities);
-
-        // Set the authentication in the SecurityContext
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-        // Proceed with the filter chain
-        filterChain.doFilter(request, response);
-    } catch (Exception e) {
-        log.error("JWT Check Error......");
-        log.error(e.getMessage());
-
-        // Handle error response
-        Gson gson = new Gson();
-        String msg = gson.toJson(Map.of("error", "ERROR_ACCESS_TOKEN"));
-
-        response.setContentType("application/json");
-        PrintWriter printWriter = response.getWriter();
-        printWriter.print(msg);
-        printWriter.close();
-    }
-}
 }
