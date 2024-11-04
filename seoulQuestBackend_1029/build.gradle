@@ -44,11 +44,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/net.coobird/thumbnailator
 	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.19'
 
-<<<<<<< HEAD:seoulQuest/build.gradle
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
-=======
+
 //	 https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
->>>>>>> origin/hyeri:seoulQuestBackend_v4/build.gradle
 	// Product 테스트를 위해 시큐리티 관련 주석처리해둠
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 
