@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from "../ui/Button";
-import { getUserInfoforEdit } from '../../api/myPageApi';
+import { getUserInfo, postUserInfoforEdit } from '../../api/myPageApi';
+import { checkNickname } from "../../api/memberApi";
 
     const initState = {
         fullname: "",
@@ -16,33 +17,66 @@ import { getUserInfoforEdit } from '../../api/myPageApi';
         street: "",
         zipcode: "",
         password: "",
+        newPassword: "",
         confirmPassword: "",
-        newPassword: ""
       };
 
 const EditProfileComponent = () => {
     const [userInfo, setUserInfo] = useState({...initState});
+    const [isCheckingNickname, setIsCheckingNickname] = useState(false);
+    const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // New loading state
 
     useEffect(() => {
-        getUserInfoforEdit().then((data) => {
+        getUserInfo().then((data) => {
             console.log(data);
             setUserInfo(data);
         });
     }, []);
 
     const handleChange = (e) => {
-        const {name : fieldName,  value} = e.target
-
-        setUserInfo((info) => ({
-            ...info,
-            [fieldName]: value,
-        }));
+       setUserInfo({...userInfo, [e.target.name]:e.target.value})
     }
+
+    const handleClickEditProfile = async (e) => {
+        e.preventDefault();
+        if (userInfo.newPassword !== userInfo.confirmPassword) {
+          alert("Passwords do not match.");
+          return;
+        }
+        setIsLoading(true); // Start loading
+        try {
+          await postUserInfoforEdit(userInfo);
+          alert("Profile edited successfully!");
+          setUserInfo({ ...initState });
+        } catch (error) {
+          console.error("Error occurred during profile editing:", error);
+          alert("Failed to edit profile: " + error.message);
+        } finally {
+          setIsLoading(false); // Stop loading
+        }
+      };
+
+    
+      const checkNicknameAvailability = async () => {
+        setIsCheckingNickname(true);
+        try {
+          const response = await checkNickname(userInfo.nickName);
+          setIsNicknameAvailable(response.includes("Available Nickname")); // Update based on response
+          alert(response);
+        } catch (error) {
+          console.error("Error checking nickname availability:", error);
+          alert("Error checking nickname availability.");
+          setIsNicknameAvailable(false);
+        } finally {
+          setIsCheckingNickname(false);
+        }
+      };
 
     return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="w-full mt-20 mb-10 p-8 sm:p-10 md:p-8 lg:p-20 lg:w-1/2 bg-white rounded-lg">
-                <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
+                <h2 className="text-2xl font-bold text-center text-gray-700 mb-10">
                     Edit Profile
                 </h2>
                 <form className="space-y-4">
@@ -57,6 +91,30 @@ const EditProfileComponent = () => {
                             value={userInfo.fullname}
                         />
                     </div>
+                    <div className="flex items-center gap-2">
+                        <label className="w-1/4 text-gray-600 mb-1" htmlFor="fullname">Email</label>
+                        <input
+                            disabled
+                            className="flex-1 p-3 border border-gray-300 rounded shadow-sm"
+                            id="email"
+                            name="email"
+                            type="text"
+                            value={userInfo.email}
+                        />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <label className="w-1/4 text-gray-600 mb-1" htmlFor="fullname">Birthday</label>
+                        <input
+                            disabled
+                            className="flex-1 p-3 border border-gray-300 rounded shadow-sm"
+                            id="birthday"
+                            name="birthday"
+                            type="text"
+                            value={userInfo.birthday}
+                        />
+                    </div>
+
                     <div className="space-y-2">
                         <label className="block text-gray-600 mb-1" htmlFor="nickName">Nickname</label>
                         <div className="flex space-x-2">
@@ -73,28 +131,7 @@ const EditProfileComponent = () => {
                             <button
                                 type="button"
                                 className="w-1/3 p-3 md:w-1/5 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
-                            >
-                                Check
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="block text-gray-600 mb-1" htmlFor="email">Email</label>
-                        <div className="flex space-x-2">
-                            <input
-                                className="flex-1 p-3 border border-gray-300 rounded shadow-sm"
-                                id="email"
-                                name="email"
-                                type="email"
-                                value={userInfo.email}
-                                placeholder="email"
-                                onChange={handleChange}
-                                required
-                            />
-                            <button
-                                type="button"
-                                className="w-1/3 p-3 md:w-1/5 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                                onClick={checkNicknameAvailability}
                             >
                                 Check
                             </button>
@@ -142,18 +179,6 @@ const EditProfileComponent = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="block text-gray-600 mb-1" htmlFor="birthday">Birthday</label>
-                        <input
-                            className="w-full p-3 border border-gray-300 rounded shadow-sm"
-                            id="birthday"
-                            name="birthday"
-                            disabled
-                            type="date"
-                            value={userInfo.birthday}
-                            required
-                        />
-                    </div>
 
                     <div className="grid grid-cols-2 gap-2">
                         <div>
@@ -230,7 +255,7 @@ const EditProfileComponent = () => {
                             id="newPassword"
                             name="newPassword"
                             type="password"
-                            value={userInfo.newPassword}
+                            value={userInfo.newPassword || ""}
                             onChange={handleChange}
                             placeholder="Enter new password"
                             required
@@ -242,9 +267,9 @@ const EditProfileComponent = () => {
                         <input
                             className="w-full p-3 border border-gray-300 rounded shadow-sm"
                             id="confirmNewPassword"
-                            name="confirmNewPassword"
+                            name="confirmPassword"
                             type="password"
-                            value={userInfo.confirmPassword}
+                            value={userInfo.confirmPassword || ""}
                             onChange={handleChange}
                             placeholder="Re-enter new password"
                             required
@@ -255,6 +280,7 @@ const EditProfileComponent = () => {
                     <Button
                         type="submit"
                         className="w-full py-3 mt-4 bg-gray-700 text-white font-bold rounded"
+                        onClick={handleClickEditProfile}
                     >
                         Edit Profile
                     </Button>

@@ -39,6 +39,7 @@ export const checkNickname = async (nickName) => {
   );
   return res.data;
 };
+
 export const registerMember = async (obj) => {
   console.log("obj:", obj);
   const headers = { "Content-Type": "application/json" };

@@ -4,42 +4,33 @@ import {getUserInfo } from "../../api/myPageApi";
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { useNavigate } from 'react-router-dom';
 
-
-
 const initState = {
     email : "",
-    password : "", 
-    nickname : "",
+    fullname : "", 
+    nickName : "",
   };
 
 const MyPageComponent = () => {
     const navigate = useNavigate()
     const [userInfo, setUserInfo] = useState({...initState})
-    const {isLogin, loginState} = useCustomLogin()
 
 
     useEffect(() => {
-        console.log(isLogin)
-      
-      if(isLogin){
         getUserInfo().then((data)=>{
         console.log(data)
         setUserInfo(data)
-        }
-      )
-      }
-      console.log(userInfo)
-    }, [isLogin])
+        })
+    }, [])
     
 
     return (
       <div className="flex justify-center items-center min-h-screen mt-20 mb-10">
-        {isLogin? (<div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-2xl">
+        <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-2xl">
 
           {/* 헤더 */}
           <header className="flex justify-between items-center mb-8 border-b pb-4 border-gray-300">
               <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-stone-500 to-gray-600">
-                  Hello, {userInfo.nickname}! 
+                  Hello, {userInfo.nickName}! 
               </h1>
           </header>
 
@@ -56,7 +47,7 @@ const MyPageComponent = () => {
                   <div className="flex justify-center mb-6">
                       <UserOutlined className="text-6xl text-stone-500 border-2 border-gray-300 rounded-full p-2 bg-white shadow-md" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 tracking-wide"> {userInfo.nickname} </h2>
+                  <h2 className="text-2xl font-bold text-gray-900 tracking-wide"> {userInfo.fullname} </h2>
                   <p className="text-gray-800 mb-6"> {userInfo.email}</p>
                   <button className="text-indigo-50 bg-gray-800 hover:bg-gray-900 py-2 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out"
                         onClick={()=>navigate('/mypage/editProfile')}
@@ -131,8 +122,7 @@ const MyPageComponent = () => {
                   </button>
               </div>
           </section>
-          </div>) : (<p className="text-center text-gray-500 mt-12">Please log in to see your cart.</p>
-    )}
+          </div>
     </div>
     );
 }
