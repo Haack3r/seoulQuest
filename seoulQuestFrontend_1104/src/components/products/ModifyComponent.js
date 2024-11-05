@@ -18,16 +18,10 @@ const initState = {
 const ModifyComponent = ({ pno }) => {
     const [product, setProduct] = useState(initState)
     const [fetching, setFetching] = useState(false)
-<<<<<<< HEAD
     const uploadRef = useRef()
     const [result, setResult] = useState(null)
     // const { moveToRead, moveToList} = useCustomMove()
     const { moveToRead, moveToList, page, size } = useCustomMove()
-=======
-    const [result, setResult] = useState(null)
-    const { moveToRead, moveToList, page, size } = useCustomMove()
-    const uploadRef = useRef()
->>>>>>> origin/hyein
 
     useEffect(() => {
         setFetching(true)
@@ -177,10 +171,7 @@ const ModifyComponent = ({ pno }) => {
                 <button type='button' className='inline-block rounded p-4 m-2 text-xl w-32 text-white bg-orange-500'
                     onClick={handleClickModify}>Modify</button>
                 <button type='button' className='rounded p-4 m-2 text-xl w-32 text-white bg-blue-500'
-<<<<<<< HEAD
                     // onClick={moveToList}>List</button>
-=======
->>>>>>> origin/hyein
                     onClick={() => moveToList({ page, size })}>List</button>
             </div>
         </div>
