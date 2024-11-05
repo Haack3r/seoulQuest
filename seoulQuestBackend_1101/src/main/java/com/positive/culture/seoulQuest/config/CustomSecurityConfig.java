@@ -59,12 +59,9 @@ public class CustomSecurityConfig {
                 .csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check",
-                        "/api/member/checknickname","/api/member/login").permitAll() // Permit OPTIONS requests
-                .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/checknickname",
-                        "/api/member/login","/api/user/tours/view/**","/api/user/products/view/**").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check", "/api/member/checknickname","/api/member/login").permitAll() // Permit OPTIONS requests
+                .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/checknickname", "/api/member/login","/api/user/tours/view/**","/api/user/products/view/**").permitAll()
                 .requestMatchers("/api/products/**", "/api/tours/**").permitAll()// Allow unauthenticated access
-                .requestMatchers("/api/admin/**").hasRole("ADMIN") // need admin role authenticate
                 .anyRequest().authenticated());
 
         http.formLogin(config -> {
