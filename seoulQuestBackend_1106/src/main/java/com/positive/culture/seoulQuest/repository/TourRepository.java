@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TourRepository extends JpaRepository<Tour,Long> {
@@ -29,5 +30,6 @@ public interface TourRepository extends JpaRepository<Tour,Long> {
     @Query("update Tour t set t.delFlag = :flag where t.tno = :tno")
     void updateToDelete(@Param("tno")Long tno, @Param("flag") boolean flag);
 
+    List<Tour> findByTlocationContaining(String location);
 }
 

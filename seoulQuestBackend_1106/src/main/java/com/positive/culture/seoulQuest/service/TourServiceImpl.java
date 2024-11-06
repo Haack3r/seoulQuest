@@ -125,5 +125,11 @@ public class TourServiceImpl implements TourService{
         tourRepository.updateToDelete(tno, true);
     }
 
+    @Override
+    public List<TourDTO> getToursByLocation(String location) {
+        List<Tour> tours = tourRepository.findByTlocationContaining(location);
+        return tours.stream().map(this::entityChangeDTO).collect(Collectors.toList());
+    }
+
 
 }

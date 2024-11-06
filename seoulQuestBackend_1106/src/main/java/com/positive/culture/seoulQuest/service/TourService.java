@@ -72,5 +72,7 @@ public interface TourService {
                 .build();
         return tourDTO;
     }
+    // 서울 관광지 조회
+    List<TourDTO> getToursByLocation(String location);
 
 }

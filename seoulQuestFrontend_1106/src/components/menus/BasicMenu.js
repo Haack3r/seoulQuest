@@ -5,11 +5,12 @@ import Button from "../ui/Button";
 import "../../Navbar.css"; // Ensure this file includes the necessary CSS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import {User, ShoppingBagIcon, UserIcon, LogInIcon } from "lucide-react";
+import { User, ShoppingBagIcon, UserIcon, LogInIcon } from "lucide-react";
 
 const BasicMenu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const loginState = useSelector((state) => state.loginSlice);
+  const [role, setRole] = useState(null);
 
   // Function to check if the screen is wide enough for the normal menu
   const checkScreenSize = () => {
@@ -21,6 +22,11 @@ const BasicMenu = () => {
 
   // Set up event listener for window resize
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")); // user 객체 가져오기
+    if (user && user.role && Array.isArray(user.role)) {
+      if (user.role[1]) setRole("ADMIN"); // role 배열에서 첫 번째 값을 가져옴
+      else setRole("USER");
+    }
     window.addEventListener("resize", checkScreenSize);
 
     // Cleanup function to remove event listener
@@ -101,24 +107,43 @@ const BasicMenu = () => {
                 </>
               ) : (
                 <>
-                  <Link
-                    to="/mypage"
-                    className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
-                  >
-                    <User className="h-5 w-5 text-gray-600 hover:text-gray-900"/>
-                  </Link>
-                  <Link
-                    to="/cart/"
-                    className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
-                  >
-                    <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
-                  </Link>
-                  <Link
-                    to="/member/logout/"
-                    className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
-                  >
-                    Logout
-                  </Link>
+                  {role === "ADMIN" ? (
+                    <>
+                      <Link
+                        to="/admin/"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                      > <UserIcon className="h-5 w-5 mr-2" />
+                        ADMIN
+                      </Link>
+                      <Link
+                        to="/member/logout/"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                      >
+                        Logout
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to="/mypage"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                      >
+                        <User className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                      </Link>
+                      <Link
+                        to="/cart/"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                      >
+                        <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                      </Link>
+                      <Link
+                        to="/member/logout/"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                      >
+                        Logout
+                      </Link>
+                    </>
+                  )}
                 </>
               )}
             </div>

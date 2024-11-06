@@ -28,6 +28,17 @@ import java.util.stream.Collectors;
 public class TourController {
     private final CustomFileUtil fileUtil;
     private final TourService tourService;
+
+    @GetMapping("/location")
+    public List<TourMapDTO> getToursByLocation(@RequestParam String location) {
+        log.info("Fetching tours for location: " + location);
+        List<TourDTO> tours = tourService.getToursByLocation(location);
+        return tours.stream()
+                .map(tour -> new TourMapDTO(tour.getTname(), tour.getTaddress()))  // Ensure taddress has full address
+                .collect(Collectors.toList());
+    }
+
+
     @Autowired
     private TourRepository tourRepository;
 
