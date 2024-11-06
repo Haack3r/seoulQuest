@@ -27,8 +27,8 @@ public interface TourService {
 
     //등록시 카테고리 부분 추가 수정 필요함
     default  //DTO를 엔티티로 변환해주는 메서드 -> register에 사용
-    public Tour dtoToEntity(TourDTO tourDTO){
-        Tour tour =Tour.builder()
+    public Tour dtoToEntity(TourDTO tourDTO) {
+        Tour tour = Tour.builder()
                 .tno(tourDTO.getTno())
                 .tname(tourDTO.getTname())
                 .tdesc(tourDTO.getTdesc())
@@ -44,11 +44,11 @@ public interface TourService {
         //업로드 처리가 끝난 파일들의 이름 리스트
         List<String> uploadFileNames = tourDTO.getUploadFileNames();
 
-        if(uploadFileNames== null){
+        if (uploadFileNames == null) {
             return tour;
         }
 
-        uploadFileNames.stream().forEach(uploadNames ->{
+        uploadFileNames.stream().forEach(uploadNames -> {
             tour.addImageString(uploadNames);
         });
 
@@ -56,7 +56,7 @@ public interface TourService {
     }
 
     default   //엔티티를 DTO로 변환해주는 메서드  -> getList와 get에 사용
-    public TourDTO entityChangeDTO(Tour tour){
+    public TourDTO entityChangeDTO(Tour tour) {
         TourDTO tourDTO = TourDTO.builder()
                 .tno(tour.getTno())
                 .tname(tour.getTname())
@@ -72,7 +72,9 @@ public interface TourService {
                 .build();
         return tourDTO;
     }
+
     // 서울 관광지 조회
     List<TourDTO> getToursByLocation(String location);
 
+    List<TourDTO> getToursByAddress(String taddress);
 }

@@ -1,7 +1,9 @@
 package com.positive.culture.seoulQuest.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.domain.TourDate;
+import com.positive.culture.seoulQuest.domain.TourImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data //DTO에는 GETTER와 SETTER가 있음
 @Builder
@@ -45,4 +48,26 @@ public class TourDTO {
 
     @Builder.Default
     private List<String> uploadFileNames = new ArrayList<>(); //업로드한 파일들을 문자열로 저장
+
+    public TourDTO(Tour tour) {
+        this.tno = tour.getTno();
+        this.tname = tour.getTname();
+        this.categoryName = tour.getCategory().getCategoryName(); // Access category name directly
+        this.tdesc = tour.getTdesc();
+        this.tprice = tour.getTprice();
+        this.maxCapacity = tour.getMaxCapacity();
+        this.tlocation = tour.getTlocation();
+        this.likeCount = tour.getLikeCount();
+        this.taddress = tour.getTaddress();
+        this.tDate = tour.getTDate(); // Assuming TourDate is directly compatible
+
+        this.createAt = tour.getCreateAt();
+        this.updateAt = tour.getUpdateAt();
+        this.delFlag = tour.isDelFlag();
+
+        // Extract file names from tourImageList
+        this.uploadFileNames = tour.getTourImageList().stream()
+                .map(TourImage::getFileName)
+                .collect(Collectors.toList());
+    }
 }

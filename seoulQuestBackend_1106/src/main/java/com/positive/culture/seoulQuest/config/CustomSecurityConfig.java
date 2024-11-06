@@ -60,7 +60,7 @@ public class CustomSecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check", "/api/member/checknickname","/api/member/login").permitAll() // Permit OPTIONS requests
-                .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/checknickname", "/api/member/login","/api/mypage/**","/api/user/tours/view/**","/api/user/products/view/**", "/api/user/tours/location").permitAll()
+                .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/checknickname", "/api/member/login","/api/mypage/**","/api/user/tours/view/**","/api/user/products/view/**", "/api/user/tours/mapData", "/api/user/tours/by-address").permitAll()
                 .requestMatchers("/api/products/**", "/api/tours/**").permitAll()// Allow unauthenticated access
                 .anyRequest().authenticated());
 

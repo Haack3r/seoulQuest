@@ -131,5 +131,13 @@ public class TourServiceImpl implements TourService{
         return tours.stream().map(this::entityChangeDTO).collect(Collectors.toList());
     }
 
+    @Override
+    public List<TourDTO> getToursByAddress(String taddress) {
+        List<Tour> tours = tourRepository.findByTaddress(taddress);
+        return tours.stream()
+                .map(TourDTO::new)
+                .collect(Collectors.toList());
+    }
+
 
 }

@@ -157,4 +157,11 @@ public class TourRepositoryTests {
         List<TourDate> tourdate = tourDateRepository.selectDateList(num);
         tourdate.forEach(System.out::println);
     }
+
+    @Transactional
+    @Test
+    public void testAddress(){
+        List<Tour> list = tourRepository.findByTaddress("161 Sajik-ro, Jongno-gu, Seoul");
+        list.forEach(i-> System.out.println(i));
+    }
 }
