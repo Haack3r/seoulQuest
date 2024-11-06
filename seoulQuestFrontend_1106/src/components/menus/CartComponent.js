@@ -61,7 +61,7 @@ const CartComponent = () => {
                     <div className="flex flex-col sm:flex-row justify-between items-center mt-6 border-t pt-4">
                         {total && (
                             <p className="text-lg sm:text-xl font-bold text-gray-800">
-                                Total: ₩{total.toFixed(2)}
+                                Total: ₩{total.toLocaleString()}
                             </p>
                         )}
                         <p className="text-gray-600">{cartItems.length} items</p>

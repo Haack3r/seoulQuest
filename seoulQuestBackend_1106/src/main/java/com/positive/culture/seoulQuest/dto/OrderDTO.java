@@ -16,8 +16,12 @@ import java.util.List;
 public class OrderDTO {
 
     @Builder.Default
-    private List<String> coupon  = new ArrayList<>(); ;
+    private List<String> coupons  = new ArrayList<>(); ;
 
+    @Builder.Default
+    private List<String> orderItems  = new ArrayList<>(); ;
+
+    private String email;
     private String firstname;
     private String lastname;
     private String city;

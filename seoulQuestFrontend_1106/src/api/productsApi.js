@@ -37,3 +37,39 @@ export const deleteOne = async (pno) => {
   const res = await jwtAxios.delete(`${host}/${pno}`);
   return res.data;
 };
+
+
+//order
+export const getOrderInfo = async () => {
+  const res = await jwtAxios.get(`${host}/orderinfo`);
+  return res.data;
+};
+
+//order
+export const postOrderInfo = async (obj) => {
+  console.log("obj:", obj);
+  const headers = { "Content-Type": "application/json" };
+
+  try {
+    const res = await axios.post(
+      `${host}/order`,
+      {
+        orderItems: obj.orderItems,
+        coupons: obj.coupons,
+        firstname: obj.firstname,
+        lastname: obj.lastname,
+        email: obj.email,
+        phoneNumber: obj.phoneNumber,
+        country: obj.country,
+        state: obj.state,
+        city: obj.city,
+        street: obj.street,
+        zipcode: obj.zipcode,
+      },
+      { headers }
+    );
+    return res.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to Post order info");
+  }
+};

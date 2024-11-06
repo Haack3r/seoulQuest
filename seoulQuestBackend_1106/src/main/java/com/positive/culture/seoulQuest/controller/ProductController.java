@@ -1,19 +1,24 @@
 package com.positive.culture.seoulQuest.controller;
 
-import com.positive.culture.seoulQuest.dto.PageRequestDTO;
-import com.positive.culture.seoulQuest.dto.PageResponseDTO;
-import com.positive.culture.seoulQuest.dto.ProductDTO;
+import com.positive.culture.seoulQuest.domain.Address;
+import com.positive.culture.seoulQuest.domain.Member;
+import com.positive.culture.seoulQuest.dto.*;
+import com.positive.culture.seoulQuest.repository.MemberRepository;
+import com.positive.culture.seoulQuest.service.MemberService;
 import com.positive.culture.seoulQuest.service.ProductService;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,6 +30,7 @@ import java.util.stream.Collectors;
 public class ProductController {
     private final CustomFileUtil fileUtil;
     private final ProductService productService;
+    private final MemberService memberService;
 
     //시큐리티 구현후 권한 추가
 
@@ -119,4 +125,34 @@ public class ProductController {
 
         return Map.of("RESULT","SUCCESS");
     }
+
+    @GetMapping("/orderinfo")
+    public OrderDTO getOrderInfo(Principal principal){
+        String email = principal.getName();
+        log.info(email);
+        Member member= memberService.findByEmail(email).orElseThrow();
+        log.info(member);
+
+        OrderDTO orderInfoDTO = OrderDTO.builder()
+                .firstname(member.getFirstname())
+                .lastname(member.getLastname())
+                .country(member.getAddress().getCountry())
+                .state(member.getAddress().getState())
+                .city(member.getAddress().getCity())
+                .street(member.getAddress().getStreet())
+                .zipcode(member.getAddress().getZipCode())
+                .phoneNumber(member.getPhoneNumber())
+                .email(member.getEmail())
+                //쿠폰추가
+                .build();
+        return  orderInfoDTO;
+    }
+
+//    //여기 하는중
+//    @PostMapping
+//    public ResponseEntity<String> order(@RequestBody OrderDTO orderDTO){
+//        List<String> list = orderDTO.getOrderItems();
+//        orderDTO.getPhoneNumber();
+//        return new ResponseEntity<>("order complete", HttpStatus.OK);
+//    }
 }
