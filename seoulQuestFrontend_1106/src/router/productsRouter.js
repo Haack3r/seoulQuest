@@ -8,7 +8,7 @@ const productsRouter = () => {
   const ProductsAdd = lazy(() => import("../pages/products/AddPage"))
   const ProductRead = lazy(() => import("../pages/products/ReadPage"))
   const ProductModify = lazy(() => import("../pages/products/ModifyPage"))
-
+  const ProductOrder = lazy(() => import("../pages/products/OrderPage"))
   return [
     {
       path: "list",
@@ -29,7 +29,12 @@ const productsRouter = () => {
     {
       path: "modify/:pno",
       element: <Suspense fallback={Loading}><ProductModify /></Suspense>
+    },
+    {
+      path: "order",
+      element: <Suspense fallback={Loading}><ProductOrder /></Suspense>
     }
+
   ]
 }
 

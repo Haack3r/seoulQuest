@@ -8,7 +8,6 @@ import useCustomCart from '../../hooks/useCustomCart';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import CartComponent from '../menus/CartComponent';
 
-
 const initState = {
     pno: 0,
     pname: '',

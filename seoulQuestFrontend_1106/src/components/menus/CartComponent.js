@@ -1,12 +1,14 @@
-import React, { useEffect, useMemo } from "react"; // useEffect, useMemo import 추가
-import useCustomLogin from "../../hooks/useCustomLogin"; // useCustomLogin import 추가
-import useCustomCart from "../../hooks/useCustomCart"; // useCustomCart import 추가
-import CartItemComponent from "../cartAndReservation/CartItemComponent"; // CartItemComponent import 추가
-import { ShoppingCartOutlined } from "@ant-design/icons"; // ShoppingCartOutlined import 추가
+import React, { useEffect, useMemo } from "react"; 
+import useCustomLogin from "../../hooks/useCustomLogin"; 
+import useCustomCart from "../../hooks/useCustomCart"; 
+import CartItemComponent from "../cartAndReservation/CartItemComponent";
+import { ShoppingCartOutlined } from "@ant-design/icons"; 
+import { useNavigate } from "react-router-dom";
 
 
 
 const CartComponent = () => {
+    const navigate = useNavigate();
     const { isLogin, loginState } = useCustomLogin();
     const { refreshCart, cartItems, changeCart } = useCustomCart();
 
@@ -70,6 +72,7 @@ const CartComponent = () => {
                         <button
                             className="text-white font-semibold py-2 px-6 rounded-lg bg-stone-400 hover:bg-stone-600 transition duration-300 shadow-md w-full sm:w-auto"
                             type="button"
+                            onClick={()=>navigate('/user/products/order')}
                         >
                             Proceed to Checkout
                         </button>

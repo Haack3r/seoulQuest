@@ -1,6 +1,5 @@
 import React from 'react'
 import ListComponent from '../../components/products/ListComponent'
-import ListImage from '../../layouts/ListImage'
 import ProductImage from '../../layouts/ProductImage'
 import ProcessSteps from '../../layouts/ProcessSteps'
 import AboutProductPage from './AboutProductPage'
