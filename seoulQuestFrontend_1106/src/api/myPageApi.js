@@ -41,7 +41,7 @@ export const findEmail = async (obj) => {
 
   try {
     const res = await axios.post(
-      `${host}/findpassword`,
+      `${host}/findemail`,
       {
         firstname: obj.firstname,
         lastname: obj.lastname,

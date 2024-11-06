@@ -156,6 +156,14 @@ public class MemberServiceImpl implements MemberService{
         return member;
     }
 
+    @Override
+    public Member findEmail(String firstname, String lastname, String phonenumber) {
+        Member member = memberRepository.findByFirstnameAndLastnameAndPhoneNumber(firstname,lastname,phonenumber).orElseThrow();
+        log.info(member);
+
+        return member;
+    }
+
     private void sendTemporaryPasswordEmail(String toEmail, String tempPassword) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -173,17 +181,15 @@ public class MemberServiceImpl implements MemberService{
         }
     }
 
-//    private String makeTempPassword() {
-//        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-//        StringBuilder buffer = new StringBuilder();
-//        for (int i = 0; i < 10; i++) {
-//            int index = (int) (Math.random() * chars.length());
-//            buffer.append(chars.charAt(index));
-//        }
-//        return buffer.toString();
-//    }
+    //임시 비밀번호 발급시 사용함.
+    private String makeTempPassword() {
+        StringBuffer buffer = new StringBuffer();
 
-
+        for(int i = 0; i < 10; i++) {
+            buffer.append((char)((int)(Math.random()*55)+65));
+        }
+        return buffer.toString();
+    }
 
 
     private String getEmailFromKakaoAccessToken(String accessToken) {
@@ -220,16 +226,6 @@ public class MemberServiceImpl implements MemberService{
         log.info("KakaoAccount: "+kakaoAccount);
         return kakaoAccount.get("email");
 
-    }
-
-    //임시 비밀번호 발급시 사용함.
-    private String makeTempPassword() {
-        StringBuffer buffer = new StringBuffer();
-
-        for(int i = 0; i < 10; i++) {
-            buffer.append((char)((int)(Math.random()*55)+65));
-        }
-        return buffer.toString();
     }
 
     private Member makeSocialMember(String email) {

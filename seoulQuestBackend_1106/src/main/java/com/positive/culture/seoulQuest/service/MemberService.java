@@ -22,7 +22,11 @@ public interface MemberService {
     Optional<Member> findByNickname(String email);
     Member save(UserDTO dto);
     void modifyInfo(UserDTO dto);
+
+    //비밀번호찾기
     Member findPasswordAndSendEmail(String email, String password);
+    //이메일찾기
+    Member findEmail(String firstname, String lastname, String phonenumber);
 
     default MemberDTO entityToDTO(Member member) {
         MemberDTO dto = new MemberDTO(

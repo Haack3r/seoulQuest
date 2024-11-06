@@ -32,16 +32,12 @@ const FindEmailComponent = () => {
                 }
             })
             .catch((error) => {
-                console.error("Error finding password:", error);
+                console.error("Error finding Email:", error);
                 alert("An error occurred. Please try again later.");
             })
             .finally(() => {
-                setIsLoading(false); // 로딩 종료
+                setIsLoading(false); 
             });
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
     };
 
     return (
@@ -168,16 +164,25 @@ const FindEmailComponent = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 w-full max-w-md text-center">
-                        <div className="text-2xl font-bold text-gray-700 mb-4 w-full">Your temporary password has been sent to your email.</div>
+                        <div className="text-2xl font-bold text-gray-700 mb-4 w-full">
+                            We found your account ID!
+                        </div>
+                        <p className="text-gray-600 mb-4">
+                            Your account ID (email address) is:
+                        </p>
+                        <p className="text-lg font-semibold text-gray-800 mb-6">
+                            {userInfo.email}
+                        </p>
                         <Button
-                            onClick={closeModal}
+                            onClick={()=> navigate('/member/login')}
                             className="mt-6 px-4 py-2 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-800 transition duration-300"
                         >
-                            Close
+                            Go to Login
                         </Button>
                     </div>
                 </div>
             )}
+
         </div>
     );
 };

@@ -70,20 +70,20 @@ public class MyPageController {
         return new ResponseEntity<>(newUserDTO, HttpStatus.OK);
     }
 
-//    @PreAuthorize("permitAll()")
-//    @PostMapping("/findemail")
-//    public ResponseEntity<UserDTO> findEmail(@RequestBody UserDTO dto) {
-//        System.out.println(dto);
-//        String firstname= dto.getFirstname();
-//        String lastname = dto.getLastname();
-//
-//        String phoneNumber = String.join("-",
-//                dto.getPhoneNumber1(),
-//                dto.getPhoneNumber2(),
-//                dto.getPhoneNumber3()
-//        );
-//        Member member = memberService.findFirstnameAndLastnameAndSendEmail(firstname,lastname, phoneNumber);
-//        UserDTO newUserDTO = memberService.entityToUserDTOforMypage(member);
-//        return new ResponseEntity<>(newUserDTO, HttpStatus.OK);
-//    }
+    @PreAuthorize("permitAll()")
+    @PostMapping("/findemail")
+    public ResponseEntity<UserDTO> findEmail(@RequestBody UserDTO dto) {
+        System.out.println(dto);
+        String firstname= dto.getFirstname();
+        String lastname = dto.getLastname();
+
+        String phoneNumber = String.join("-",
+                dto.getPhoneNumber1(),
+                dto.getPhoneNumber2(),
+                dto.getPhoneNumber3()
+        );
+        Member member = memberService.findEmail(firstname,lastname, phoneNumber);
+        UserDTO newUserDTO = memberService.entityToUserDTOforMypage(member);
+        return new ResponseEntity<>(newUserDTO, HttpStatus.OK);
+    }
 }
