@@ -112,7 +112,9 @@ const BasicMenu = () => {
                       <Link
                         to="/admin/"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
-                      > <UserIcon className="h-5 w-5 mr-2" />
+                      >
+                        {" "}
+                        <UserIcon className="h-5 w-5 mr-2" />
                         ADMIN
                       </Link>
                       <Link
@@ -188,38 +190,84 @@ const BasicMenu = () => {
                 </>
               ) : (
                 <>
-                  <nav className="flex flex-col space-y-4">
-                    <Link to="/user/tours/" className="menu-animation-color">
-                      Tours
-                    </Link>
-                    <Link to="/user/products/" className="menu-animation-color">
-                      Souvenirs
-                    </Link>
-                    <Link to="/about/" className="menu-animation-color">
-                      About
-                    </Link>
-                    <Link to="/contact/" className="menu-animation-color">
-                      Contact
-                    </Link>
-                  </nav>
-                  <Link
-                    to={"/mypage"}
-                    className="flex items-center space-x-2 menu-animation-color"
-                  >
-                    <User className="h-5 w-5 menu-animation-color" />
-                  </Link>
-                  <Link
-                    to={"/cart/"}
-                    className="flex items-center space-x-2 menu-animation-color"
-                  >
-                    <ShoppingBagIcon className="h-5 w-5 menu-animation-color" />
-                  </Link>
-                  <Link
-                    to={"/member/logout/"}
-                    className="flex items-center space-x-2 menu-animation-color"
-                  >
-                    Logout
-                  </Link>
+                  {" "}
+                  {role === "ADMIN" ? (
+                    <>
+                      <nav className="flex flex-col space-y-4">
+                        <Link
+                          to="/user/tours/"
+                          className="menu-animation-color"
+                        >
+                          Tours
+                        </Link>
+                        <Link
+                          to="/user/products/"
+                          className="menu-animation-color"
+                        >
+                          Souvenirs
+                        </Link>
+                        <Link to="/about/" className="menu-animation-color">
+                          About
+                        </Link>
+                        <Link to="/contact/" className="menu-animation-color">
+                          Contact
+                        </Link>
+                      </nav>
+                      <Link
+                        to={"/admin/"}
+                        className="flex items-center space-x-2 menu-animation-color"
+                      >
+                        ADMIN
+                      </Link>
+                      <Link
+                        to={"/member/logout/"}
+                        className="flex items-center space-x-2 menu-animation-color"
+                      >
+                        Logout
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <nav className="flex flex-col space-y-4">
+                        <Link
+                          to="/user/tours/"
+                          className="menu-animation-color"
+                        >
+                          Tours
+                        </Link>
+                        <Link
+                          to="/user/products/"
+                          className="menu-animation-color"
+                        >
+                          Souvenirs
+                        </Link>
+                        <Link to="/about/" className="menu-animation-color">
+                          About
+                        </Link>
+                        <Link to="/contact/" className="menu-animation-color">
+                          Contact
+                        </Link>
+                      </nav>
+                      <Link
+                        to={"/mypage"}
+                        className="flex items-center space-x-2 menu-animation-color"
+                      >
+                        <User className="h-5 w-5 menu-animation-color" />
+                      </Link>
+                      <Link
+                        to={"/cart/"}
+                        className="flex items-center space-x-2 menu-animation-color"
+                      >
+                        <ShoppingBagIcon className="h-5 w-5 menu-animation-color" />
+                      </Link>
+                      <Link
+                        to={"/member/logout/"}
+                        className="flex items-center space-x-2 menu-animation-color"
+                      >
+                        Logout
+                      </Link>
+                    </>
+                  )}
                 </>
               )}
             </div>
