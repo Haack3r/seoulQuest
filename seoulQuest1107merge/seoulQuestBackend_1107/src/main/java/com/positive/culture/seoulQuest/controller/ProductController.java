@@ -1,9 +1,10 @@
 package com.positive.culture.seoulQuest.controller;
 
-import com.positive.culture.seoulQuest.domain.Address;
 import com.positive.culture.seoulQuest.domain.Member;
-import com.positive.culture.seoulQuest.dto.*;
-import com.positive.culture.seoulQuest.repository.MemberRepository;
+import com.positive.culture.seoulQuest.dto.OrderDTO;
+import com.positive.culture.seoulQuest.dto.PageRequestDTO;
+import com.positive.culture.seoulQuest.dto.PageResponseDTO;
+import com.positive.culture.seoulQuest.dto.ProductDTO;
 import com.positive.culture.seoulQuest.service.MemberService;
 import com.positive.culture.seoulQuest.service.ProductService;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -126,6 +126,7 @@ public class ProductController {
         return Map.of("RESULT","SUCCESS");
     }
 
+
     //여기 수정해야함
     @GetMapping("/orderinfo")
     public OrderDTO getOrderInfo(Principal principal){
@@ -157,4 +158,6 @@ public class ProductController {
         System.out.println(list);
         return new ResponseEntity<>("order complete", HttpStatus.OK);
     }
+
+
 }
