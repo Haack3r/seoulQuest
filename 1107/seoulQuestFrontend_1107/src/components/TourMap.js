@@ -10,10 +10,9 @@ const TourMap = () => {
   const [touristSpots, setTouristSpots] = useState([]);
   const [map, setMap] = useState(null);
   const [overlays, setOverlays] = useState([]);
-  const [selectedSpot, setSelectedSpot] = useState(null); // Stores selected tour details
+  const [selectedSpot, setSelectedSpot] = useState(null);
   const geoapifyApiKey = "c65e86bb88864eb4b9658fe2c9b1048e";
 
-  // Icon component with dynamic color and bounce effect
   const MarkerIcon = ({ isSelected }) => (
     <div
       className={`marker-icon ${isSelected ? "selected" : ""}`}
@@ -23,7 +22,6 @@ const TourMap = () => {
     </div>
   );
 
-  // Initialize Kakao Map
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
       window.kakao.maps.load(() => {
@@ -38,7 +36,6 @@ const TourMap = () => {
     }
   }, []);
 
-  // Fetch tourist spots for map pins
   useEffect(() => {
     const fetchMapData = async () => {
       try {
@@ -51,14 +48,13 @@ const TourMap = () => {
     fetchMapData();
   }, []);
 
-  // Fetch tour details by address when a pin is clicked
   const fetchTourDetails = async (address) => {
     try {
       const response = await axios.get(`/api/user/tours/by-address`, {
         params: { address },
       });
       if (response.status === 200) {
-        setSelectedSpot(response.data[0]); // Assume first result if multiple tours share the address
+        setSelectedSpot(response.data[0]);
       } else {
         console.error("No tour details found for this address.");
       }
@@ -67,7 +63,6 @@ const TourMap = () => {
     }
   };
 
-  // Get coordinates for each pin based on the address
   const getCoordinates = async (address) => {
     const url = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
       address
@@ -84,7 +79,6 @@ const TourMap = () => {
     return null;
   };
 
-  // Create custom overlays with tooltips
   useEffect(() => {
     if (!map || touristSpots.length === 0) return;
 
@@ -104,7 +98,6 @@ const TourMap = () => {
 
             overlayContent.appendChild(tooltip);
 
-            // Use createRoot for rendering in React 18
             const root = createRoot(overlayContent);
             root.render(
               <MarkerIcon isSelected={selectedSpot?.tname === spot.tname} />
@@ -120,8 +113,6 @@ const TourMap = () => {
             });
 
             customOverlay.setMap(map);
-
-            // Fetch tour details by address and update side panel when clicked
             overlayContent.onclick = () => fetchTourDetails(spot.taddress);
 
             return customOverlay;
@@ -143,15 +134,17 @@ const TourMap = () => {
         <div
           id="map"
           style={{ width: "100%", height: "600px" }}
-          className="rounded-lg border border-gray-300 shadow-lg"
+          className="rounded-lg border border-gray-300 shadow-lg relative"
         ></div>
+
+        {/* Pastel Overlay */}
+        <div className="absolute inset-0 bg-pastel-overlay rounded-lg pointer-events-none"></div>
       </div>
 
-      {/* Right Side Popup for Tour Information */}
       {selectedSpot && (
         <div className="top-16 right-4 h-[600px] w-1/4 bg-white shadow-lg rounded-lg border border-gray-300 flex flex-col overflow-hidden">
           <button
-            className="absolute right-4  text-right p-2"
+            className="absolute right-4 text-right p-2"
             onClick={() => setSelectedSpot(null)}
           >
             ✖
@@ -163,7 +156,7 @@ const TourMap = () => {
           />
           <div className="p-4 flex-grow flex flex-col justify-start">
             <h2 className="text-sm font-bold mb-2">{selectedSpot.tname}</h2>
-            <p className="text-sm">Address:{selectedSpot.taddress}</p>
+            <p className="text-sm">Address: {selectedSpot.taddress}</p>
             <p className="text-sm text-gray-600 mb-4">{selectedSpot.tdesc}</p>
             <p className="text-sm">Price: ₩{selectedSpot.tprice} per person</p>
             <Link
