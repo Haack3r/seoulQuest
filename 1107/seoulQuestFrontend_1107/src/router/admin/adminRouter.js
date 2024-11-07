@@ -1,4 +1,3 @@
-import { Alert } from '@mui/material'
 import React, { lazy, Suspense } from 'react'
 import { Navigate } from 'react-router-dom'
 import { SyncLoader } from 'react-spinners'
@@ -17,10 +16,10 @@ const adminRouter = () => {
             element: (
                 <Suspense fallback={Loading}><AdminIndexPage /></Suspense>
             ),
-            errorElement: <Alert severity="error">권한이 없습니다.</Alert>,
             children: [
                 {
-                    index: true,
+                    // index: true,
+                    path: "",
                     element: <Navigate replace to="dashboard" />
                     // 자동연결? 리다이렉트 처리 ex) 관리자 페이지 접속시 자동으로 dashboard로 이동
                 },
