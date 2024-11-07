@@ -148,11 +148,12 @@ public class ProductController {
         return  orderInfoDTO;
     }
 
-//    //여기 하는중
-//    @PostMapping
-//    public ResponseEntity<String> order(@RequestBody OrderDTO orderDTO){
-//        List<String> list = orderDTO.getOrderItems();
-//        orderDTO.getPhoneNumber();
-//        return new ResponseEntity<>("order complete", HttpStatus.OK);
-//    }
+    //여기 하는중
+    @PostMapping("/orders")
+    public ResponseEntity<String> order(@RequestBody OrderDTO orderDTO){
+        System.out.println("order내역 : " + orderDTO);
+        List<String> list = orderDTO.getOrderItems();
+        System.out.println(list);
+        return new ResponseEntity<>("order complete", HttpStatus.OK);
+    }
 }

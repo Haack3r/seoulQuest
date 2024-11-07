@@ -45,6 +45,7 @@ export const getOrderInfo = async () => {
   return res.data;
 };
 
+
 //order
 export const postOrderInfo = async (obj) => {
   console.log("obj:", obj);
@@ -52,7 +53,7 @@ export const postOrderInfo = async (obj) => {
 
   try {
     const res = await axios.post(
-      `${host}/order`,
+      `${host}/orders`,
       {
         orderItems: obj.orderItems,
         coupons: obj.coupons,
