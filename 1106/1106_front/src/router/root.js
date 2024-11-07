@@ -7,6 +7,8 @@ import toursRouter from "./toursRouter";
 import nuProductsRouter from "./nuProductsRouter";
 import nuToursRouter from "./nuToursRouter";
 import myPageRouter from "./myPageRouter";
+import adminRouter from "./admin/adminRouter"
+import { Alert } from "@mui/material";
 
 
 const { createBrowserRouter } = require("react-router-dom")
@@ -72,6 +74,11 @@ const root = createBrowserRouter([
     {
         path: "mypage",
         children: myPageRouter()
+    },
+    {
+        path: "admin",
+        children: adminRouter(),
+        errorElement: <Alert severity="error">오류가 발생했습니다.</Alert>
     },
 ])
 
