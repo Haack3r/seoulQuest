@@ -11,7 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CouponDTO {
     private String couponName;
-    private String couponCode;
-    private String amount;
-    private String percent;
+    private int discount;
 }

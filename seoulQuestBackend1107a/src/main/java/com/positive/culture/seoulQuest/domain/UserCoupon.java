@@ -1,10 +1,7 @@
 package com.positive.culture.seoulQuest.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString(exclude = {"coupon", "couponOwner"})
 @Builder
+@Getter
 @Table(name = "tbl_user_coupon")
 public class UserCoupon {
 

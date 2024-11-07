@@ -2,10 +2,7 @@ package com.positive.culture.seoulQuest.controller;
 
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.UserCoupon;
-import com.positive.culture.seoulQuest.dto.OrderDTO;
-import com.positive.culture.seoulQuest.dto.PageRequestDTO;
-import com.positive.culture.seoulQuest.dto.PageResponseDTO;
-import com.positive.culture.seoulQuest.dto.ProductDTO;
+import com.positive.culture.seoulQuest.dto.*;
 import com.positive.culture.seoulQuest.repository.CouponRepository;
 import com.positive.culture.seoulQuest.repository.UserCouponRepository;
 import com.positive.culture.seoulQuest.service.MemberService;
@@ -23,9 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequiredArgsConstructor
@@ -111,7 +111,7 @@ public class ProductController {
             List<String> removeFiles = oldFileNames
                     .stream()
                     .filter(fileName->uploadedFileNames.indexOf(fileName)==-1)
-                    .collect(Collectors.toList());
+                    .collect(toList());
 
             //실제 파일 삭제
             fileUtil.deleteFiles(removeFiles);
@@ -142,6 +142,16 @@ public class ProductController {
         log.info(member);
         List<UserCoupon> userCoupons= userCouponRepository.findByCouponOwnerEmail(member.getEmail());
         log.info(userCoupons);
+        //userCoupon 엔티티리스트를  Coupon dto 리스트로 변경
+
+        List<CouponDTO> couponDTOList =userCoupons.stream().filter(userCoupon-> userCoupon.getCoupon().isActive())
+                .map(coupon->{
+                    CouponDTO couponDTO = CouponDTO.builder()
+                            .couponName(coupon.getCoupon().getCouponName())
+                            .discount(coupon.getCoupon().getDiscount())
+                            .build();
+                    return couponDTO;
+                }).toList();
 
 
         OrderDTO orderInfoDTO = OrderDTO.builder()
@@ -154,7 +164,7 @@ public class ProductController {
                 .zipcode(member.getAddress().getZipCode())
                 .phoneNumber(member.getPhoneNumber())
                 .email(member.getEmail())
-//                .coupons(userCoupons)
+                .coupons(couponDTOList)
                 .build();
         return  orderInfoDTO;
     }

@@ -5,9 +5,12 @@ import FetchingModal from "../common/FetchingModal";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
 import useCustomLogin from "../../hooks/useCustomLogin";
+import Button from "../ui/Button";
 import {
-  CardTitle,
+  Card,
+  CardContent,
   CardDescription,
+  CardTitle,
 } from "../ui/Card";
 
 const host = API_SERVER_HOST;
@@ -30,7 +33,7 @@ const ListComponent = () => {
   const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
 
-  // Fetching Modal
+  //for FetchingModal
   const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
@@ -53,53 +56,40 @@ const ListComponent = () => {
       });
   }, [page, size, refresh]);
 
-  // Randomly generate rotation and margin for each product card to create a freeform layout
-  const getRandomTransform = () => `rotate(${Math.random() * 4 - 2}deg) translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)`;
-
   return (
-    <div>
+    <div >
       {fetching ? <FetchingModal /> : null}
 
-      {/* 상단 설명 섹션 */}
-      <section className="text-center py-12">
-        <h2 className="text-4xl font-semibold text-gray-800 mb-4">Our Products</h2>
-        <p className="text-gray-500 max-w-2xl mx-auto">
-          Discover our unique and exceptional quality products designed for the modern generation.
-        </p>
-        <div className="border-t-2 border-gray-300 mx-auto my-4 w-16"></div>
-      </section>
-
-      {/* 자유분방한 제품 카드 레이아웃 */}
-      <section className="px-4 py-8 max-w-8xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-1">
+      {/* 카드 섹션 */}
+      <section className="px-4 py-12 max-w-6xl mx-auto">
+        <h2 className="mb-8 text-3xl font-semibold text-center text-gray-800 tracking-wide uppercase">
+          Our Products
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {serverData.dtoList && serverData.dtoList.length > 0 ? (
             serverData.dtoList.map((product) => (
-              <div
+              <Card
                 key={product.pno}
                 onClick={() => moveToRead(product.pno)}
-                className="cursor-pointer text-center group transform transition-transform duration-300"
-                style={{
-                  transform: getRandomTransform(),
-                  margin: `${Math.random() * 8}px`,
-                }}
+                className="relative w-full h-[280px] rounded-lg overflow-hidden bg-white shadow-md transition-transform duration-300 transform hover:scale-105 hover:shadow-lg cursor-pointer group"
               >
-                {/* 제품 이미지 */}
-                <div className="relative w-full h-48 flex items-center justify-center overflow-hidden">
+                <div className="relative w-full h-full overflow-hidden">
                   <img
                     src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`}
                     alt={product.pname}
-                    className="w-3/4 h-full object-contain transition-transform duration-300 transform group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <CardTitle className="text-lg font-semibold">
+                      {product.pname}
+                    </CardTitle>
+                    <CardDescription className="text-sm font-light">
+                      ${product.pprice.toLocaleString()}
+                    </CardDescription>
+                  </div>
                 </div>
-
-                {/* 제품명과 가격 */}
-                <CardTitle className="text-md font-medium text-gray-800 mt-2">
-                  {product.pname}
-                </CardTitle>
-                <CardDescription className="text-sm text-gray-600">
-                  ${product.pprice.toLocaleString()}
-                </CardDescription>
-              </div>
+              </Card>
             ))
           ) : (
             <p className="text-center text-gray-500">No products available.</p>

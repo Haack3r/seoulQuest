@@ -68,11 +68,11 @@ const ReservationComponent = ({maxCapacity}) => {
                     </div>
 
                     {/* Book Now Button */}
-                    <div className="text-center mt-6">
+                    {reservationItems.length!==0?(<div className="text-center mt-6">
                         <button className="text-white font-semibold py-2 px-6 rounded-lg bg-stone-400 hover:bg-stone-600 transition duration-300 shadow-md w-full sm:w-auto">
                             Book now
                         </button>
-                    </div>
+                    </div>):('')}
                 </div>
             ) : (
                 <p className="text-center text-gray-500 mt-6">Please log in to see your reservation.</p>

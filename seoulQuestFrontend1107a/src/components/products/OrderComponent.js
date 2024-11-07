@@ -3,6 +3,7 @@ import useCustomCart from "../../hooks/useCustomCart";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import { Badge } from "antd"; 
 import { getOrderInfo } from "../../api/productsApi";
+import useCustomLogin from "../../hooks/useCustomLogin";
 
 const host = API_SERVER_HOST;
 
@@ -21,7 +22,7 @@ const initState = {
 };
 
 const OrderComponent = () => {
-    const { cartItems } = useCustomCart();
+    const { cartItems, refreshCart } = useCustomCart();
     const [orderInfo, setOrderInfo] = useState({ ...initState });
     const [selectedCoupon, setSelectedCoupon] = useState("");
     const [discountedPrice, setDiscountedPrice] = useState(6000);
@@ -31,8 +32,8 @@ const OrderComponent = () => {
     useEffect(() => {
         getOrderInfo().then((data) => {
             console.log(data);
-            console.log(cartItems)
-            setOrderInfo({...data, orderItems: cartItems });
+            console.log(cartItems);
+            setOrderInfo({ ...data, orderItems: cartItems });
         });
     }, [cartItems]);
 
@@ -47,10 +48,9 @@ const OrderComponent = () => {
         setSelectedItems(allItems);
     }, [cartItems]);
 
-
     const handleChange = (e) => {
         setOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
-        console.log(orderInfo)
+        console.log(orderInfo);
     };
 
     const handleToggleSelect = (index) => {
@@ -67,39 +67,35 @@ const OrderComponent = () => {
 
     const calculateSelectedItemsPrice = () => {
         let total = 0;
-        selectedItems.forEach(index => {
+        selectedItems.forEach((index) => {
             total += cartItems[index].pprice * cartItems[index].pqty;
         });
         return total;
     };
 
-    const calculateDiscountedPrice = (coupon) => {
+    const calculateDiscountedPrice = (discount = 0) => {
         const selectedItemsPrice = calculateSelectedItemsPrice();
         const shippingFee = 3000;
-        let discountPrice = selectedItemsPrice + shippingFee;
-
-        switch (coupon) {
-            case "discount10":
-                discountPrice *= 0.9;
-                break;
-            case "discount20":
-                discountPrice *= 0.8;
-                break;
-            case "freeshipping":
-                discountPrice -= shippingFee;
-                break;
-            default:
-                break;
-        }
+        let discountPrice = selectedItemsPrice + shippingFee - discount;
 
         setDiscountedPrice(Math.max(discountPrice, 0));
     };
 
-
     const handleCouponSelect = (e) => {
-        const coupon = e.target.value;
-        setSelectedCoupon(coupon);
-        calculateDiscountedPrice(coupon);
+        const couponName = e.target.value;
+        setSelectedCoupon(couponName);
+
+        // 선택된 쿠폰 객체를 찾습니다.
+        const selectedCoupon = orderInfo.coupons.find(
+            (coupon) => coupon.couponName === couponName
+        );
+
+        // 쿠폰이 존재하는 경우, 할인 금액을 적용합니다.
+        if (selectedCoupon) {
+            calculateDiscountedPrice(selectedCoupon.discount);
+        } else {
+            calculateDiscountedPrice(); // 선택된 쿠폰이 없을 경우 할인 없이 계산
+        }
     };
 
     return (
@@ -148,12 +144,12 @@ const OrderComponent = () => {
 
                     {/* Order Form Section */}
                     <h3 className="text-xl font-semibold text-gray-700 mb-4 mt-20">Order Form</h3>
-                    <div className="px-6 py-4 bg-white rounded-xl shadow-md">
-                        <div className="grid grid-cols-2 gap-20">
+                    <div className="px-8 py-4 bg-white rounded-xl shadow-md">
+                        <div className="grid grid-cols-2 gap-10">
 
                             {/* Shipping Information */}
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-4">Shipping Information</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-4 mt-5">Shipping Information</h3>
                                 <div className="flex items-start space-y-2 flex-col mb-4">
                                     <label className="flex items-center">
                                         <input 
@@ -264,18 +260,9 @@ const OrderComponent = () => {
 
                             {/* Delivery Instructions / Payment Method */}
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-700 mb-10">Delivery Instructions / Payment Method</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-10 mt-5">Delivery Instructions / Payment Method</h3>
                                 <hr className="border-t border-gray-400 my-4" />
                                 <div className="space-y-4">
-                                <label htmlFor="delivery-message" className="block text-gray-600 font-semibold">
-                                    Delivery Message
-                                </label>
-                                <select id="delivery-message" className="w-full mt-2 p-3 border rounded-md">
-                                    <option>Leave at the door</option>
-                                    <option>Hand deliver, please</option>
-                                    <option>Leave at the security desk</option>
-                                </select>
-                                    <hr className="border-t border-gray-400 my-4" />
                                     <fieldset className="text-gray-600 ">
                                         <legend className="block mb-2 font-semibold">Select Payment Method</legend>
                                         <div className="mt-2">
@@ -290,8 +277,7 @@ const OrderComponent = () => {
                                         </div>
                                     </fieldset>
                                     <p className="text-sm text-gray-500">
-                                        Please select your preferred payment method. Note that credit card payments require a minimum payment of ₩10,000.
-                                        Once you select a payment method, you can proceed with the checkout process.
+                                        Please select your preferred payment method. 
                                     </p>
                                     <hr className="border-t border-gray-400 my-4" />
                                     {/* Coupon Selection */}
@@ -302,15 +288,39 @@ const OrderComponent = () => {
                                         id="coupon-select"
                                         value={selectedCoupon}
                                         onChange={handleCouponSelect}
-                                        className="w-full mt-2 p-3 border rounded-md"
+                                        className="w-full mt-2 p-3 border rounded-md text-xs"
                                     >
                                         <option value="">Select a coupon</option>
-                                        <option value="discount10">10% Discount Coupon</option>
-                                        <option value="discount20">20% Discount Coupon</option>
-                                        <option value="freeshipping">Free Shipping Coupon</option>
+                                        {orderInfo.coupons && orderInfo.coupons.length > 0 ? (
+                                            orderInfo.coupons.map((coupon) => (
+                                                <option key={coupon.couponName} value={coupon.couponName}>
+                                                    {coupon.couponName} discount ₩{coupon.discount}
+                                                </option>
+                                            ))
+                                        ) : (
+                                            <option value="emptyCoupon">No coupons available.</option>
+                                        )}
                                     </select>
+                                    <hr className="border-t border-gray-400 my-5" />
 
+                                    
                                 </div>
+                                    <div className="space-y-4 text-sm bg-gray-100 text-gray-500 my-20 rounded-lg p-5">
+                                        <h4 className="font-semibold text-gray-700">Delivery Terms</h4>
+                                        <p>
+                                            Your order will be shipped within <span className="font-semibold">5 days</span> 
+                                            (excluding weekends and public holidays).
+                                        </p>
+                                        <p>
+                                            If the item is out of stock or if there is an expected delay in shipping, we will 
+                                            notify you via <span className="font-semibold">Email</span>.
+                                        </p>
+                                        <hr className="border-t border-gray-400 my-4" />
+                                        <h4 className="font-semibold text-gray-700">Need Assistance?</h4>
+                                        <p>
+                                            If you have any further questions, please contact <span className="font-semibold">Customer Service</span>.
+                                        </p>
+                                    </div>
                             </div>
 
                             
@@ -340,7 +350,7 @@ const OrderComponent = () => {
                             <p>Total Payment</p>
                             <p>₩{discountedPrice.toLocaleString()}</p>
                         </div>
-                        <button className="w-full max-w-6xl bg-gray-500 text-white py-3 mt-10 rounded-md hover:bg-gray-600 transition">
+                        <button className="w-full max-w-6xl bg-gray-500 text-white py-3 mt-10 rounded-md hover:bg-gray-600 transition font-semibold">
                             BUY NOW
                         </button>
                     </div>

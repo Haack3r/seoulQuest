@@ -1,10 +1,7 @@
 package com.positive.culture.seoulQuest.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString
 @Builder
+@Getter
 @Table(name = "tbl_coupon")
 public class Coupon {
     @Id
@@ -22,8 +20,7 @@ public class Coupon {
     private String couponName;
     private String couponCode;
 
-    @Embedded
-    private DiscountType discountType;
+    private int discount;
 
     private LocalDate expireDate;
     private boolean isActive;
