@@ -1,0 +1,120 @@
+/* Link animation for Tours and Souvenirs text */
+.link-animation-color {
+  position: relative;
+  display: inline-block;
+  color: #f3f3f3; /* Initial color */
+  text-decoration: none;
+  /* text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3); Subtle shadow */
+  letter-spacing: -0.05em; /* Condensed letter spacing */
+  transition: letter-spacing 0.5s ease, color 0.5s ease;
+}
+
+.link-animation-color:hover {
+  color: #fcd862; /* Bright color on hover */
+  letter-spacing: 0.1em; /* Expand spacing on hover */
+}
+
+.link-animation-color::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.link-animation-color:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Custom text shadow */
+.text-shadow-custom {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Video styling for Tours hover effect */
+.hover-video {
+  opacity: 0; /* Initially hidden */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease; /* Smooth fade-in */
+  z-index: 1;
+}
+
+/* Show video on hover */
+.hover-section:hover .hover-video {
+  opacity: 0.7;
+}
+
+/* Ensure text stays above video */
+.text-overlay {
+  position: relative;
+  z-index: 2;
+}
+
+.process-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start; /* 각 항목이 위쪽에 정렬되도록 설정 */
+  padding: 20px 0;
+  position: relative;
+}
+
+.process-step {
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column; /* 세로로 정렬 */
+  align-items: center;
+}
+
+.process-step-icon {
+    margin-top: 0.5em;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2; /* 아이콘이 점선 위에 표시되도록 설정 */
+}
+
+.process-step-title {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.process-description {
+  margin-top: 10px;
+  color: #555;
+  font-size: 0.7em;
+}
+
+/* 기본 점선 스타일 */
+.process-connector {
+  width: 100px;
+  height: 10px;
+  background: repeating-linear-gradient(
+    to right,
+    #ccc 0,
+    #ccc 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  transition: 0.3s ease; /* 부드러운 전환 */
+  margin-top: 10px; /* 아이콘 아래에 점선을 배치 */
+  z-index: 1; /* 점선이 아이콘 아래로 가도록 설정 */
+}
+
+/* hover 시 실선으로 변경 */
+.process-step:hover .process-connector {
+  background: #7e7c7c; /* hover 시 실선 */
+}
