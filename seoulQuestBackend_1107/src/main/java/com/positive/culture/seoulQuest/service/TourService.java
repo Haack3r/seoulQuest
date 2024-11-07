@@ -77,4 +77,6 @@ public interface TourService {
     List<TourDTO> getToursByLocation(String location);
 
     List<TourDTO> getToursByAddress(String taddress);
+
+
 }

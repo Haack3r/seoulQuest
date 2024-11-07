@@ -3,37 +3,46 @@ import { API_SERVER_HOST } from "./todoApi";
 
 const host = `${API_SERVER_HOST}/api/user/tours`;
 
-//등록
+// Function to fetch the list of tours with pagination and search functionality
+export const getList = async ({ page, size, keyword = "", type = "t" }) => {
+  try {
+    const res = await jwtAxios.get(`${host}/list`, {
+      params: {
+        page,
+        size,
+        keyword, // Search keyword
+        type,    // Search type
+      },
+    });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Add remaining tour API functions below
+
+// Register a new tour
 export const postAdd = async (tour) => {
   const header = { headers: { "Content-Type": "multipart/form-data" } };
   const res = await jwtAxios.post(`${host}/`, tour, header);
   return res.data;
 };
 
-//서버에서 목록데이터 가져옴
-export const getList = async (pageParam) => {
-  const { page, size } = pageParam;
-  const res = await jwtAxios.get(`${host}/list`, {
-    params: { page: page, size: 10 },
-  });
-  return res.data;
-};
-
-
-//특정 상품 데이터 조회
+// Retrieve a specific tour by ID
 export const getOne = async (tno) => {
   const res = await jwtAxios.get(`${host}/${tno}`);
   return res.data;
 };
 
-//수정
+// Update a specific tour
 export const putOne = async (tno, tour) => {
   const header = { headers: { "Content-Type": "multipart/form-data" } };
   const res = await jwtAxios.put(`${host}/${tno}`, tour, header);
   return res.data;
 };
 
-//삭제
+// Delete a specific tour
 export const deleteOne = async (tno) => {
   const res = await jwtAxios.delete(`${host}/${tno}`);
   return res.data;

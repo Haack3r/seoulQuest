@@ -1,9 +1,12 @@
 package com.positive.culture.seoulQuest.service;
 
+import com.positive.culture.seoulQuest.domain.QTour;
 import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.domain.TourImage;
 import com.positive.culture.seoulQuest.dto.*;
 import com.positive.culture.seoulQuest.repository.TourRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,33 +33,67 @@ public class TourServiceImpl implements TourService{
     @Override
     public PageResponseDTO<TourDTO> getList(PageRequestDTO pageRequestDTO) {
 
-        Pageable pageable =  PageRequest.of(
-                pageRequestDTO.getPage()-1,
+        // Set up paging and sorting
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
-                Sort.by("tno").descending());
+                Sort.by("tno").descending()
+        );
 
-        Page<Object[]> result = tourRepository.selectList(pageable);
+        // Create search filter using BooleanBuilder
+        BooleanBuilder booleanBuilder = getSearch(pageRequestDTO);
 
-        List<TourDTO> dtoList = result.get().map(arr->{
-            Tour tour = (Tour) arr[0];
-            TourImage tourImage = (TourImage) arr[1];
+        // Execute search query with the filter
+        Page<Tour> result = tourRepository.findAll(booleanBuilder, pageable);
 
-            //Entity를 DTO로 변환
-            TourDTO tourDTO = entityChangeDTO(tour);
+        // Convert each Tour entity to a TourDTO
+        List<TourDTO> dtoList = result.stream()
+                .map(this::entityChangeDTO)
+                .collect(Collectors.toList());
 
-            String imageStr = tourImage.getFileName();
-            tourDTO.setUploadFileNames(List.of(imageStr)); //List.of 불변하는 리스트를 생성
-            return tourDTO;
-        }).collect(Collectors.toList()); //end of map , map으로 productDTO의 리스트를 만듦
+        // Get the total number of items
+        long totalCount = result.getTotalElements();
 
-        long totalCount= result.getTotalElements();
-
+        // Build and return the PageResponseDTO
         return PageResponseDTO.<TourDTO>withAll()
-                .dtoList(dtoList) //ProductDTO 객체가 담겨있는 list
+                .dtoList(dtoList) // List of DTO objects
                 .totalCount(totalCount)
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
+
+
+
+//    @Override
+//    public PageResponseDTO<TourDTO> getList(PageRequestDTO pageRequestDTO) {
+//
+//        Pageable pageable =  PageRequest.of(
+//                pageRequestDTO.getPage()-1,
+//                pageRequestDTO.getSize(),
+//                Sort.by("tno").descending());
+//
+//        Page<Object[]> result = tourRepository.selectList(pageable);
+//
+//        List<TourDTO> dtoList = result.get().map(arr->{
+//            Tour tour = (Tour) arr[0];
+//            TourImage tourImage = (TourImage) arr[1];
+//
+//            //Entity를 DTO로 변환
+//            TourDTO tourDTO = entityChangeDTO(tour);
+//
+//            String imageStr = tourImage.getFileName();
+//            tourDTO.setUploadFileNames(List.of(imageStr)); //List.of 불변하는 리스트를 생성
+//            return tourDTO;
+//        }).collect(Collectors.toList()); //end of map , map으로 productDTO의 리스트를 만듦
+//
+//        long totalCount= result.getTotalElements();
+//
+//        return PageResponseDTO.<TourDTO>withAll()
+//                .dtoList(dtoList) //ProductDTO 객체가 담겨있는 list
+//                .totalCount(totalCount)
+//                .pageRequestDTO(pageRequestDTO)
+//                .build();
+//    }
 
 
     //하나 조회---(유저, 관리자)
@@ -138,6 +176,38 @@ public class TourServiceImpl implements TourService{
                 .map(TourDTO::new)
                 .collect(Collectors.toList());
     }
+
+  private BooleanBuilder getSearch(PageRequestDTO requestDTO){
+        String type = requestDTO.getType();
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+      QTour qTour = QTour.tour;
+      String keyword = requestDTO.getKeyword();
+
+      BooleanExpression expression = qTour.tno.gt(0L);
+
+      //조건만 생성
+      booleanBuilder.and(expression);
+
+      if (type == null || type.trim().length() == 0){
+          return booleanBuilder;
+      }
+      //검색 조건 작성하기
+
+      BooleanBuilder conditionBuilder = new BooleanBuilder();
+      if (type.contains("t")){
+          conditionBuilder.or(qTour.tname.contains(keyword));
+      }
+      if (type.contains("c")){
+          conditionBuilder.or(qTour.tname.contains(keyword));
+      }
+      if (type.contains("w")){
+          conditionBuilder.or(qTour.tname.contains(keyword));
+      }
+
+      booleanBuilder.and(conditionBuilder);
+      return booleanBuilder;
+
+  }
 
 
 }

@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +29,8 @@ import java.util.stream.Collectors;
 public class TourController {
     private final CustomFileUtil fileUtil;
     private final TourService tourService;
+
+
 
 //    @GetMapping("/location")
 //    public List<TourMapDTO> getToursByLocation(@RequestParam String location) {
@@ -144,5 +147,7 @@ public class TourController {
 
         return Map.of("RESULT", "SUCCESS");
     }
+
+
 
 }

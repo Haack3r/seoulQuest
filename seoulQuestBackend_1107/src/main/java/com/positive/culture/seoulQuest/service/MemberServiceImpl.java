@@ -242,5 +242,5 @@ public class MemberServiceImpl implements MemberService{
         member.addRole(MemberRole.USER);
         return member;
     }
-   
+
 }

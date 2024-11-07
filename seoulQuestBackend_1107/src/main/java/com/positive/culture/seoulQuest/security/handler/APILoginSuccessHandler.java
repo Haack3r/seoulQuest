@@ -26,7 +26,7 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         // p317
         MemberDTO dto = (MemberDTO) authentication.getPrincipal();
         Map<String, Object> claims = dto.getClaims();
-        String accessToken = JWTUtil.generateToken(claims, 10); // 10분
+        String accessToken = JWTUtil.generateToken(claims, 60*24); // 10분
         String refreshToken = JWTUtil.generateToken(claims, 60*24); // 24시간
         claims.put("accessToken", accessToken);
         claims.put("refreshToken", refreshToken);

@@ -1,12 +1,14 @@
-import React, { useEffect, useMemo } from "react"; // useEffect, useMemo import 추가
-import useCustomLogin from "../../hooks/useCustomLogin"; // useCustomLogin import 추가
-import useCustomCart from "../../hooks/useCustomCart"; // useCustomCart import 추가
-import CartItemComponent from "../cartAndReservation/CartItemComponent"; // CartItemComponent import 추가
-import { ShoppingCartOutlined } from "@ant-design/icons"; // ShoppingCartOutlined import 추가
+import React, { useEffect, useMemo } from "react"; 
+import useCustomLogin from "../../hooks/useCustomLogin"; 
+import useCustomCart from "../../hooks/useCustomCart"; 
+import CartItemComponent from "../cartAndReservation/CartItemComponent";
+import { ShoppingCartOutlined } from "@ant-design/icons"; 
+import { useNavigate } from "react-router-dom";
 
 
 
 const CartComponent = () => {
+    const navigate = useNavigate();
     const { isLogin, loginState } = useCustomLogin();
     const { refreshCart, cartItems, changeCart } = useCustomCart();
 
@@ -59,7 +61,7 @@ const CartComponent = () => {
                     <div className="flex flex-col sm:flex-row justify-between items-center mt-6 border-t pt-4">
                         {total && (
                             <p className="text-lg sm:text-xl font-bold text-gray-800">
-                                Total: ₩{total.toFixed(2)}
+                                Total: ₩{total.toLocaleString()}
                             </p>
                         )}
                         <p className="text-gray-600">{cartItems.length} items</p>
@@ -70,6 +72,7 @@ const CartComponent = () => {
                         <button
                             className="text-white font-semibold py-2 px-6 rounded-lg bg-stone-400 hover:bg-stone-600 transition duration-300 shadow-md w-full sm:w-auto"
                             type="button"
+                            onClick={()=>navigate('/user/products/order')}
                         >
                             Proceed to Checkout
                         </button>
