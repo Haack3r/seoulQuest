@@ -1,17 +1,19 @@
 package com.positive.culture.seoulQuest.repository;
 
 import com.positive.culture.seoulQuest.domain.Product;
+import com.positive.culture.seoulQuest.domain.Tour;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<Product,Long>, QuerydslPredicateExecutor<Product> {
 
     //전체 조회
     @Query("select p, pi from Product p left join p.productImageList pi where pi.ord = 0 and p.delFlag=false")

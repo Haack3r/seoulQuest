@@ -1,10 +1,8 @@
 package com.positive.culture.seoulQuest.seoulQuest.repository;
 
-import com.positive.culture.seoulQuest.domain.Category;
-import com.positive.culture.seoulQuest.domain.QTour;
-import com.positive.culture.seoulQuest.domain.Tour;
-import com.positive.culture.seoulQuest.domain.TourDate;
+import com.positive.culture.seoulQuest.domain.*;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
+import com.positive.culture.seoulQuest.repository.ProductRepository;
 import com.positive.culture.seoulQuest.repository.TourDateRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
 import com.querydsl.core.BooleanBuilder;
@@ -31,6 +29,9 @@ public class SearchRepositoryTests {
     @Autowired
     private TourRepository tourRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @Transactional
     @Test
     public void testQuery1(){
@@ -48,6 +49,25 @@ public class SearchRepositoryTests {
         Page<Tour> result = tourRepository.findAll(builder, pageable);
 
         result.stream().forEach(tour -> System.out.println(tour));
+    }
+
+    @Transactional
+    @Test
+    public void testQuery2(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("pno").descending());
+        QProduct qProduct = QProduct.product;
+
+        String keyword = "E";
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        BooleanExpression expression = qProduct.pname.contains(keyword);
+
+        builder.and(expression);
+
+        Page<Product> result = productRepository.findAll(builder, pageable);
+
+        result.stream().forEach(product -> System.out.println(product));
     }
 
 }

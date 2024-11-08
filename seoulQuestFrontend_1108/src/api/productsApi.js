@@ -1,4 +1,3 @@
-
 import { API_SERVER_HOST } from "./todoApi";
 import jwtAxios from "../util/jwtUtil";
 import axios from "axios";
@@ -12,14 +11,21 @@ export const postAdd = async (product) => {
 };
 
 //p264, 서버에서 목록 데이터를 가져오기 위한 함수
-export const getList = async (pageParam) => {
-  const { page, size } = pageParam;
-  const res = await jwtAxios.get(`${host}/list`, {
-    params: { page: page, size: 10 },
-  });
-  return res.data;
+export const getList = async ({ page, size, keyword = "", type = "t" }) => {
+  try {
+    const res = await jwtAxios.get(`${host}/list`, {
+      params: {
+        page,
+        size,
+        keyword, // Search keyword
+        type, // Search type
+      },
+    });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
 };
-
 
 //p273, Axios로 특정 상품 데이터 조회
 export const getOne = async (pno) => {
@@ -39,13 +45,11 @@ export const deleteOne = async (pno) => {
   return res.data;
 };
 
-
 //order
 export const getOrderInfo = async () => {
   const res = await jwtAxios.get(`${host}/orderinfo`);
   return res.data;
 };
-
 
 //order
 export const postOrderInfo = async (obj) => {
@@ -72,6 +76,8 @@ export const postOrderInfo = async (obj) => {
     );
     return res.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to Post order info");
+    throw new Error(
+      error.response?.data?.message || "Failed to Post order info"
+    );
   }
 };

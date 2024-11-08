@@ -130,57 +130,57 @@ const TourMap = () => {
   }, [map, touristSpots, selectedSpot]);
 
   return (
-    <div className="flex items-center justify-center mt-16">
-      {/* Main Map Container */}
-      <div className="relative lg:w-2/4 md:w-3/4 h-600px">
-        <div
-          id="map"
-          style={{ width: "100%", height: "600px" }}
-          className="rounded-lg border border-gray-300 shadow-lg relative"
-        ></div>
-
-        {/* Pastel Overlay */}
-        <div className="absolute inset-0 bg-pastel-overlay rounded-lg pointer-events-none"></div>
-      </div>
-
-      {selectedSpot && (
-        <div className="top-16 right-4 h-[600px] w-1/4 bg-white shadow-lg rounded-lg border border-gray-300 flex flex-col overflow-hidden">
-          <button
-            className="absolute right-4 text-right p-2"
-            onClick={() => setSelectedSpot(null)}
-          >
-            ✖
-          </button>
-          <img
-            className="h-1/2 w-full object-cover"
-            src={`/api/user/tours/view/${selectedSpot.uploadFileNames[0]}`}
-            alt="Tour Spot"
-          />
-          <div className="p-4 flex-grow flex flex-col justify-start">
-            <h2 className="text-sm font-bold mb-2">{selectedSpot.tname}</h2>
-            <p className="text-sm">Address: {selectedSpot.taddress}</p>
-            <p className="text-sm text-gray-600 mb-4">{selectedSpot.tdesc}</p>
-            <p className="text-sm">Price: ₩{selectedSpot.tprice} per person</p>
-            {!loginState.email ? (
-              <Link
-                to={`/tours/read/${selectedSpot.tno}?page=1&size=10`}
-                className="text-sm mt-4 px-4 py-2 bg-orange-800 text-white rounded-lg inline-block text-center"
-              >
-                Reserve Now
-              </Link>
-            ) : (
-              <Link
-                to={`/user/tours/read/${selectedSpot.tno}?page=1&size=10`}
-                className="text-sm mt-4 px-4 py-2 bg-orange-800 text-white rounded-lg inline-block text-center"
-              >
-                Reserve Now
-              </Link>
-            )}
-          </div>
+    <section className="mt-10 px-4 max-w-5xl mx-auto mb-1">
+      <h2 className="-mb-10 text-3xl font-bold uppercase text-center text-gray-800 tracking-widest">
+        Explore On Map
+      </h2>
+      <div className="flex items-center justify-center mt-16">
+        {/* Main Map Container */}
+        <div className="relative lg:w-2/4 md:w-3/4 h-600px">
+          <div
+            id="map"
+            style={{ width: "100%", height: "600px" }}
+            className="rounded-lg border border-gray-300 shadow-lg relative"
+          ></div>
+          <div className="absolute inset-0 bg-pastel-overlay rounded-lg pointer-events-none"></div>
         </div>
-      )}
-    </div>
+
+        {selectedSpot && (
+          <div className="top-16 right-4 h-[600px] w-1/4 bg-white shadow-lg rounded-lg border border-gray-300 flex flex-col overflow-hidden">
+            <button
+              className="absolute right-7 lg:right-80 text-right p-2"
+              onClick={() => setSelectedSpot(null)}
+            >
+              ✖
+            </button>
+            <img
+              className="h-1/3 w-full object-cover"
+              src={`/api/user/tours/view/${selectedSpot.uploadFileNames[0]}`}
+              alt="Tour Spot"
+            />
+            <div className="p-4 flex-grow flex flex-col justify-start">
+  <h2 className="text-xl font-bold mb-2">{selectedSpot.tname}</h2>
+  <p className="small-text text-sm mb-2 text-gray-700">Address: {selectedSpot.taddress}</p>
+  
+  {/* Apply truncated-description class to limit text after 3 lines */}
+  <p className="truncated-description text-sm text-gray-600 mb-4">
+    {selectedSpot.tdesc}
+  </p>
+  
+  <p className="text-sm font-semibold">Price: ₩{selectedSpot.tprice} per person</p>
+  <Link
+    to={`/user/tours/read/${selectedSpot.tno}?page=1&size=10`}
+    className="text-sm mt-4 px-6 py-3 bg-orange-800 text-white rounded-lg inline-block text-center transform transition-all hover:scale-105"
+  >
+    Reserve Now
+  </Link>
+</div>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
+
 
 export default TourMap;

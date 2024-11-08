@@ -18,13 +18,13 @@ public class PageRequestDTO {
     private int page = 1;
 
     @Builder.Default
-    private int size = 10;
+    private int size = 9;
 
     private String type;
     private String keyword;
 
-    public Pageable getPageable(Sort sort){
-        return PageRequest.of(page-1, size, sort);
-    }
+//    public Pageable getPageable(Sort sort){
+//        return PageRequest.of(page-1, size, sort);
+//    }
 
 }

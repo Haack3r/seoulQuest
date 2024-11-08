@@ -7,6 +7,8 @@ import { Card, CardTitle, CardDescription } from "../ui/Card";
 import Button from "../ui/Button";
 import { getListNU } from "../../api/nuProductApi";
 import "../../Product.css";
+import { Input } from "antd";
+import { SearchIcon } from "lucide-react";
 
 const host = API_SERVER_HOST;
 
@@ -29,12 +31,19 @@ const NUListComponent = () => {
   const [error, setError] = useState(null);
   const [fetching, setFetching] = useState(false);
 
+  // New states for search
+  const [keyword, setKeyword] = useState("");
+  const [type, setType] = useState("t"); // Default type; adjust based on your needs
+
   useEffect(() => {
     setFetching(true);
-    getListNU({ page, size })
+    getListNU({ page, size, keyword, type })
       .then((data) => {
-        console.log("API Response:", data);
-        setServerData(data);
+        if (data && Array.isArray(data.dtoList)) {
+          setServerData(data);
+        } else {
+          setServerData(initState);
+        }
         setFetching(false);
       })
       .catch((err) => {
@@ -42,23 +51,51 @@ const NUListComponent = () => {
         setError("Failed to load product data");
         setFetching(false);
       });
-  }, [page, size, refresh]);
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (fetching) {
-    return <FetchingModal />;
-  }
+  }, [page, size, refresh, keyword, type]);
+    
+      // Handle search submission
+  const handleSearch = () => {
+    // Trigger a refresh with new keyword
+    setFetching(true);
+    getListNU({ page: 1, size, keyword, type })
+      .then((data) => {
+        if (data && Array.isArray(data.dtoList)) {
+          setServerData(data);
+        } else {
+          setServerData(initState);
+        }
+        setFetching(false);
+      })
+      .catch((err) => {
+        setFetching(false);
+      });
+  };
 
   return (
-      <div className="py-12">
-          {fetching ? <FetchingModal /> : <></>}
+    <div className="py-12">
       <section className="px-4 max-w-6xl mx-auto">
         <h2 className="mb-12 text-4xl font-bold text-center text-gray-800 tracking-wide uppercase">
           Artisan Treasures
         </h2>
+
+        {/* Search Input */}
+        <div className="mt-8 flex justify-center mb-8">
+          <div className="flex w-full max-w-2xl bg-white rounded-full shadow-lg overflow-hidden border border-gray-200">
+            <Input
+              placeholder="Search experiences..."
+              className="flex-grow border-0 focus:ring-0 text-lg px-6"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+            <Button
+              className="bg-orange-800 hover:bg-rose-700 text-white font-medium tracking-wide py-6 px-6 rounded-r-full"
+              onClick={handleSearch}
+            >
+              <SearchIcon className="h-5 w-5 mr-2" />
+              Explore
+            </Button>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20">
           {serverData.dtoList && serverData.dtoList.length > 0 ? (
             serverData.dtoList.map((product) => (

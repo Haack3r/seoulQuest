@@ -44,3 +44,18 @@
     visibility: visible;
   }
   
+  .truncated-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 3 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.875rem; /* You can adjust the font size as needed */
+    color: #555; /* Adjust color if needed */
+  }
+  
+  .small-text {
+    font-size: 0.65rem; /* Adjust size as needed */
+    color: #777; /* Optional: Adjust the color to make it look less prominent */
+  }
+  

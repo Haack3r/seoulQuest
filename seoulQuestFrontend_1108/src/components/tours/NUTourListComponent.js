@@ -71,7 +71,6 @@ const NUTourListComponent = () => {
 
   return (
     <div className="py-12">
-      {fetching ? <FetchingModal /> : <></>}
       <section className="px-4 max-w-5xl mx-auto mb-1">
         <h2 className="mb-10 text-3xl font-bold uppercase text-center text-gray-800 tracking-widest">
           Curated Experiences

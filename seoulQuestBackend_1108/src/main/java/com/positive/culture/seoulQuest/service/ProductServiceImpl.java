@@ -2,11 +2,15 @@ package com.positive.culture.seoulQuest.service;
 
 import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.domain.ProductImage;
+import com.positive.culture.seoulQuest.domain.QProduct;
 import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
+import com.positive.culture.seoulQuest.dto.TourDTO;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -38,20 +42,16 @@ public class ProductServiceImpl implements ProductService{
                 pageRequestDTO.getSize(),
                 Sort.by("pno").descending());
 
+        // Create search filter using BooleanBuilder
+        BooleanBuilder booleanBuilder = getSearch(pageRequestDTO);
+
         //<Object[]>에는 product, productImage 객체가 담겨있음
-        Page<Object[]> result = productRepository.selectList(pageable);
+        Page<Product> result = productRepository.findAll(booleanBuilder,pageable);
 
-        List<ProductDTO> dtoList = result.get().map(arr->{
-            Product product = (Product) arr[0];
-            ProductImage productImage = (ProductImage) arr[1];
-
-            //Entity를 DTO로 변환
-            ProductDTO productDTO = entityChangeDTO(product);
-
-            String imageStr = productImage.getFileName();
-            productDTO.setUploadFileNames(List.of(imageStr)); //List.of 불변하는 리스트를 생성
-            return productDTO;
-        }).collect(Collectors.toList()); //end of map , map으로 productDTO의 리스트를 만듦
+        // Convert each Tour entity to a TourDTO
+        List<ProductDTO> dtoList = result.stream()
+                .map(this::entityChangeDTO)
+                .collect(Collectors.toList());
 
         long totalCount= result.getTotalElements();
 
@@ -130,6 +130,34 @@ public class ProductServiceImpl implements ProductService{
         productRepository.updateToDelete(pno, true);
     }
 
+    private BooleanBuilder getSearch(PageRequestDTO requestDTO){
+        String type = requestDTO.getType();
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QProduct qProduct = QProduct.product;
+        String keyword = requestDTO.getKeyword();
+
+        BooleanExpression expression = qProduct.pno.gt(0L);
+
+        booleanBuilder.and(expression);
+
+        if (type == null || type.trim().length() == 0){
+            return booleanBuilder;
+        }
+        BooleanBuilder conditionBuilder = new BooleanBuilder();
+        if (type.contains("t")){
+            conditionBuilder.or(qProduct.pname.contains(keyword));
+        }
+        if (type.contains("c")){
+            conditionBuilder.or(qProduct.pname.contains(keyword));
+        }
+        if (type.contains("w")){
+            conditionBuilder.or(qProduct.pname.contains(keyword));
+        }
+
+        booleanBuilder.and(conditionBuilder);
+
+        return booleanBuilder;
+    }
 
 
 }
