@@ -23,6 +23,7 @@ const NUProductsIndex = lazy(() => import("../pages/products/NUIndexPage"))
 const ToursIndex = lazy(() => import("../pages/tours/TourIndexPage"))
 const NUToursIndex = lazy(() => import("../pages/tours/NUTourIndexPage"))
 const Cart = lazy(() => import("../pages/Cart"))
+const Favorite = lazy(() => import("../pages/Favorite"))
 
 const root = createBrowserRouter([
     {
@@ -36,6 +37,10 @@ const root = createBrowserRouter([
     {
         path: "cart",
         element: <Suspense fallback={Loading}><Cart /></Suspense>
+    },
+    {
+        path: "favorite",
+        element: <Suspense fallback={Loading}><Favorite /></Suspense>
     },
     {
         path: "todo",

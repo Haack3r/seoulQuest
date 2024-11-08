@@ -5,7 +5,13 @@ import Button from "../ui/Button";
 import "../../Navbar.css"; // Ensure this file includes the necessary CSS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { User, ShoppingBagIcon, UserIcon, LogInIcon } from "lucide-react";
+import {
+  User,
+  ShoppingBagIcon,
+  UserIcon,
+  LogInIcon,
+  Heart,
+} from "lucide-react";
 
 const BasicMenu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -133,6 +139,12 @@ const BasicMenu = () => {
                         <User className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
+                        to="/favorite/"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                      >
+                        <Heart className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                      </Link>
+                      <Link
                         to="/cart/"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
@@ -253,6 +265,12 @@ const BasicMenu = () => {
                         className="flex items-center space-x-2 menu-animation-color"
                       >
                         <User className="h-5 w-5 menu-animation-color" />
+                      </Link>
+                      <Link
+                        to="/favorite/"
+                        className="flex items-center space-x-2 menu-animation-color"
+                      >
+                        <Heart className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
                         to={"/cart/"}
