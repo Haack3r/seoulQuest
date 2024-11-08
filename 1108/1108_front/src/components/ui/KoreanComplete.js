@@ -63,10 +63,10 @@ function divideKorean(letter) {
     };
 }
 
-console.log(divideKorean("김"));
+// console.log(divideKorean("김"));
 // { "cho": "ㄱ", "jung": "ㅣ", "jong": "ㅁ" }
 
-console.log(divideKorean("ㄱ"));
+// console.log(divideKorean("ㄱ"));
 // ㄱ
 
 // 44032(가) + ((초성 × 21) + 중성) × 28 + 종성
@@ -88,10 +88,10 @@ function combine(cho, jung, jong) {
  * @returns {string} 조합된 한글 문자
  */
 
-console.log(combine(0, 20, 16));
+// console.log(combine(0, 20, 16));
 // 김
 
-console.log(combine(-1, 20, 16));
+// console.log(combine(-1, 20, 16));
 // ''
 
 function combineKorean(cho = '', jung = '', jong = '') {
@@ -120,10 +120,10 @@ function handleInput(target) {
         }, '');
 }
 
-const korean = { cho: 'ㄱ', jung: 'ㅣ', jong: 'ㅁ' };
+// const korean = { cho: 'ㄱ', jung: 'ㅣ', jong: 'ㅁ' };
 // const korean = divideKorean('김');
 
-console.log(combineKorean(korean.cho, korean.jung, korean.jong));
+// console.log(combineKorean(korean.cho, korean.jung, korean.jong));
 // 김
 
 // 단어 분해
@@ -144,7 +144,7 @@ const combineLetter = divideLetter
     .map((korean) => combineKorean(korean.cho, korean.jung, korean.jong))
     .join("");
 
-console.log(combineLetter);
+// console.log(combineLetter);
 // 수박
 
 export {

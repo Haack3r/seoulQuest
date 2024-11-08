@@ -136,7 +136,7 @@ const TourMap = () => {
       </h2>
       <div className="flex items-center justify-center mt-16">
         {/* Main Map Container */}
-        <div className="relative lg:w-2/4 md:w-3/4 h-600px">
+        <div className="relative lg:w-3/4 md:w-3/4 h-600px">
           <div
             id="map"
             style={{ width: "100%", height: "600px" }}
@@ -159,22 +159,22 @@ const TourMap = () => {
               alt="Tour Spot"
             />
             <div className="p-4 flex-grow flex flex-col justify-start">
-  <h2 className="text-xl font-bold mb-2">{selectedSpot.tname}</h2>
-  <p className="small-text text-sm mb-2 text-gray-700">Address: {selectedSpot.taddress}</p>
-  
-  {/* Apply truncated-description class to limit text after 3 lines */}
-  <p className="truncated-description text-sm text-gray-600 mb-4">
-    {selectedSpot.tdesc}
-  </p>
-  
-  <p className="text-sm font-semibold">Price: ₩{selectedSpot.tprice} per person</p>
-  <Link
-    to={`/user/tours/read/${selectedSpot.tno}?page=1&size=10`}
-    className="text-sm mt-4 px-6 py-3 bg-orange-800 text-white rounded-lg inline-block text-center transform transition-all hover:scale-105"
-  >
-    Reserve Now
-  </Link>
-</div>
+              <h2 className="text-xl font-bold mb-2">{selectedSpot.tname}</h2>
+              <p className="small-text text-sm mb-2 text-gray-700">Address: {selectedSpot.taddress}</p>
+
+              {/* Apply truncated-description class to limit text after 3 lines */}
+              <p className="truncated-description text-sm text-gray-600 mb-4">
+                {selectedSpot.tdesc}
+              </p>
+
+              <p className="text-sm font-semibold">Price: ₩{selectedSpot.tprice} per person</p>
+              <Link
+                to={`/user/tours/read/${selectedSpot.tno}?page=1&size=10`}
+                className="text-sm mt-4 px-6 py-3 bg-orange-800 text-white rounded-lg inline-block text-center transform transition-all hover:scale-105"
+              >
+                Reserve Now
+              </Link>
+            </div>
           </div>
         )}
       </div>

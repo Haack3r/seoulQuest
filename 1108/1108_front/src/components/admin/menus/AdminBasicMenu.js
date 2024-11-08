@@ -11,7 +11,7 @@ import {
   CHO_KOREAN,
   JUNG_KOREAN,
   JONG_KOREAN
-} from '../ui/KoreanComplete';
+} from '../../ui/KoreanComplete';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -43,7 +43,7 @@ const searchStyles = `
 .search-container {
   position: relative;
   }
-  
+
   .autocomplete {
     position: absolute;
     top: 100%;
@@ -126,6 +126,7 @@ const AdminBasicMenu = () => {
     setSuggestions(matchDataList);
   }
 
+  // 방향키와 엔터 키로 단어 선택
   const handleKeyDown = (e) => {
     if (suggestions.length === 0) return
 

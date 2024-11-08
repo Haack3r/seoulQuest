@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useCustomMove from "./../../hooks/useCustomMove";
 import FetchingModal from "../common/FetchingModal";
 import { API_SERVER_HOST } from "../../api/todoApi";
@@ -30,27 +30,55 @@ const TourListComponent = () => {
   const [serverData, setServerData] = useState(initState);
   const [fetching, setFetching] = useState(false);
 
+  // 검색바 관련
   // New states for search
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("t"); // Default type; adjust based on your needs
+  const [suggestions, setSuggestions] = useState([])
+  const [activeIndex, setActiveIndex] = useState(0)
+  const dataList = serverData.dtoList.map(tour => tour.tname)
 
-  // Fetch list with search and pagination
-  useEffect(() => {
-    setFetching(true);
-    getList({ page, size, keyword, type })
-      .then((data) => {
-        if (data && Array.isArray(data.dtoList)) {
-          setServerData(data);
-        } else {
-          setServerData(initState);
+  const filterSuggestions = (value) => {
+    if (!value) {
+      setSuggestions([])
+      return
+    }
+
+    // 대소문자 구분없이 자동완성을 소문자를 기준으로 만듬
+    const lowerAlphabet = dataList.filter(word =>
+      word.toLowerCase().includes(value.toLowerCase())
+    )
+
+    setSuggestions(lowerAlphabet)
+
+    // const result = filterSuggestions(value, dataList)
+    // setSuggestions(result)
+  }
+
+  const handleKeyDown = (e) => {
+    if (suggestions.length === 0)
+      return
+
+    switch (e.keyCode) {
+      case 38:
+        setActiveIndex(prev => (Math.max(prev - 1, 0)))
+        break
+
+      case 40:
+        setActiveIndex(prev => (Math.min(prev + 1, suggestions.length - 1)))
+        break
+
+      case 13:
+        if (suggestions[activeIndex]) {
+          setKeyword(suggestions[activeIndex])
+          setSuggestions([])
         }
-        setFetching(false);
-      })
-      .catch((err) => {
-        exceptionHandle(err);
-        setFetching(false);
-      });
-  }, [page, size, refresh, keyword, type]);
+        break
+
+      default:
+        break
+    }
+  }
 
   // Handle search submission
   const handleSearch = () => {
@@ -71,6 +99,40 @@ const TourListComponent = () => {
       });
   };
 
+  const highlightMatch = (text, searchValue) => {
+    if (!searchValue) return text
+
+    const regex = new RegExp(`(${searchValue})`, "gi")
+
+    return text.replace(regex, "<mark>$1</Mark>")
+  }
+
+  // Fetch list with search and pagination
+  useEffect(() => {
+    setFetching(true);
+    getList({ page, size, keyword, type })
+      .then((data) => {
+        if (data && Array.isArray(data.dtoList)) {
+          setServerData(data);
+        } else {
+          setServerData(initState);
+        }
+        setFetching(false);
+      })
+      .catch((err) => {
+        exceptionHandle(err);
+        setFetching(false);
+      });
+  }, [page, size, refresh, keyword, type]);
+
+  const searchStyles = `
+  mark {
+    background-color: #ffeb3b;
+    padding: 0;
+  }
+`;
+
+
   return (
     <div className="py-12">
       {/* {fetching ? <FetchingModal /> : null} */}
@@ -80,13 +142,18 @@ const TourListComponent = () => {
         </h2>
 
         {/* Search Input */}
-        <div className="mt-8 flex justify-center">
-          <div className="flex w-full max-w-2xl bg-white rounded-full shadow-lg overflow-hidden border border-gray-200">
+        <div className="relative w-full max-w-2xl">
+          <div className="flex max-w-2xl bg-white rounded-full shadow-lg overflow-hidden border border-gray-200">
             <Input
               placeholder="Search experiences..."
               className="flex-grow border-0 focus:ring-0 text-lg py-6 px-6"
+              type="text"
               value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
+              onChange={(e) => {
+                setKeyword(e.target.value)
+                filterSuggestions(e.target.value)
+              }}
+              onKeyDown={handleKeyDown}
             />
             <Button
               className="bg-orange-800 hover:bg-rose-700 text-white font-medium tracking-wide py-6 px-6 rounded-r-full"
@@ -96,6 +163,25 @@ const TourListComponent = () => {
               Explore
             </Button>
           </div>
+          {/** 자동완성에 하이라이트 추가 */}
+          {suggestions.length > 0 && (
+            <div className="absolute w-full mt-1 bg-white shadow-lg rounded-lg overflow-hidden">
+              {suggestions.map((suggestion, index) => (
+                <div
+                  key={suggestion}
+                  className={`px-6 py-2 cursor-pointer hover:bg-gray-100
+                    ${index === activeIndex ? 'bg-gray-100' : ''}`}
+                  onClick={() => {
+                    setKeyword(suggestion);
+                    setSuggestions([]);
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: highlightMatch(suggestion, keyword)
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20 mt-10">
@@ -128,10 +214,10 @@ const TourListComponent = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section >
 
       <PageComponent serverData={serverData} movePage={moveToList} />
-    </div>
+    </div >
   );
 };
 
