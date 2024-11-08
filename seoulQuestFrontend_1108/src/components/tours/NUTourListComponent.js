@@ -4,6 +4,8 @@ import FetchingModal from "../common/FetchingModal";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
 import { getListTNU } from "../../api/nuTourApi";
+import { SearchIcon } from "lucide-react";
+import { Button, Input } from "antd";
 
 const host = API_SERVER_HOST;
 
@@ -26,35 +28,74 @@ const NUTourListComponent = () => {
   const [error, setError] = useState(null);
   const [fetching, setFetching] = useState(false);
 
+  // New states for search
+  const [keyword, setKeyword] = useState("");
+  const [type, setType] = useState("t"); // Default type; adjust based on your needs
+
   useEffect(() => {
     setFetching(true);
-    getListTNU({ page, size })
+    getListTNU({ page, size, keyword, type })
       .then((data) => {
-        setServerData(data);
-        setFetching(false);
+        if (data && Array.isArray(data.dtoList)) {
+            setServerData(data);
+          } else {
+            setServerData(initState);
+          }
+          setFetching(false);
       })
       .catch((err) => {
         console.error("API Error:", err);
         setError("Failed to load tour data");
         setFetching(false);
       });
-  }, [page, size, refresh]);
+  }, [page, size, refresh, keyword, type]);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
-  if (fetching) {
-    return <FetchingModal />;
-  }
+  // Handle search submission
+  const handleSearch = () => {
+    // Trigger a refresh with new keyword
+    setFetching(true);
+    getListTNU({ page: 1, size, keyword, type })
+      .then((data) => {
+        if (data && Array.isArray(data.dtoList)) {
+          setServerData(data);
+        } else {
+          setServerData(initState);
+        }
+        setFetching(false);
+      })
+      .catch((err) => {
+        setFetching(false);
+      });
+  };
 
   return (
-      <div className="py-12">
-          {fetching ? <FetchingModal /> : <></>}
+    <div className="py-12">
+      {fetching ? <FetchingModal /> : <></>}
       <section className="px-4 max-w-5xl mx-auto mb-1">
         <h2 className="mb-10 text-3xl font-bold uppercase text-center text-gray-800 tracking-widest">
           Curated Experiences
         </h2>
+
+        {/* Search Input */}
+        <div className="mt-8 flex justify-center mb-8">
+          <div className="flex w-full max-w-2xl bg-white rounded-full shadow-lg overflow-hidden border border-gray-200">
+            <Input
+              placeholder="Search experiences..."
+              className="flex-grow border-0 focus:ring-0 text-lg px-6"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+            <Button
+              className="bg-orange-800 hover:bg-rose-700 text-white font-medium tracking-wide py-6 px-6 rounded-r-full"
+              onClick={handleSearch}
+            >
+              <SearchIcon className="h-5 w-5 mr-2" />
+              Explore
+            </Button>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20">
           {serverData.dtoList.map((tour) => (
             <div

@@ -5,6 +5,7 @@ import MainImage from "./../../layouts/MainImage";
 import TourImage from "../../layouts/TourImage";
 import AboutToursComponent from "../../components/tours/AboutToursComponent ";
 import SearchBar from "../../layouts/SearchBar";
+import TourMap from "../../components/TourMap";
 
 const NUTourListPage = () => {
     const aboutRef = useRef(null); // Create a ref for the AboutToursComponent
@@ -21,6 +22,7 @@ const NUTourListPage = () => {
         {/* Content */}
         <div className="mt-2">
                 <TourImage onScrollToAbout={scrollToAbout} />
+                <TourMap />
                 <NUTourListComponent />
           {/* Add a ref to the AboutToursComponent */}
           <div ref={aboutRef}>

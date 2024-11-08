@@ -5,6 +5,7 @@ import { faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { createRoot } from "react-dom/client";
 import "../TourMap.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const TourMap = () => {
   const [touristSpots, setTouristSpots] = useState([]);
@@ -12,6 +13,7 @@ const TourMap = () => {
   const [overlays, setOverlays] = useState([]);
   const [selectedSpot, setSelectedSpot] = useState(null);
   const geoapifyApiKey = "c65e86bb88864eb4b9658fe2c9b1048e";
+  const loginState = useSelector((state) => state.loginSlice);
 
   const MarkerIcon = ({ isSelected }) => (
     <div
@@ -159,12 +161,21 @@ const TourMap = () => {
             <p className="text-sm">Address: {selectedSpot.taddress}</p>
             <p className="text-sm text-gray-600 mb-4">{selectedSpot.tdesc}</p>
             <p className="text-sm">Price: ₩{selectedSpot.tprice} per person</p>
-            <Link
-              to={`/user/tours/read/${selectedSpot.tno}?page=1&size=10`}
-              className="text-sm mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg inline-block text-center"
-            >
-              Reserve Now
-            </Link>
+            {!loginState.email ? (
+              <Link
+                to={`/tours/read/${selectedSpot.tno}?page=1&size=10`}
+                className="text-sm mt-4 px-4 py-2 bg-orange-800 text-white rounded-lg inline-block text-center"
+              >
+                Reserve Now
+              </Link>
+            ) : (
+              <Link
+                to={`/user/tours/read/${selectedSpot.tno}?page=1&size=10`}
+                className="text-sm mt-4 px-4 py-2 bg-orange-800 text-white rounded-lg inline-block text-center"
+              >
+                Reserve Now
+              </Link>
+            )}
           </div>
         </div>
       )}

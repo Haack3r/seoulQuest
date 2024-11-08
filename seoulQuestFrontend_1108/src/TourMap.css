@@ -11,12 +11,12 @@
   }
   
   .marker-icon {
-    color: #e74c3c; /* Default color */
+    color: #c24c3f; /* Default color */
     font-size: 35px;
   }
   
   .marker-icon.selected {
-    color: #3498db;
+    color: #1c567c;
     animation: bounce 1s infinite;
   }
   
