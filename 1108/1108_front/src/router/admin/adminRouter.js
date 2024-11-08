@@ -6,9 +6,16 @@ const adminRouter = () => {
 
     const Loading = <div><SyncLoader /></div>
     const AdminDashBoard = lazy(() => import("../../pages/admin/AdminDashBoard"))
-    const AdminOrderPage = lazy(() => import("../../pages/admin/AdminOrderPage"))
-    const AdminProductComponents = lazy(() => import("../../components/admin/AdminProductComponents"))
+    const AdminOrderPage = lazy(() => import("../../pages/admin/AdminOrder"))
+    const AdminProductPage = lazy(() => import("../../pages/admin/AdminProduct"))
     const AdminIndexPage = lazy(() => import("../../pages/admin/AdminIndexPage"))
+    const AdminTourPage = lazy(() => import("../../pages/admin/AdminTour"))
+    const AdminInventoryPage = lazy(() => import("../../pages/admin/AdminInventory"))
+    const AdminReservationPage = lazy(() => import("../../pages/admin/AdminReservation"))
+    const AdminExchangePage = lazy(() => import("../../pages/admin/AdminExchange"))
+    const AdminDeliveryPage = lazy(() => import("../../pages/admin/AdminDelivery"))
+    const AdminDeliveryCostPage = lazy(() => import("../../pages/admin/AdminDeliveryCost"))
+    const AdminCustomerPage = lazy(() => import("../../pages/admin/AdminCustomer"))
 
     return [
         {
@@ -33,7 +40,35 @@ const adminRouter = () => {
                 },
                 {
                     path: "product",
-                    element: <Suspense fallback={Loading}><AdminProductComponents /></Suspense>
+                    element: <Suspense fallback={Loading}><AdminProductPage /></Suspense>
+                },
+                {
+                    path: "tour",
+                    element: <Suspense fallback={Loading}><AdminTourPage /></Suspense>
+                },
+                {
+                    path: "inventory",
+                    element: <Suspense fallback={Loading}><AdminInventoryPage /></Suspense>
+                },
+                {
+                    path: "reservation",
+                    element: <Suspense fallback={Loading}><AdminReservationPage /></Suspense>
+                },
+                {
+                    path: "exchange",
+                    element: <Suspense fallback={Loading}><AdminExchangePage /></Suspense>
+                },
+                {
+                    path: "delivery",
+                    element: <Suspense fallback={Loading}><AdminDeliveryPage /></Suspense>
+                },
+                {
+                    path: "cost",
+                    element: <Suspense fallback={Loading}><AdminDeliveryCostPage /></Suspense>
+                },
+                {
+                    path: "customer",
+                    element: <Suspense fallback={Loading}><AdminCustomerPage /></Suspense>
                 },
             ]
         }
