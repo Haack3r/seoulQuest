@@ -5,7 +5,9 @@ import com.positive.culture.seoulQuest.domain.UserCoupon;
 import com.positive.culture.seoulQuest.dto.*;
 import com.positive.culture.seoulQuest.repository.CouponRepository;
 import com.positive.culture.seoulQuest.repository.UserCouponRepository;
+import com.positive.culture.seoulQuest.service.CouponService;
 import com.positive.culture.seoulQuest.service.MemberService;
+import com.positive.culture.seoulQuest.service.OrderService;
 import com.positive.culture.seoulQuest.service.ProductService;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +36,8 @@ import static java.util.stream.Collectors.toList;
 public class ProductController {
     private final CustomFileUtil fileUtil;
     private final ProductService productService;
-    private final MemberService memberService;
-    private final UserCouponRepository userCouponRepository;
-    private final CouponRepository couponRepository;
+    private final CouponService couponService;
+    private final OrderService orderService;
 
     //시큐리티 구현후 권한 추가
 
@@ -47,9 +48,10 @@ public class ProductController {
         return productService.getList(pageRequestDTO);
     }
 
-    //파일 등록 - test 성공 (관리자)
+    //파일 등록 , 등록할때 service쪽에서 category수정해야됨
     @PostMapping("/")
     public Map<String , Long> register(ProductDTO productDTO){
+
         log.info("register: " + productDTO);
         List<MultipartFile> files =  productDTO.getFiles(); //사용자가 등록한 실제 파일들을 가져와서 새 리스트에 저장
         List<String> uploadFileNames = fileUtil.saveFiles(files); //실제 등록한 파일들의 이름을 문자열로 반환하여 리스트에 저장.
@@ -132,49 +134,21 @@ public class ProductController {
         return Map.of("RESULT","SUCCESS");
     }
 
-
-    //여기 수정해야함
+    //이메일로 사용자 정보와 쿠폰리스트를 받아옴.
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/orderinfo")
     public OrderDTO getOrderInfo(Principal principal){
         String email = principal.getName();
         log.info(email);
-        Member member= memberService.findByEmail(email).orElseThrow();
-        log.info(member);
-        List<UserCoupon> userCoupons= userCouponRepository.findByCouponOwnerEmail(member.getEmail());
-        log.info(userCoupons);
-        //userCoupon 엔티티리스트를  Coupon dto 리스트로 변경
-
-        List<CouponDTO> couponDTOList =userCoupons.stream().filter(userCoupon-> userCoupon.getCoupon().isActive())
-                .map(coupon->{
-                    CouponDTO couponDTO = CouponDTO.builder()
-                            .couponName(coupon.getCoupon().getCouponName())
-                            .discount(coupon.getCoupon().getDiscount())
-                            .build();
-                    return couponDTO;
-                }).toList();
-
-
-        OrderDTO orderInfoDTO = OrderDTO.builder()
-                .firstname(member.getFirstname())
-                .lastname(member.getLastname())
-                .country(member.getAddress().getCountry())
-                .state(member.getAddress().getState())
-                .city(member.getAddress().getCity())
-                .street(member.getAddress().getStreet())
-                .zipcode(member.getAddress().getZipCode())
-                .phoneNumber(member.getPhoneNumber())
-                .email(member.getEmail())
-                .coupons(couponDTOList)
-                .build();
-        return  orderInfoDTO;
+        return  couponService.getUserCouponAndUserInfo(email);
     }
 
-    //여기 하는중
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/orders")
     public ResponseEntity<String> order(@RequestBody OrderDTO orderDTO){
         System.out.println("order내역 : " + orderDTO);
-        List<String> list = orderDTO.getOrderItems();
-        System.out.println(list);
+        //orderDTO를 받아서 order 엔티티에 저장.
+        orderService.saveOrder(orderDTO);
         return new ResponseEntity<>("order complete", HttpStatus.OK);
     }
 

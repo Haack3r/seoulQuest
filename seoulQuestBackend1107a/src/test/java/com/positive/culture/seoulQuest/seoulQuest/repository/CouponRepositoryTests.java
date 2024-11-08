@@ -107,19 +107,4 @@ public class CouponRepositoryTests {
     }
 
 
-    //    //퍼센트 쿠폰
-//    @Test
-//    public void insertDummyPercentCoupon(){
-//
-//        for(int i = 1 ; i<5 ; i++){
-//            Coupon coupon = Coupon.builder()
-//                    .couponName("percentcoupon"+i*5)
-//                    .couponCode("efgh"+ (int)(Math.random()*12345))
-//                    .discountType(new DiscountType(i*5,null))
-//                    .expireDate(LocalDate.parse("2024-11-1"+i))
-//                    .isActive(true)
-//                    .build();
-//        couponRepository.save(coupon);
-//        }
-//    }
 }

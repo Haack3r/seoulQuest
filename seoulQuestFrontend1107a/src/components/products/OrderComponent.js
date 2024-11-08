@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import useCustomCart from "../../hooks/useCustomCart";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import { Badge } from "antd"; 
-import { getOrderInfo } from "../../api/productsApi";
-import useCustomLogin from "../../hooks/useCustomLogin";
+import { getOrderInfo, postOrderInfo } from "../../api/productsApi";
 
 const host = API_SERVER_HOST;
 
 const initState = { 
     orderItems: [],
     coupons: [],
+    usedCoupon: '',
     firstname: '',
     lastname: '',
     city: '',
@@ -19,38 +19,39 @@ const initState = {
     zipcode: '',
     phoneNumber: '',
     email: '',
+    totalPrice: '',
 };
 
 const OrderComponent = () => {
-    const { cartItems, refreshCart } = useCustomCart();
+    const { cartItems} = useCustomCart();
     const [orderInfo, setOrderInfo] = useState({ ...initState });
     const [selectedCoupon, setSelectedCoupon] = useState("");
-    const [discountedPrice, setDiscountedPrice] = useState(6000);
+    const [discountedPrice, setDiscountedPrice] = useState(0);
     const [selectedItems, setSelectedItems] = useState(new Set());
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         getOrderInfo().then((data) => {
-            console.log(data);
-            console.log(cartItems);
             setOrderInfo({ ...data, orderItems: cartItems });
+            console.log(orderInfo)
         });
     }, [cartItems]);
 
     useEffect(() => {
+        // 선택된 아이템의 가격 계산하여 업데이트
         const selectedItemsPrice = calculateSelectedItemsPrice();
         const shippingFee = 3000;
         setDiscountedPrice(selectedItemsPrice + shippingFee);
     }, [selectedItems]);
 
     useEffect(() => {
+        // 모든 항목을 초기 선택 상태로 설정
         const allItems = new Set(cartItems.map((_, index) => index));
         setSelectedItems(allItems);
     }, [cartItems]);
 
     const handleChange = (e) => {
         setOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
-        console.log(orderInfo);
     };
 
     const handleToggleSelect = (index) => {
@@ -66,6 +67,7 @@ const OrderComponent = () => {
     };
 
     const calculateSelectedItemsPrice = () => {
+        // selectedItems에 있는 항목들만 가격을 합산
         let total = 0;
         selectedItems.forEach((index) => {
             total += cartItems[index].pprice * cartItems[index].pqty;
@@ -77,7 +79,6 @@ const OrderComponent = () => {
         const selectedItemsPrice = calculateSelectedItemsPrice();
         const shippingFee = 3000;
         let discountPrice = selectedItemsPrice + shippingFee - discount;
-
         setDiscountedPrice(Math.max(discountPrice, 0));
     };
 
@@ -85,18 +86,39 @@ const OrderComponent = () => {
         const couponName = e.target.value;
         setSelectedCoupon(couponName);
 
-        // 선택된 쿠폰 객체를 찾습니다.
         const selectedCoupon = orderInfo.coupons.find(
             (coupon) => coupon.couponName === couponName
         );
 
-        // 쿠폰이 존재하는 경우, 할인 금액을 적용합니다.
         if (selectedCoupon) {
             calculateDiscountedPrice(selectedCoupon.discount);
         } else {
-            calculateDiscountedPrice(); // 선택된 쿠폰이 없을 경우 할인 없이 계산
+            calculateDiscountedPrice();
         }
     };
+
+    const handleClickBuyNow = () => {
+        console.log(selectedCoupon)
+        // 선택된 아이템만 필터링하여 새로운 orderItems 배열 생성
+        const selectedOrderItems = orderInfo.orderItems.filter((_, index) =>
+            selectedItems.has(index)
+        );
+    
+        // 필터링된 orderItems만을 포함한 orderInfo 생성
+        const filteredOrderInfo = {
+            ...orderInfo,
+            orderItems: selectedOrderItems,
+            usedCoupon: selectedCoupon,
+            totalPrice: discountedPrice,
+        };
+    
+        console.log(filteredOrderInfo); // 필터링된 orderInfo 확인
+    
+        postOrderInfo(filteredOrderInfo).then((data)=>{
+            console.log(data)
+        })
+    };
+
 
     return (
         <div className="min-h-screen p-10 flex flex-col items-center mt-20 mb-20 bg-gray-100">
@@ -341,7 +363,7 @@ const OrderComponent = () => {
                             <p>Shipping Fee</p>
                             <p>₩3,000</p>
                         </div>
-                        <div className="flex justify-between mb-4">
+                        <div className="flex justify-between mb-4 text-blue-400">
                             <p>Discount Amount</p>
                             <p>₩{(calculateSelectedItemsPrice() + 3000 - discountedPrice).toLocaleString()}</p>
                         </div>
@@ -350,7 +372,9 @@ const OrderComponent = () => {
                             <p>Total Payment</p>
                             <p>₩{discountedPrice.toLocaleString()}</p>
                         </div>
-                        <button className="w-full max-w-6xl bg-gray-500 text-white py-3 mt-10 rounded-md hover:bg-gray-600 transition font-semibold">
+                        <button className="w-full max-w-6xl bg-gray-500 text-white py-3 mt-10 rounded-md hover:bg-gray-600 transition font-semibold"
+                            onClick={handleClickBuyNow}
+                        >
                             BUY NOW
                         </button>
                     </div>

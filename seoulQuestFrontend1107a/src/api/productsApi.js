@@ -6,6 +6,7 @@ import axios from "axios";
 const host = `${API_SERVER_HOST}/api/user/products`;
 
 export const postAdd = async (product) => {
+  console.log("보내는데이터 ", product)
   const header = { headers: { "Content-Type": "multipart/form-data" } };
   const res = await jwtAxios.post(`${host}/`, product, header);
   return res.data;
@@ -53,11 +54,12 @@ export const postOrderInfo = async (obj) => {
   const headers = { "Content-Type": "application/json" };
 
   try {
-    const res = await axios.post(
+    const res = await jwtAxios.post(
       `${host}/orders`,
       {
         orderItems: obj.orderItems,
-        coupons: obj.coupons,
+        // coupons : obj.coupons,
+        usedCoupon: obj.usedCoupon,
         firstname: obj.firstname,
         lastname: obj.lastname,
         email: obj.email,
@@ -67,6 +69,7 @@ export const postOrderInfo = async (obj) => {
         city: obj.city,
         street: obj.street,
         zipcode: obj.zipcode,
+        totalPrice: obj.totalPrice,
       },
       { headers }
     );

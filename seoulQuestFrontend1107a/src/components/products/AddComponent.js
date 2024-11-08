@@ -9,6 +9,7 @@ const initState = {
     pdesc: '',
     pprice: 0,
     files: []
+    //카테고리 넣기 
 }
 
 const AddComponent = () => {
@@ -23,24 +24,37 @@ const AddComponent = () => {
     const handleChangeProduct = (e) => {
         product[e.target.name] = e.target.value
         setProduct({...product})
+        console.log(product)
     }
 
-    const handleClickAdd = (e) => {
+    const handleClickAdd = () => {
+        console.log("product", product)
+        const files = uploadRef.current.files;
+        if (!files || files.length === 0) {
+            alert("파일을 선택해 주세요.");
+            return;
+        }
         
-        const files = uploadRef.current.files
-
         const formData = new FormData()
-
+        
         for(let i = 0; i < files.length; i++) {
             formData.append("files", files[i]);
         }
-
+        
         // other data
         formData.append("pname", product.pname)
         formData.append("pdesc", product.pdesc)
-        formData.append("price", product.pprice)
+        formData.append("pprice", product.pprice)
+        
+        console.log("product파일넣은후", files)
 
         console.log(formData)
+
+        // FormData 내용을 확인하는 코드
+        for (let pair of formData.entries()) {
+            console.log(`${pair[0]}: ${pair[1]}`);
+        }
+
 
         // ADD 버튼 클릭 시 모달창 띄움
         setFetching(true)
@@ -90,7 +104,7 @@ const AddComponent = () => {
             <div className='relative mb-4 flex w-full flex-wrap items-stretch'>
                 <div className='w-1/5 p-6 text-right font-bold'>Price</div>
                 <input className='w-4/5 p-6 rounded-r border border-solid border-neutral-300 shadow-md'
-                    name='price'
+                    name='pprice'
                     type={'number'}
                     value={product.pprice}
                     onChange={handleChangeProduct}></input>

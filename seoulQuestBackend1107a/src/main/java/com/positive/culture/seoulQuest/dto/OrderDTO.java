@@ -17,8 +17,11 @@ public class OrderDTO {
 
     @Builder.Default
     private List<CouponDTO> coupons  = new ArrayList<>();
+
+    private String usedCoupon;
+
     @Builder.Default
-    private List<String> orderItems  = new ArrayList<>(); ;
+    private List<CartItemListDTO> orderItems  = new ArrayList<>(); ;
 
     private String email;
     private String firstname;
@@ -29,5 +32,6 @@ public class OrderDTO {
     private String street;
     private String zipcode;
     private String phoneNumber;
+    private int totalPrice;
 
 }

@@ -24,7 +24,6 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@CrossOrigin("*")
 @RequestMapping("/api/mypage")
 public class MyPageController {
 

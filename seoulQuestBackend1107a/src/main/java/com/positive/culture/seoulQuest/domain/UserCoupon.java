@@ -27,4 +27,8 @@ public class UserCoupon {
     private Member couponOwner;
 
     private LocalDate useDate;
+
+    public void ChangeUseDate(LocalDate useDate){
+        this.useDate = useDate;
+    }
 }
