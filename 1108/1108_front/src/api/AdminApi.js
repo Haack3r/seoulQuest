@@ -35,6 +35,7 @@ export const fetchProducts = async () => {
         throw error
     }
 }
+
 export const fetchReservations = async () => {
     try {
         const res = await jwtAxios.get(`${host}/reservation`)
@@ -45,3 +46,59 @@ export const fetchReservations = async () => {
         throw error
     }
 }
+
+export const fetchCustomer = async () => {
+    try {
+        const res = await jwtAxios.get(`${host}/customer`)
+        console.log("고객목록 체크 응답", res)
+        return res.data
+    } catch (error) {
+        console.log("고객목록 체크 오류", error.response || error)
+        throw error
+    }
+}
+
+export const fetchDelivery = async () => {
+    try {
+        const res = await jwtAxios.get(`${host}/delivery`)
+        console.log("배송 체크 응답", res)
+        return res.data
+    } catch (error) {
+        console.log("배송 체크 오류", error.response || error)
+        throw error
+    }
+}
+
+export const fetchCost = async () => {
+    try {
+        const res = await jwtAxios.get(`${host}/cost`)
+        console.log("배송비용 체크 응답", res)
+        return res.data
+    } catch (error) {
+        console.log("배송비용 체크 오류", error.response || error)
+        throw error
+    }
+}
+
+export const fetchExchange = async () => {
+    try {
+        const res = await jwtAxios.get(`${host}/exchange`)
+        console.log("교환 체크 응답", res)
+        return res.data
+    } catch (error) {
+        console.log("교환 체크 오류", error.response || error)
+        throw error
+    }
+}
+
+export const fetchTour = async () => {
+    try {
+        const res = await jwtAxios.get(`${host}/tour`)
+        console.log("투어 체크 응답", res)
+        return res.data
+    } catch (error) {
+        console.log("투어 체크 오류", error.response || error)
+        throw error
+    }
+}
+
