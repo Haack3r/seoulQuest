@@ -5,10 +5,7 @@ import com.positive.culture.seoulQuest.domain.UserCoupon;
 import com.positive.culture.seoulQuest.dto.*;
 import com.positive.culture.seoulQuest.repository.CouponRepository;
 import com.positive.culture.seoulQuest.repository.UserCouponRepository;
-import com.positive.culture.seoulQuest.service.CouponService;
-import com.positive.culture.seoulQuest.service.MemberService;
-import com.positive.culture.seoulQuest.service.OrderService;
-import com.positive.culture.seoulQuest.service.ProductService;
+import com.positive.culture.seoulQuest.service.*;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -30,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,6 +44,7 @@ public class ProductController {
     private final CouponService couponService;
     private final OrderService orderService;
     private IamportClient iamportClient;
+    private final PaymentService paymentService;
 
     @Value("${iamport.api_key}")
     private String apiKey;
@@ -164,25 +163,33 @@ public class ProductController {
         return  couponService.getUserCouponAndUserInfo(email);
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_USER')")
-//    @PostMapping("/orders")
-//    public ResponseEntity<String> order(@RequestBody OrderDTO orderDTO){
-//        System.out.println("order내역 : " + orderDTO);
-//        //orderDTO를 받아서 order 엔티티에 저장.
-//        orderService.saveOrder(orderDTO);
-//        return new ResponseEntity<>("order complete", HttpStatus.OK);
-//    }
+    //order 버튼 눌렀을때 order 엔티티에 저장.
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @PostMapping("/orders")
+    public ResponseEntity<Map<String,Object>> order(@RequestBody OrderDTO orderDTO){
+        System.out.println("order내역 : " + orderDTO);
+        //orderDTO를 받아서 order 엔티티에 저장.
+        Long orderId = orderService.saveOrder(orderDTO);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Order complete");
+        response.put("orderId", orderId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 
+    //결제 성공시 결제 엔티티에 저장
     @PostMapping("/payment/{imp_uid}")
-    public IamportResponse<Payment> validateIamport(@PathVariable String imp_uid, @RequestBody OrderDTO request) throws IamportResponseException, IOException {
+    public IamportResponse<Payment> validateIamport(@PathVariable String imp_uid, @RequestBody OrderDTO orderDTO) throws IamportResponseException, IOException {
 
-        log.info("결제 성공");
-        IamportResponse<Payment> payment = iamportClient.paymentByImpUid(imp_uid);;
+        log.info("결제 성공 paymentDTO:" + orderDTO);
+        //결제 성공시에 order엔티티에 status를 complete으로 변경하는 로직 필요.
+        IamportResponse<Payment> payment = iamportClient.paymentByImpUid(imp_uid);
+        log.info(payment.getResponse());
 
         log.info("결제 요청 응답. 결제 내역 - 주문 번호: {}", payment.getResponse().getMerchantUid());
+        Payment paymentResponse = payment.getResponse();
 
-//        paymentService.processPaymentDone(request);
+        paymentService.paymentDone(paymentResponse, orderDTO);
 
         return payment;
     }

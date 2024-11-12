@@ -7,5 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface OrderService {
     //주문 상품 저장
-    public void saveOrder(OrderDTO orderDTO);
+    public Long saveOrder(OrderDTO orderDTO);
 }

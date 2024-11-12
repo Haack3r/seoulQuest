@@ -5,9 +5,14 @@ import FetchingModal from "../common/FetchingModal";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
 import useCustomLogin from "../../hooks/useCustomLogin";
+import Button from "../ui/Button";
 import {
-  CardTitle,
+  Card,
+  CardContent,
   CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from "../ui/Card";
 
 const host = API_SERVER_HOST;
@@ -30,7 +35,7 @@ const ListComponent = () => {
   const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
 
-  // Fetching Modal
+  //for FetchingModal
   const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
@@ -38,68 +43,62 @@ const ListComponent = () => {
 
     getList({ page, size })
       .then((data) => {
+        console.log("Fetched data:", data); // Log the data to inspect its structure
         if (data && Array.isArray(data.dtoList)) {
           setServerData(data);
         } else {
           console.error("Unexpected data structure:", data);
-          setServerData(initState); 
+          setServerData(initState); // Fallback to initial state if data is incorrect
         }
         setFetching(false);
       })
       .catch((err) => {
         console.error("Error fetching data:", err);
         exceptionHandle(err);
-        setFetching(false);
+        setFetching(false); // Reset fetching state on error
       });
   }, [page, size, refresh]);
 
-  // Randomly generate rotation and margin for each product card to create a freeform layout
-  const getRandomTransform = () => `rotate(${Math.random() * 4 - 2}deg) translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)`;
 
   return (
-    <div>
-      {fetching ? <FetchingModal /> : null}
-
-      {/* 상단 설명 섹션 */}
-      <section className="text-center py-12">
-        <h2 className="text-4xl font-semibold text-gray-800 mb-4">Our Products</h2>
-        <p className="text-gray-500 max-w-2xl mx-auto">
-          Discover our unique and exceptional quality products designed for the modern generation.
-        </p>
-        <div className="border-t-2 border-gray-300 mx-auto my-4 w-16"></div>
-      </section>
-
-      {/* 자유분방한 제품 카드 레이아웃 */}
-      <section className="px-4 py-8 max-w-8xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-1">
+    <div className="py-12">
+          {fetching ? <FetchingModal /> : <></>}
+      <section className="px-4 max-w-6xl mx-auto">
+        <h2 className="mb-12 text-4xl font-bold text-center text-gray-800 tracking-wide uppercase">
+          Artisan Treasures
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20">
           {serverData.dtoList && serverData.dtoList.length > 0 ? (
             serverData.dtoList.map((product) => (
-              <div
+              <Card
                 key={product.pno}
                 onClick={() => moveToRead(product.pno)}
-                className="cursor-pointer text-center group transform transition-transform duration-300"
-                style={{
-                  transform: getRandomTransform(),
-                  margin: `${Math.random() * 8}px`,
-                }}
+                className="relative w-[320px] h-[430px] rounded-lg overflow-hidden bg-white border border-white border-opacity-40 p-4 bg-opacity-20 backdrop-blur-lg transition-transform duration-300 transform group-hover:scale-105 group-hover:shadow-lg cursor-pointer"
               >
-                {/* 제품 이미지 */}
-                <div className="relative w-full h-48 flex items-center justify-center overflow-hidden">
+                <div className="relative w-full h-48 mb-3 rounded-lg overflow-hidden">
                   <img
                     src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`}
                     alt={product.pname}
-                    className="w-3/4 h-full object-contain transition-transform duration-300 transform group-hover:scale-105"
+                    className="w-full h-full object-cover opacity-80 transition-opacity duration-300 group-hover:opacity-100"
                   />
+                  <div className="absolute inset-0 bg-black opacity-40 group-hover:opacity-50 transition-opacity"></div>
                 </div>
 
-                {/* 제품명과 가격 */}
-                <CardTitle className="text-md font-medium text-gray-800 mt-2">
-                  {product.pname}
-                </CardTitle>
-                <CardDescription className="text-sm text-gray-600">
-                  ${product.pprice.toLocaleString()}
-                </CardDescription>
-              </div>
+                <div className="relative z-10 flex flex-col items-center justify-center text-center text-white uppercase tracking-wider">
+                  <CardTitle className="text-lg font-semibold mb-1">
+                    {product.pname}
+                  </CardTitle>
+                  <CardDescription className="text-sm font-medium mb-2 opacity-90">
+                    ${product.pprice.toLocaleString()}
+                  </CardDescription>
+                  <Button
+                    variant="outline"
+                    className="px-6 py-2 mt-4 bg-white bg-opacity-50 text-black font-semibold rounded-lg text-sm transition-all duration-300 hover:bg-opacity-80 hover:shadow-md"
+                  >
+                    Add to Collection
+                  </Button>
+                </div>
+              </Card>
             ))
           ) : (
             <p className="text-center text-gray-500">No products available.</p>

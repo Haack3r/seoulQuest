@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useCustomCart from "../../hooks/useCustomCart";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import { Badge } from "antd"; 
-import { getOrderInfo, postOrderInfo,  } from "../../api/productsApi";
+import { getOrderInfo, postOrderInfo, postPayInfo,  } from "../../api/productsApi";
 
 const host = API_SERVER_HOST;
 
@@ -22,6 +22,7 @@ const initState = {
     totalPrice: '',
     paymentMethod: '',
     impUid: '',
+    orderId: 0,
 };
 
 const OrderComponent = () => {
@@ -74,7 +75,8 @@ const OrderComponent = () => {
     useEffect(() => {
         // 선택된 아이템의 가격 계산하여 업데이트
         const selectedItemsPrice = calculateSelectedItemsPrice();
-        const shippingFee = 3000;
+        // const shippingFee = 3000;
+        const shippingFee = 0;
         setDiscountedPrice(selectedItemsPrice + shippingFee);
     }, [selectedItems]);
 
@@ -116,11 +118,12 @@ const OrderComponent = () => {
     const calculateDiscountedPrice = (discount) => {
         console.log(discount)
         const selectedItemsPrice = calculateSelectedItemsPrice();
-        const shippingFee = 3000;
+        // const shippingFee = 3000;
+        const shippingFee = 0;
         let discountPrice = selectedItemsPrice + shippingFee - discount;
         console.log(discountPrice)
-        setDiscountedPrice(Math.max(discountPrice, 0));
-        setOrderInfo({...orderInfo, total: discountPrice})
+        setDiscountedPrice(Math.max(discountPrice, 100));
+        setOrderInfo({...orderInfo, totalPrice: discountPrice})
     };
 
     const handleCouponSelect = (e) => {
@@ -168,60 +171,64 @@ const OrderComponent = () => {
             totalPrice: discountedPrice,
         };
 
-     // Product Price가 0일 때 경고 메시지 표시
+        // Product Price가 0일 때 경고 메시지 표시
         if (calculateSelectedItemsPrice() === 0) {
             alert("There are no items to order. Please select at least one item to order.");
             return; 
         }
 
-        // if(filteredOrderInfo.paymentMethod){
-        //     console.log(filteredOrderInfo); // 필터링된 orderInfo 확인
+        if(filteredOrderInfo.paymentMethod){
+            console.log(filteredOrderInfo); // 필터링된 orderInfo 확인
         
-        //     postOrderInfo(filteredOrderInfo).then((data)=>{
-        //         console.log(data)
-        //     }) 
-        // }else{
-        //    alert("Please select your payment method.")
-        // }
+            //주문시 주문 정보 서버로 전달
+            postOrderInfo(filteredOrderInfo).then((data)=>{
+                console.log(data)
+                const orderInfoWithOrderId = {
+                    ...filteredOrderInfo,
+                    orderId: data.orderId,
+                };
 
-        if (!filteredOrderInfo.paymentMethod) {
-            alert("Please select your payment method.");
-            return;
+                console.log(orderInfoWithOrderId)
+                // 아임포트 결제 요청
+                IMP.request_pay({
+                    pg: "html5_inicis", 
+                    pay_method: orderInfoWithOrderId.paymentMethod, 
+                    merchant_uid: `order_${new Date().getTime()}`, // 주문 번호
+                    name: orderInfoWithOrderId.orderItems.map(item => item.pname).join(', '),
+                    amount: orderInfoWithOrderId.totalPrice, // 총 결제 금액
+                    buyer_email: orderInfoWithOrderId.email,
+                    buyer_name: `${orderInfoWithOrderId.firstname} ${orderInfoWithOrderId.lastname}`,
+                    buyer_tel: orderInfoWithOrderId.phoneNumber,
+                    buyer_addr: `${orderInfoWithOrderId.city}, ${orderInfoWithOrderId.street}`,
+                    buyer_postcode: orderInfoWithOrderId.zipcode,
+                }, async (rsp) => {
+                    if (rsp.success) {
+                        // 결제가 성공하면 imp_uid를 포함하여 서버로 결제 정보 전송
+                        console.log(rsp)
+                        console.log("orderDTO:", orderInfoWithOrderId)
+                        const payInfo = {orderDTO: orderInfoWithOrderId};
+                        const impUid = rsp.imp_uid;
+                        
+                        try {
+                            const response = await postPayInfo(payInfo, impUid);
+                            console.log(response);
+                            alert("Payment has been successfully completed!");
+                        } catch (error) {
+                            console.error(error);
+                            alert("Failed to complete the payment.");
+                        }
+                    } else {
+                        // 결제가 실패하면 에러 메시지 출력
+                        alert(`Payment failed: ${rsp.error_msg}`);
+                    }
+                });
+            }) 
+
+
+        }else{
+           alert("Please select your payment method.")
         }
     
-        // 아임포트 결제 요청
-        IMP.request_pay({
-            pg: "html5_inicis", 
-            pay_method: filteredOrderInfo.paymentMethod, 
-            merchant_uid: `order_${new Date().getTime()}`, // 주문 번호
-            name: filteredOrderInfo.orderItems.map(item => item.pname).join(', '),
-            amount: filteredOrderInfo.totalPrice, // 총 결제 금액
-            buyer_email: filteredOrderInfo.email,
-            buyer_name: `${filteredOrderInfo.firstname} ${filteredOrderInfo.lastname}`,
-            buyer_tel: filteredOrderInfo.phoneNumber,
-            buyer_addr: `${filteredOrderInfo.city}, ${filteredOrderInfo.street}`,
-            buyer_postcode: filteredOrderInfo.zipcode,
-        }, async (rsp) => {
-            if (rsp.success) {
-                // 결제가 성공하면 imp_uid를 포함하여 서버로 주문 정보 전송
-                const orderInfoWithImpUid = {
-                    ...filteredOrderInfo,
-                    impUid: rsp.imp_uid,
-                };
-    
-                try {
-                    const response = await postOrderInfo(orderInfoWithImpUid);
-                    console.log(response);
-                    alert("Order has been successfully completed!");
-                } catch (error) {
-                    console.error(error);
-                    alert("Failed to complete the order.");
-                }
-            } else {
-                // 결제가 실패하면 에러 메시지 출력
-                alert(`Payment failed: ${rsp.error_msg}`);
-            }
-        });
     };
 
 
@@ -265,7 +272,8 @@ const OrderComponent = () => {
                         <hr className="border-t border-gray-400 my-6" />
                         <div className="flex justify-between items-center text-lg font-semibold">
                             <p>Shipping Fee:</p>
-                            <p>₩3,000</p>
+                            {/* <p>₩3,000</p> */}
+                            <p>₩0</p>
                         </div>
                     </div>
 
@@ -425,14 +433,17 @@ const OrderComponent = () => {
                                                 </option>
                                             ))
                                         ) : (
-                                            <option value="emptyCoupon">No coupons available.</option>
+                                            <option value="emptyCoupon" disabled>No coupons available.</option>
                                         )}
                                     </select>
+                                    <p className="text-xs text-gray-500 mt-2">
+                                        * Please note that the minimum payment amount must be at least <span className="font-semibold">100 KRW</span> after applying the coupon.
+                                    </p>
                                     <hr className="border-t border-gray-400 my-5" />
 
                                     
                                 </div>
-                                    <div className="space-y-4 text-sm bg-gray-100 text-gray-500 my-20 rounded-lg p-5">
+                                    <div className="space-y-4 text-sm bg-gray-100 text-gray-500 my-8 rounded-lg p-5">
                                         <h4 className="font-semibold text-gray-700">Delivery Terms</h4>
                                         <p>
                                             Your order will be shipped within <span className="font-semibold">5 days</span> 
@@ -466,7 +477,8 @@ const OrderComponent = () => {
                         </div>
                         <div className="flex justify-between mb-4">
                             <p>Shipping Fee</p>
-                            <p>₩3,000</p>
+                            {/* <p>₩3,000</p> */}
+                            <p>₩0</p>
                         </div>
                         <div className="flex justify-between mb-4 text-blue-400">
                             <p>Discount Amount</p>
@@ -475,13 +487,21 @@ const OrderComponent = () => {
                         <hr className="border-t border-gray-400 my-4" />
                         <div className="flex justify-between text-lg font-semibold text-gray-900">
                             <p>Total Payment</p>
-                            <p>₩{Math.max((calculateSelectedItemsPrice() + 3000 - discountAmount),0).toLocaleString()}</p>
+                            {/* <p>₩{Math.max((calculateSelectedItemsPrice() + 3000 - discountAmount),0).toLocaleString()}</p> */}
+                            <p>₩{Math.max((calculateSelectedItemsPrice() + 0 - discountAmount),100).toLocaleString()}</p>
                         </div>
 
                         {/* 상품 추가 안내 메시지 */}
                         {calculateSelectedItemsPrice() === 0 && (
                             <p className="text-sm text-red-500 mt-2">
                                 Please add at least one product to your order.
+                            </p>
+                        )}
+
+                        {/* 100원 이상만 결제 가능하다는 안내 메시지 */}
+                        {(calculateSelectedItemsPrice() + 0 - discountAmount) < 100 && (
+                            <p className="text-sm text-gray-500 mt-2">
+                                The minimum payment amount is 100 KRW.
                             </p>
                         )}
                         

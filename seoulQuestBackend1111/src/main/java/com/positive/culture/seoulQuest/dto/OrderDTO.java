@@ -15,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderDTO {
 
+    private Long orderId;
+
     @Builder.Default
     private List<CouponDTO> coupons  = new ArrayList<>();
 
@@ -33,5 +35,8 @@ public class OrderDTO {
     private String zipcode;
     private String phoneNumber;
     private int totalPrice;
+
+
+    //삭제고려
     private String paymentMethod;
 }

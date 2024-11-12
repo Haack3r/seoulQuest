@@ -22,17 +22,18 @@ public class Order {
     @JoinColumn
     private Member orderOwner;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    //결제 실패시에도 쿠폰을 재사용할수 있도록 관계를 ManyToOne으로 지정하여 중복이 가능하게함
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_coupon_id")
     private UserCoupon usedCoupon;
+
     private int totalPrice;
 
     @Builder.Default
-    @Column(name = "payment_status")
-    private boolean paymentStatus = false;
+    private String paymentStatus = "pending";
 
-    private String paymentMethod;
-
+    //삭제 고려
+//    private String paymentMethod;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -48,5 +49,9 @@ public class Order {
     private String state;
     private String country;
     private String zipcode;
+
+    public void changePaymentStatus(String paymentStatus){
+        this.paymentStatus = paymentStatus;
+    }
 
 }
