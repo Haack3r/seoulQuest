@@ -6,6 +6,7 @@ import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import Button from "../ui/Button";
+import useCustomFav from '../../hooks/useCustomFav';
 import {
   Card,
   CardContent,
@@ -14,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/Card";
-import { SearchIcon } from "lucide-react";
+import { HeartIcon, SearchIcon } from "lucide-react";
 import { Input } from "antd";
 
 const host = API_SERVER_HOST;
@@ -33,51 +34,63 @@ const initState = {
 };
 
 const ListComponent = () => {
+  const [serverData, setServerData] = useState(initState);
   const { exceptionHandle } = useCustomLogin();
   const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
-  const [serverData, setServerData] = useState(initState);
-
-  // New states for search
+  const { loginState } = useCustomLogin();
+  const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
   const [keyword, setKeyword] = useState("");
-  const [type, setType] = useState("t"); // Default type; adjust based on your needs
-
-  //for FetchingModal
+  const [type, setType] = useState("t");
   const [fetching, setFetching] = useState(false);
 
-  // Update data when page, size, refresh, keyword, or type changes
+    
   useEffect(() => {
-    setFetching(true);
-    getList({ page, size, keyword, type })
-      .then((data) => {
-        console.log("Fetched data:", data); // Log the data to inspect its structure
-        if (data && Array.isArray(data.dtoList)) {
-          setServerData(data);
-        } else {
-          console.error("Unexpected data structure:", data);
-          setServerData(initState); // Fallback to initial state if data is incorrect
-        }
-        setFetching(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching data:", err);
-        exceptionHandle(err);
-        setFetching(false); // Reset fetching state on error
-      });
-  }, [page, size, refresh, keyword, type]); // Ensure 'keyword' is a dependency here
+    refreshFav();
+  }, []);
+    
+  // Toggle favorite status
+  const handleToggleFavorite = async (product) => {
+    if (!loginState.email) {
+        window.alert("Please log in to manage favorites.");
+        return;
+    }
+    
+    const isFavorite = favItems.some(item => item.pno === product.pno);
+    
+    if (isFavorite) {
+        const favoriteItem = favItems.find(item => item.pno === product.pno);
+        await deleteFav(favoriteItem.fino); // Use `fino` for deletion
+    } else {
+        await changeFav({ email: loginState.email, pno: product.pno });
+    }
+};
+  
+
+// Fetch product list on mount and `favItems` change
+useEffect(() => {
+  setFetching(true);
+  getList({ page, size, keyword, type })
+    .then((data) => {
+      if (data && Array.isArray(data.dtoList)) {
+        setServerData(data);
+      } else {
+        setServerData(initState);
+      }
+      setFetching(false);
+    })
+    .catch((err) => {
+      exceptionHandle(err);
+      setFetching(false);
+    });
+}, [page, size, refresh, keyword, type, favItems]); // Use favItems here for accurate UI sync
+
 
   const handleSearch = () => {
-    // Reset page to 1 when a new search is conducted
-    moveToList(1); // Update to reset the page state to 1 in your `useCustomMove` logic
-    
-    // Trigger a refresh with new keyword
+    moveToList(1);
     setFetching(true);
     getList({ page: 1, size, keyword, type })
       .then((data) => {
-        if (data && Array.isArray(data.dtoList)) {
-          setServerData(data);
-        } else {
-          setServerData(initState);
-        }
+        setServerData(data || initState);
         setFetching(false);
       })
       .catch((err) => {
@@ -111,39 +124,55 @@ const ListComponent = () => {
             </Button>
           </div>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20">
           {serverData.dtoList && serverData.dtoList.length > 0 ? (
-            serverData.dtoList.map((product) => (
-              <Card
-                key={product.pno}
-                onClick={() => moveToRead(product.pno)}
-                className="relative w-[320px] h-[430px] rounded-lg overflow-hidden bg-white border border-white border-opacity-40 p-4 bg-opacity-20 backdrop-blur-lg transition-transform duration-300 transform group-hover:scale-105 group-hover:shadow-lg cursor-pointer"
-              >
-                <div className="relative w-full h-48 mb-3 rounded-lg overflow-hidden">
-                  <img
-                    src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`}
-                    alt={product.pname}
-                    className="w-full h-full object-cover opacity-80 transition-opacity duration-300 group-hover:opacity-100"
-                  />
-                  <div className="absolute inset-0 bg-black opacity-40 group-hover:opacity-50 transition-opacity"></div>
-                </div>
+            serverData.dtoList.map((product) => {
+              const isFavorite = favItems.some(item => item.pno === product.pno);
 
-                <div className="relative z-10 flex flex-col items-center justify-center text-center text-white uppercase tracking-wider">
-                  <CardTitle className="text-lg font-semibold mb-1">
-                    {product.pname}
-                  </CardTitle>
-                  <CardDescription className="text-sm font-medium mb-2 opacity-90">
-                    ${product.pprice.toLocaleString()}
-                  </CardDescription>
-                  <Button
-                    variant="outline"
-                    className="px-6 py-2 mt-4 bg-white bg-opacity-50 text-black font-semibold rounded-lg text-sm transition-all duration-300 hover:bg-opacity-80 hover:shadow-md"
-                  >
-                    Add to Collection
-                  </Button>
-                </div>
-              </Card>
-            ))
+              return (
+                <Card
+                  key={product.pno}
+                  onClick={() => moveToRead(product.pno)}
+                  className="relative w-[320px] h-[430px] rounded-lg overflow-hidden bg-white border border-white border-opacity-40 p-4 bg-opacity-20 backdrop-blur-lg transition-transform duration-300 transform group-hover:scale-105 group-hover:shadow-lg cursor-pointer"
+                >
+                  <div className="relative w-full h-48 mb-3 rounded-lg overflow-hidden">
+                    <img
+                      src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`}
+                      alt={product.pname}
+                      className="w-full h-full object-cover opacity-80 transition-opacity duration-300 group-hover:opacity-100"
+                    />
+                    <div className="absolute inset-0 bg-black opacity-40 group-hover:opacity-50 transition-opacity"></div>
+                  </div>
+
+                  <div className="relative z-10 flex flex-col items-center justify-center text-center text-white uppercase tracking-wider">
+                    <CardTitle className="text-lg font-semibold mb-1">
+                      {product.pname}
+                    </CardTitle>
+                    <CardDescription className="text-sm font-medium mb-2 opacity-90">
+                      ₩{product.pprice.toLocaleString()}
+                    </CardDescription>
+
+                    <button
+                      className={`hover:text-gray-500 ${isFavorite ? 'text-gray-500 fill-current' : 'text-white'}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleFavorite(product);
+                      }}
+                    >
+                      <HeartIcon className={`mr-2 h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
+                    </button>
+
+                    <Button
+                      variant="outline"
+                      className="px-6 py-2 mt-4 bg-white bg-opacity-50 text-black font-semibold rounded-lg text-sm transition-all duration-300 hover:bg-opacity-80 hover:shadow-md"
+                    >
+                      Add to Collection
+                    </Button>
+                  </div>
+                </Card>
+              );
+            })
           ) : (
             <p className="text-center text-gray-500">No products available.</p>
           )}

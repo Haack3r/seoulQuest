@@ -37,14 +37,16 @@ export const postChangeFav = async (favItem) => {
 
 // Delete a single favorite item by ID
 export const deleteFavItem = async (fino) => {
-  try {
-    const res = await jwtAxios.delete(`${host}/item/${fino}`);
-    return res.data;
-  } catch (error) {
-    console.error("Error deleting favorite item:", error);
-    return null; // Return null to avoid infinite loading
-  }
-};
+    try {
+      const res = await jwtAxios.delete(`${host}/item/${fino}`);
+      console.log("Delete API response:", res.data); // Confirm backend response
+      return res.data;
+    } catch (error) {
+      console.error("Error deleting favorite item:", error);
+      return null;
+    }
+  };
+  
 
 // favoriteApi.js
 

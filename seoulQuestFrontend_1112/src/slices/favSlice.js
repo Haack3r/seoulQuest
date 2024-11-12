@@ -47,21 +47,18 @@ const favSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getFavItemsAsync.fulfilled, (state, action) => {
-        state.items = action.payload; // Update items with fetched data
-        state.error = null; // Clear any previous errors
+    .addCase(getFavItemsAsync.fulfilled, (state, action) => {
+        state.items = action.payload || [];
       })
       .addCase(getFavItemsAsync.rejected, (state, action) => {
         state.error = action.payload || "An error occurred"; // Store error message
       })
       .addCase(postChangeFavAsync.fulfilled, (state, action) => {
-        state.items.push(action.payload); // Optionally update the state if needed
+        state.items.push(action.payload);
       })
       .addCase(deleteFavItemAsync.fulfilled, (state, action) => {
-        // Remove the item from the state based on the ID (fino) after successful deletion
-        state.items = state.items.filter(
-          (item) => item.fino !== action.meta.arg
-        );
+        const deletedFino = action.meta.arg;
+        state.items = state.items.filter(item => item.fino !== deletedFino);
       })
       .addCase(deleteBulkFavItemAsync.fulfilled, (state, action) => {
         const finoList = action.meta.arg; // Get list of deleted items

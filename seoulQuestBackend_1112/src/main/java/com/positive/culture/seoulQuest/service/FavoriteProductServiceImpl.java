@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,20 +28,42 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
     @Autowired
     private ProductRepository productRepository;
 
+//    @Override
+//    public FavoriteProductDTO addFavoriteProduct(String email, Long pno) {
+//        Member member = memberRepository.findByEmail(email)
+//                .orElseThrow(() -> new IllegalArgumentException("Member not found with email: " + email));
+//
+//        Product product = productRepository.findById(pno)
+//                .orElseThrow(() -> new IllegalArgumentException("Product not found with pno: " + pno));
+//
+//        FavoriteProduct favoriteProduct = new FavoriteProduct(member, product);
+//        favoriteProduct.setCreatedAt(LocalDateTime.now());
+//        favoriteProductRepository.save(favoriteProduct);
+//
+//        return convertToDTO(favoriteProduct);
+//    }
+
     @Override
     public FavoriteProductDTO addFavoriteProduct(String email, Long pno) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found with email: " + email));
-
         Product product = productRepository.findById(pno)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found with pno: " + pno));
 
+        // Check if the product is already in the user's favorites
+        Optional<FavoriteProduct> existingFavorite = favoriteProductRepository.findByMemberAndProduct(member, product);
+        if (existingFavorite.isPresent()) {
+            throw new IllegalArgumentException("Product already liked by this user");
+        }
+
+        // Add the product to favorites if it's not already present
         FavoriteProduct favoriteProduct = new FavoriteProduct(member, product);
         favoriteProduct.setCreatedAt(LocalDateTime.now());
         favoriteProductRepository.save(favoriteProduct);
 
         return convertToDTO(favoriteProduct);
     }
+
 
     @Override
     public List<FavoriteProductDTO> getFavoritesByEmail(String email) {
