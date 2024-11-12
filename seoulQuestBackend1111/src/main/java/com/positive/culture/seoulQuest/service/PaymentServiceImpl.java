@@ -1,23 +1,17 @@
 package com.positive.culture.seoulQuest.service;
 
-import com.positive.culture.seoulQuest.domain.Member;
-import com.positive.culture.seoulQuest.domain.Order;
+import com.positive.culture.seoulQuest.domain.*;
 
-import com.positive.culture.seoulQuest.domain.PaymentRecord;
-import com.positive.culture.seoulQuest.domain.UserCoupon;
 import com.positive.culture.seoulQuest.dto.OrderDTO;
-import com.positive.culture.seoulQuest.dto.PaymentDTO;
-import com.positive.culture.seoulQuest.repository.MemberRepository;
-import com.positive.culture.seoulQuest.repository.OrderRepository;
-import com.positive.culture.seoulQuest.repository.PaymentRepository;
+import com.positive.culture.seoulQuest.repository.*;
 
 
-import com.positive.culture.seoulQuest.repository.UserCouponRepository;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,16 +21,19 @@ public class PaymentServiceImpl implements PaymentService{
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
     private final UserCouponRepository userCouponRepository;
+    private final PaymentItemRepository paymentItemRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
 
     //결제 정보를 저장하고, order엔티티의 status를 complete으로 변경함.
     @Override
-    public void paymentDone(Payment paymentResponse, OrderDTO paymentdto) {
+    public void paymentDone(Payment paymentResponse, OrderDTO orderdto) {
 
         try{
             String paymentEmail = paymentResponse.getBuyerEmail();
             Member paymentMember = memberRepository.findByEmail(paymentEmail).orElseThrow();
 
-            Long orderId = paymentdto.getOrderId();
+            Long orderId = orderdto.getOrderId();
             System.out.println("orderId"+orderId);
             Order order = orderRepository.findById(orderId).orElseThrow();
 
@@ -57,7 +54,7 @@ public class PaymentServiceImpl implements PaymentService{
 
             //2. orderId로 order를 찾아 해당 Order의 상태와 쿠폰 사용날짜 변경
             //   User가 사용한 쿠폰의 날짜를 오늘날짜로 변경.
-            String usedCouponName = paymentdto.getUsedCoupon();
+            String usedCouponName = orderdto.getUsedCoupon();
             UserCoupon usedCoupon =
                     userCouponRepository.findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(paymentEmail,usedCouponName);
 
@@ -67,16 +64,35 @@ public class PaymentServiceImpl implements PaymentService{
                 userCouponRepository.save(usedCoupon);
             }
 
+            //3.paymentItem 저장
+            orderdto.getOrderItems().forEach(i->{
+                PaymentItem paymentItem = PaymentItem.builder()
+                        .paymentRecord(payment)
+                        .pname(i.getPname())
+                        .pqty(i.getPqty())
+                        .pprice(i.getPprice())
+                        .build();
+
+                paymentItemRepository.save(paymentItem);
+            });
+
+            //4. 해당 유저의 카트를 조회하여, cart에 들어있는 cartitem들 중 결제 완료된 item들은 삭제
+            Cart cart = cartRepository.getCartOfMember(paymentEmail).orElseThrow();
+
+            //결제 완료시 , 상품번호에 해당하는 카트아이템들 삭제
+            List<Long> pnoList = orderdto.getOrderItems().stream().map(i->i.getPno()).toList();
+            cartItemRepository.deleteByCartCnoAndProductPnoIn(cart.getCno(), pnoList);
+
         } catch (Exception e) {
             // 결제 실패 로직
-//            handlePaymentFailure(paymentdto);
+            handlePaymentFailure(orderdto);
             throw new RuntimeException("Payment failed", e);
         }
     }
 
     // 결제 실패 시 처리 로직
-    public void handlePaymentFailure(PaymentDTO paymentdto) {
-        Long orderId = paymentdto.getOrderDTO().getOrderId();
+    public void handlePaymentFailure(OrderDTO orderdto) {
+        Long orderId = orderdto.getOrderId();
         Order order = orderRepository.findById(orderId).orElseThrow();
 
         // 결제 상태를 "failed"로 설정

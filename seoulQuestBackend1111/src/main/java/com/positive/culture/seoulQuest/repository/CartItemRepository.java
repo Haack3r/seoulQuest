@@ -22,4 +22,8 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
    //-----카트아이템번호로 카트아이템을 찾아줌
    public Optional<CartItem> findCartItemByCino(Long cino);
 
+   //카트 번호와 상품번호에 해당하는 카트 아이템들 삭제
+   public void deleteByCartCnoAndProductPnoIn(Long cno, List<Long> pnoList);
+
+
 }

@@ -36,7 +36,7 @@ public class Order {
 //    private String paymentMethod;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime orderDate;
 
     // 실제 배송 정보

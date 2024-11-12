@@ -92,7 +92,7 @@ public class TourRepositoryTests {
 
     @Test
     public void testInsertMultipleTourDates() {
-        // 투어 ID 범위 반복
+
         for (int tourId = 1; tourId < 21; tourId++) {
             // 각 투어당 여러 날짜 생성
             for (int dayOffset = 0; dayOffset < 10; dayOffset++) {

@@ -177,7 +177,7 @@ public class ProductController {
     }
 
 
-    //결제 성공시 결제 엔티티에 저장
+    //결제 성공시 paymentRecord엔티티에 저장
     @PostMapping("/payment/{imp_uid}")
     public IamportResponse<Payment> validateIamport(@PathVariable String imp_uid, @RequestBody OrderDTO orderDTO) throws IamportResponseException, IOException {
 

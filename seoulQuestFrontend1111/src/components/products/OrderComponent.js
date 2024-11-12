@@ -25,7 +25,9 @@ const initState = {
     orderId: 0,
 };
 
+//shippingfee는 임시로 0원으로 해둠.
 const OrderComponent = () => {
+    const shippingFee = 0;
     const { cartItems} = useCustomCart();
     const [orderInfo, setOrderInfo] = useState({ ...initState });
     const [existOrderInfo, setExistOrderInfo] = useState({ ...initState });
@@ -50,15 +52,8 @@ const OrderComponent = () => {
         const appliedCoupon = orderInfo.coupons.find(
             (coupon) => coupon.couponName === selectedCoupon
         );
-
         console.log(appliedCoupon)
-    
-        if (appliedCoupon) {
-            console.log("여기서 계산")
-            calculateDiscountedPrice(appliedCoupon.discount);
-        } else {
-            calculateDiscountedPrice();
-        }
+        calculateDiscountedPrice(appliedCoupon ? appliedCoupon.discount : 0);
     }, [selectedItems, selectedCoupon]); // selectedItems와 selectedCoupon이 변경될 때마다 재계산
     
 
@@ -76,7 +71,7 @@ const OrderComponent = () => {
         // 선택된 아이템의 가격 계산하여 업데이트
         const selectedItemsPrice = calculateSelectedItemsPrice();
         // const shippingFee = 3000;
-        const shippingFee = 0;
+        // const shippingFee = 0;
         setDiscountedPrice(selectedItemsPrice + shippingFee);
     }, [selectedItems]);
 
@@ -85,7 +80,6 @@ const OrderComponent = () => {
         const allItems = new Set(cartItems.map((_, index) => index));
         setSelectedItems(allItems);
     }, [cartItems]);
-
     
 
     const handleChange = (e) => {
@@ -119,7 +113,7 @@ const OrderComponent = () => {
         console.log(discount)
         const selectedItemsPrice = calculateSelectedItemsPrice();
         // const shippingFee = 3000;
-        const shippingFee = 0;
+        // const shippingFee = 0;
         let discountPrice = selectedItemsPrice + shippingFee - discount;
         console.log(discountPrice)
         setDiscountedPrice(Math.max(discountPrice, 100));
@@ -212,7 +206,10 @@ const OrderComponent = () => {
                         try {
                             const response = await postPayInfo(payInfo, impUid);
                             console.log(response);
-                            alert("Payment has been successfully completed!");
+                            const answer = alert("Payment has been successfully completed!");
+                            if(answer){
+                                //상품 주문 확인페이지로 이동
+                            }
                         } catch (error) {
                             console.error(error);
                             alert("Failed to complete the payment.");
@@ -402,11 +399,17 @@ const OrderComponent = () => {
                                         <legend className="block mb-2 font-semibold">Select Payment Method</legend>
                                         <div className="mt-2">
                                             <label className="mr-4">
-                                                <input type="radio" name="payment" value="card" className="mr-2" onClick={handleClickPaymentMethod}  />
+                                                <input type="radio" name="payment" className="mr-2"
+                                                    value="card"  
+                                                    onClick={handleClickPaymentMethod}  
+                                                />
                                                 Credit Card
                                             </label>
                                             <label>
-                                                <input type="radio" name="payment" value="trans" className="mr-2" onClick={handleClickPaymentMethod} />
+                                                <input type="radio" name="payment" className="mr-2" 
+                                                    value="trans" 
+                                                    onClick={handleClickPaymentMethod} 
+                                                />
                                                 Bank Transfer
                                             </label>
                                         </div>

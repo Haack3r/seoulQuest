@@ -24,6 +24,7 @@ public class OrderItem {
     @JoinColumn(name = "orderId")
     private Order order;
 
+    private Long pno;
     private String pname;
     private int pprice;
     private int pqty;

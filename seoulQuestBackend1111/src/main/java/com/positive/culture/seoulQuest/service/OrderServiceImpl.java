@@ -16,7 +16,6 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final UserCouponRepository userCouponRepository;
-//    private final CartItemRepository cartItemRepository;
 
     @Override
     public Long saveOrder(OrderDTO orderDTO) {
@@ -29,13 +28,6 @@ public class OrderServiceImpl implements OrderService {
         //userCoupon의 사용한 쿠폰에 날짜를 설정하고 저장/ 쿠폰 사용날짜는 결제완료 후 저장.
         //이메일과 쿠폰이름으로 유저쿠폰 조회하고 usedate가 null인것만 조회 , 같은 쿠폰이름이 있는경우가 있으면 첫번째 것을 사용.
         UserCoupon userCoupon = userCouponRepository.findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(email,usedCouponName);
-
-//        //조건 : 조회 된 쿠폰은 use_date값이 null이여야함 =>  사용날짜가 없는 쿠폰이여야함
-//        if(userCoupon != null){
-//            System.out.println(1.5 + "userCoupon");
-//            userCoupon.ChangeUseDate(LocalDate.now()); //오늘 날짜를 저장
-//            userCouponRepository.save(userCoupon);
-//        }
 
         System.out.println(2 + "OrderDTO를 OrderEntity로 변경하여 저장.");
         //OrderDTO를 OrderEntity로 변경하여 저장.
@@ -65,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
 
             return OrderItem.builder()
                     .order(order)
+                    .pno(i.getPno())
                     .pqty(i.getPqty())
                     .pname(i.getPname())
                     .pprice(i.getPprice())
