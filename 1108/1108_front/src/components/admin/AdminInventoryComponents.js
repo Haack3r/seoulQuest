@@ -15,7 +15,7 @@ import Papa from 'papaparse';         // papaparse 라이브러리를 import하�
 // 이 등록 과정이 없다면, 차트를 그릴 때 해당 요소들이 무엇인지 알지 못하기 때문에 오류가 발생하거나 차트가 제대로 표시되지 않음
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const AdminInventoryComponent = () => {
+const AdminInventoryComponents = () => {
 
   // inventoryData라는 상태 변수를 정의하여 이를 업데이트할 수 있는 setInventoryData 함수를 생성
   // 제품의 재고 데이터를 저장하며, 초기값은 빈 배열 (처음에는 재고 데이터가 없음)
@@ -317,4 +317,4 @@ const AdminInventoryComponent = () => {
   );
 };
 
-export default AdminInventoryComponent;
+export default AdminInventoryComponents;

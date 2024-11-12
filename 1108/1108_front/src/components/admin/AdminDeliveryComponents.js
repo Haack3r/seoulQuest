@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 // 배송 회사의 목록을 deliveryCompanies라는 배열에 정의
 const deliveryCompanies = ['FedEx', 'DHL', 'UPS'];  
 
-const AdminDeliveryComponent = () => {
+const AdminDeliveryComponents = () => {
 
   const [orders, setOrders] = useState([  // setOrders는 orders 상태를 업데이트하기 위한 함수
     {
@@ -230,4 +230,4 @@ const AdminDeliveryComponent = () => {
   );
 };
 
-export default AdminDeliveryComponent;
+export default AdminDeliveryComponents;

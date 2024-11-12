@@ -27,7 +27,7 @@ window.addEventListener('resize', function () {
   window.location.reload();
 });
 
-const AdminDeliveryCostComponent = () => {
+const AdminDeliveryCostComponents = () => {
 
   // API 호출이나 기타 방법을 통해 받아온 배달 서비스의 정보를 저장
   const [deliveryServices, setDeliveryServices] = useState([]);
@@ -392,4 +392,4 @@ const AdminDeliveryCostComponent = () => {
   );
 };
 
-export default AdminDeliveryCostComponent;
+export default AdminDeliveryCostComponents;

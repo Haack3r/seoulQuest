@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const AdminProductComponent = () => {
+const AdminProductComponents = () => {
 
     // 제품 목록 상태를 관리하기 위한 useState 훅
     const [products, setProducts] = useState([]);
@@ -318,4 +318,4 @@ const AdminProductComponent = () => {
     );
 };
 
-export default AdminProductComponent;
+export default AdminProductComponents;

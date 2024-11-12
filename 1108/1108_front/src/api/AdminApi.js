@@ -14,12 +14,34 @@ export const checkRole = async () => {
     }
 }
 
-// export const checkRoleWithData = async () => {
-//     try {
-//         const res = await jwtAxios.post(`${host}/admin`)
-//         return res.data;
-//     } catch (error) {
-//         console.error("권한 체크 오류:", error);
-//         throw error;
-//     }
-// }
+export const fetchOrders = async () => {
+    try {
+        const res = await jwtAxios.get(`${host}/order`)
+        console.log("주문 체크 응답", res)
+        return res.data
+    } catch (error) {
+        console.log("주문 체크 오류", error.response || error)
+        throw error
+    }
+}
+
+export const fetchProducts = async () => {
+    try {
+        const res = await jwtAxios.get(`${host}/product`)
+        console.log("상품 체크 응답", res)
+        return res.data
+    } catch (error) {
+        console.log("상품 체크 오류", error.response || error)
+        throw error
+    }
+}
+export const fetchReservations = async () => {
+    try {
+        const res = await jwtAxios.get(`${host}/reservation`)
+        console.log("상품 체크 응답", res)
+        return res.data
+    } catch (error) {
+        console.log("상품 체크 오류", error.response || error)
+        throw error
+    }
+}
