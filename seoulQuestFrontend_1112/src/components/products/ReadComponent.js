@@ -7,7 +7,7 @@ import FetchingModal from '../common/FetchingModal';
 import useCustomCart from '../../hooks/useCustomCart';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import CartComponent from '../menus/CartComponent';
-import { postChangeFav } from '../../api/favoriteApi'; // Import the favorite API function
+import useCustomFav from '../../hooks/useCustomFav'; // Import useCustomFav for favorite items
 
 const initState = {
     pno: 0,
@@ -26,7 +26,42 @@ const ReadComponent = ({ pno }) => {
     const [currentImage, setCurrentImage] = useState(0);
     const { changeCart, cartItems } = useCustomCart();
     const { loginState } = useCustomLogin();
+    const { favItems, changeFav, refreshFav } = useCustomFav(); // Add favItems and changeFav
     const [selectedQuantity, setSelectedQuantity] = useState(0);
+
+    useEffect(() => {
+        setFetching(true);
+        getOne(pno).then(data => {
+            setProduct(data);
+            setFetching(false);
+        });
+    }, [pno]);
+
+    // Handle adding to favorites
+    const handleAddToFavorites = async () => {
+        if (!loginState.email) {
+            window.alert("Please log in to add favorites.");
+            return;
+        }
+    
+        // Check if the product is already in the favorites
+        const isAlreadyFavorite = favItems.some(item => item.pno === product.pno);
+        if (isAlreadyFavorite) {
+            alert("You already liked this product!");
+            return;
+        }
+    
+        // Try to add to favorites and show success alert
+        try {
+            await changeFav({ email: loginState.email, pno: product.pno });
+            alert("Product added to favorites!"); // Show success message
+            refreshFav(); // Update favorites after adding
+        } catch (error) {
+            console.error("Failed to add favorite:", error);
+            alert("Could not add to favorites. Please try again.");
+        }
+    };
+    
 
     // Handle adding to cart
     const handleClickAddCart = () => {
@@ -45,34 +80,6 @@ const ReadComponent = ({ pno }) => {
             changeCart({ email: loginState.email, pno: pno, pqty: pqty });
         }
     };
-
-    // Handle quantity change
-    const handleChangeQuantity = (e) => {
-        setSelectedQuantity(parseInt(e.target.value));
-    };
-
-    // Handle adding to favorites
-    const handleAddToFavorites = () => {
-        if (!loginState.email) {
-            window.alert("Please log in to add favorites.");
-            return;
-        }
-
-        postChangeFav({ email: loginState.email, pno: product.pno }).then(() => {
-            window.alert("Product added to favorites!");
-        }).catch((error) => {
-            console.error("Failed to add favorite:", error);
-            window.alert("Could not add to favorites. Please try again.");
-        });
-    };
-
-    useEffect(() => {
-        setFetching(true);
-        getOne(pno).then(data => {
-            setProduct(data);
-            setFetching(false);
-        });
-    }, [pno]);
 
     return (
         <div className='grid grid-cols-3 gap-6 mt-10 m-4'>
@@ -121,37 +128,7 @@ const ReadComponent = ({ pno }) => {
                                 <p className="text-2xl font-light text-gray-900 mb-6">₩{product.pprice.toLocaleString()}</p>
                                 <p className="text-gray-700 mb-6">{product.pdesc}</p>
 
-                                {/* Size Selection */}
-                                <div className="mb-6">
-                                    <label htmlFor="size" className="text-gray-700 mb-2 block">Size</label>
-                                    <select
-                                        id="size"
-                                        className="w-full border border-gray-300 p-2 rounded-lg"
-                                    >
-                                        <option value="">Select size</option>
-                                        <option value="s">Small</option>
-                                        <option value="m">Medium</option>
-                                        <option value="l">Large</option>
-                                        <option value="xl">X-Large</option>
-                                    </select>
-                                </div>
-
-                                {/* Quantity Selection */}
-                                <div className="flex items-center mb-6">
-                                    <label htmlFor="quantity" className="text-gray-700 mr-4">Quantity</label>
-                                    <input
-                                        id="quantity"
-                                        type="number"
-                                        min="1"
-                                        max={product.pqty}
-                                        placeholder='0'
-                                        value={selectedQuantity}
-                                        onChange={handleChangeQuantity}
-                                        className="w-20 border border-gray-300 p-2 rounded-lg"
-                                    />
-                                </div>
-
-                                {/* Add to Cart and Wishlist Buttons */}
+                                {/* Add to Cart and Favorites */}
                                 <div className="flex space-x-4 mb-8">
                                     <button
                                         className="flex items-center justify-center bg-stone-400 hover:bg-stone-600 text-white p-3 rounded-lg w-full"
@@ -160,22 +137,10 @@ const ReadComponent = ({ pno }) => {
                                     </button>
                                     <button
                                         className="flex items-center justify-center border border-gray-300 text-gray-700 hover:bg-gray-100 p-3 rounded-lg w-full"
-                                        onClick={handleAddToFavorites} // Add this line
+                                        onClick={handleAddToFavorites} // Use updated handleAddToFavorites
                                     >
                                         <HeartIcon className="mr-2 h-4 w-4" /> Add to Favorites
                                     </button>
-                                </div>
-
-                                {/* Product Details */}
-                                <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
-                                    <h2 className="text-gray-900 text-lg font-semibold mb-2">Product Details</h2>
-                                    <ul className="list-disc list-inside text-gray-700">
-                                        <li>Material: 100% premium silk</li>
-                                        <li>Handcrafted in Seoul, South Korea</li>
-                                        <li>Includes both jeogori (jacket) and chima (skirt)</li>
-                                        <li>Decorative norigae (hanging ornament) included</li>
-                                        <li>Dry clean only</li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
