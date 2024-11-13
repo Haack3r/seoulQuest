@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -12,4 +15,5 @@ import lombok.NoArgsConstructor;
 public class CouponDTO {
     private String couponName;
     private int discount;
+    private LocalDate expirationDate;
 }

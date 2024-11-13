@@ -97,9 +97,9 @@ const MyPageComponent = () => {
                   <TagsOutlined className="text-4xl text-gray-600 mb-4" />
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Coupons</h3>
                   <p className="text-gray-500 mb-4">Check available discounts</p>
-                  <button className="text-white bg-gray-700 hover:bg-gray-800 py-2 px-4 rounded-full shadow-md">
+                  <Link to="/mypage/coupon" className="text-white bg-gray-700 hover:bg-gray-800 py-2 px-4 rounded-full shadow-md">
                       View Coupons
-                  </button>
+                  </Link>
               </div>
 
               {/* 예약 카드 */}

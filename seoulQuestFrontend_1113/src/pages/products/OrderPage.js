@@ -5,11 +5,11 @@ import OrderComponent from '../../components/products/OrderComponent'
 
 const OrderPage = () => {
 
-    const {pno} = useParams()
+   
 
   return (
     <div className='p-4 w-full bg-gray-100'>
-        <OrderComponent pno={pno}></OrderComponent>
+        <OrderComponent />
     </div>
   )
 }

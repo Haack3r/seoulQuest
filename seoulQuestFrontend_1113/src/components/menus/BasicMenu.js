@@ -10,7 +10,8 @@ import {
   ShoppingBagIcon,
   UserIcon,
   LogInIcon,
-  Heart,
+    Heart,
+    Tickets
 } from "lucide-react";
 
 const BasicMenu = () => {
@@ -149,6 +150,12 @@ const BasicMenu = () => {
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
                         <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                                                  </Link>
+                                                  <Link
+                        to="/mypage/coupon"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                      >
+                        <Tickets className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
                         to="/member/logout/"
@@ -277,6 +284,12 @@ const BasicMenu = () => {
                         className="flex items-center space-x-2 menu-animation-color"
                       >
                         <ShoppingBagIcon className="h-5 w-5 menu-animation-color" />
+                                                  </Link>
+                                                  <Link
+                        to={"/mypage/coupon"}
+                        className="flex items-center space-x-2 menu-animation-color"
+                      >
+                        <Tickets className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
                         to={"/member/logout/"}

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @ToString(exclude = {"coupon", "couponOwner"})
 @Builder
 @Getter
+@Setter
 @Table(name = "tbl_user_coupon")
 public class UserCoupon {
 

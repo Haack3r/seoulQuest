@@ -1,9 +1,11 @@
 package com.positive.culture.seoulQuest.service;
 
+import com.positive.culture.seoulQuest.domain.Coupon;
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.UserCoupon;
 import com.positive.culture.seoulQuest.dto.CouponDTO;
 import com.positive.culture.seoulQuest.dto.OrderDTO;
+import com.positive.culture.seoulQuest.repository.CouponRepository;
 import com.positive.culture.seoulQuest.repository.MemberRepository;
 import com.positive.culture.seoulQuest.repository.UserCouponRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +23,7 @@ public class CouponServiceImpl implements CouponService{
 
     private final UserCouponRepository userCouponRepository;
     private final MemberRepository memberRepository;
+    private final CouponRepository couponRepository;
 
     @Override
     public OrderDTO getUserCouponAndUserInfo(String email) {
@@ -59,5 +63,37 @@ public class CouponServiceImpl implements CouponService{
                 .coupons(couponDTOList) //쿠폰 DTO 리스트를 넣음
                 .build();
         return  orderInfoDTO;
+    }
+
+    @Override
+    public List<CouponDTO> getAvailableCoupons() {
+        return couponRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addCouponToUser(String email, Long couponId) {
+        Member member = memberRepository.findByEmail(email).orElseThrow();
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow();
+        UserCoupon userCoupon = new UserCoupon();
+        userCoupon.setCouponOwner(member);
+        userCoupon.setCoupon(coupon);
+        userCouponRepository.save(userCoupon);
+    }
+
+    @Override
+    public List<CouponDTO> getUserCoupons(String email) {
+        return userCouponRepository.findByCouponOwnerEmail(email).stream()
+                .map(userCoupon -> convertToDTO(userCoupon.getCoupon()))
+                .collect(Collectors.toList());
+    }
+
+    private CouponDTO convertToDTO(Coupon coupon) {
+        return CouponDTO.builder()
+                .couponName(coupon.getCouponName())
+                .discount(coupon.getDiscount())
+                .expirationDate(coupon.getExpireDate())
+                .build();
     }
 }
