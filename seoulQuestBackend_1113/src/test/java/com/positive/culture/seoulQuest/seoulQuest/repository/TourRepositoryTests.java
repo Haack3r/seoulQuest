@@ -90,19 +90,21 @@ public class TourRepositoryTests {
         }
     }
 
-    // 5. 예약 날짜 데이터 추가
     @Test
-    public void testInsertTdate(){
-        for(int i = 10; i<19 ; i++){
-            TourDate tourDate = TourDate.builder()
-                    .available_capacity((int)(Math.random()*30)+1)
-                    .tour(tourRepository.selectOne((long)i).get())
-                    .tourDate(LocalDate.parse("2024-11-"+ i, DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                    .build();
-            tourDateRepository.save(tourDate);
+    public void testInsertMultipleTourDates() {
+
+        for (int tourId = 1; tourId < 21; tourId++) {
+            // 각 투어당 여러 날짜 생성
+            for (int dayOffset = 0; dayOffset < 10; dayOffset++) {
+                TourDate tourDate = TourDate.builder()
+                        .available_capacity((int) (Math.random() * 20) + 1)
+                        .tour(tourRepository.selectOne((long) tourId).get())
+                        .tourDate(LocalDate.of(2024, 11, 1).plusDays(dayOffset))
+                        .build();
+                tourDateRepository.save(tourDate);
+            }
         }
     }
-
 
 //    @Test
 //    public void testRead2(){

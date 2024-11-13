@@ -1,5 +1,6 @@
 package com.positive.culture.seoulQuest.dto;
 
+import com.positive.culture.seoulQuest.domain.UserCoupon;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,11 +15,15 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderDTO {
 
-    @Builder.Default
-    private List<String> coupons  = new ArrayList<>(); ;
+    private Long orderId;
 
     @Builder.Default
-    private List<String> orderItems  = new ArrayList<>(); ;
+    private List<CouponDTO> coupons  = new ArrayList<>();
+
+    private String usedCoupon;
+
+    @Builder.Default
+    private List<CartItemListDTO> orderItems  = new ArrayList<>(); ;
 
     private String email;
     private String firstname;
@@ -29,5 +34,9 @@ public class OrderDTO {
     private String street;
     private String zipcode;
     private String phoneNumber;
+    private int totalPrice;
 
+
+    //삭제고려
+    private String paymentMethod;
 }

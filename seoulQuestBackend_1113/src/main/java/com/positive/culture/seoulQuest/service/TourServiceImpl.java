@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,39 +60,6 @@ public class TourServiceImpl implements TourService{
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
-
-
-
-//    @Override
-//    public PageResponseDTO<TourDTO> getList(PageRequestDTO pageRequestDTO) {
-//
-//        Pageable pageable =  PageRequest.of(
-//                pageRequestDTO.getPage()-1,
-//                pageRequestDTO.getSize(),
-//                Sort.by("tno").descending());
-//
-//        Page<Object[]> result = tourRepository.selectList(pageable);
-//
-//        List<TourDTO> dtoList = result.get().map(arr->{
-//            Tour tour = (Tour) arr[0];
-//            TourImage tourImage = (TourImage) arr[1];
-//
-//            //Entity를 DTO로 변환
-//            TourDTO tourDTO = entityChangeDTO(tour);
-//
-//            String imageStr = tourImage.getFileName();
-//            tourDTO.setUploadFileNames(List.of(imageStr)); //List.of 불변하는 리스트를 생성
-//            return tourDTO;
-//        }).collect(Collectors.toList()); //end of map , map으로 productDTO의 리스트를 만듦
-//
-//        long totalCount= result.getTotalElements();
-//
-//        return PageResponseDTO.<TourDTO>withAll()
-//                .dtoList(dtoList) //ProductDTO 객체가 담겨있는 list
-//                .totalCount(totalCount)
-//                .pageRequestDTO(pageRequestDTO)
-//                .build();
-//    }
 
 
     //하나 조회---(유저, 관리자)
@@ -176,38 +142,36 @@ public class TourServiceImpl implements TourService{
                 .map(TourDTO::new)
                 .collect(Collectors.toList());
     }
-
-  private BooleanBuilder getSearch(PageRequestDTO requestDTO){
+    private BooleanBuilder getSearch(PageRequestDTO requestDTO){
         String type = requestDTO.getType();
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-      QTour qTour = QTour.tour;
-      String keyword = requestDTO.getKeyword();
+        QTour qTour = QTour.tour;
+        String keyword = requestDTO.getKeyword();
 
-      BooleanExpression expression = qTour.tno.gt(0L);
+        BooleanExpression expression = qTour.tno.gt(0L);
 
-      //조건만 생성
-      booleanBuilder.and(expression);
+        //조건만 생성
+        booleanBuilder.and(expression);
 
-      if (type == null || type.trim().length() == 0){
-          return booleanBuilder;
-      }
-      //검색 조건 작성하기
+        if (type == null || type.trim().length() == 0){
+            return booleanBuilder;
+        }
+        //검색 조건 작성하기
 
-      BooleanBuilder conditionBuilder = new BooleanBuilder();
-      if (type.contains("t")){
-          conditionBuilder.or(qTour.tname.contains(keyword));
-      }
-      if (type.contains("c")){
-          conditionBuilder.or(qTour.tname.contains(keyword));
-      }
-      if (type.contains("w")){
-          conditionBuilder.or(qTour.tname.contains(keyword));
-      }
+        BooleanBuilder conditionBuilder = new BooleanBuilder();
+        if (type.contains("t")){
+            conditionBuilder.or(qTour.tname.contains(keyword));
+        }
+        if (type.contains("c")){
+            conditionBuilder.or(qTour.tname.contains(keyword));
+        }
+        if (type.contains("w")){
+            conditionBuilder.or(qTour.tname.contains(keyword));
+        }
 
-      booleanBuilder.and(conditionBuilder);
-      return booleanBuilder;
+        booleanBuilder.and(conditionBuilder);
+        return booleanBuilder;
 
-  }
-
+    }
 
 }

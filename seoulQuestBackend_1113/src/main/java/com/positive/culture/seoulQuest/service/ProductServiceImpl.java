@@ -7,7 +7,6 @@ import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
-import com.positive.culture.seoulQuest.dto.TourDTO;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -158,6 +157,5 @@ public class ProductServiceImpl implements ProductService{
 
         return booleanBuilder;
     }
-
 
 }

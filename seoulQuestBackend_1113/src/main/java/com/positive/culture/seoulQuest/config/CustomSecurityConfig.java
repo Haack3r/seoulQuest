@@ -11,13 +11,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -63,14 +61,9 @@ public class CustomSecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check", "/api/member/checknickname","/api/member/login").permitAll() // Permit OPTIONS requests
                 .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/checknickname", "/api/member/login","/api/mypage/**","/api/user/tours/view/**","/api/user/products/view/**", "/api/user/tours/mapData", "/api/user/tours/by-address").permitAll()
-                .requestMatchers("/api/products/**", "/api/tours/**", "/api/favTour/**").permitAll()// Allow unauthenticated access
+                .requestMatchers("/api/products/**", "/api/user/products/**","/api/tours/**").permitAll()// Allow unauthenticated access
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/favorite/**").authenticated()
                 .anyRequest().authenticated());
-
-// Set a custom entry point to return 401 Unauthorized instead of redirecting
-        http.exceptionHandling(exception ->
-                exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))); // Handles authentication errors
 
 
         http.formLogin(config -> {

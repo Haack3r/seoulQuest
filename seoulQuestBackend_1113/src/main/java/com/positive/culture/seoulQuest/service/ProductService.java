@@ -1,15 +1,21 @@
 package com.positive.culture.seoulQuest.service;
 
+import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
+import com.positive.culture.seoulQuest.repository.CategoryRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Transactional
 public interface ProductService {
+
+
 
     //전체 조회
     PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO);
@@ -29,7 +35,12 @@ public interface ProductService {
     //DTO를 엔티티로 변환해주는 메서드 -> register에 사용
     default
     public Product dtoToEntity(ProductDTO productDTO){
+
+        //나중에 수정해야함
+        Category cartegory =new Category(5l,"sadfa","asdfaf");
+
         Product product =Product.builder()
+                .category(cartegory)
                 .pno(productDTO.getPno())
                 .pname(productDTO.getPname())
                 .pdesc(productDTO.getPdesc())
@@ -59,7 +70,7 @@ public interface ProductService {
     public ProductDTO entityChangeDTO(Product product){
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
-                .categoryName(product.getCategory().getCategoryName())
+//                .categoryName(product.getCategory().getCategoryName())
                 .pname(product.getPname())
                 .pdesc(product.getPdesc())
                 .pprice(product.getPprice())

@@ -1,9 +1,10 @@
 package com.positive.culture.seoulQuest.seoulQuest.repository;
 
-import com.positive.culture.seoulQuest.domain.*;
-import com.positive.culture.seoulQuest.repository.CategoryRepository;
+import com.positive.culture.seoulQuest.domain.Product;
+import com.positive.culture.seoulQuest.domain.QProduct;
+import com.positive.culture.seoulQuest.domain.QTour;
+import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
-import com.positive.culture.seoulQuest.repository.TourDateRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -16,11 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.UUID;
 
 @SpringBootTest
 @Log4j2

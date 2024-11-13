@@ -1,4 +1,4 @@
-package com.positive.culture.seoulQuest.service.impl;
+package com.positive.culture.seoulQuest.service;
 
 import com.positive.culture.seoulQuest.domain.FavoriteProduct;
 import com.positive.culture.seoulQuest.domain.Member;
@@ -7,7 +7,6 @@ import com.positive.culture.seoulQuest.dto.FavoriteProductDTO;
 import com.positive.culture.seoulQuest.repository.FavoriteProductRepository;
 import com.positive.culture.seoulQuest.repository.MemberRepository;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
-import com.positive.culture.seoulQuest.service.FavoriteProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

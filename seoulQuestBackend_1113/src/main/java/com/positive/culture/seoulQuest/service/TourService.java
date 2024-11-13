@@ -75,8 +75,6 @@ public interface TourService {
 
     // 서울 관광지 조회
     List<TourDTO> getToursByLocation(String location);
-
+//
     List<TourDTO> getToursByAddress(String taddress);
-
-
 }

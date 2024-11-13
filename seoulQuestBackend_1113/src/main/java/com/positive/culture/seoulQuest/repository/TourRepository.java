@@ -14,7 +14,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface TourRepository extends JpaRepository<Tour,Long>, QuerydslPredicateExecutor<Tour>{
+public interface TourRepository extends JpaRepository<Tour,Long>, QuerydslPredicateExecutor<Tour> {
 
 
     //전체 조회

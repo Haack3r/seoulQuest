@@ -3,7 +3,6 @@ package com.positive.culture.seoulQuest.seoulQuest.repository;
 import com.positive.culture.seoulQuest.domain.FavoriteTour;
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.Tour;
-import com.positive.culture.seoulQuest.dto.FavoriteProductDTO;
 import com.positive.culture.seoulQuest.repository.FavoriteTourRepository;
 import com.positive.culture.seoulQuest.repository.MemberRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
@@ -14,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 @Log4j2
