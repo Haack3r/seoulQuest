@@ -43,8 +43,8 @@ public class ProductController {
     private final ProductService productService;
     private final CouponService couponService;
     private final OrderService orderService;
-    private IamportClient iamportClient;
     private final PaymentService paymentService;
+    private IamportClient iamportClient;
 
     @Value("${iamport.api_key}")
     private String apiKey;
