@@ -1,69 +1,116 @@
-// import React, { useEffect, useMemo } from "react";
-// import useCustomLogin from "../../hooks/useCustomLogin";
-// import useCustomTour from "../../hooks/useCustomTour";
-// import { SolutionOutlined, LikeOutlined } from "@ant-design/icons";
-// import FavTourComponent from "../favProductAndTour/FavTourComponent";
-// import { useDispatch, useSelector } from "react-redux";
-// import { getTourItemsAsync } from "../../slices/tourSlice";
+import React, { useCallback, useEffect, useState } from "react";
+import useCustomLogin from "../../hooks/useCustomLogin";
+import useCustomTourFav from "../../hooks/useCustomTourFav";
+import FavTourComponent from "../../components/favProductAndTour/FavTourComponent";
+import { LikeOutlined, DeleteOutlined } from "@ant-design/icons";
 
-// const TourComponent = ({ maxCapacity }) => {
-//     console.log("TourComponet");
-//     const dispatch = useDispatch();
-//     const { isLogin, loginState } = useCustomLogin();
-//     const tourItems = useSelector((state) => state.tourSlice || []); // Ensure it’s an empty array by default
+const TourComponent = () => {
+  const { isLogin, loginState } = useCustomLogin();
+  const {
+    refreshFav,
+    favItems = [], // Access favorite items directly from hook
+    changeFav,
+    deleteFav,
+    deleteBulkFav,
+  } = useCustomTourFav();
 
-//     useEffect(() => {
-//         dispatch(getTourItemsAsync());
-//     }, [dispatch]);
-//     const total = useMemo(() => {
-//         let total = 0;
-//         if (!tourItems || tourItems.length === 0 || tourItems.error === "ERROR_ACCESS_TOKEN") {
-//             return total;
-//         }
-//         for (const titem of tourItems) {
-//             total += titem.tprice * titem.tqty;
-//         }
-//         return total;
-//     }, [tourItems]);
+  const [localFavItems, setLocalFavItems] = useState([]); // Local state for tour favorites
+  const [selectedItems, setSelectedItems] = useState(new Set());
 
-  
+  useEffect(() => {
+    // Directly set favItems to localFavItems without filtering by type
+    setLocalFavItems(favItems);
+    console.log("Updated localFavItems with tour items:", favItems);
+  }, [favItems]);
 
-//     return (
-//         <div className="flex flex-col items-center w-full px-4">
-//             {isLogin ? (
-//                 <div className="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg">
-//                     {/* Header */}
-//                     <div className="mb-6 border-b pb-4 flex items-center space-x-2">
-//                         <LikeOutlined className="text-gray-500 text-2xl" />
-//                         <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Favorite Tour</h2>
-//                     </div>
+  useEffect(() => {
+    if (isLogin) {
+      refreshFav(); // Ensure favorite items are refreshed when logging in
+    }
+  }, [isLogin, refreshFav]);
 
-//                     {/* Reservation Items */}
-//                     <div className="mb-6 space-y-4">
-//                         {tourItems.length > 0 ? (
-//                             tourItems.map((titem) => (
-//                                 <FavTourComponent
-//                                     maxCapacity={maxCapacity}
-//                                     email={loginState.email}
-//                                     {...titem}
-//                                     key={titem.fino}
-//                                 />
-//                             ))
-//                         ) : (
-//                             <p className="text-center text-gray-500">No favorite tour yet.</p>
-//                         )}
-//                     </div>
+  const handleDelete = useCallback(
+    async (ftino) => {
+      await deleteFav(ftino);
+      refreshFav();
+    },
+    [deleteFav, refreshFav]
+  );
 
-//                     {/* Total Price Display */}
-//                     <div className="mt-4 text-right text-lg font-bold text-gray-900">
-//                         Total: ₩{total.toLocaleString()}
-//                     </div>
-//                 </div>
-//             ) : (
-//                 <p className="text-center text-gray-500 mt-6">Please log in to see your reservation.</p>
-//             )}
-//         </div>
-//     );
-// };
+  const handleBulkDelete = useCallback(async () => {
+    console.log(
+      "deleteBulkFav called with selected items:",
+      Array.from(selectedItems)
+    );
+    const response = await deleteBulkFav(Array.from(selectedItems));
+    if (response) {
+      setSelectedItems(new Set());
+      refreshFav();
+    }
+  }, [deleteBulkFav, selectedItems, refreshFav]);
 
-// export default TourComponent;
+  const toggleSelectItem = useCallback((ftino) => {
+    setSelectedItems((prev) => {
+      const updatedSet = new Set(prev);
+      if (updatedSet.has(ftino)) {
+        updatedSet.delete(ftino);
+      } else {
+        updatedSet.add(ftino);
+      }
+      return updatedSet;
+    });
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center w-full px-4 sm:px-6 lg:px-8">
+      {isLogin ? (
+        <div className="w-full max-w-3xl bg-white p-4 sm:p-6 lg:px-8 rounded-lg shadow-xl">
+          <div className="mb-6 border-b pb-4 flex items-center space-x-2">
+            <LikeOutlined className="text-2xl sm:text-3xl text-gray-700" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+              Favorite Tours
+            </h2>
+          </div>
+
+          <div className="mb-6">
+            {localFavItems.length > 0 ? (
+              <ul className="space-y-4">
+                {localFavItems.map((item) => (
+                  <FavTourComponent
+                    {...item}
+                    key={`tour-${item.ftino}`} // Ensure each component has a unique key
+                    changeFav={changeFav}
+                    email={loginState.email}
+                    handleDelete={handleDelete}
+                    handleSelect={toggleSelectItem}
+                    selected={selectedItems.has(item.ftino)}
+                  />
+                ))}
+              </ul>
+            ) : (
+              <p className="text-center text-gray-500">
+                No favorite tours yet.
+              </p>
+            )}
+          </div>
+
+          {selectedItems.size > 0 && (
+            <button
+              className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md flex items-center space-x-2"
+              onClick={handleBulkDelete}
+            >
+              <DeleteOutlined />
+              <span>Delete Selected</span>
+            </button>
+          )}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500 mt-12">
+          Please log in to see your favorite tours.
+        </p>
+      )}
+    </div>
+  );
+};
+
+export default TourComponent;

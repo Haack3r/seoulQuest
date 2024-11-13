@@ -5,7 +5,7 @@ const host = `${API_SERVER_HOST}/api/favorite`;
 
 // Fetch favorite items with error handling
 export const getFavItems = async () => {
-  console.log("GetTourItems 호출");
+  console.log("GetProductItems 호출");
   const user = JSON.parse(localStorage.getItem("user"));
   const email = user?.email;
 

@@ -13,7 +13,7 @@ const Favorite = () => {
             <ProductComponent />
           </div>
           <div className="w-1/2 max-w-md">
-            {/* <TourComponent /> */}
+            <TourComponent />
           </div>
         </div>
       </div>
