@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CouponDTO {
+    private Long couponId;
     private String couponName;
     private int discount;
     private LocalDate expirationDate;

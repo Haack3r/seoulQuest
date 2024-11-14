@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie, setCookie } from "./cookieUtil";
+import { getCookie, removeCookie, setCookie } from "./cookieUtil";
 import { API_SERVER_HOST } from "../api/todoApi";
 
 const jwtAxios = axios.create();
@@ -38,29 +38,47 @@ jwtAxios.interceptors.request.use(
   }
 );
 
+
+
 // Before response interceptor
 jwtAxios.interceptors.response.use(
-  async (res) => {
-    const data = res.data;
-    if (data && data.error === "ERROR_ACCESS_TOKEN") {
-      const memberCookieValue = getCookie("member");
-      const result = await refreshJWT(memberCookieValue.accessToken, memberCookieValue.refreshToken);
-
-      // Update cookie with new tokens
-      memberCookieValue.accessToken = result.accessToken;
-      memberCookieValue.refreshToken = result.refreshToken;
-      setCookie("member", JSON.stringify(memberCookieValue), 1);
-
-      // Retry original request with new token
-      res.config.headers.Authorization = `Bearer ${result.accessToken}`;
-      return await axios(res.config);
+    async (response) => {
+      return response; // Proceed if the response is successful
+    },
+    async (error) => {
+      // Handle 302 redirects or authentication errors
+      if (error.response && error.response.status === 302) {
+        console.error("Redirect detected, authentication may be required.");
+        // You can handle the redirect by redirecting to a login page or refreshing the token
+        removeCookie("member"); // Clear token if necessary
+        window.location.href = "/login"; // Redirect to login if required
+      }
+      if (error.response && error.response.status === 401) {
+        console.error("Unauthorized - invalid or expired token.");
+        // Handle token refresh or prompt for re-authentication
+        const memberInfo = getCookie("member");
+        if (memberInfo && memberInfo.refreshToken) {
+          try {
+            const refreshedToken = await refreshJWT(
+              memberInfo.accessToken,
+              memberInfo.refreshToken
+            );
+            setCookie("member", JSON.stringify(refreshedToken), 1);
+            error.config.headers.Authorization = `Bearer ${refreshedToken.accessToken}`;
+            return jwtAxios(error.config); // Retry request with new token
+          } catch (refreshError) {
+            console.error("Failed to refresh token:", refreshError);
+            removeCookie("member");
+            window.location.href = "/login";
+          }
+        } else {
+          window.location.href = "/login"; // Redirect if no token is found
+        }
+      }
+      return Promise.reject(error);
     }
-    return res;
-  },
-  (error) => {
-    console.error("Response error:", error);
-    return Promise.reject(error);
-  }
-);
+  );
+  
+  
 
 export default jwtAxios;

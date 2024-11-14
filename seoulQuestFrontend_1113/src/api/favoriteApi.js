@@ -48,7 +48,7 @@ export const deleteFavItem = async (fino) => {
   };
   
 
-// favoriteApi.js
+
 
 // Bulk delete favorite items by IDs
 export const deleteFavItemsBulk = async (finoList) => {

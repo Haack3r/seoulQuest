@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log4j2
 @RequestMapping("api/mypage/coupon")
+@CrossOrigin("*")
 public class CouponController {
     private final CouponService couponService;
     private final MemberService memberService;
@@ -23,8 +24,8 @@ public class CouponController {
         return couponService.getAvailableCoupons();
     }
 
-    @PostMapping("/add")
-    public void addCouponToUser(@RequestParam String email, @RequestParam Long couponId) {
+    @PostMapping("/add/{email}")
+    public void addCouponToUser(@PathVariable String email, @RequestParam Long couponId) {
         couponService.addCouponToUser(email, couponId);
     }
 

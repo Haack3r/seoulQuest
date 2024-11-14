@@ -5,7 +5,9 @@ import com.positive.culture.seoulQuest.domain.UserCoupon;
 import com.positive.culture.seoulQuest.repository.CouponRepository;
 import com.positive.culture.seoulQuest.repository.MemberRepository;
 import com.positive.culture.seoulQuest.repository.UserCouponRepository;
+import com.positive.culture.seoulQuest.service.CouponService;
 import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Log4j2
 @SpringBootTest
@@ -27,6 +32,9 @@ public class CouponRepositoryTests {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private CouponService couponService;
 
     // 금액 할인 쿠폰(배송비 할인 등)
     @Test
@@ -115,6 +123,38 @@ public class CouponRepositoryTests {
         log.info(userCoupon.getUserCouponId());
     }
 
+
+    @Test
+    @Transactional
+    public void markCouponAsUsedTest() {
+        String email = "user2@gmail.com";
+        String couponName = "Exclusive Member Coupon";
+
+        UserCoupon userCoupon = userCouponRepository.findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(email, couponName);
+
+        if (userCoupon != null) {
+            userCoupon.setUseDate(LocalDate.now());
+            userCoupon.setIsActive(false); // Set is_active to false
+
+            userCouponRepository.save(userCoupon); // Save changes to the database
+
+            log.info("Coupon for user {} with name '{}' has been marked as used. Active status: {}",
+                    email, couponName, userCoupon.isActive());
+        } else {
+            log.warn("No active coupon found for user {} with name '{}'", email, couponName);
+        }
+    }
+
+    @Test
+    @Transactional
+    public void testMarkCouponAsUsed() {
+        Long userCouponId = 19L; // Replace with an actual ID for testing
+        couponService.markCouponAsUsed(userCouponId);
+
+        UserCoupon updatedCoupon = userCouponRepository.findById(userCouponId).orElseThrow();
+        Assertions.assertNotNull(updatedCoupon.getUseDate(), "The coupon should have a use date set");
+        Assertions.assertFalse(updatedCoupon.isActive(), "The coupon should be deactivated");
+    }
 
 
 }

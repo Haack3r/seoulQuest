@@ -12,7 +12,9 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @Setter
-@Table(name = "tbl_user_coupon")
+@Table(name = "tbl_user_coupon", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"coupon_id", "member_id"})
+})
 public class UserCoupon {
 
     @Id
@@ -29,7 +31,12 @@ public class UserCoupon {
 
     private LocalDate useDate;
 
+    //추가 1114
+    private boolean isActive;
+
+
     public void ChangeUseDate(LocalDate useDate){
         this.useDate = useDate;
     }
+    public void setIsActive(boolean isActive) {this.isActive = isActive; }
 }

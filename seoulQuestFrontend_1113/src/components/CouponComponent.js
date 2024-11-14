@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button, Badge } from "antd";
-import { getAvailableCoupons, addCouponToMyList, getMyCoupons } from "../api/couponApi";
+import {
+  getAvailableCoupons,
+  addCouponToMyList,
+  getMyCoupons,
+} from "../api/couponApi";
 
 const CouponComponent = () => {
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [myCoupons, setMyCoupons] = useState([]);
-  const email = "user1@gmail.com"; // replace with dynamic user email if available
-
+  //   const email = "user1@gmail.com"; // replace with dynamic user email if available
+  const user = JSON.parse(localStorage.getItem("user"));
+  const email = user?.email;
   useEffect(() => {
     fetchAvailableCoupons();
     fetchMyCoupons();
@@ -32,11 +37,24 @@ const CouponComponent = () => {
 
   const handleAddCoupon = async (couponId) => {
     try {
-      await addCouponToMyList(email, couponId);
+      await addCouponToMyList(couponId);
       fetchMyCoupons();
       alert("Coupon added to your list!");
     } catch (error) {
-      console.error("Error adding coupon to my list:", error);
+      if (error.response) {
+        if (error.response.status === 409) {
+          alert("Coupon already added for this user.");
+        } else {
+          console.error("Unexpected error:", error.response.status, error.response.data);
+          alert("An error occurred while adding the coupon. Please try again.");
+        }
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        alert("Network error: Unable to contact server.");
+      } else {
+        console.error("Error in request setup:", error.message);
+        alert("An unexpected error occurred.");
+      }
     }
   };
 
@@ -50,15 +68,25 @@ const CouponComponent = () => {
         {availableCoupons.length > 0 ? (
           <ul className="space-y-4">
             {availableCoupons.map((coupon) => (
-              <li key={coupon.couponName} className="flex justify-between items-center border-b pb-4">
+              <li
+                key={coupon.couponName}
+                className="flex justify-between items-center border-b pb-4"
+              >
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-700">{coupon.couponName}</h3>
-                  <p className="text-sm text-gray-500">Expires on {coupon.expirationDate}</p>
-                  <Badge count={`Discount: ₩${coupon.discount}`} style={{ backgroundColor: '#52c41a' }} />
+                  <h3 className="text-lg font-semibold text-gray-700">
+                    {coupon.couponName}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Expires on {coupon.expirationDate}
+                  </p>
+                  <Badge
+                    count={`Discount: ₩${coupon.discount}`}
+                    style={{ backgroundColor: "#52c41a" }}
+                  />
                 </div>
                 <Button
                   type="primary"
-                  onClick={() => handleAddCoupon(coupon.id)}
+                  onClick={() => handleAddCoupon(coupon.couponId)}
                 >
                   Add to My Coupons
                 </Button>
@@ -76,10 +104,18 @@ const CouponComponent = () => {
         {myCoupons.length > 0 ? (
           <ul className="space-y-4">
             {myCoupons.map((coupon) => (
-              <li key={coupon.couponName} className="flex justify-between items-center border-b pb-4">
+              <li
+                key={coupon.couponName}
+                className="flex justify-between items-center border-b pb-4"
+              >
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-700">{coupon.couponName}</h3>
-                  <Badge count={`Discount: ₩${coupon.discount}`} style={{ backgroundColor: '#faad14' }} />
+                  <h3 className="text-lg font-semibold text-gray-700">
+                    {coupon.couponName}
+                  </h3>
+                  <Badge
+                    count={`Discount: ₩${coupon.discount}`}
+                    style={{ backgroundColor: "#faad14" }}
+                  />
                 </div>
               </li>
             ))}

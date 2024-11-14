@@ -23,5 +23,8 @@ public class Coupon {
     private int discount;
 
     private LocalDate expireDate;
+    @Setter
     private boolean isActive;
+
+
 }

@@ -1,6 +1,7 @@
 package com.positive.culture.seoulQuest.service;
 
 import com.positive.culture.seoulQuest.domain.Coupon;
+import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.UserCoupon;
 import com.positive.culture.seoulQuest.dto.CouponDTO;
 import com.positive.culture.seoulQuest.dto.OrderDTO;
@@ -16,6 +17,8 @@ public interface CouponService {
     List<CouponDTO> getAvailableCoupons();
     void addCouponToUser(String email, Long couponId);
     List<CouponDTO> getUserCoupons(String email);
+    public void markCouponAsUsed(Long userCouponId);
+
 
 
 }
