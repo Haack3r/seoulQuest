@@ -122,6 +122,30 @@ const layoutStyles = {
     }
 };
 
+const modalStyles = {
+    overlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 1000,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    content: {
+        position: 'relative',
+        width: '500px',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        padding: 0,
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+    }
+};
+
+
 // Button 컴포넌트
 const Button = ({ children, variant = 'primary', size = 'default', ...props }) => (
     <button
@@ -147,6 +171,254 @@ const initState = {
     pqty: 0,
     uploadFileNames: []
 }
+
+// ProductForm 컴포넌트 분리
+const ProductForm = ({ isEditing, initialData, onSubmit, onClose }) => {
+
+    // // 현재 업로드된 파일 미리보기를 위한 상태
+    // const [previewUrls, setPreviewUrls] = useState([]);
+
+    // // 파일 변경 핸들러
+    // const handleFileChange = (e) => {
+    //     const { name, value, type } = e.target;
+
+    //     if (type === 'file') {
+    //         // 파일 입력의 경우 별도 처리
+    //         const files = Array.from(e.target.files);
+    //         setServerData(prev => ({
+    //             ...prev,
+    //             files: files // FormData 생성 시 사용할 파일들 저장
+    //         }));
+    //     } else {
+    //         // 기존 처리
+    //         const newValue = (name === 'pprice' || name === 'pqty')
+    //             ? parseInt(value) || 0
+    //             : value;
+
+    //         setServerData(prev => ({
+    //             ...prev,
+    //             [name]: newValue
+    //         }));
+    //     }
+    // };
+
+    // // 기존 이미지 표시 (수정 시)
+    // useEffect(() => {
+    //     if (isEditing && serverData.uploadFileNames) {
+    //         const urls = serverData.uploadFileNames.map(
+    //             fileName => `/api/user/products/view/${fileName}`
+    //         );
+    //         setPreviewUrls(urls);
+    //     }
+    // }, [isEditing, serverData.uploadFileNames]);
+
+    // // 컴포넌트 언마운트 시 미리보기 URL 정리
+    // useEffect(() => {
+    //     return () => {
+    //         previewUrls.forEach(url => URL.revokeObjectURL(url));
+    //     };
+    // }, [previewUrls]);
+
+    // 폼 데이터 상태 관리
+    const [formData, setFormData] = useState(initialData);
+    // 파일 미리보기 상태
+    const [previewUrls, setPreviewUrls] = useState([]);
+    // 파일 입력 참조
+    const fileInputRef = useRef();
+
+    // 입력값 변경 핸들러
+    const handleChange = (e) => {
+        const { name, value, type } = e.target;
+
+        if (type === 'file') {
+            const files = Array.from(e.target.files);
+            // 이미지 파일 검증
+            const validFiles = files.filter(file => file.type.startsWith('image/'));
+            if (validFiles.length !== files.length) {
+                alert('이미지 파일만 업로드 가능합니다.');
+                e.target.value = '';
+                return;
+            }
+
+            // 미리보기 URLs 업데이트
+            const urls = validFiles.map(file => URL.createObjectURL(file));
+            setPreviewUrls(prev => {
+                prev.forEach(url => URL.revokeObjectURL(url));
+                return urls;
+            });
+
+            setFormData(prev => ({
+                ...prev,
+                files: validFiles
+            }));
+        } else {
+            const newValue = (name === 'pprice' || name === 'pqty')
+                ? parseInt(value) || 0
+                : value;
+
+            setFormData(prev => ({
+                ...prev,
+                [name]: newValue
+            }));
+        }
+    };
+
+    // 폼 제출 핸들러
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const submitData = new FormData();
+
+        // 파일 처리
+        if (formData.files) {
+            Array.from(formData.files).forEach(file => {
+                submitData.append("files", file);
+            });
+        }
+
+        // 기본 정보 추가
+        submitData.append("pname", formData.pname);
+        submitData.append("pdesc", formData.pdesc);
+        submitData.append("pprice", formData.pprice);
+        submitData.append("pqty", formData.pqty);
+        submitData.append("categoryName", formData.categoryName);
+
+        // 수정 시 기존 파일 정보 추가
+        if (isEditing && formData.uploadFileNames) {
+            formData.uploadFileNames.forEach(fileName => {
+                submitData.append("uploadFileNames", fileName);
+            });
+        }
+
+        onSubmit(submitData);
+    };
+
+    // 초기 이미지 로드
+    useEffect(() => {
+        if (isEditing && initialData.uploadFileNames) {
+            const urls = initialData.uploadFileNames.map(
+                fileName => `/api/user/products/view/${fileName}`
+            );
+            setPreviewUrls(urls);
+        }
+
+        return () => {
+            previewUrls.forEach(url => URL.revokeObjectURL(url));
+        };
+    }, [isEditing, initialData]);
+
+
+    return (
+        <div style={modalStyles.overlay} onClick={onClose}>
+            <div style={modalStyles.content} onClick={e => e.stopPropagation()}>
+                <div style={cardStyles.header}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h3 style={cardStyles.title}>{isEditing ? '제품 편집' : '새 제품 추가'}</h3>
+                        <Button variant="ghost" size="small" onClick={onClose}>닫기</Button>
+                    </div>
+                </div>
+                <div style={cardStyles.content}>
+                    <form onSubmit={handleSubmit}>
+                        {/* 기존 폼 내용 */}
+                        <div style={inputStyles.container}>
+                            <label style={inputStyles.label}>제품 이름</label>
+                            <input
+                                style={inputStyles.input}
+                                name="pname"
+                                value={serverData.pname}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div style={inputStyles.container}>
+                            <label style={inputStyles.label}>카테고리</label>
+                            <input
+                                style={inputStyles.input}
+                                name="categoryName"
+                                value={serverData.categoryName}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div style={inputStyles.container}>
+                            <label style={inputStyles.label}>설명</label>
+                            <textarea
+                                style={inputStyles.textarea}
+                                name="pdesc"
+                                value={serverData.pdesc}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div style={layoutStyles.grid}>
+                            <div style={inputStyles.container}>
+                                <label style={inputStyles.label}>가격</label>
+                                <input
+                                    style={inputStyles.input}
+                                    type="number"
+                                    name="pprice"
+                                    value={serverData.pprice}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div style={inputStyles.container}>
+                                <label style={inputStyles.label}>재고</label>
+                                <input
+                                    style={inputStyles.input}
+                                    type="number"
+                                    name="pqty"
+                                    value={serverData.pqty}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div style={inputStyles.container}>
+                            <label style={inputStyles.label}>이미지</label>
+                            <input
+                                ref={fileInputRef}
+                                style={inputStyles.input}
+                                type="file"
+                                onChange={handleFileChange}
+                                multiple
+                                accept="image/*"
+                            />
+                            {previewUrls.length > 0 && (
+                                <div style={{
+                                    display: 'flex',
+                                    gap: '8px',
+                                    marginTop: '8px',
+                                    flexWrap: 'wrap'
+                                }}>
+                                    {previewUrls.map((url, index) => (
+                                        <img
+                                            key={index}
+                                            src={url}
+                                            alt={`Preview ${index + 1}`}
+                                            style={{
+                                                width: '100px',
+                                                height: '100px',
+                                                objectFit: 'cover',
+                                                borderRadius: '4px'
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div style={layoutStyles.buttonGroup}>
+                            <Button style={{ flex: 1 }} type="submit">
+                                {isEditing ? '수정하기' : '추가하기'}
+                            </Button>
+                            <Button type="button" variant="secondary" onClick={onClose}>
+                                취소
+                            </Button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+};
 
 const AdminProductComponents = () => {
     // const [product, setProduct] = useState([]);
@@ -222,6 +494,16 @@ const AdminProductComponents = () => {
 
         return formData;
     };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        if (isEditing) {
+            handleModifyProduct(e);
+        } else {
+            handleAddProduct(e);
+        }
+    };
+
 
     // 입력값 변경 처리
     const handleChange = (e) => {
@@ -532,7 +814,19 @@ const AdminProductComponents = () => {
             ))}
 
             {/* 제품 추가/편집 폼 */}
+
             {showAddForm && (
+                <ProductForm
+                    isEditing={isEditing}
+                    serverData={serverData}
+                    handleChange={handleChange}
+                    handleSubmit={handleFormSubmit}
+                    fileInputRef={fileInputRef}
+                    onClose={resetForm}
+                />
+            )}
+
+            {/* {showAddForm && (
                 <div style={cardStyles.container}>
                     <div style={cardStyles.header}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -618,8 +912,9 @@ const AdminProductComponents = () => {
                         </form>
                     </div>
                 </div>
-            )
-            }
+            ) */}
+
+
 
             {/* 판매 통계 */}
             {/* <div style={cardStyles.container}>

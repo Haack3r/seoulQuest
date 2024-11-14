@@ -31,7 +31,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (request.getMethod().equals("OPTIONS")) return true;
 
         String path = request.getRequestURI();
-        log.info("check uri....."+path);
+        log.info("check uri....." + path);
 
         //        // api/member 경로의 호출은 체크 안함
         if (path.startsWith("/api/member/")) return true;
@@ -171,7 +171,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 //    }
 //}
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         log.info("----- JWTCheckFilter -----");
 
         String authHeaderStr = request.getHeader("Authorization");
@@ -225,9 +226,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String msg = gson.toJson(Map.of("error", "ERROR_ACCESS_TOKEN"));
 
             response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             PrintWriter printWriter = response.getWriter();
             printWriter.print(msg);
             printWriter.close();
+
         }
     }
 }

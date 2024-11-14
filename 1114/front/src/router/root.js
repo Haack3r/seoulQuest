@@ -9,6 +9,8 @@ import nuToursRouter from "./nuToursRouter";
 import myPageRouter from "./myPageRouter";
 import { Alert } from "@mui/material";
 import adminRouter from "./admin/adminRouter";
+import AdminLayout from "../layouts/AdminLayout";
+import { AdminAuth } from "./admin/adminAuth";
 
 
 const { createBrowserRouter } = require("react-router-dom")
@@ -77,6 +79,7 @@ const root = createBrowserRouter([
     },
     {
         path: "admin",
+        element: <AdminAuth />,
         children: adminRouter(),
         errorElement: <Alert severity="error">오류가 발생했습니다.</Alert>
     },
