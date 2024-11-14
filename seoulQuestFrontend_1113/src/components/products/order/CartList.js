@@ -4,6 +4,7 @@ import { Badge } from "antd";
 const CartList = ({ orderItems, selectedItems, handleToggleSelect, host }) => {
   return (
     <div className="px-6 py-4 bg-white rounded-xl shadow-md mb-6">
+      <hr className="border-t border-gray-200 my-4" />
       {orderItems.map((item, index) => (
         <div key={index} className="flex items-center mb-4">
           <input
@@ -32,7 +33,7 @@ const CartList = ({ orderItems, selectedItems, handleToggleSelect, host }) => {
         </div>
       ))}
 
-      <hr className="border-t border-gray-400 my-6" />
+      <hr className="border-t border-gray-200 my-4" />
       <div className="flex justify-between items-center text-lg font-semibold">
         <p>Shipping Fee:</p>
         {/* <p>₩3,000</p> */}

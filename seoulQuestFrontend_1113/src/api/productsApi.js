@@ -62,7 +62,7 @@ export const postOrderInfo = async (obj) => {
     const res = await jwtAxios.post(
       `${host}/orders`,
       {
-        orderItems: obj.orderItems,
+        porderItems: obj.orderItems,
         usedCoupon: obj.usedCoupon,
         firstname: obj.firstname,
         lastname: obj.lastname,
@@ -78,6 +78,8 @@ export const postOrderInfo = async (obj) => {
       },
       { headers }
     );
+
+    console.log(res)
     return res.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Failed to Post order info");

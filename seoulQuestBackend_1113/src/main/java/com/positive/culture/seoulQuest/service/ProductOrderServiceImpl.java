@@ -5,16 +5,16 @@ import com.positive.culture.seoulQuest.dto.OrderDTO;
 import com.positive.culture.seoulQuest.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
+public class ProductOrderServiceImpl implements ProductOrderService {
 
     private final MemberRepository memberRepository;
-    private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
+    private final ProductOrderRepository productOrderRepository;
+    private final ProductOrderItemRepository productOrderItemRepository;
     private final UserCouponRepository userCouponRepository;
 
     @Override
@@ -31,9 +31,9 @@ public class OrderServiceImpl implements OrderService {
 
         System.out.println(2 + "OrderDTO를 OrderEntity로 변경하여 저장.");
         //OrderDTO를 OrderEntity로 변경하여 저장.
-        Order order = Order.builder()
+        ProductOrder productOrder = ProductOrder.builder()
                 .orderDate(LocalDateTime.now())
-                .orderOwner(member)
+                .pOrderMember(member)
                 .recipientFirstName(orderDTO.getFirstname())
                 .recipientLastName(orderDTO.getLastname())
                 .zipcode(orderDTO.getZipcode().trim())
@@ -46,25 +46,24 @@ public class OrderServiceImpl implements OrderService {
                 .usedCoupon(userCoupon)
                 .totalPrice(orderDTO.getTotalPrice())
                 .build();
-        orderRepository.save(order);
+        productOrderRepository.save(productOrder);
 
 
 
         System.out.println(3+ "order된 item들을 저장.");
         //order된 item들을 저장. , 상품이름 , 카트 아이템 번호? 카트번호?
         //프론트에서 카트에 있는 아이템을 조정할수 있으므로 카트엔티티나 카트아이템과의 연관성은 없앰
-        orderDTO.getOrderItems().stream().map(i->{
-
-            return OrderItem.builder()
-                    .order(order)
+        orderDTO.getPOrderItems().stream().map(i->{
+            return ProductOrderItem.builder()
+                    .productOrder(productOrder)
                     .pno(i.getPno())
                     .pqty(i.getPqty())
                     .pname(i.getPname())
                     .pprice(i.getPprice())
                     .build();
-        }).forEach(i-> orderItemRepository.save(i));
+        }).forEach(i-> productOrderItemRepository.save(i));
         System.out.println(4);
 
-        return order.getOrderId();
+        return productOrder.getPOrderId();
     }
 }

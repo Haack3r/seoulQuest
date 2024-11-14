@@ -90,6 +90,8 @@ public class TourRepositoryTests {
         }
     }
 
+
+    //tour 날짜 저장
     @Test
     public void testInsertMultipleTourDates() {
 

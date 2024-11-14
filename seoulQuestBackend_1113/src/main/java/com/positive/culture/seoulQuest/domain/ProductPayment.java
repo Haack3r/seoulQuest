@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -13,21 +12,21 @@ import java.util.Date;
 @Builder
 @Getter
 @Entity
-@Table(name = "tbl_payment")
-public class PaymentRecord {
+@Table(name = "tbl_product_payment")
+public class ProductPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long paymentId;
+    private Long pPaymentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    private Member paymentMember;
+    private Member pPaymentMember;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    private Order order;
+    private ProductOrder productOrder;
 
-    private String MerchantUid;
+    private String merchantUid;
 
     private BigDecimal paymentPrice;
     private Date paymentDate;

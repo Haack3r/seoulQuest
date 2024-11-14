@@ -57,7 +57,7 @@ export const postBookInfo = async (obj) => {
     const res = await jwtAxios.post(
       `${host}/orders`,
       {
-        orderItems: obj.orderItems,
+        torderItems: obj.orderItems,
         usedCoupon: obj.usedCoupon,
         firstname: obj.firstname,
         lastname: obj.lastname,
@@ -75,24 +75,24 @@ export const postBookInfo = async (obj) => {
   }
 };
 
-// // payment: 유저의 결제 정보를 서버로 보냄 , impUid포함한 정보.
-// export const postPayInfo = async (obj, impUid) => {
-//   console.log("payment:", obj);
-//   const {orderDTO} = obj
-//   console.log(orderDTO)
-//   console.log(impUid);
-//   const headers = { "Content-Type": "application/json" };
+// payment: 유저의 결제 정보를 서버로 보냄 , impUid포함한 정보.
+export const postPayInfo = async (obj, impUid) => {
+  console.log("payment:", obj);
+  const {orderDTO} = obj
+  console.log(orderDTO)
+  console.log(impUid);
+  const headers = { "Content-Type": "application/json" };
 
-//   try {
-//     const res = await jwtAxios.post(
-//       `${host}/payment/${impUid}`,
-//         orderDTO,
-//       //   paymentDate: new Date().toISOString(),
-//       // ),
-//       { headers }
-//     );
-//     return res.data;
-//   } catch (error) {
-//     throw new Error(error.response?.data?.message || "Failed to Post payment info");
-//   }
-// };
+  try {
+    const res = await jwtAxios.post(
+      `${host}/payment/${impUid}`,
+        orderDTO,
+      //   paymentDate: new Date().toISOString(),
+      // ),
+      { headers }
+    );
+    return res.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to Post payment info");
+  }
+};

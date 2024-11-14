@@ -1,5 +1,6 @@
 package com.positive.culture.seoulQuest.dto;
 
+import com.positive.culture.seoulQuest.domain.Reservation;
 import com.positive.culture.seoulQuest.domain.UserCoupon;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,10 @@ public class OrderDTO {
     private String usedCoupon;
 
     @Builder.Default
-    private List<CartItemListDTO> orderItems  = new ArrayList<>(); ;
+    private List<CartItemListDTO> pOrderItems  = new ArrayList<>();
+
+    @Builder.Default
+    private List<ReservationItemListDTO> tOrderItems  = new ArrayList<>();
 
     private String email;
     private String firstname;

@@ -11,18 +11,19 @@ import java.time.LocalDate;
 @Getter
 @Builder
 @ToString
-@Table(name = "tbl_book_item")
-public class BookItem {
+@Table(name = "tbl_tour_order_item")
+public class TourOrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookItemId;
+    private Long tOrderItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bookId")
-    private Book book;
+    @JoinColumn(name = "tour_order_id")
+    private TourOrder tourOrder;
 
     private String tname;
-    private String tno;
-    private String tprice;
+    private Long tno;
+    private int tprice;
+    private int tqty;
     private LocalDate tdate;
 }
