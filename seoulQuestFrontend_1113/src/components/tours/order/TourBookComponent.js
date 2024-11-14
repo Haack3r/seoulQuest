@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { API_SERVER_HOST } from "../../../api/todoApi";
 import { getOrderInfo, postOrderInfo, postPayInfo,  } from "../../../api/productsApi";
 import useCustomReservation from "../../../hooks/useCustomReservation";
+import { Globe,CalendarCheck, ContactRound , Info } from 'lucide-react';
 
 const host = API_SERVER_HOST;
 
 const initState = { 
-    bookItems: [],
+    orderItems: [],
     coupons: [],
     usedCoupon: '',
     firstname: '',
@@ -17,7 +18,7 @@ const initState = {
     totalPrice: '',
     paymentMethod: '',
     impUid: '',
-    bookId: 0,
+    orderId: 0,
 };
 
 const TourBookComponent = () => {
@@ -53,7 +54,7 @@ const TourBookComponent = () => {
 
     useEffect(() => {
         getOrderInfo().then((data) => {
-            const existBookInfo = { ...data, bookItems: reservationItems };
+            const existBookInfo = { ...data, orderItems: reservationItems };
             setBookInfo(existBookInfo);
             setExistBookInfo(existBookInfo);
             console.log(bookInfo)
@@ -142,7 +143,7 @@ const TourBookComponent = () => {
 
     
         console.log(selectedCoupon)
-        // 선택된 아이템만 필터링하여 새로운 orderItems 배열 생성
+        // 선택된 아이템만 필터링하여 새로운 bookItems 배열 생성
         const selectedBookItems = bookInfo.orderItems.filter((_, index) =>
             selectedItems.has(index)
         );
@@ -150,19 +151,19 @@ const TourBookComponent = () => {
         // 필터링된 bookItems만을 포함한 bookInfo 생성
         const filteredBookInfo = {
             ...bookInfo,
-            bookItems: selectedBookItems,
+            orderItems: selectedBookItems,
             usedCoupon: selectedCoupon,
             totalPrice: discountedPrice,
         };
 
         // Product Price가 0일 때 경고 메시지 표시
         if (calculateSelectedItemsPrice() === 0) {
-            alert("There are no items to order. Please select at least one item to order.");
+            alert("There are no tours to book. Please select at least one tour to book.");
             return; 
         }
 
         if(filteredBookInfo.paymentMethod){
-            console.log(filteredBookInfo); // 필터링된 orderInfo 확인
+            console.log(filteredBookInfo); // 필터링된 bookInfo 확인
         
             // //주문시 주문 정보 서버로 전달
             // postOrderInfo(filteredBookInfo).then((data)=>{
@@ -228,7 +229,7 @@ const TourBookComponent = () => {
                 <div className="w-2/3 pr-10">
                 <div className="px-6 py-4 bg-white rounded-xl shadow-md mb-6">
                 <hr className="border-t border-gray-200 my-4" />
-                    {bookInfo.bookItems.map((item, index) => (
+                    {bookInfo.orderItems.map((item, index) => (
                         <div
                         key={index}
                         className="flex items-center justify-between mb-4 border-b pb-4"
@@ -255,13 +256,23 @@ const TourBookComponent = () => {
                         </div>
 
                         {/* Right Section: Tour Details */}
-                        <div className="text-right">
-                            <p className="text-sm mb-2">📅 {item.tdate}</p>
-                            <p className="text-sm mb-2">👤 {item.tqty}</p>
-                            <p className="text-sm">🗣️ Language: English</p>
+                        <div className="text-right space-y-2">
+                        <p className="text-xs flex items-center">
+                                <CalendarCheck className="h-4 w-4 mr-1"  /> 
+                                {item.tdate}
+                            </p>
+                            <p className="text-xs flex items-center">
+                                < ContactRound  className="h-4 w-4 mr-1"  /> 
+                                {item.tqty}
+                            </p>
+                            <p className="text-xs flex items-center">
+                                <Globe className="h-4 w-4 mr-1" />
+                                Language: English
+                            </p>
                         </div>
                         </div>
                     ))}
+                    <p className="text-xs text-green-600">Please double-check <strong>the reservation date</strong> and <strong>the number of people</strong>.</p> 
                     </div>
 
 
@@ -294,51 +305,135 @@ const TourBookComponent = () => {
                                     </label>
                                 </div>
                                 <hr className="border-t border-gray-400 my-4" />
-                                <div className="space-y-4">
-                                    <label className="block text-gray-600 font-semibold">Recipient Information</label>
-                                    <input
-                                        type="text"
-                                        placeholder="First Name"
-                                        className={`w-full p-3 border rounded-md ${!isEditing ? 'bg-gray-100' : ''}`}
-                                        value={bookInfo.firstname}
-                                        disabled={!isEditing}
-                                        onChange={handleChange}
-                                        name="firstname"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Last Name"
-                                        className={`w-full p-3 border rounded-md ${!isEditing ? 'bg-gray-100' : ''}`}
-                                        value={bookInfo.lastname}
-                                        disabled={!isEditing}
-                                        onChange={handleChange}
-                                        name="lastname"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Contact Number"
-                                        className={`w-full p-3 border rounded-md ${!isEditing ? 'bg-gray-100' : ''}`}
-                                        value={bookInfo.phoneNumber}
-                                        disabled={!isEditing}
-                                        onChange={handleChange}
-                                        name="phoneNumber"
-                                    />
-                                    <p className="text-xs ml-1">Please enter your phone number with dashes(-).</p>
-                                </div>
-                                <hr className="border-t border-gray-400 my-4" />
-                                <div className="space-y-4">
-                                    <label className="block text-gray-600 mb-2 font-semibold">Address</label>
+                                <div className="space-y-3">
+                                <label className="block text-gray-700 text-lg font-semibold">
+                                    Recipient Information
+                                </label>
+
+                                <div className="items-center relative">
+                                <label
+                                htmlFor="firstname"
+                                className="text-gray-600 text-sm font-semibold w-32"
+                                >
+                                First Name *
+                                </label>
+                                <input
+                                type="text"
+                                id="firstname"
+                                placeholder="First Name"
+                                required
+                                className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 mt-1 ${
+                                    bookInfo.firstname === '' ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
+                                }`}
+                                value={bookInfo.firstname}
+                                disabled={!isEditing}
+                                onChange={handleChange}
+                                name="firstname"
+                                />
+                                {bookInfo.firstname === '' && (
+                                <span className="absolute right-3 top-3 text-red-500 text-sm">
+                                    <Info className="h-6 w-6 pb-3" />
+                                </span>
+                                )}
+                                {bookInfo.firstname === '' && (
+                                <p className="text-xs text-red-500 mt-1">Enter your first name</p>
+                                )}
+                            </div>
+
+
+                                {/* Last Name */}
+                                <div className="items-center relative">
+                                <label
+                                htmlFor="lastname"
+                                className="text-gray-600 text-sm font-semibold w-32"
+                                >
+                                Last Name *
+                                </label>
+                                <input
+                                type="text"
+                                id="lastname"
+                                placeholder="Last Name"
+                                required
+                                className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 mt-1 ${
+                                    bookInfo.lastname === '' ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
+                                }`}
+                                value={bookInfo.lastname}
+                                disabled={!isEditing}
+                                onChange={handleChange}
+                                name="lastname"
+                                />
+                                {bookInfo.lastname === '' && (
+                                <span className="absolute right-3 top-3 text-red-500 text-sm">
+                                    <Info className="h-6 w-6 pb-3" />
+                                </span>
+                                )}
+                                {bookInfo.lastname === '' && (
+                                <p className="text-xs text-red-500 mt-1">Enter your last name</p>
+                                )}
+                            </div>
+
+
+                                {/* Phone Number */}
+
+                                <div className="items-center relative">
+                                <label
+                                htmlFor="phoneNumber"
+                                className="text-gray-600 text-sm font-semibold w-32"
+                                >
+                                Phone Number *
+                                </label>
+
+                                <p className="text-xs text-gray-500 mb-2">
+                                    Please enter your phone number with dashes (-).
+                                    </p>
+                                <input
+                                type="text"
+                                id="phoneNumber"
+                                placeholder="Phone Number"
+                                className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 mt-1 ${
+                                    bookInfo.phoneNumber === '' ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
+                                }`}
+                                value={bookInfo.phoneNumber}
+                                disabled={!isEditing}
+                                onChange={handleChange}
+                                name="phoneNumber"
+                                required
+                                />
+                                {bookInfo.phoneNumber === '' && (
+                                <span className="absolute right-3 top-3 text-red-500 text-sm">
+                                    <Info className="h-6 w-6 pb-3" />
+                                </span>
+                                )}
+                                {bookInfo.phoneNumber === '' && (
+                                <p className="text-xs text-red-500 mt-1">Enter your phone Number</p>
+                                )}
+                                 <p style={{ fontSize: '0.75rem' }} className="text-xs text-gray-600 flex items-center mt-2">
+                                    We will contact you only regarding essential updates or changes to your reservation.
+                                </p>
+
+                            </div>
+
+                            </div> 
+
+
+                                <hr className="border-t border-gray-400 my-2" />
+                                <div className="space-y-2 mb-5">
+                                    <label className="block text-gray-600 font-semibold">Country</label>
                                     
-                                    <input 
-                                        type="text" 
-                                        placeholder="Country" 
-                                        className={`w-full p-3 border rounded-md mt-2 ${!isEditing ? 'bg-gray-100' : ''}`} 
+                                    <input
+                                        type="text"
+                                        id="country"
+                                        placeholder="Country"
+                                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 mt-2 focus:ring-blue-500"
                                         value={bookInfo.country}
                                         disabled={!isEditing}
                                         onChange={handleChange}
                                         name="country"
-                                    />
-                                   
+                                        />
+                                        <p style={{ fontSize: '0.75rem' }} className="text-xs text-gray-600 flex items-center">
+                                        If you enter your country, we will provide you with an audio guide.
+                                    </p>
+                                        
                                 </div>
                             </div>
 
@@ -401,7 +496,7 @@ const TourBookComponent = () => {
                                     
                                 </div>
                                     <div className="space-y-4 text-sm bg-gray-100 text-gray-500 my-8 rounded-lg p-5">
-                                        <h4 className="font-semibold text-gray-700">Delivery Terms</h4>
+                                        {/* <h4 className="font-semibold text-gray-700">Delivery Terms</h4>
                                         <p>
                                             Your order will be shipped within <span className="font-semibold">5 days</span> 
                                             (excluding weekends and public holidays).
@@ -410,13 +505,13 @@ const TourBookComponent = () => {
                                             If the item is out of stock or if there is an expected delay in shipping, we will 
                                             notify you via <span className="font-semibold">Email</span>.
                                         </p>
-                                        <hr className="border-t border-gray-400 my-4" />
+                                        <hr className="border-t border-gray-400 my-4" /> */}
                                         <h4 className="font-semibold text-gray-700">Need Assistance?</h4>
                                         <p>
                                             If you have any further questions, please contact <span className="font-semibold">Customer Service</span>.
                                         </p>
                                     </div>
-                            </div>
+                                </div>
 
                             
                         </div>
@@ -447,7 +542,7 @@ const TourBookComponent = () => {
                         {/* 상품 추가 안내 메시지 */}
                         {calculateSelectedItemsPrice() === 0 && (
                             <p className="text-sm text-red-500 mt-2">
-                                Please add at least one Tour to your order.
+                                Please add at least one tour to your Booking.
                             </p>
                         )}
 
@@ -462,7 +557,7 @@ const TourBookComponent = () => {
                         <button className="w-full max-w-6xl bg-gray-500 text-white py-3 mt-10 rounded-md hover:bg-gray-600 transition font-semibold"
                             onClick={handleClickBuyNow}
                         >
-                            BUY NOW
+                            BOOKING NOW
                         </button>
                     </div>
                 </div>

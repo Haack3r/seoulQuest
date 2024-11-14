@@ -7,17 +7,23 @@ import com.positive.culture.seoulQuest.service.CouponService;
 import com.positive.culture.seoulQuest.service.TourService;
 
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -148,13 +154,34 @@ public class TourController {
         return Map.of("RESULT", "SUCCESS");
     }
 
-    //이메일로 사용자 정보와 쿠폰리스트를 받아옴.
+    //orderDTO로 받아서 Book, BookItem 엔티티에 저장.
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    @GetMapping("/bookinfo")
-    public OrderDTO getBookInfo(Principal principal){
-        String email = principal.getName();
-        log.info(email);
-        return  couponService.getUserCouponAndUserInfo(email);
+    @PostMapping("/orders")
+    public ResponseEntity<Map<String,Object>> book(@RequestBody OrderDTO orderDTO){
+        System.out.println("tour order내역 : " + orderDTO);
+
+        Long bookId = bookService.saveBook(orderDTO);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "tour Order complete");
+        response.put("orderId", bookId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+//    //결제 성공시 paymentRecord엔티티에 저장
+//    @PostMapping("/payment/{imp_uid}")
+//    public IamportResponse<Payment> validateIamport(@PathVariable String imp_uid, @RequestBody OrderDTO orderDTO) throws IamportResponseException, IOException {
+//
+//        log.info("결제 성공 paymentDTO:" + orderDTO);
+//        //결제 성공시에 order엔티티에 status를 complete으로 변경하는 로직 필요.
+//        IamportResponse<Payment> payment = iamportClient.paymentByImpUid(imp_uid);
+//        log.info(payment.getResponse());
+//
+//        log.info("결제 요청 응답. 결제 내역 - 주문 번호: {}", payment.getResponse().getMerchantUid());
+//        Payment paymentResponse = payment.getResponse();
+//
+//        paymentService.paymentDone(paymentResponse, orderDTO);
+//
+//        return payment;
+//    }
 
 }
