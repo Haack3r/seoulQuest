@@ -2,8 +2,10 @@ package com.positive.culture.seoulQuest.seoulQuest.repository;
 
 import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.domain.Product;
+import com.positive.culture.seoulQuest.dto.ProductDTO;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
+import com.positive.culture.seoulQuest.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
 import javax.swing.plaf.PanelUI;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -24,6 +27,9 @@ public class ProductRepositoryTests {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    ProductService productService;
 
     //3. product data 추가
     @Test
@@ -104,5 +110,29 @@ public class ProductRepositoryTests {
 
     }
 
+    @Test
+    public void testAdminAdd(){
+        Category category = Category.builder()
+                .categoryName("111")
+                .categoryType("product")
+                .build();
+        categoryRepository.save(category);
+
+        ProductDTO productDTO = ProductDTO.builder()
+                .pname("111")
+                .pdesc("111")
+                .categoryName("111")
+                .categoryType("product")
+                .pprice(111)
+                .pqty(111)
+                .shippingCost(111)
+                .build();
+
+        productDTO.setUploadFileNames(
+                List.of(UUID.randomUUID()+"_"+"Test1.jpg")
+        );
+
+        productService.register(productDTO);
+    }
 
 }

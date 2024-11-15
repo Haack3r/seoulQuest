@@ -22,24 +22,27 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 
 public class AdminController {
     private final CustomFileUtil fileUtil;
     private final ProductService productService;
     private final ProductRepository productRepository;  // 추가
 
-    @GetMapping("/")
-    public Map<String, Object> checkAdminAccess() {
-        log.info("admin access check...");
-        return Map.of("role", "ADMIN", "success", true);
-    }
+//    @GetMapping("/")
+//    public Map<String, Object> checkAdminAccess() {
+//        log.info("admin access check...");
+//        return Map.of("role", "ADMIN", "success", true);
+//    }
 
-    @GetMapping("/product")
-    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO) {
-        log.info("list.........." + pageRequestDTO);
-        return productService.getList(pageRequestDTO);
-    }
+//    @GetMapping("/product")
+//    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO) {
+//        log.info("list.........." + pageRequestDTO);
+//        return productService.getList(pageRequestDTO);
+//    }
+
+//    @GetMapping("/product")
+//    public ProductDTO
+//    }
 
     @GetMapping("/product/{pno}")
     public ProductDTO getOne(@PathVariable("pno") Long pno) {
@@ -77,7 +80,8 @@ public class AdminController {
             productDTO.setUploadFileNames(uploadFileNames);
             log.info("Uploaded files: " + uploadFileNames);
         }
-
+    
+        // 서비스 호출
         Long pno = productService.register(productDTO);
         return Map.of("RESULT", pno);
     }
@@ -101,8 +105,14 @@ public class AdminController {
 
     @DeleteMapping("/product/{pno}")
     public Map<String,Long> remove(@PathVariable("pno") Long pno) {
+        log.info("상품 삭제 (pno) : " + pno);
         // soft delete 처리
+        try{
         productRepository.updateToDelete(pno, true);
         return Map.of("RESULT", pno);
+        } catch (Exception e) {
+            log.error("삭제 중 에러 : " +e );
+            throw e;
+        }
     }
 }

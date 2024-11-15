@@ -18,6 +18,7 @@ import java.util.List;
 public class ProductDTO {
     private Long pno;
     private String categoryName;
+    private String categoryType;
 
     private String pname;
     private String pdesc; //상품설명

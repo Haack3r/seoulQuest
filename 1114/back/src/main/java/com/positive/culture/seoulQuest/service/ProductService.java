@@ -1,5 +1,6 @@
 package com.positive.culture.seoulQuest.service;
 
+import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
@@ -28,9 +29,10 @@ public interface ProductService {
 
     //DTO를 엔티티로 변환해주는 메서드 -> register에 사용
     default
-    public Product dtoToEntity(ProductDTO productDTO){
-        Product product =Product.builder()
+    public Product dtoToEntity(ProductDTO productDTO) {
+        Product product = Product.builder()
                 .pno(productDTO.getPno())
+                .category(new Category())
                 .pname(productDTO.getPname())
                 .pdesc(productDTO.getPdesc())
                 .pprice(productDTO.getPprice())
@@ -43,11 +45,11 @@ public interface ProductService {
         //업로드 처리가 끝난 파일들의 이름 리스트
         List<String> uploadFileNames = productDTO.getUploadFileNames();
 
-        if(uploadFileNames== null){
+        if (uploadFileNames == null) {
             return product;
         }
 
-        uploadFileNames.stream().forEach(uploadNames ->{
+        uploadFileNames.stream().forEach(uploadNames -> {
             product.addImageString(uploadNames);
         });
 
@@ -56,7 +58,7 @@ public interface ProductService {
 
     //엔티티를 DTO로 변환해주는 메서드  -> getList와 get에 사용
     default
-    public ProductDTO entityChangeDTO(Product product){
+    public ProductDTO entityChangeDTO(Product product) {
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
                 .categoryName(product.getCategory().getCategoryName())

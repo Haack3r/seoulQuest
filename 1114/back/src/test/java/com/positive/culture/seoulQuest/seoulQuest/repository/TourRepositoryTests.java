@@ -164,4 +164,19 @@ public class TourRepositoryTests {
         List<Tour> list = tourRepository.findByTaddress("161 Sajik-ro, Jongno-gu, Seoul");
         list.forEach(i-> System.out.println(i));
     }
+
+    @Test
+    public void testTourOne(){
+        String categoryName = "Seasonal Festivals";
+
+        Category category = categoryRepository.findByCategoryName(categoryName);
+
+        if(category != null) {
+            log.info("Found Category: " + category);
+        } else {
+            log.info("Category not found for name: " + categoryName);
+        }
+    }
+
+
 }

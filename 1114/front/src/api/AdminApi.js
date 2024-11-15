@@ -1,11 +1,9 @@
 import { Children, useEffect, useState } from "react"
 import jwtAxios from "../util/jwtUtil"
-import { API_SERVER_HOST } from "./todoApi"
 import { useNavigate } from "react-router-dom"
 import { Loader2 } from "lucide-react"
-import { getCookie } from "../util/cookieUtil"
 
-const host = `${API_SERVER_HOST}/api/admin`
+const host = `http://localhost:8080/api/admin`
 
 // const memberInfo = getCookie("member");
 
@@ -136,6 +134,7 @@ export const adminProductOne = async (pno) => {
         const res = await jwtAxios.get(`${host}/product/${pno}`)
         return res.data
     } catch (error) {
+        console.error('상품 하나 조회 오류', error)
         throw error
     }
 }
@@ -143,8 +142,10 @@ export const adminProductOne = async (pno) => {
 export const addProduct = async (formData) => {
     try {
         const res = await jwtAxios.post(
-            `${host}/product`, formData,
-            { headers: { "Content-Type": "multipart/form-data" } }
+            `${host}/product/`, formData,
+            {
+                headers: { "Content-Type": "multipart/form-data" },
+            }
         )
         return res.data
     } catch (error) {
