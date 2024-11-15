@@ -31,6 +31,15 @@ const ReservationComponent = ({maxCapacity}) => {
         console.log(reservationItems)
     }, [isLogin]);
 
+    const handleClickBook = () =>{
+        console.log(reservationItems.length)
+        if(reservationItems.length !== 0){
+            navigate('/user/products/order') 
+        }else{
+            alert("The reservation is empty. Please select at least one product.")      
+        }
+    }
+
     return (
         <div className="flex flex-col items-center w-full px-4">
             {isLogin ? (
@@ -71,7 +80,8 @@ const ReservationComponent = ({maxCapacity}) => {
                     {/* Book Now Button */}
                     <div className="text-center mt-6">
                         <button className="text-white font-semibold py-2 px-6 rounded-lg bg-stone-400 hover:bg-stone-600 transition duration-300 shadow-md w-full sm:w-auto"
-                            onClick={()=> navigate('/user/tours/book')}
+                            // onClick={()=> navigate('/user/tours/book')}
+                            onClick={handleClickBook}
                         >
                             Book now
                         </button>

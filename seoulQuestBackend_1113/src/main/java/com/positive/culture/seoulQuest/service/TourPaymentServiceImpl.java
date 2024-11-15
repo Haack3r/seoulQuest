@@ -21,6 +21,7 @@ public class TourPaymentServiceImpl implements TourPaymentService {
     private final TourPaymentItemRepository paymentItemRepository;
     private final ReservationRepository reservationRepository;
     private final ReservationItemRepository reservationItemRepository;
+    private final TourDateRepository tourDateRepository;
 
     //결제 정보를 저장하고, order엔티티의 status를 complete으로 변경함.
     @Override
@@ -61,8 +62,16 @@ public class TourPaymentServiceImpl implements TourPaymentService {
                 userCouponRepository.save(usedCoupon);
             }
 
-            //3.paymentItem 저장
+            //3. 해당 유저의 reservation를 조회하여, reservation에 들어있는 item들 중 결제 완료된 item들은 삭제
+            Reservation reservation = reservationRepository.getReservationOfMember(paymentEmail).orElseThrow();
+
+            //결제 완료시 , 투어번호에 해당하는 reservationItem 삭제
+            List<Long> tnoList = orderdto.getTOrderItems().stream().map(i->i.getTno()).toList();
+            reservationItemRepository.deleteByReservationRnoAndTourTnoIn(reservation.getRno(),tnoList);
+
+
             orderdto.getTOrderItems().forEach(i->{
+                //4.paymentItem 저장
                 TourPaymentItem tourPaymentItem = TourPaymentItem.builder()
                         .tourPayment(payment)
                         .tname(i.getTname())
@@ -70,16 +79,15 @@ public class TourPaymentServiceImpl implements TourPaymentService {
                         .tprice(i.getTprice())
                         .tdate(i.getTdate())
                         .build();
-
                 paymentItemRepository.save(tourPaymentItem);
+
+                //5.해당 tour의 tourdate의 available capacity 변경 (결제 갯수만큼 마이너스)
+                //tour와 tourdate가 모두 일치하는 데이터를 찾아야함.
+                TourDate tourDate = tourDateRepository.findByTourDateAndTourTno(i.getTdate(),i.getTno()).orElseThrow();
+                tourDate.changeAvailableCapacity(tourDate.getAvailableCapacity()-i.getTqty());
+                tourDateRepository.save(tourDate);
             });
 
-            //4. 해당 유저의 reservation를 조회하여, reservation에 들어있는 item들 중 결제 완료된 item들은 삭제
-            Reservation reservation = reservationRepository.getReservationOfMember(paymentEmail).orElseThrow();
-
-            //결제 완료시 , 투어번호에 해당하는 예약아이템들 삭제
-            List<Long> tnoList = orderdto.getTOrderItems().stream().map(i->i.getTno()).toList();
-            reservationItemRepository.deleteByReservationRnoAndTourTnoIn(reservation.getRno(),tnoList);
 
         } catch (Exception e) {
             // 결제 실패 로직

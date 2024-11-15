@@ -21,7 +21,6 @@ const initState = {
   uploadFileNames: [],
   tDate: [],
   maxCapacity:0,
-  availableCapacity:0
 };
 const host = API_SERVER_HOST;
 
@@ -38,6 +37,7 @@ const TourReadComponent = ({ tno }) => {
   const {reservationItems,changeReservation} = useCustomReservation();
   const { loginState } = useCustomLogin();
   const [visible, setVisible] = useState(false); // 팝업 표시 여부
+  const [availableCapacity, setAvailalbeCapacity] = useState(0);
 
     // 팝업을 보여주고 닫는 핸들러
     const handleVisibleChange = (visible) => {
@@ -55,28 +55,32 @@ const TourReadComponent = ({ tno }) => {
       // 날짜가 선택된 경우에만 수량을 업데이트
       setSelectedQuantity(e.target.value);
   };
-    // //날짜 클릭시 날짜에 해당하는 예약 가능 인원 출력하는 함수 -> 클릭한 날짜를 서버로 보내는 것도 처리해야함.
+
+    // 날짜 클릭시 날짜에 해당하는 예약 가능 인원 출력하는 함수
     const onSelect = (e) => {
-      setVisible(false); // 날짜 선택 후 팝업 닫기
       
-      console.log("클릭된 날짜 포맷 :"+ e.format('YYYY-MM-DD'));
-
-      const formattedDate = e.format('YYYY-MM-DD');
-      // 예약 가능한 날짜 찾기
-      const selectedDate = tour.tDate.find(i => i.tourDate === formattedDate).tourDate;
-      
-      
-      if (selectedDate) {
-        console.log("예약할 날짜: " , selectedDate)
-       
-        setSelectedDate(selectedDate)
-      } else {
-          console.log("예약 불가"); // 예약 불가능한 경우
-      }
+      setVisible(false);
     
-      };
-
-
+      const formattedDate = e.format('YYYY-MM-DD');
+    
+      // 선택한 날짜와 일치하는 tDate 객체 찾기
+      const selectedDateInfo = tour.tDate.find((date) => date.tourDate === formattedDate);
+    
+      if (selectedDateInfo) {
+        // 예약할 날짜 및 예약 가능 인원 출력
+        console.log("예약할 날짜: ", selectedDateInfo.tourDate);
+        console.log("예약 가능 인원: ", selectedDateInfo.availableCapacity);
+    
+        // 선택된 날짜와 해당 예약 가능 인원을 상태로 저장
+        setSelectedDate(selectedDateInfo.tourDate);
+        setAvailalbeCapacity(selectedDateInfo.availableCapacity);
+      } else {
+        // 예약 불가능한 날짜 처리
+        console.log("예약 불가");
+        window.alert("The selected date is not available for reservations.");
+      }
+    };
+    
       //예약가능한 날짜만 선택할수 있게 하는 함수 
       const disabledDate = (current) => {
         
@@ -248,8 +252,7 @@ const TourReadComponent = ({ tno }) => {
                       id="quantity"
                       type="number"
                       min="1"
-                      max={selectedDate ? tour.tqty : 1 }
-                      // max={selectedDate ? tour.availableCapacity : 1 } //나중에 이거로 바꾸기
+                      max= {availableCapacity? availableCapacity: 0} 
                       value={selectedQuantity}
                       onChange={onchangeQty}
                       className="w-full border border-gray-300 p-3 rounded-lg text-center"

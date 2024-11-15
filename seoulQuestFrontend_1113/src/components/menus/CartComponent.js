@@ -29,6 +29,15 @@ const CartComponent = () => {
         }
     }, [isLogin]);
 
+    const handleclickCheckout = () =>{
+        console.log(cartItems.length)
+        if(cartItems.length !== 0){
+            navigate('/user/products/order') 
+        }else{
+            alert("The cart is empty. Please select at least one product.")      
+        }
+    }
+
     return (
         <div className="flex flex-col items-center w-full px-4 sm:px-6 lg:px-8">
             {isLogin ? (
@@ -72,7 +81,7 @@ const CartComponent = () => {
                         <button
                             className="text-white font-semibold py-2 px-6 rounded-lg bg-stone-400 hover:bg-stone-600 transition duration-300 shadow-md w-full sm:w-auto"
                             type="button"
-                            onClick={()=>navigate('/user/products/order')}
+                            onClick={handleclickCheckout}
                         >
                             Proceed to Checkout
                         </button>

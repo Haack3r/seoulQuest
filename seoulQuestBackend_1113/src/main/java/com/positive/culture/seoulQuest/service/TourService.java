@@ -57,6 +57,7 @@ public interface TourService {
 
     default   //엔티티를 DTO로 변환해주는 메서드  -> getList와 get에 사용
     public TourDTO entityChangeDTO(Tour tour) {
+
         TourDTO tourDTO = TourDTO.builder()
                 .tno(tour.getTno())
                 .tname(tour.getTname())

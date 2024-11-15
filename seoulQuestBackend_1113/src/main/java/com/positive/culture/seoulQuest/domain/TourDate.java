@@ -29,12 +29,13 @@ public class TourDate {
 
     private LocalDate tourDate;
 
-    private int available_capacity;
+    private int availableCapacity;
 
     public void changeTourDate(LocalDate tourDate) {
         this.tourDate = tourDate;
     }
     public void changeAvailableCapacity(int available_capacity){
-        this.available_capacity = available_capacity;
+        this.availableCapacity = availableCapacity;
     }
+
 }

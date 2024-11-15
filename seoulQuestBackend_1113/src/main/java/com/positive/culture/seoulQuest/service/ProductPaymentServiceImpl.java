@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductPaymentServiceImpl implements ProductPaymentService {
 
+    private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
     private final ProductPaymentRepository productPaymentRepository;
     private final ProductOrderRepository productOrderRepository;
@@ -64,7 +65,24 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
                 userCouponRepository.save(usedCoupon);
             }
 
-            //3.paymentItem 저장
+            //3. 해당 유저의 카트를 조회하여, cart에 들어있는 cartitem들 중 결제 완료된 item들은 삭제
+            Cart cart = cartRepository.getCartOfMember(paymentEmail).orElseThrow();
+
+            //결제 완료시 , 상품번호에 해당하는 카트아이템들 삭제
+            List<Long> pnoList = orderdto.getPOrderItems().stream().map(i->i.getPno()).toList();
+            cartItemRepository.deleteByCartCnoAndProductPnoIn(cart.getCno(), pnoList);
+
+//            orderdto.getPOrderItems().forEach(j->{
+//                //결제 완료시, product의 pqty를 결제한 수량만큼 -함.
+//                pnoList.forEach(i-> {
+//                    Product product = productRepository.findById(i).orElseThrow();
+//                    product.changeQuantity(product.getPqty()-j.getPqty());
+//                    productRepository.save(product);
+//                });
+//            });
+
+            //4.paymentItem 저장
+            //4. 결제 테이블에 결제내역 저장, product 수량 변경
             orderdto.getPOrderItems().forEach(i->{
                 ProductPaymentItem productPaymentItem = ProductPaymentItem.builder()
                         .productPayment(payment)
@@ -72,16 +90,15 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
                         .pqty(i.getPqty())
                         .pprice(i.getPprice())
                         .build();
-
                 productPaymentItemRepository.save(productPaymentItem);
+
+                //결제 완료시, product의 pqty를 결제한 수량만큼 -함.
+                pnoList.forEach(j-> {
+                    Product product = productRepository.findById(j).orElseThrow();
+                    product.changeQuantity(product.getPqty()-i.getPqty());
+                    productRepository.save(product);
+                });
             });
-
-            //4. 해당 유저의 카트를 조회하여, cart에 들어있는 cartitem들 중 결제 완료된 item들은 삭제
-            Cart cart = cartRepository.getCartOfMember(paymentEmail).orElseThrow();
-
-            //결제 완료시 , 상품번호에 해당하는 카트아이템들 삭제
-            List<Long> pnoList = orderdto.getPOrderItems().stream().map(i->i.getPno()).toList();
-            cartItemRepository.deleteByCartCnoAndProductPnoIn(cart.getCno(), pnoList);
 
         } catch (Exception e) {
             // 결제 실패 로직

@@ -4,6 +4,7 @@ import com.positive.culture.seoulQuest.domain.QTour;
 import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.domain.TourImage;
 import com.positive.culture.seoulQuest.dto.*;
+import com.positive.culture.seoulQuest.repository.TourDateRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 public class TourServiceImpl implements TourService{
 
     private final TourRepository tourRepository;
+
 
     //전체 조회----(유저, 관리자)
     @Override
