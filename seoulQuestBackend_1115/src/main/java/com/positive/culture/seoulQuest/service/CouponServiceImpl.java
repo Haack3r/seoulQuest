@@ -8,6 +8,7 @@ import com.positive.culture.seoulQuest.dto.OrderDTO;
 import com.positive.culture.seoulQuest.repository.CouponRepository;
 import com.positive.culture.seoulQuest.repository.MemberRepository;
 import com.positive.culture.seoulQuest.repository.UserCouponRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,10 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<CouponDTO> getAvailableCoupons() {
         return couponRepository.findAll().stream()
+                .filter(coupon ->
+                        //유효기간이 지나지 않은 쿠폰만 가져옴.
+                        LocalDate.now().isBefore(coupon.getExpireDate())
+                )
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -100,19 +105,31 @@ public class CouponServiceImpl implements CouponService {
         UserCoupon userCoupon = UserCoupon.builder()
                 .couponOwner(member)
                 .coupon(coupon)
-                .isActive(true)
                 .build();
         userCouponRepository.save(userCoupon);
     }
 
+//    @Override
+//    public List<CouponDTO> getUserCoupons(String email) {
+//        return userCouponRepository.findByCouponOwnerEmail(email).stream()
+//                .filter(UserCoupon::isActive) // Only return active coupons
+//                .map(userCoupon -> convertToDTO(userCoupon.getCoupon()))
+//                .collect(Collectors.toList());
+//    }
+
     @Override
     public List<CouponDTO> getUserCoupons(String email) {
         return userCouponRepository.findByCouponOwnerEmail(email).stream()
-                .filter(UserCoupon::isActive) // Only return active coupons
+                .filter(userCoupon -> userCoupon.getUseDate() == null)
+                .filter(userCoupon ->
+                        //유효기간이 지나지 않은 쿠폰만 가져옴.
+                        LocalDate.now().isBefore(userCoupon.getCoupon().getExpireDate()) || LocalDate.now().isEqual(userCoupon.getCoupon().getExpireDate())
+                )// Only return active, unused coupons
                 .map(userCoupon -> convertToDTO(userCoupon.getCoupon()))
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void markCouponAsUsed(Long userCouponId) {
         UserCoupon userCoupon = userCouponRepository.findById(userCouponId)
@@ -121,13 +138,13 @@ public class CouponServiceImpl implements CouponService {
         log.info("Marking coupon as used. UserCouponId: {}", userCouponId);
 
         userCoupon.setUseDate(LocalDate.now());
-        userCoupon.setIsActive(false); // Set inactive
+//        userCoupon.setActive(false); // Set inactive
 
         userCouponRepository.save(userCoupon);
 
-        log.info("Coupon marked as used. Active status: {}, Use Date: {}",
-                userCoupon.isActive(), userCoupon.getUseDate());
+        log.info("Coupon marked as used. Use Date: {}", userCoupon.getUseDate());
     }
+
 
 
 

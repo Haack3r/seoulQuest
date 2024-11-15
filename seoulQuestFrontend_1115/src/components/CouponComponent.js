@@ -9,9 +9,10 @@ import {
 const CouponComponent = () => {
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [myCoupons, setMyCoupons] = useState([]);
-  //   const email = "user1@gmail.com"; // replace with dynamic user email if available
+  
   const user = JSON.parse(localStorage.getItem("user"));
   const email = user?.email;
+
   useEffect(() => {
     fetchAvailableCoupons();
     fetchMyCoupons();
@@ -34,27 +35,25 @@ const CouponComponent = () => {
       console.error("Error fetching my coupons:", error);
     }
   };
+  
 
   const handleAddCoupon = async (couponId) => {
+    const isAlreadyMyCoupon = myCoupons.some((coupon) => coupon.couponId === couponId);
+    if (isAlreadyMyCoupon) {
+        alert("You already added this coupon!");
+        return;
+    }
+
     try {
-      await addCouponToMyList(couponId);
-      fetchMyCoupons();
-      alert("Coupon added to your list!");
+        await addCouponToMyList(couponId);
+        fetchMyCoupons(); // Refresh the list after adding
+        alert("Coupon added to your list!");
     } catch (error) {
-      if (error.response) {
-        if (error.response.status === 409) {
-          alert("Coupon already added for this user.");
+        if (error.response && error.response.status === 409) {
+            alert("An error occurred while adding the coupon. Please try again.");
         } else {
-          console.error("Unexpected error:", error.response.status, error.response.data);
-          alert("An error occurred while adding the coupon. Please try again.");
+            console.error("Error adding coupon to my list:", error);
         }
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-        alert("Network error: Unable to contact server.");
-      } else {
-        console.error("Error in request setup:", error.message);
-        alert("An unexpected error occurred.");
-      }
     }
   };
 
@@ -67,31 +66,43 @@ const CouponComponent = () => {
         <h2 className="text-xl font-semibold text-gray-700 mb-4">New Offer!</h2>
         {availableCoupons.length > 0 ? (
           <ul className="space-y-4">
-            {availableCoupons.map((coupon) => (
-              <li
-                key={coupon.couponName}
-                className="flex justify-between items-center border-b pb-4"
-              >
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700">
-                    {coupon.couponName}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Expires on {coupon.expirationDate}
-                  </p>
-                  <Badge
-                    count={`Discount: ₩${coupon.discount}`}
-                    style={{ backgroundColor: "#52c41a" }}
-                  />
-                </div>
-                <Button
-                  type="primary"
-                  onClick={() => handleAddCoupon(coupon.couponId)}
+            {availableCoupons.map((coupon) => {
+              const isAlreadyAdded = myCoupons.some(
+                (myCoupon) => myCoupon.couponId === coupon.couponId
+              );
+
+              return (
+                <li
+                  key={coupon.couponId}
+                  className="flex justify-between items-center border-b pb-4"
                 >
-                  Add to My Coupons
-                </Button>
-              </li>
-            ))}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700">
+                      {coupon.couponName}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      Expires on {coupon.expirationDate}
+                    </p>
+                    <Badge
+                      count={`Discount: ₩${coupon.discount}`}
+                      style={{ backgroundColor: "#52c41a" }}
+                    />
+                  </div>
+                  <Button
+                    type="primary"
+                    onClick={() => handleAddCoupon(coupon.couponId)}
+                    disabled={isAlreadyAdded}
+                    style={{
+                      backgroundColor: isAlreadyAdded ? "#d9d9d9" : "",
+                      color: isAlreadyAdded ? "#8c8c8c" : "",
+                      cursor: isAlreadyAdded ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {isAlreadyAdded ? "Already Used" : "Add to My Coupons"}
+                  </Button>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p className="text-center text-gray-500">No new offers available.</p>
@@ -105,7 +116,7 @@ const CouponComponent = () => {
           <ul className="space-y-4">
             {myCoupons.map((coupon) => (
               <li
-                key={coupon.couponName}
+                key={coupon.couponId}
                 className="flex justify-between items-center border-b pb-4"
               >
                 <div>
