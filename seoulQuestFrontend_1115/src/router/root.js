@@ -25,8 +25,6 @@ const NUToursIndex = lazy(() => import("../pages/tours/NUTourIndexPage"))
 const Cart = lazy(() => import("../pages/Cart"))
 const Favorite = lazy(() => import("../pages/Favorite"))
 
-
-
 const root = createBrowserRouter([
     {
         path: "",

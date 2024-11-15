@@ -34,16 +34,31 @@ public class CategoryRepositoryTests { // 투어와 상품의 카테고리 데�
         });
     }
 
-    //2. 투어 카테고리 데이터 저장
+//    //2. 투어 카테고리 데이터 저장
+//    @Test
+//    public void testTourCategoryDummy() {
+//        String[] tourCategories = {
+//                "Palaces & Historical Sites", "Traditional Villages", "Cultural Streets", "Shopping Districts",
+//                "Towers & Panoramic Views", "Modern Architecture", "Luxury Experiences", "Multicultural Areas",
+//                "Street Markets", "Rivers & Streams", "Art & Creativity", "Museums & Galleries",
+//                "Parks & Nature Trails", "Mountains & Hiking", "Temples & Spiritual Sites",
+//                "Olympic Sites", "Antique & Vintage Markets", "University Districts", "Presidential & Government Sites",
+//                "Seasonal Festivals"
+//        };
+//
+//        IntStream.rangeClosed(0, tourCategories.length - 1).forEach(i -> {
+//            Category category = Category.builder()
+//                    .categoryName(tourCategories[i])
+//                    .categoryType("tour")
+//                    .build();
+//            categoryRepository.save(category);
+//        });
+//    }
+
     @Test
     public void testTourCategoryDummy() {
         String[] tourCategories = {
-                "Palaces & Historical Sites", "Traditional Villages", "Cultural Streets", "Shopping Districts",
-                "Towers & Panoramic Views", "Modern Architecture", "Luxury Experiences", "Multicultural Areas",
-                "Street Markets", "Rivers & Streams", "Art & Creativity", "Museums & Galleries",
-                "Parks & Nature Trails", "Mountains & Hiking", "Temples & Spiritual Sites",
-                "Olympic Sites", "Antique & Vintage Markets", "University Districts", "Presidential & Government Sites",
-                "Seasonal Festivals"
+                "Historical & Cultural Sites", "Shopping & Lifestyle", "Landmarks & Scenic Views", "Nature & Outdoor", "Art & Creativity"
         };
 
         IntStream.rangeClosed(0, tourCategories.length - 1).forEach(i -> {

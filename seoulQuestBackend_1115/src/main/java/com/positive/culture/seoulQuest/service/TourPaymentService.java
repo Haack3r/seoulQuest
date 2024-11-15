@@ -5,7 +5,7 @@ import com.siot.IamportRestClient.response.Payment;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public interface PaymentService {
+public interface TourPaymentService {
     //결제 정보 저장
     public void paymentDone(Payment payment, OrderDTO orderdto);
 }

@@ -1,10 +1,6 @@
 package com.positive.culture.seoulQuest.controller;
 
-import com.positive.culture.seoulQuest.domain.Member;
-import com.positive.culture.seoulQuest.domain.UserCoupon;
 import com.positive.culture.seoulQuest.dto.*;
-import com.positive.culture.seoulQuest.repository.CouponRepository;
-import com.positive.culture.seoulQuest.repository.UserCouponRepository;
 import com.positive.culture.seoulQuest.service.*;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import com.siot.IamportRestClient.IamportClient;
@@ -14,23 +10,19 @@ import com.siot.IamportRestClient.response.Payment;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -42,9 +34,9 @@ public class ProductController {
     private final CustomFileUtil fileUtil;
     private final ProductService productService;
     private final CouponService couponService;
-    private final OrderService orderService;
+    private final ProductOrderService productOrderService;
+    private final ProductPaymentService productPaymentService;
     private IamportClient iamportClient;
-    private final PaymentService paymentService;
 
     @Value("${iamport.api_key}")
     private String apiKey;
@@ -154,7 +146,7 @@ public class ProductController {
         return Map.of("RESULT","SUCCESS");
     }
 
-    //이메일로 사용자 정보와 쿠폰리스트를 받아옴.
+    //이메일로 사용자 정보와 쿠폰리스트를 받아옴. product & tour 같이 사용
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/orderinfo")
     public OrderDTO getOrderInfo(Principal principal){
@@ -167,9 +159,9 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/orders")
     public ResponseEntity<Map<String,Object>> order(@RequestBody OrderDTO orderDTO){
-        System.out.println("order내역 : " + orderDTO);
+        System.out.println("product order내역 : " + orderDTO);
         //orderDTO를 받아서 order 엔티티에 저장.
-        Long orderId = orderService.saveOrder(orderDTO);
+        Long orderId = productOrderService.saveOrder(orderDTO);
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Order complete");
         response.put("orderId", orderId);
@@ -189,7 +181,7 @@ public class ProductController {
         log.info("결제 요청 응답. 결제 내역 - 주문 번호: {}", payment.getResponse().getMerchantUid());
         Payment paymentResponse = payment.getResponse();
 
-        paymentService.paymentDone(paymentResponse, orderDTO);
+        productPaymentService.paymentDone(paymentResponse, orderDTO);
 
         return payment;
     }

@@ -7,24 +7,19 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "tbl_order_item")
+@Table(name = "tbl_product_payment_item")
 @Builder
 @Getter
-public class OrderItem {
+public class ProductPaymentItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderItemId;
-
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "cartItemId")
-//    private CartItem cartItem;
+    private Long pPaymentItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderId")
-    private Order order;
+    @JoinColumn(name = "paymentId")
+    private ProductPayment productPayment;
 
-    private Long pno;
     private String pname;
     private int pprice;
     private int pqty;

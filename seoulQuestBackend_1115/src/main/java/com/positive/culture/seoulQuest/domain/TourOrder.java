@@ -10,17 +10,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Builder
 @Getter
-@Table(name = "tbl_order")
-public class Order {
+@Builder
+@Table(name = "tbl_tour_order")
+public class TourOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long tOrderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private Member orderOwner;
+    @JoinColumn(name = "order_member_id")
+    private Member tOrderMember;
 
     //결제 실패시에도 쿠폰을 재사용할수 있도록 관계를 ManyToOne으로 지정하여 중복이 가능하게함
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,19 +39,13 @@ public class Order {
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime orderDate;
 
-    // 실제 배송 정보
-    private String recipientFirstName;
-    private String recipientLastName;
+    private String firstName;
+    private String lastName;
 
-    private String contactNumber;
-    private String city;
-    private String street;
-    private String state;
+    private String phoneNumber;
     private String country;
-    private String zipcode;
 
     public void changePaymentStatus(String paymentStatus){
         this.paymentStatus = paymentStatus;
     }
-
 }

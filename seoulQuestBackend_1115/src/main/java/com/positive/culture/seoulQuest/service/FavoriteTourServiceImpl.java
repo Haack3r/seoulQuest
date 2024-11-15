@@ -1,10 +1,8 @@
 package com.positive.culture.seoulQuest.service;
 
-import com.positive.culture.seoulQuest.domain.FavoriteProduct;
 import com.positive.culture.seoulQuest.domain.FavoriteTour;
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.Tour;
-import com.positive.culture.seoulQuest.dto.FavoriteProductDTO;
 import com.positive.culture.seoulQuest.dto.FavoriteTourDTO;
 import com.positive.culture.seoulQuest.repository.FavoriteTourRepository;
 import com.positive.culture.seoulQuest.repository.MemberRepository;

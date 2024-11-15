@@ -67,15 +67,25 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public List<CouponDTO> getAvailableCoupons() {
+    public List<CouponDTO> getAvailableCoupons(String email) {
+        // Fetch the user's used coupons with a non-null useDate
+        List<Long> usedCouponIds = userCouponRepository.findByCouponOwnerEmail(email).stream()
+                .filter(userCoupon -> userCoupon.getUseDate() != null)
+                .map(userCoupon -> userCoupon.getCoupon().getCouponId())
+                .collect(Collectors.toList());
+
+        // Fetch available coupons that are not expired and not used by the current user
         return couponRepository.findAll().stream()
                 .filter(coupon ->
-                        //유효기간이 지나지 않은 쿠폰만 가져옴.
-                        LocalDate.now().isBefore(coupon.getExpireDate())
+                        // Filter out coupons that are expired
+                        LocalDate.now().isBefore(coupon.getExpireDate()) &&
+                                // Exclude coupons that are already used by this user
+                                !usedCouponIds.contains(coupon.getCouponId())
                 )
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+
 
 //    @Override
 //    public void addCouponToUser(String email, Long couponId) {
@@ -105,6 +115,7 @@ public class CouponServiceImpl implements CouponService {
         UserCoupon userCoupon = UserCoupon.builder()
                 .couponOwner(member)
                 .coupon(coupon)
+                .useDate(null) // Initially unused
                 .build();
         userCouponRepository.save(userCoupon);
     }
@@ -120,7 +131,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<CouponDTO> getUserCoupons(String email) {
         return userCouponRepository.findByCouponOwnerEmail(email).stream()
-                .filter(userCoupon -> userCoupon.getUseDate() == null)
+                .filter(userCoupon -> userCoupon.getUseDate() == null) // Unused coupons
                 .filter(userCoupon ->
                         //유효기간이 지나지 않은 쿠폰만 가져옴.
                         LocalDate.now().isBefore(userCoupon.getCoupon().getExpireDate()) || LocalDate.now().isEqual(userCoupon.getCoupon().getExpireDate())

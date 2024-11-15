@@ -1,6 +1,5 @@
 package com.positive.culture.seoulQuest.controller;
 
-import com.positive.culture.seoulQuest.domain.Coupon;
 import com.positive.culture.seoulQuest.dto.CouponDTO;
 import com.positive.culture.seoulQuest.service.CouponService;
 import com.positive.culture.seoulQuest.service.MemberService;
@@ -20,8 +19,9 @@ public class CouponController {
     private final MemberService memberService;
 
     @GetMapping("/available")
-    public List<CouponDTO> getAvailableCoupons() {
-        return couponService.getAvailableCoupons();
+    public List<CouponDTO> getAvailableCoupons(@RequestParam String email) {
+        // Pass the email to getAvailableCoupons to filter out used coupons
+        return couponService.getAvailableCoupons(email);
     }
 
     @PostMapping("/add/{email}")

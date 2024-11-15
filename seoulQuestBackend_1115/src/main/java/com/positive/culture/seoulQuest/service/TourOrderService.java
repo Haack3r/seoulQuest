@@ -5,7 +5,7 @@ import com.positive.culture.seoulQuest.dto.OrderDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public interface OrderService {
+public interface TourOrderService {
     //주문 상품 저장
     public Long saveOrder(OrderDTO orderDTO);
 }

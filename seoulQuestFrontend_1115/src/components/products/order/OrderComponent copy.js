@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import useCustomCart from "../../hooks/useCustomCart";
-import { API_SERVER_HOST } from "../../api/todoApi";
+import useCustomCart from "../../../hooks/useCustomCart";
+import { API_SERVER_HOST } from "../../../api/todoApi";
 import { Badge } from "antd"; 
-import { getOrderInfo, postOrderInfo, postPayInfo,  } from "../../api/productsApi";
+import { getOrderInfo, postOrderInfo, postPayInfo,  } from "../../../api/productsApi";
 
 const host = API_SERVER_HOST;
 

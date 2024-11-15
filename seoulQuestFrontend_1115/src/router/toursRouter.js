@@ -7,6 +7,7 @@ const toursRouter = () => {
   const ToursRead = lazy(() => import("../pages/tours/TourReadPage"));
   const ToursAdd = lazy(() => import("../pages/tours/TourAddPage"));
   const ToursModify = lazy(() => import("../pages/tours/TourModifyPage"));
+  const TourBook = lazy(()=> import("../pages/tours/TourBookPage"));
 
   return [
     {
@@ -44,6 +45,10 @@ const toursRouter = () => {
           <ToursModify />
         </Suspense>
       ),
+    },
+    {
+      path: "book",
+      element: <Suspense fallback={Loading}><TourBook /></Suspense>
     },
   ];
 };

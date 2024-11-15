@@ -3,10 +3,7 @@ package com.positive.culture.seoulQuest.repository;
 import com.positive.culture.seoulQuest.domain.Coupon;
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.UserCoupon;
-import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

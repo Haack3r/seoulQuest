@@ -1,11 +1,8 @@
 package com.positive.culture.seoulQuest.service;
 
 import com.positive.culture.seoulQuest.domain.*;
-
 import com.positive.culture.seoulQuest.dto.OrderDTO;
 import com.positive.culture.seoulQuest.repository.*;
-
-
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,15 +12,16 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentServiceImpl implements PaymentService{
+public class TourPaymentServiceImpl implements TourPaymentService {
 
     private final MemberRepository memberRepository;
-    private final PaymentRepository paymentRepository;
-    private final OrderRepository orderRepository;
+    private final TourPaymentRepository paymentRepository;
+    private final TourOrderRepository tourOrderRepository;
     private final UserCouponRepository userCouponRepository;
-    private final PaymentItemRepository paymentItemRepository;
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    private final TourPaymentItemRepository paymentItemRepository;
+    private final ReservationRepository reservationRepository;
+    private final ReservationItemRepository reservationItemRepository;
+    private final TourDateRepository tourDateRepository;
 
     //결제 정보를 저장하고, order엔티티의 status를 complete으로 변경함.
     @Override
@@ -35,20 +33,20 @@ public class PaymentServiceImpl implements PaymentService{
 
             Long orderId = orderdto.getOrderId();
             System.out.println("orderId"+orderId);
-            Order order = orderRepository.findById(orderId).orElseThrow();
+            TourOrder tourOrder = tourOrderRepository.findById(orderId).orElseThrow();
 
-            order.changePaymentStatus(paymentResponse.getStatus());
-            orderRepository.save(order); //order테이블의 paymentState도 변경
+            tourOrder.changePaymentStatus(paymentResponse.getStatus());
+            tourOrderRepository.save(tourOrder); //order테이블의 paymentState도 변경
 
             //1.결제정보 저장
-            PaymentRecord payment = PaymentRecord.builder()
+            TourPayment payment = TourPayment.builder()
                     .paymentStatus(paymentResponse.getStatus())
-                    .paymentMember(paymentMember)
+                    .tPaymentMember(paymentMember)
                     .paymentPrice(paymentResponse.getAmount())
                     .paymentDate(paymentResponse.getPaidAt())
                     .paymentMethod(paymentResponse.getPayMethod())
-                    .MerchantUid(paymentResponse.getMerchantUid())
-                    .order(order)
+                    .merchantUid(paymentResponse.getMerchantUid())
+                    .tourOrder(tourOrder)
                     .build();
             paymentRepository.save(payment);
 
@@ -64,24 +62,32 @@ public class PaymentServiceImpl implements PaymentService{
                 userCouponRepository.save(usedCoupon);
             }
 
-            //3.paymentItem 저장
-            orderdto.getOrderItems().forEach(i->{
-                PaymentItem paymentItem = PaymentItem.builder()
-                        .paymentRecord(payment)
-                        .pname(i.getPname())
-                        .pqty(i.getPqty())
-                        .pprice(i.getPprice())
-                        .build();
+            //3. 해당 유저의 reservation를 조회하여, reservation에 들어있는 item들 중 결제 완료된 item들은 삭제
+            Reservation reservation = reservationRepository.getReservationOfMember(paymentEmail).orElseThrow();
 
-                paymentItemRepository.save(paymentItem);
+            //결제 완료시 , 투어번호에 해당하는 reservationItem 삭제
+            List<Long> tnoList = orderdto.getTOrderItems().stream().map(i->i.getTno()).toList();
+            reservationItemRepository.deleteByReservationRnoAndTourTnoIn(reservation.getRno(),tnoList);
+
+
+            orderdto.getTOrderItems().forEach(i->{
+                //4.paymentItem 저장
+                TourPaymentItem tourPaymentItem = TourPaymentItem.builder()
+                        .tourPayment(payment)
+                        .tname(i.getTname())
+                        .tqty(i.getTqty())
+                        .tprice(i.getTprice())
+                        .tdate(i.getTdate())
+                        .build();
+                paymentItemRepository.save(tourPaymentItem);
+
+                //5.해당 tour의 tourdate의 available capacity 변경 (결제 갯수만큼 마이너스)
+                //tour와 tourdate가 모두 일치하는 데이터를 찾아야함.
+                TourDate tourDate = tourDateRepository.findByTourDateAndTourTno(i.getTdate(),i.getTno()).orElseThrow();
+                tourDate.changeAvailableCapacity(tourDate.getAvailableCapacity()-i.getTqty());
+                tourDateRepository.save(tourDate);
             });
 
-            //4. 해당 유저의 카트를 조회하여, cart에 들어있는 cartitem들 중 결제 완료된 item들은 삭제
-            Cart cart = cartRepository.getCartOfMember(paymentEmail).orElseThrow();
-
-            //결제 완료시 , 상품번호에 해당하는 카트아이템들 삭제
-            List<Long> pnoList = orderdto.getOrderItems().stream().map(i->i.getPno()).toList();
-            cartItemRepository.deleteByCartCnoAndProductPnoIn(cart.getCno(), pnoList);
 
         } catch (Exception e) {
             // 결제 실패 로직
@@ -93,14 +99,14 @@ public class PaymentServiceImpl implements PaymentService{
     // 결제 실패 시 처리 로직
     public void handlePaymentFailure(OrderDTO orderdto) {
         Long orderId = orderdto.getOrderId();
-        Order order = orderRepository.findById(orderId).orElseThrow();
+        TourOrder tourOrder = tourOrderRepository.findById(orderId).orElseThrow();
 
         // 결제 상태를 "failed"로 설정
-        order.changePaymentStatus("failed");
-        orderRepository.save(order);
+        tourOrder.changePaymentStatus("failed");
+        tourOrderRepository.save(tourOrder);
 
         // 쿠폰 사용 취소
-        UserCoupon usedCoupon = order.getUsedCoupon();
+        UserCoupon usedCoupon = tourOrder.getUsedCoupon();
         if (usedCoupon != null) {
             usedCoupon.ChangeUseDate(null); // 사용날짜를 null로 되돌려 쿠폰을 사용하지 않은 상태로 복구
             userCouponRepository.save(usedCoupon);

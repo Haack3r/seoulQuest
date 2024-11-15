@@ -3,9 +3,11 @@ import { API_SERVER_HOST } from "./todoApi";
 
 const host = `${API_SERVER_HOST}/api/mypage/coupon`;
 
-export const getAvailableCoupons = async () => {
+export const getAvailableCoupons = async (email) => {
   try {
-    const res = await jwtAxios.get(`${host}/available`);
+    const res = await jwtAxios.get(`${host}/available`, {
+      params: { email }, // Pass email as a query parameter
+    });
     return res.data;
   } catch (error) {
     console.error("Error fetching available coupons:", error);
@@ -37,21 +39,20 @@ export const addCouponToMyList = async (couponId) => {
 };
 
 export const getMyCoupons = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const email = user?.email;
-  
-      if (!email) {
-        throw new Error("User email not found in localStorage");
-      }
-  
-      const res = await jwtAxios.get(`${host}/myCoupons`, {
-        params: { email },
-      });
-      return res.data;
-    } catch (error) {
-      console.error("Error fetching my coupons:", error);
-      throw error;
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const email = user?.email;
+
+    if (!email) {
+      throw new Error("User email not found in localStorage");
     }
-  };
-  
+
+    const res = await jwtAxios.get(`${host}/myCoupons`, {
+      params: { email },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching my coupons:", error);
+    throw error;
+  }
+};

@@ -20,26 +20,37 @@ const CouponComponent = () => {
 
   const fetchAvailableCoupons = async () => {
     try {
-      const coupons = await getAvailableCoupons();
-      setAvailableCoupons(coupons);
+        const userEmail = user?.email; // Fetch user email from local storage or user object
+        const coupons = await getAvailableCoupons(userEmail); // Pass email as parameter
+        setAvailableCoupons(coupons);
     } catch (error) {
-      console.error("Error fetching available coupons:", error);
+        console.error("Error fetching available coupons:", error);
     }
-  };
+};
 
-  const fetchMyCoupons = async () => {
+
+    const fetchMyCoupons = async () => {
+
     try {
-      const coupons = await getMyCoupons(email);
-      setMyCoupons(coupons);
+        const coupons = await getMyCoupons(email);
+        setMyCoupons(coupons.map(coupon => ({
+            ...coupon,
+            isUsed: coupon.useDate !== null, // Add isUsed property
+        })));
     } catch (error) {
-      console.error("Error fetching my coupons:", error);
+        console.error("Error fetching my coupons:", error);
     }
-  };
+};
+
   
 
-  const handleAddCoupon = async (couponId) => {
-    const isAlreadyMyCoupon = myCoupons.some((coupon) => coupon.couponId === couponId);
-    if (isAlreadyMyCoupon) {
+const handleAddCoupon = async (couponId) => {
+    const coupon = myCoupons.find(coupon => coupon.couponId === couponId);
+    if (coupon?.isUsed) {
+        alert("This coupon has already been used!");
+        return;
+    }
+    if (coupon) {
         alert("You already added this coupon!");
         return;
     }
@@ -55,7 +66,7 @@ const CouponComponent = () => {
             console.error("Error adding coupon to my list:", error);
         }
     }
-  };
+};
 
   return (
     <div className="min-h-screen p-10 flex flex-col items-center bg-gray-100 mt-20 mb-20">

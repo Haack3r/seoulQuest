@@ -46,62 +46,65 @@ export const deleteOne = async (pno) => {
 };
 
 //order : 처음에 유저정보와 유저의 쿠폰정보 가져올때 사용
+//product & tour 같이 사용
 export const getOrderInfo = async () => {
-    const res = await jwtAxios.get(`${host}/orderinfo`);
+  const res = await jwtAxios.get(`${host}/orderinfo`);
+  return res.data;
+};
+  
+  
+//order : 유저의 order정보를 서버로 보냄
+export const postOrderInfo = async (obj) => {
+  console.log("obj:", obj);
+  const headers = { "Content-Type": "application/json" };
+
+  try {
+    const res = await jwtAxios.post(
+      `${host}/orders`,
+      {
+        porderItems: obj.orderItems,
+        usedCoupon: obj.usedCoupon,
+        firstname: obj.firstname,
+        lastname: obj.lastname,
+        email: obj.email,
+        phoneNumber: obj.phoneNumber,
+        country: obj.country,
+        state: obj.state,
+        city: obj.city,
+        street: obj.street,
+        zipcode: obj.zipcode,
+        totalPrice: obj.totalPrice,
+        paymentMethod: obj.paymentMethod,
+      },
+      { headers }
+    );
+
+    console.log(res)
     return res.data;
-  };
-  
-  
-  //order : 유저의 order정보를 서버로 보냄
-  export const postOrderInfo = async (obj) => {
-    console.log("obj:", obj);
-    const headers = { "Content-Type": "application/json" };
-  
-    try {
-      const res = await jwtAxios.post(
-        `${host}/orders`,
-        {
-          orderItems: obj.orderItems,
-          usedCoupon: obj.usedCoupon,
-          firstname: obj.firstname,
-          lastname: obj.lastname,
-          email: obj.email,
-          phoneNumber: obj.phoneNumber,
-          country: obj.country,
-          state: obj.state,
-          city: obj.city,
-          street: obj.street,
-          zipcode: obj.zipcode,
-          totalPrice: obj.totalPrice,
-          paymentMethod: obj.paymentMethod,
-        },
-        { headers }
-      );
-      return res.data;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Failed to Post order info");
-    }
-  };
-  
-  // payment: 유저의 결제 정보를 서버로 보냄 , impUid포함한 정보.
-  export const postPayInfo = async (obj, impUid) => {
-    console.log("payment:", obj);
-    const {orderDTO} = obj
-    console.log(orderDTO)
-    console.log(impUid);
-    const headers = { "Content-Type": "application/json" };
-  
-    try {
-      const res = await jwtAxios.post(
-        `${host}/payment/${impUid}`,
-         orderDTO,
-        //   paymentDate: new Date().toISOString(),
-        // ),
-        { headers }
-      );
-      return res.data;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Failed to Post payment info");
-    }
-  };
-  
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to Post order info");
+  }
+};
+
+// payment: 유저의 결제 정보를 서버로 보냄 , impUid포함한 정보.
+export const postPayInfo = async (obj, impUid) => {
+  console.log("payment:", obj);
+  const {orderDTO} = obj
+  console.log(orderDTO)
+  console.log(impUid);
+  const headers = { "Content-Type": "application/json" };
+
+  try {
+    const res = await jwtAxios.post(
+      `${host}/payment/${impUid}`,
+        orderDTO,
+      //   paymentDate: new Date().toISOString(),
+      // ),
+      { headers }
+    );
+    return res.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to Post payment info");
+  }
+};
+

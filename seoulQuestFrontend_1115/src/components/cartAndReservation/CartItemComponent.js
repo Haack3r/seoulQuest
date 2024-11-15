@@ -43,7 +43,22 @@ const CartItemComponent = ({ cino, pname, pprice, pno, pqty, imageFile, changeCa
                 ₩{(pprice * pqty).toLocaleString()}
             </div>
 
-            
+            {/* Quantity Controls on the right */}
+            <div className="flex space-x-2">
+                <button
+                    onClick={() => handleCLickQty(-1)}
+                    className="px-3 py-1 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                >
+                    -
+                </button>
+                <span className="text-gray-700 font-medium">{pqty}</span>
+                <button
+                    onClick={() => handleCLickQty(1)}
+                    className="px-3 py-1 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                >
+                    +
+                </button>
+            </div>
         </div>
 
         </li>

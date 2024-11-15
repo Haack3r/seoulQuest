@@ -5,7 +5,7 @@ const host = `${API_SERVER_HOST}/api/favorite`;
 
 // Fetch favorite items with error handling
 export const getFavItems = async () => {
-  console.log("GetProductItems 호출");
+  console.log("GetTourItems 호출");
   const user = JSON.parse(localStorage.getItem("user"));
   const email = user?.email;
 
@@ -48,7 +48,7 @@ export const deleteFavItem = async (fino) => {
   };
   
 
-
+// favoriteApi.js
 
 // Bulk delete favorite items by IDs
 export const deleteFavItemsBulk = async (finoList) => {
