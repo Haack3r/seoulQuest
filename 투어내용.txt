@@ -1,7 +1,6 @@
 https://latexeditor.lagrida.com/
 
 
-
     <div className="min-h-screen bg-gray-100 p-5 mt-20">
       <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
         {/* Left Section */}
