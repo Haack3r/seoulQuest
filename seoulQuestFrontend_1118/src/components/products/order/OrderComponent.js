@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useCustomCart from "../../../hooks/useCustomCart";
-import { API_SERVER_HOST } from "../../../api/todoApi";
+import { API_SERVER_HOST } from "../../../api/reviewApi";
 import { getOrderInfo, postOrderInfo, postPayInfo,  } from "../../../api/productsApi";
 import ShippingInformation from "./ShippingInformation";
 import PaymentDetails from "./PaymentDetails";

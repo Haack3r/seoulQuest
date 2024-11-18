@@ -1,5 +1,5 @@
 // import axios from "axios";
-// import { API_SERVER_HOST } from "./todoApi";
+// import { API_SERVER_HOST } from "./reviewApi";
 
 // const rest_api_key = "40924e760d2aef76f9429464caa9191c"; //rest키 값
 // const redirect_uri = "http://localhost:3000/member/kakao"; //로그인후 이동할 RedirectUri

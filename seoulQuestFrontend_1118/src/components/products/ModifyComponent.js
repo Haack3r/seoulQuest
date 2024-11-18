@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { getOne, putOne, deleteOne } from '../../api/productsApi'
 import FetchingModal from '../common/FetchingModal'
-import { API_SERVER_HOST } from '../../api/todoApi'
+import { API_SERVER_HOST } from '../../api/reviewApi'
 import useCustomMove from '../../hooks/useCustomMove'
 import ResultModal from '../common/ResultModal'
 

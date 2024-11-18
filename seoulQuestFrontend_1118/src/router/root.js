@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import { SyncLoader } from "react-spinners";
-import todoRouter from "./todoRouter";
 import productsRouter from "./productsRouter";
 import memberRouter from "./memberRouter";
 import toursRouter from "./toursRouter";
@@ -9,6 +8,8 @@ import nuToursRouter from "./nuToursRouter";
 import myPageRouter from "./myPageRouter";
 import { Alert } from "@mui/material";
 import adminRouter from "./admin/adminRouter";
+import productReviewRouter from "./productReviewRouter";
+import tourReviewRouter from "./tourReviewRouter";
 
 
 const { createBrowserRouter } = require("react-router-dom")
@@ -17,7 +18,8 @@ const Loading = <div><SyncLoader /></div>
 // MainPage 로딩 지연
 const Main = lazy(() => import("../pages/MainPage"))
 const About = lazy(() => import("../pages/AboutPage"))
-const TodoIndex = lazy(() => import("../pages/todo/IndexPage"))
+const ProductReviewIndex = lazy(() => import("../pages/productsReview/IndexPage"))
+const TourReviewIndex = lazy(() => import("../pages/toursReview/IndexPage"))
 const ProductsIndex = lazy(() => import("../pages/products/IndexPage"))
 const NUProductsIndex = lazy(() => import("../pages/products/NUIndexPage"))
 const ToursIndex = lazy(() => import("../pages/tours/TourIndexPage"))
@@ -43,10 +45,16 @@ const root = createBrowserRouter([
         element: <Suspense fallback={Loading}><Favorite /></Suspense>
     },
     {
-        path: "todo",
-        element: <Suspense fallback={Loading}><TodoIndex /></Suspense>,
+        path: "products/review",
+        element: <Suspense fallback={Loading}><ProductReviewIndex /></Suspense>,
         // 중첩 라우팅
-        children: todoRouter()
+        children: productReviewRouter()
+    },
+    {
+        path: "tours/review",
+        element: <Suspense fallback={Loading}><TourReviewIndex /></Suspense>,
+        // 중첩 라우팅
+        children: tourReviewRouter()
     },
     {
         path: "user/products",

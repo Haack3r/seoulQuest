@@ -37,7 +37,6 @@ public class MyPageController {
         return new ResponseEntity<>("Profile edit complete", HttpStatus.OK);
     }
 
-
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/info")
     public UserDTO getInfo(Principal principal){

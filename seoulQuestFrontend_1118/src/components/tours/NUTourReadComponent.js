@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { API_SERVER_HOST } from '../../api/todoApi';
+import { API_SERVER_HOST } from '../../api/reviewApi';
 import { StarIcon, HeartIcon } from 'lucide-react'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { getOneTNU } from '../../api/nuTourApi';

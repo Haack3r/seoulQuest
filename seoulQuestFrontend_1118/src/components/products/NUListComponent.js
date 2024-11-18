@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useCustomMove from "../../hooks/useCustomMove";
 import FetchingModal from "../common/FetchingModal";
-import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
 import { Card, CardTitle, CardDescription } from "../ui/Card";
 import Button from "../ui/Button";
@@ -9,6 +8,7 @@ import { getListNU } from "../../api/nuProductApi";
 import "../../Product.css";
 import { Input } from "antd";
 import { SearchIcon } from "lucide-react";
+import { API_SERVER_HOST } from "../../api/reviewApi";
 
 const host = API_SERVER_HOST;
 
