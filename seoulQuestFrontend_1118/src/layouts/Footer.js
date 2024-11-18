@@ -4,7 +4,7 @@ import { faCcVisa, faCcMastercard, faCcAmex } from '@fortawesome/free-brands-svg
 
 export default function Footer() {
   return (
-    <footer className=" text-gray-900"  style={{ backgroundColor: "#E0DCD0" }}>
+    <footer className="text-gray-900" style={{ backgroundColor: "#E0DCD0" }}>
       {/* Top Bar with Payment Icons */}
       <div className="bg-gray-500 py-4">
         <div className="max-w-7xl mx-auto px-4 flex justify-center space-x-6">
@@ -18,9 +18,9 @@ export default function Footer() {
       <div className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Footer Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-7 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-7 gap-8 sm:items-start sm:text-left items-center text-center">
             {/* Column 1 */}
-            <div className="col-span-1 flex flex-col items-center sm:items-start">
+            <div className="lg:col-span-1 sm:col-span-full flex flex-col items-center text-center">
               <h4 className="text-lg font-semibold tracking-wide mb-4">
                 Journal
               </h4>
@@ -54,7 +54,7 @@ export default function Footer() {
             </div>
 
             {/* Column 2 */}
-            <div className="col-span-1 flex flex-col items-center sm:items-start">
+            <div className="lg:col-span-1 sm:col-span-full flex flex-col items-center text-center">
               <h4 className="text-lg font-semibold tracking-wide mb-4">
                 Explore
               </h4>
@@ -83,7 +83,7 @@ export default function Footer() {
             </div>
 
             {/* Column 3 (Logo with Badge) */}
-            <div className="col-span-1 lg:col-span-3 flex flex-col justify-center items-center">
+            <div className="col-span-full lg:col-span-3 flex flex-col justify-center items-center">
               {/* SCQ Logo */}
               <div className="text-7xl font-serif font-bold text-gray-800">
                 SCQ
@@ -100,14 +100,16 @@ export default function Footer() {
                   </div>
                   <div className="text-center mt-4">
                     <h5 className="text-md font-semibold text-gray-800">Certified</h5>
-                    <p className="text-sm font-light text-gray-600">Positive Corporation</p>
+                    <p className="text-sm font-light text-gray-600">
+                      Positive Corporation
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Column 4 */}
-            <div className="col-span-1 flex flex-col items-center sm:items-start">
+            <div className="col-span-1 lg:col-span-1 sm:col-span-full flex flex-col items-center text-center">
               <h4 className="text-lg font-semibold tracking-wide mb-4">
                 Socials
               </h4>
@@ -136,7 +138,6 @@ export default function Footer() {
 
           {/* Footer Bottom Section */}
           <div className="mt-12 flex flex-col items-center lg:flex-row justify-between text-sm text-gray-600">
-            
             <div>
               © {new Date().getFullYear()} Seoul Culture Quest. All rights reserved.
             </div>

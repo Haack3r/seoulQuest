@@ -83,7 +83,11 @@ const AboutToursComponent = () => {
         </div>
 
         {/* Text Box 1: Top-left */}
-        <div className="absolute top-0 left-0 w-[250px] border py-5 px-5 -translate-x-10 -translate-y-10 z-10">
+        <div className="absolute top-0 right-0 w-[250px] border py-5 px-5 -translate-x-2 translate-y-24 z-10 lg:-translate-x-32">
+          <h4 className="mb-20">
+          </h4>
+        </div>
+        <div className="absolute top-0 left-0 w-[250px] border py-5 px-5 -translate-x-10 -translate-y-10 z-10 sx:w-[100px] lg:translate-x-20">
           <h4 className="text-lg font-semibold text-gray-800 mb-2">
             Traditional Cultural Tours
           </h4>
@@ -95,7 +99,8 @@ const AboutToursComponent = () => {
                   </div>
 
         {/* Text Box 2: Top-right */}
-        <div className="absolute top-0 right-0 w-[250px] border py-5 px-5 translate-x-10 -translate-y-10 z-10">
+        
+        <div className="absolute top-0 right-0 w-[250px] border py-5 px-5 translate-x-10 -translate-y-10 z-10 lg:-translate-x-20">
           <h4 className="text-lg font-semibold text-gray-800 mb-2">
             Modern City Adventures
           </h4>
@@ -104,13 +109,10 @@ const AboutToursComponent = () => {
             in modern Seoul's vibrant districts.
           </p>
                   </div>
-                  <div className="absolute top-0 right-0 w-[250px] border py-5 px-5 -translate-x-2 translate-y-24 z-10">
-          <h4 className="mb-20">
-          </h4>
-        </div>
+                  
 
         {/* Text Box 3: Bottom-left */}
-        <div className="absolute bottom-0 left-0 w-[250px] border py-5 px-5 -translate-x-10 translate-y-10 z-10">
+        <div className="absolute bottom-0 left-0 w-[250px] border py-5 px-5 -translate-x-10 translate-y-10 z-10 lg:translate-x-20">
           <h4 className="text-lg font-semibold text-gray-800 mb-2">
             Hidden Gems & Nature Escapes
           </h4>
@@ -121,7 +123,7 @@ const AboutToursComponent = () => {
         </div>
 
         {/* Text Box 4: Bottom-right */}
-        <div className="absolute bottom-0 right-0 w-[250px] border py-5 px-5 translate-x-10 translate-y-10 z-10">
+        <div className="absolute bottom-0 right-0 w-[250px] bg-white bg-opacity-15 border py-5 px-5 translate-x-10 translate-y-10 z-10 lg:-translate-x-20">
           <h4 className="text-lg font-semibold text-gray-800 mb-2">
             Customizable Experiences
           </h4>
@@ -141,9 +143,7 @@ const AboutToursComponent = () => {
             SeoulCultureQuest. Let us take you on a journey where every moment
             becomes a cherished memory.
           </p>
-          <button className="mt-8 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold tracking-wide">
-            Explore Tours
-          </button>
+          
         </div>
       </div>
     </div>
