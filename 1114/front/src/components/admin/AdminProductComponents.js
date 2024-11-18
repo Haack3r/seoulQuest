@@ -72,24 +72,42 @@ const AdminProductComponents = () => {
     };
 
     // 제품 삭제
-    const handleDelete = (pno) => {
+    const handleDelete = async (pno) => {
         if (!window.confirm('정말 삭제하시겠습니까?')) return;
-        setFetching(true);
-        deleteProduct(pno)
-            .then((response) => {
-                console.log("삭제 성공", response)
-                return adminProductList({ keyword, type })
-            })
-            .then(data => {
-                console.log("삭제 후 리스트 조회", data)
-                setServerData(data || initState)
-            })
-            .catch(error => {
-                console.error("Delete or fetch error:", error);
-                exceptionHandle(error);
-            })
-            .finally(() => setFetching(false));
-    };
+        try {
+            setFetching(true);
+            await deleteProduct(pno)
+            alert("삭제되었습니다")
+
+            const updateList = await adminProductList({ keyword, type })
+            setServerData(updateList || initState)
+        } catch (error) {
+            console.error("Delete error:", error);
+            if (error.response?.status === 401) {
+                alert("삭제 권한이 없습니다.");
+            } else {
+                alert("삭제 중 오류가 발생했습니다.");
+            }
+        } finally {
+            setFetching(false);
+        }
+    }
+    // setFetching(true);
+    // deleteProduct(pno)
+    //         .then((response) => {
+    //         console.log("삭제 성공", response)
+    //         return adminProductList({ keyword, type })
+    //     })
+    // .then(data => {
+    //     console.log("삭제 후 리스트 조회", data)
+    //     setServerData(data || initState)
+    // })
+    // .catch(error => {
+    //     console.error("Delete or fetch error:", error);
+    //     exceptionHandle(error);
+    // })
+    // .finally(() => setFetching(false));
+    // };
 
     // 폼 제출 처리
     const handleFormSubmit = (formData) => {
@@ -138,14 +156,16 @@ const AdminProductComponents = () => {
             <div style={{ height: '24px' }} />
 
             {/* 제품 목록 */}
-            {serverData.dtoList && serverData.dtoList.map((product) => (
-                <ProductCard
-                    key={product.pno}
-                    product={product}
-                    onEdit={() => handleEdit(product)}
-                    onDelete={() => handleDelete(product.pno)}
-                />
-            ))}
+            {serverData.dtoList && serverData.dtoList
+                // .filter(product => !product.delFlag)
+                .map((product) => (
+                    <ProductCard
+                        key={product.pno}
+                        product={product}
+                        onEdit={() => handleEdit(product)}
+                        onDelete={() => handleDelete(product.pno)}
+                    />
+                ))}
 
             {/* 제품 추가/편집 폼 */}
             {showAddForm && (

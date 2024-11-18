@@ -24,7 +24,7 @@ const BasicMenu = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user")); // user 객체 가져오기
     if (user && user.role && Array.isArray(user.role)) {
-      if (user.role[1]) setRole("ADMIN"); // role 배열에서 첫 번째 값을 가져옴
+      if (user.role) setRole("ADMIN"); // role 배열에서 첫 번째 값을 가져옴
       else setRole("USER");
     }
     window.addEventListener("resize", checkScreenSize);

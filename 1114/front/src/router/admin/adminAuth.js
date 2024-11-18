@@ -135,9 +135,18 @@ export const AdminAuth = () => {
             //     });
             // }
             /*-------------------------------------------------------------------------*/
-
+            // const user = JSON.parse(localStorage.getItem("user"));
+            // if (user && user.role && Array.isArray(user.role)) {
+            //     if (user.role == "ADMIN" || "ROLE_ADMIN") setRole("ROLE_ADMIN"); // role 배열에서 첫 번째 값을 가져옴
+            //     else setRole("USER");
+            //     console.log(user)
+            //     console.log(user.role)
+            // }
             try {
-                await checkAdminRole()
+                // await checkAdminRole(role)
+                // setLoading(false)
+                const result = await checkAdminRole()
+                console.log("관리자 권한 체크 결과", result)
                 setLoading(false)
             } catch (error) {
                 console.error('권한 검증 실패:', error);

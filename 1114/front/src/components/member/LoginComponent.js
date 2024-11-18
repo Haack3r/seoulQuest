@@ -13,6 +13,7 @@ import {
 } from "../ui/Card";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
+import { setCookie } from "../../util/cookieUtil";
 
 const initState = {
   email: "",
@@ -42,13 +43,25 @@ const LoginComponent = () => {
           alert("Check your Email or Password");
         } else {
           alert("Success");
-          const userRole = data.roleName; // Assuming data contains a `role` field
-          console.log(userRole);
-          localStorage.setItem(
-            "user",
-            JSON.stringify({ email: loginParam.email, role: userRole })
-          );
-          console.log(localStorage.getItem("user"));
+          /* ----------------- localStorage 방법 -----------------------------------------*/
+
+          // localStorage 방법
+          // const userRole = data.roleName; // Assuming data contains a `role` field
+          // console.log(userRole);
+          // localStorage.setItem(
+          //   "user",
+          //   JSON.stringify({ email: loginParam.email, role: userRole })
+          // );
+          // console.log(localStorage.getItem("user"));
+
+          /* -----------------------------------------------------------------------------*/
+
+          setCookie("member", JSON.stringify({
+            email: loginParam.email,
+            role: data.roleName,
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken
+          }), 1)
           // 홈화면 이동 후 뒤로가기 하면 로그인화면 표시 X
           //   navigate({ pathname: "/" }, { replace: true });
           moveToPath("/"); // hook 사용
@@ -97,11 +110,11 @@ const LoginComponent = () => {
           </Button>
 
           {/* <KakaoLoginComponent />  */}
-        </CardContent>
+        </CardContent >
 
         <CardFooter className="flex flex-col space-y-2 text-gray-500">
           <Button className="text-sm text-muted-foreground"
-                  onClick={()=> navigate('/member/findpassword')}>
+            onClick={() => navigate('/member/findpassword')}>
             Find Password
           </Button>
           <div className="text-sm text-muted-foreground">
@@ -111,7 +124,7 @@ const LoginComponent = () => {
             </a>
           </div>
         </CardFooter>
-      </Card>
+      </Card >
 
       {/* -------------------------변경 전------------------------------------ */}
       {/* 
@@ -154,7 +167,7 @@ const LoginComponent = () => {
       </div>
       <KakaoLoginComponent /> 
       */}
-    </div>
+    </div >
   );
 };
 

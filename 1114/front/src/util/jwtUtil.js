@@ -40,12 +40,16 @@ jwtAxios.interceptors.request.use(
   (config) => {
     const memberInfo = getCookie("member");
 
+    const parsedMemberInfo = typeof memberInfo === 'string'
+      ? JSON.parse(memberInfo)
+      : memberInfo;
+
     if (!memberInfo) {
       console.log("Member NOT FOUND");
       return Promise.reject({ response: { data: { error: "REQUIRE_LOGIN" } } });
     }
 
-    const { accessToken } = memberInfo;
+    const { accessToken } = parsedMemberInfo;
     config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
   },

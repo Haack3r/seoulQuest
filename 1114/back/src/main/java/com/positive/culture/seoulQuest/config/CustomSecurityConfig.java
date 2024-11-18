@@ -6,6 +6,7 @@ import com.positive.culture.seoulQuest.security.filter.JWTCheckFilter;
 import com.positive.culture.seoulQuest.security.handler.APILoginFailHandler;
 import com.positive.culture.seoulQuest.security.handler.APILoginSuccessHandler;
 import com.positive.culture.seoulQuest.security.handler.CustomAccessDeniedHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -78,9 +79,18 @@ public class CustomSecurityConfig {
             config.failureHandler(new APILoginFailHandler());
         });
 
-
+        // JWT 체크 필터 추가
         http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.exceptionHandling(exception -> exception.accessDeniedHandler(new CustomAccessDeniedHandler()));
+
+        // 인증 / 인가 실패 핸들러 설정
+        http.exceptionHandling(exception -> exception
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\": \"Unauthorized\"}");
+                })
+        );
 
         return http.build();
     }

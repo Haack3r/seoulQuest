@@ -31,10 +31,19 @@ public interface ProductRepository extends JpaRepository<Product,Long>, Querydsl
     @Query("update Product p set p.delFlag = :flag where p.pno = :pno")
     void updateToDelete(@Param("pno")Long pno, @Param("flag") boolean flag);
 
-    @Query("select p, pi from Product p left join p.productImageList pi " +
-            "where pi.ord = 0 and p.delFlag=false " +
+    @Query("select distinct p, case when p.productImageList is not empty " +
+            "then (select pi from p.productImageList pi where pi.ord = 0) " +
+            "else null end " +
+            "from Product p " +
+            "where p.delFlag = false " +
             "and (:keyword is null or p.pname like concat('%',:keyword,'%'))")
     Page<Object[]> AdminProductList(Pageable pageable, @Param("keyword") String keyword);
+
+    // 새로운 쿼리 - 이미지 없이 상품 정보만 조회
+    @Query("select p from Product p " +
+            "where p.delFlag = false " +
+            "and (:keyword is null or p.pname like concat('%',:keyword,'%'))")
+    Page<Product> AdminProductListNoImage(Pageable pageable, @Param("keyword") String keyword);
 
     /* ------------------------AI 추천 쿼리문( 써도 되고 안 써도 되고 )--------------------------------*/
 

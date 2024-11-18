@@ -15,6 +15,12 @@ public interface ProductService {
     //전체 조회
     PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO);
 
+    // 전체 조회 ( 관리자 용 ) ( 테스트 )
+    PageResponseDTO<ProductDTO> getAdminProductList(PageRequestDTO pageRequestDTO);
+
+    // delFlag ( 삭제 처리 ) = true 를 제외한 * 이미지가 있는 * 리스트 조회
+    PageResponseDTO<ProductDTO> getAdminProductListNoImage(PageRequestDTO pageRequestDTO);
+
     //하나 조회
     ProductDTO get(Long pno);
 

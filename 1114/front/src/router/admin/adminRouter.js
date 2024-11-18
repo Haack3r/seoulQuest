@@ -22,6 +22,7 @@ const adminRouter = () => {
     return [
         {
             path: "",
+            element: <AdminAuth />,
             children: [
                 {
                     element: <AdminIndexPage />,

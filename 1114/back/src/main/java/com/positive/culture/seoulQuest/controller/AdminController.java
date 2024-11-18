@@ -9,7 +9,9 @@ import com.positive.culture.seoulQuest.service.ProductService;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 public class AdminController {
     private final CustomFileUtil fileUtil;
     private final ProductService productService;
-    private final ProductRepository productRepository;  // 추가
+    private final ProductRepository productRepository;
 
 //    @GetMapping("/")
 //    public Map<String, Object> checkAdminAccess() {
@@ -34,11 +36,22 @@ public class AdminController {
 //        return Map.of("role", "ADMIN", "success", true);
 //    }
 
-//    @GetMapping("/product")
-//    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO) {
-//        log.info("list.........." + pageRequestDTO);
-//        return productService.getList(pageRequestDTO);
-//    }
+    @GetMapping("/check")
+    public ResponseEntity<Map<String, Object>> checkAdmin() {
+        return ResponseEntity.ok(Map.of(
+                "role", "ADMIN",
+                "status", "authorized"
+        ));
+    }
+
+    @GetMapping("/product")
+    public PageResponseDTO<ProductDTO> list(
+            @RequestParam(required = false) String keyword,
+            PageRequestDTO pageRequestDTO) {
+        log.info("어드민 product list with keyword" + keyword);
+        pageRequestDTO.setKeyword(keyword);
+        return productService.getAdminProductListNoImage(pageRequestDTO);
+    }
 
 //    @GetMapping("/product")
 //    public ProductDTO
@@ -70,7 +83,8 @@ public class AdminController {
     }
 
     @PostMapping("/product")
-    public Map<String,Long> register(@ModelAttribute ProductDTO productDTO) {
+    @Transactional
+    public Map<String, Long> register(@ModelAttribute ProductDTO productDTO) {
         log.info("register: " + productDTO);
 
         // 파일 처리
@@ -80,14 +94,15 @@ public class AdminController {
             productDTO.setUploadFileNames(uploadFileNames);
             log.info("Uploaded files: " + uploadFileNames);
         }
-    
+
         // 서비스 호출
         Long pno = productService.register(productDTO);
         return Map.of("RESULT", pno);
     }
 
     @PutMapping("/product/{pno}")
-    public Map<String,Long> modify(
+    @Transactional
+    public Map<String, Long> modify(
             @PathVariable("pno") Long pno,
             @ModelAttribute ProductDTO productDTO
     ) {
@@ -104,14 +119,15 @@ public class AdminController {
     }
 
     @DeleteMapping("/product/{pno}")
-    public Map<String,Long> remove(@PathVariable("pno") Long pno) {
+    @Transactional
+    public Map<String, Long> remove(@PathVariable("pno") Long pno) {
         log.info("상품 삭제 (pno) : " + pno);
         // soft delete 처리
-        try{
-        productRepository.updateToDelete(pno, true);
-        return Map.of("RESULT", pno);
+        try {
+            productRepository.updateToDelete(pno, true);
+            return Map.of("RESULT", pno);
         } catch (Exception e) {
-            log.error("삭제 중 에러 : " +e );
+            log.error("삭제 중 에러 : " + e);
             throw e;
         }
     }
