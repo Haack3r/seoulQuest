@@ -78,11 +78,10 @@ public class ProductServiceImpl implements ProductService{
                 Sort.by("pno").descending()
         );
 
-        Page<Object[]> result = productRepository.AdminProductList(pageable, pageRequestDTO.getKeyword());
+        Page<Product> result = productRepository.AdminProductList(pageable, pageRequestDTO.getKeyword());
 
         List<ProductDTO> dtoList = result.getContent().stream()
-                .map(arr -> {
-                    Product product = (Product) arr[0];
+                .map(product -> {
                     ProductDTO dto = entityChangeDTO(product);
 
 //                    // 모든 이미지 정보를 가져오기 위해 selectOne 호출
@@ -93,20 +92,20 @@ public class ProductServiceImpl implements ProductService{
                     dto.setDelFlag(product.isDelFlag());
                     dto.setLikesCount(product.getLikesCount());
 
-//                    // 이미지 정보 처리
-//                    List<String> fileNames = fullProduct.getProductImageList().stream()
-//                            .map(ProductImage::getFileName)
-//                            .collect(Collectors.toList());
-//                        dto.setUploadFileNames(fileNames);
+                    // 이미지 정보 처리
+                    List<String> fileNames = product.getProductImageList().stream()
+                            .map(ProductImage::getFileName)
+                            .collect(Collectors.toList());
+                        dto.setUploadFileNames(fileNames);
 
                     // 이미지가 있는 경우에만 이미지 정보 설정
-                    if (arr[1] != null) {
-                        ProductImage productImage = (ProductImage) arr[1];
-                        dto.setUploadFileNames(List.of(productImage.getFileName()));
-                    } else {
-                        // 이미지가 없는 경우 빈 리스트 설정
-                        dto.setUploadFileNames(new ArrayList<>());
-                    }
+//                    if (arr[1] != null) {
+//                        ProductImage productImage = (ProductImage) arr[1];
+//                        dto.setUploadFileNames(List.of(productImage.getFileName()));
+//                    } else {
+//                        // 이미지가 없는 경우 빈 리스트 설정
+//                        dto.setUploadFileNames(new ArrayList<>());
+//                    }
 
                     return dto;
                 })

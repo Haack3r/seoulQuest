@@ -70,7 +70,7 @@ export const ProductForm = ({ isEditing, initialData, onSubmit, onClose }) => {
     useEffect(() => {
         if (isEditing && initialData.uploadFileNames) {
             const urls = initialData.uploadFileNames.map(
-                fileName => `/api/user/products/view/${fileName}`
+                fileName => `/api/admin/product/${fileName}`
             );
             setPreviewUrls(urls);
         }
@@ -165,11 +165,11 @@ export const ProductForm = ({ isEditing, initialData, onSubmit, onClose }) => {
                                     marginTop: '8px',
                                     flexWrap: 'wrap'
                                 }}>
-                                    {previewUrls.map((url, index) => (
+                                    {previewUrls.map((index) => (
                                         <img
                                             key={index}
-                                            src={url}
-                                            alt={`Preview ${index + 1}`}
+                                            src={`/api/admin/product/${formData.uploadFileNames[0]}`}
+                                            alt={formData.pname}
                                             style={{
                                                 width: '100px',
                                                 height: '100px',

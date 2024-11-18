@@ -45,7 +45,7 @@ const host = `http://localhost:8080/api/admin`
 // )
 
 // 관리자 권한 체크
-export const checkAdminRole = async (role) => {
+export const checkAdminRole = async () => {
     try {
         // localStorage 체크
         // const user = JSON.parse(localStorage.getItem("user"))
@@ -132,30 +132,48 @@ export const fetchOrders = async () => {
 //     return res.data
 // }
 
-export const adminProductList = async ({ keyword = "", type = "t" }) => {
+export const adminProductList = async ({ keyword, type }) => {
     try {
-        const res = await jwtAxios.get(`${host}/product`, {
-            params: {
-                keyword,
-                type,
-            }
-        })
-        return res.data
-    } catch (error) {
-        console.error('상품 목록 조회 오류', error)
-        throw error
-    }
-}
+        const response = await jwtAxios.get(`${host}/product`, {
+            params: { keyword, type }
+        });
 
-export const adminProductOne = async (pno) => {
-    try {
-        const res = await jwtAxios.get(`${host}/product/${pno}`)
-        return res.data
+        // 응답 데이터 검증
+        if (!response || !response.data) {
+            throw new Error('응답 데이터가 없습니다');
+        }
+
+        console.log("API 응답 상태:", response.status);
+        console.log("API 응답 데이터:", response.data);
+
+        return response.data;
+
     } catch (error) {
-        console.error('상품 하나 조회 오류', error)
-        throw error
+        // axios 에러인 경우
+        if (error.response) {
+            console.error('[API 에러]');
+            console.error('상태:', error.response.status);
+            console.error('데이터:', error.response.data);
+            console.error('헤더:', error.response.headers);
+        }
+        // 요청 설정 에러인 경우
+        else if (error.request) {
+            console.error('[요청 에러]', error.request);
+        }
+        // 기타 에러
+        else {
+            console.error('[기타 에러]', error.message);
+        }
+
+        // 사용자 정의 에러 객체 throw
+        throw {
+            message: '상품 목록을 불러오는데 실패했습니다',
+            status: error.response?.status,
+            data: error.response?.data,
+            originalError: error
+        };
     }
-}
+};
 
 export const addProduct = async (formData) => {
     try {

@@ -59,3 +59,19 @@ SELECT
 FROM tbl_member m
 LEFT JOIN member_member_role_list mrl ON m.member_id = mrl.member_id
 ORDER BY m.member_id;
+
+delete from member_member_role_list
+where member_id in (
+select member_id
+from member_member_role_list
+group by member_id
+having count(*) > 1
+)
+and member_role_list = 'USER';
+
+delete from member_member_role_list where member_id in (8,9,10);
+
+insert into member_member_role_list (member_id,member_role_list) values
+(8,'ADMIN'),
+(9,'ADMIN'),
+(10,'ADMIN');

@@ -33,8 +33,19 @@ const AdminProductComponents = () => {
     const fetchProductList = () => {
         setFetching(true);
         adminProductList({ keyword, type })
-            .then(data => setServerData(data || initState))
-            .catch(exceptionHandle)
+            .then(data => {
+                console.log("상품 목록 조회 성공:", data);
+                setServerData(data || initState);
+            })
+            .catch(error => {
+                console.error("상품 목록 조회 실패:", error);
+                if (error.status === 401 || error.status === 403) {
+                    exceptionHandle(error.originalError);
+                } else {
+                    alert(error.message || '상품 목록을 불러오는데 실패했습니다');
+                }
+                setServerData(initState);
+            })
             .finally(() => setFetching(false));
     };
 
@@ -158,14 +169,18 @@ const AdminProductComponents = () => {
             {/* 제품 목록 */}
             {serverData.dtoList && serverData.dtoList
                 // .filter(product => !product.delFlag)
-                .map((product) => (
-                    <ProductCard
-                        key={product.pno}
-                        product={product}
-                        onEdit={() => handleEdit(product)}
-                        onDelete={() => handleDelete(product.pno)}
-                    />
-                ))}
+                .map((data) => {
+                    // AdminProductList 의 경우 [0]으로 Product 객체를 받아옴
+                    const product = Array.isArray(data) ? data[0] : data;
+                    return (
+                        <ProductCard
+                            key={product.pno}
+                            product={product}
+                            onEdit={() => handleEdit(product)}
+                            onDelete={() => handleDelete(product.pno)}
+                        />
+                    );
+                })}
 
             {/* 제품 추가/편집 폼 */}
             {showAddForm && (

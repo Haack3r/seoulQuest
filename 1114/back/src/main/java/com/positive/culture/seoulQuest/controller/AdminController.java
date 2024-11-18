@@ -9,6 +9,7 @@ import com.positive.culture.seoulQuest.service.ProductService;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,13 +45,19 @@ public class AdminController {
         ));
     }
 
+    // admin product list 불러오기
     @GetMapping("/product")
     public PageResponseDTO<ProductDTO> list(
             @RequestParam(required = false) String keyword,
             PageRequestDTO pageRequestDTO) {
         log.info("어드민 product list with keyword" + keyword);
         pageRequestDTO.setKeyword(keyword);
-        return productService.getAdminProductListNoImage(pageRequestDTO);
+        return productService.getAdminProductList(pageRequestDTO);
+    }
+
+    @GetMapping("/product/{fileName}")
+    public ResponseEntity<Resource> viewFile(@PathVariable String fileName) {
+        return fileUtil.getFile(fileName);
     }
 
 //    @GetMapping("/product")
