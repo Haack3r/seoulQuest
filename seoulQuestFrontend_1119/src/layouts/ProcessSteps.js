@@ -4,7 +4,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const ProcessSteps = () => {
   return (
-    <div className="process-container mt-20 text-center py-10">
+    <div className="process-container text-center -mt-12">
       <div className="process-step hover-trigger">
         <div className="process-connector bg-gray-300"></div>
         <div className="process-step-icon text-3xl text-gray-400">

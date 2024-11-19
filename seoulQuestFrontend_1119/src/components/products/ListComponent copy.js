@@ -131,7 +131,7 @@ const ListComponent = () => {
         </div>
 
         {/* Product Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
           {serverData.dtoList && serverData.dtoList.length > 0 ? (
             serverData.dtoList.map((product) => {
               const isFavorite = favItems.some(
@@ -141,11 +141,10 @@ const ListComponent = () => {
               return (
                 <div
                   key={product.pno}
-                  className="flex items-center gap-6 bg-white bg-opacity-10"
+                  className=" flex flex-col items-center text-center"
                   onClick={() => moveToRead(product.pno)}
                 >
-                  {/* Product Image */}
-                  <div className="relative w-60 h-80 overflow-hidden">
+                  <div className="relative w-full max-w-xs h-52 overflow-hidden">
                     <img
                       src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`}
                       alt={product.pname}
@@ -153,29 +152,28 @@ const ListComponent = () => {
                     />
                     <button
                       className={`absolute top-2 right-2 ${
-                        isFavorite ? "text-red-500 fill-current" : "text-white"
+                        isFavorite
+                          ? "text-red-500 fill-current"
+                          : "text-white"
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleToggleFavorite(product);
                       }}
                     >
-                      <HeartIcon className="h-6 w-6" />
+                      <HeartIcon className={`h-6 w-6 ${
+                          isFavorite ? "fill-current" : ""
+                        }`} />
                     </button>
                   </div>
-
-                  {/* Product Title and Price */}
-                  <div className="flex flex-col text-left ">
-                    <h3 className="text-sm font-bold text-gray-700">
+                  <div className="p-4 text-center">
+                    <h3 className="text-lg font-bold text-gray-700">
                       {product.pname}
                     </h3>
-                    
-                          <p className="text-gray-500 mt-2 text-sm w-28  lg:w-40 hidden md:block">
-                      {product.pdesc}
-                          </p>
-                          <p className="text-gray-500 mt-2">
+                    <p className="text-gray-500 mt-2">
                       ₩{product.pprice.toLocaleString()}
-                          </p>
+                    </p>
+                    
                   </div>
                 </div>
               );

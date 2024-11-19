@@ -11,7 +11,7 @@ const ListPage = () => {
     <div className='p-4 w-full' style={{ backgroundColor: "#E0DCD0" }}>
           <ProductImage />
           <ProcessSteps />
-          <AboutProductPage />
+          {/* <AboutProductPage /> */}
         <ListComponent />
     </div>
   )

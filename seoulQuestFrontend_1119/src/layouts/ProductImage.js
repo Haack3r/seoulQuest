@@ -96,7 +96,7 @@ const ProductImage = () => {
           />
           <div className="absolute inset-0 bg-black opacity-30" />
           <div className="relative z-10 text-white font-bold text-xl uppercase tracking-widest lg:text-2xl">
-            About Our Tours
+            About Our Products
           </div>
         </div>
 
@@ -114,7 +114,7 @@ const ProductImage = () => {
           />
           <div className="absolute inset-0 bg-black opacity-30" />
           <div className="relative z-10 text-white font-bold text-xl uppercase tracking-widest lg:text-2xl">
-            Explore on Map
+            Top products
           </div>
         </a>
       </div>
