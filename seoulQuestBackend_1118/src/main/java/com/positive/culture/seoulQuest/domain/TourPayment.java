@@ -31,8 +31,8 @@ public class TourPayment {
     private BigDecimal paymentPrice; //결제 총액
     private Date paymentDate;
 
-    @Builder.Default
-    private String paymentStatus= "pending";
+//    @Builder.Default
+//    private String paymentStatus= "pending";
 
     private String paymentMethod;
 }

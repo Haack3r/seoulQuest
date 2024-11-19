@@ -38,12 +38,13 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
             System.out.println("orderId"+orderId);
             ProductOrder productOrder = productOrderRepository.findById(orderId).orElseThrow();
 
+            //order엔티티의 paymentStatus 변경
             productOrder.changePaymentStatus(paymentResponse.getStatus());
-            productOrderRepository.save(productOrder); //order테이블의 paymentStatus도 변경
+            productOrderRepository.save(productOrder);
 
             //1.결제정보 저장
             ProductPayment payment = ProductPayment.builder()
-                    .paymentStatus(paymentResponse.getStatus())
+//                    .paymentStatus(paymentResponse.getStatus()) //삭제
                     .pPaymentMember(paymentMember)
                     .paymentPrice(paymentResponse.getAmount())
                     .paymentDate(paymentResponse.getPaidAt())

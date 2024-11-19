@@ -22,6 +22,7 @@ public class ProductOrderItem {
 
     private int pOrderQty; //상품 주문수량
 
+
     //상품이 수정될 수 있으므로 product 엔티티와 @OneToOne관계로 연결하지 않고
     //주문당시의 상품 정보를 따로 저장함.
     private Long pno;

@@ -28,22 +28,20 @@ public class ReviewController {
     public ReviewInfoDTO getInfo(Principal principal){
         System.out.println("principal:"+principal);
         String email = principal.getName();
-
-        //ReviewInfoDTO에 담아서 보냄
-        //email로 member닉네임과 주문상품 찾아서 reviewInfodto에 저장하여 프론트로 전송
-        ReviewInfoDTO reviewInfodto = reviewService.getProductPaymentInfo(email);
-
-        return reviewInfodto;
+        ReviewInfoDTO reviewInfoDTO = reviewService.getProductPaymentInfo(email);
+        System.out.println(reviewInfoDTO);
+        //email로 member닉네임과 주문상품이름 찾아서 ReviewInfoDTO에 저장하여 프론트로 전송
+        return reviewInfoDTO;
     }
 
-    @PostMapping("/")
-    // product review 등록
-    public Long register(@RequestBody ReviewDTO reviewDTO){
-        log.info(reviewDTO);
-
-        Long prid = reviewService.registerProductReview(reviewDTO);
-        log.info(prid);
-        return prid;
-    }
+//    @PostMapping("/")
+//    // product review 등록
+//    public Long register(@RequestBody ReviewDTO reviewDTO){
+//        log.info(reviewDTO);
+//
+//        Long prid = reviewService.registerProductReview(reviewDTO);
+//        log.info(prid);
+//        return prid;
+//    }
 
 }

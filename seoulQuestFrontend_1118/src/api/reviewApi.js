@@ -30,3 +30,9 @@ export const postAdd = async (reviewObj) => {     // 데이터 추가
     const res = await jwtAxios.post(`${prefix}/`, reviewObj)
     return res.data
 }
+
+//데이터 추가시 기본 정보 불러오기 
+export const getInfoforProduct = async() =>{
+    const res = await jwtAxios.get(`${prefix}/info`)
+    return res.data
+}

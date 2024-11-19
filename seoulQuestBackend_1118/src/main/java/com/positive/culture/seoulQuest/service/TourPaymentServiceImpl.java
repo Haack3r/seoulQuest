@@ -41,7 +41,7 @@ public class TourPaymentServiceImpl implements TourPaymentService {
 
             //1.결제정보 저장
             TourPayment payment = TourPayment.builder()
-                    .paymentStatus(paymentResponse.getStatus())
+//                    .paymentStatus(paymentResponse.getStatus())
                     .tPaymentMember(paymentMember)
                     .paymentPrice(paymentResponse.getAmount())
                     .paymentDate(paymentResponse.getPaidAt())

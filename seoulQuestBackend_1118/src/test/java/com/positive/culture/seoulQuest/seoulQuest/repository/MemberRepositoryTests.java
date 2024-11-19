@@ -50,11 +50,13 @@ public class MemberRepositoryTests {
                     .phoneNumber("010" + "-" + middleNum + "-" + lastNum)
                     .birthday(LocalDate.of(year, month, day))
                     .build();
-            member.addRole(MemberRole.USER);
 
-            if(i>=8){
+            if(i<8){
+                member.addRole(MemberRole.USER);
+            }else {
                 member.addRole(MemberRole.ADMIN);
             }
+
             memberRepository.save(member);
         }
     }

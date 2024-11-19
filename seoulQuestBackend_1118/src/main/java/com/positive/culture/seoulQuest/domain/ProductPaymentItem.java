@@ -22,7 +22,10 @@ public class ProductPaymentItem {
 
     private int pPaymentQty; //상품 결제 수량
 
+    //Product엔티티와 연결
+
     //결제시의 상품 이름과 가격 정보
+    private Long pno;
     private String pname;
     private int pprice;
 
