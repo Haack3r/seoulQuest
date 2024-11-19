@@ -1,0 +1,11 @@
+1. orderItem 삭제 -paymentItem과 중복됨 
+
+order엔티티에는 배송정보와 주문날짜, 주문상태, 멤버아이디, 주문 총액 (쿠폰 포함)
+
+payment엔티티에는 결제 날짜, 결제 수단, 주문 총액( 쿠폰 포함), 멤버아이디, 오더 아이디 
+paymentItem 엔티티에 결제한 상품저장, paymentid
+
+결제 실패시 -> 주문엔티티의 usedCoupon을 null로 변경해야함.
+//결제 실패시 사용한 쿠폰값이 null로 변경되어야함
+
+2. review content 는 값 객체  vo로 저장하기. - 내용이 길어질수 있으므로.

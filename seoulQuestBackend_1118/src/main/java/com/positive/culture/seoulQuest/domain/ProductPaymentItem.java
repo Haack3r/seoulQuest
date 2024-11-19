@@ -20,13 +20,14 @@ public class ProductPaymentItem {
     @JoinColumn(name = "p_payment_id")
     private ProductPayment productPayment;
 
-    private int pPaymentQty; //상품 결제 수량
-
-    //Product엔티티와 연결
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pno")
+    private Product product;
 
     //결제시의 상품 이름과 가격 정보
-    private Long pno;
     private String pname;
     private int pprice;
+
+    private int pPaymentQty; //상품 결제 수량
 
 }

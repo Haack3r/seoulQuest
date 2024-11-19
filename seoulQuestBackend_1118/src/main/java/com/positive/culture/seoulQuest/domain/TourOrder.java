@@ -19,13 +19,8 @@ public class TourOrder {
     private Long tOrderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_member_id")
+    @JoinColumn(name = "member_id")
     private Member tOrderMember;
-
-    //결제 실패시에도 쿠폰을 재사용할수 있도록 관계를 ManyToOne으로 지정하여 중복이 가능하게함
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_coupon_id")
-    private UserCoupon usedCoupon;
 
     private int totalPrice;
 
@@ -42,8 +37,6 @@ public class TourOrder {
 
     private String phoneNumber;
     private String country;
-
-    //paymentMethod는 결제 엔티티에 저장함.
 
     public void changePaymentStatus(String paymentStatus){
         this.paymentStatus = paymentStatus;

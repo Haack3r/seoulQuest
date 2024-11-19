@@ -211,12 +211,9 @@ const OrderComponent = () => {
                         try {
                             const response = await postPayInfo(orderInfoWithOrderId, impUid);
                             console.log(response);
-                            const answer = alert("Payment has been successfully completed!");
-                            if(answer){
-                                //상품 주문 확인페이지로 이동
-                            }
+                            alert("Payment has been successfully completed!");
+                            //상품 주문 확인페이지로 이동
                         } catch (error) {
-                            console.error(error);
                             alert("Failed to complete the payment.");
                         }
                     } else {

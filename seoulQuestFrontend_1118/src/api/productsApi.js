@@ -67,7 +67,6 @@ export const postOrderInfo = async (orderInfo) => {
   }
 };
 
-
 // payment: 유저의 결제 정보를 서버로 보냄 , impUid포함한 정보.
 export const postPayInfo = async (orderInfoWithOrderId, impUid) => {
   console.log("payment:", orderInfoWithOrderId);

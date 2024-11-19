@@ -174,7 +174,7 @@ public class TourController {
         return Map.of("RESULT", "SUCCESS");
     }
 
-    //orderDTO로 받아서 order, orderItem 엔티티에 저장.
+    //orderDTO로 받아서 order 엔티티에 저장.
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/orders")
     public ResponseEntity<Map<String,Object>> book(@RequestBody OrderDTO orderDTO){

@@ -19,20 +19,21 @@ public class ProductPayment {
     private Long pPaymentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "p_member_id")
+    @JoinColumn(name = "member_id")
     private Member pPaymentMember;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_order_id")
     private ProductOrder productOrder;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_coupon_id")
+    private UserCoupon usedCoupon;
+
     private String merchantUid;
 
     private BigDecimal paymentPrice; //결제 총액
     private Date paymentDate;
-
-//    @Builder.Default
-//    private String paymentStatus= "pending";
 
     private String paymentMethod;
 }

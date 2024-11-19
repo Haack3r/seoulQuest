@@ -161,8 +161,6 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/orders")
     public ResponseEntity<Map<String,Object>> order(@RequestBody OrderDTO orderDTO){
-        System.out.println("product order내역 : " + orderDTO);
-        System.out.println("pOrderItems" + orderDTO.getPorderItems());
         //orderDTO를 받아서 order 엔티티에 저장하고 orderId를 반환
         Long orderId = productOrderService.saveOrder(orderDTO);
         Map<String, Object> response = new HashMap<>();
