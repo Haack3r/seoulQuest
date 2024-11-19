@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus } from "lucide-react";
-import { addProduct, adminProductList, adminProductOne, deleteProduct, modifyProduct } from '../../api/AdminApi';
+import { addProduct, adminProductList, deleteProduct, getProduct, modifyProduct } from '../../api/AdminApi';
 import { layoutStyles, inputStyles, Button } from './ui/Styles';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { ProductForm } from './ui/ProductForm';
 import { ProductCard } from './ui/ProductCard';
-import FetchingModal from '../common/FetchingModal';
+
+const adminHost = `http://localhost:8080/api/admin`
+const host = `http://localhost:8080/api`
 
 const initState = {
-    dtoList: [],
     pno: 0,
     pname: '',
     categoryName: '',
@@ -19,35 +20,61 @@ const initState = {
 }
 
 const AdminProductComponents = () => {
-    const [serverData, setServerData] = useState(initState);
+    const [product, setProduct] = useState(initState);
+    // const [uploadFileNames, setUploadFileNames] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [showAddForm, setShowAddForm] = useState(false);
     const [selectedPno, setSelectedPno] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
+    const [showProductDetail, setShowProductDetail] = useState(false);
+
     const [keyword, setKeyword] = useState("");
     const [type, setType] = useState("t");
+
     const [fetching, setFetching] = useState(false);
 
     const { exceptionHandle } = useCustomLogin();
 
-    // 제품 목록 조회
     const fetchProductList = () => {
         setFetching(true);
         adminProductList({ keyword, type })
-            .then(data => {
-                console.log("상품 목록 조회 성공:", data);
-                setServerData(data || initState);
-            })
-            .catch(error => {
-                console.error("상품 목록 조회 실패:", error);
-                if (error.status === 401 || error.status === 403) {
-                    exceptionHandle(error.originalError);
+            .then((data) => {
+                console.log("Fetched data:", data); // Log the data to inspect its structure
+                if (data && Array.isArray(data.dtoList)) {
+                    setProduct(data);
                 } else {
-                    alert(error.message || '상품 목록을 불러오는데 실패했습니다');
+                    console.error("Unexpected data structure:", data);
+                    setProduct(initState); // Fallback to initial state if data is incorrect
                 }
-                setServerData(initState);
+                setFetching(false);
             })
-            .finally(() => setFetching(false));
+            .catch((err) => {
+                console.error("Error fetching data:", err);
+                exceptionHandle(err);
+                setFetching(false); // Reset fetching state on error
+            });
     };
+
+    // 제품 목록 조회
+    // const fetchProductList = () => {
+    //     setFetching(true);
+    //     adminProductList({ keyword, type })
+    //         .then(data => {
+    //             console.log("상품 목록 조회 성공:", data);
+    //             setServerData(data || initState);
+    //         })
+    //         .catch(error => {
+    //             console.error("상품 목록 조회 실패:", error);
+    //             if (error.status === 401 || error.status === 403) {
+    //                 exceptionHandle(error.originalError);
+    //             } else {
+    //                 alert(error.message || '상품 목록을 불러오는데 실패했습니다');
+    //             }
+    //             setServerData(initState);
+    //         })
+    //         .finally(() => setFetching(false));
+    // };
 
     // 제품 추가
     const handleAddProduct = (formData) => {
@@ -57,12 +84,22 @@ const AdminProductComponents = () => {
                 console.log("Add product response", response)
                 fetchProductList();
                 setShowAddForm(false);
+                setIsEditing(false);
+                setSelectedProduct(null);
+                setSelectedPno(null);
             })
             .catch((error) => {
                 console.error(`Add product or fetch error`, error)
             })
             .finally(() => setFetching(false));
     };
+
+    // 제품 추가 버튼 핸들러
+    const handleAddClick = () => {
+        setShowAddForm(true);
+        setIsEditing(false);
+        setSelectedProduct(null);
+    }
 
     // 제품 수정
     const handleModifyProduct = (formData) => {
@@ -74,6 +111,7 @@ const AdminProductComponents = () => {
                 setShowAddForm(false);
                 setIsEditing(false);
                 setSelectedPno(null);
+                setSelectedProduct(null);
             })
             .catch(error => {
                 console.error("Modify or fetch error:", error);
@@ -82,6 +120,14 @@ const AdminProductComponents = () => {
             .finally(() => setFetching(false));
     };
 
+    // 제품 수정 버튼 핸들러
+    const handleEdit = (product) => {
+        setShowAddForm(true);
+        setIsEditing(true);
+        setSelectedPno(product.pno);
+        setSelectedProduct(product);
+    }
+
     // 제품 삭제
     const handleDelete = async (pno) => {
         if (!window.confirm('정말 삭제하시겠습니까?')) return;
@@ -89,9 +135,7 @@ const AdminProductComponents = () => {
             setFetching(true);
             await deleteProduct(pno)
             alert("삭제되었습니다")
-
-            const updateList = await adminProductList({ keyword, type })
-            setServerData(updateList || initState)
+            fetchProductList();
         } catch (error) {
             console.error("Delete error:", error);
             if (error.response?.status === 401) {
@@ -103,6 +147,27 @@ const AdminProductComponents = () => {
             setFetching(false);
         }
     }
+
+    const handleGetProduct = (pno) => {
+        getProduct(pno)
+            .then(data => {
+                setSelectedProduct(data)
+                setShowProductDetail(true)
+            })
+            .catch(error => {
+                console.error("Get product error:", error);
+                exceptionHandle(error);
+            });
+    }
+
+    const handleClose = () => {
+        setShowAddForm(false);
+        setIsEditing(false);
+        setSelectedPno(null);
+        setSelectedProduct(null);
+        fetchProductList();
+    }
+
     // setFetching(true);
     // deleteProduct(pno)
     //         .then((response) => {
@@ -129,12 +194,6 @@ const AdminProductComponents = () => {
         }
     };
 
-    // 편집 모드 시작
-    const handleEdit = (product) => {
-        setSelectedPno(product.pno);
-        setIsEditing(true);
-        setShowAddForm(true);
-    };
 
     // 초기 로딩 및 검색
     useEffect(() => {
@@ -157,7 +216,10 @@ const AdminProductComponents = () => {
                         검색
                     </Button>
                 </div>
-                <Button onClick={() => setShowAddForm(true)}>
+                <Button onClick={() => {
+                    handleAddClick();
+                    setShowProductDetail(false);
+                }}>
                     <Plus size={16} />
                     새 제품
                 </Button>
@@ -167,7 +229,7 @@ const AdminProductComponents = () => {
             <div style={{ height: '24px' }} />
 
             {/* 제품 목록 */}
-            {serverData.dtoList && serverData.dtoList
+            {/* {serverData.dtoList && serverData.dtoList
                 // .filter(product => !product.delFlag)
                 .map((data) => {
                     // AdminProductList 의 경우 [0]으로 Product 객체를 받아옴
@@ -180,24 +242,170 @@ const AdminProductComponents = () => {
                             onDelete={() => handleDelete(product.pno)}
                         />
                     );
-                })}
+                })} */}
 
-            {/* 제품 추가/편집 폼 */}
-            {showAddForm && (
-                <ProductForm
-                    isEditing={isEditing}
-                    initialData={serverData}
-                    onSubmit={handleFormSubmit}
-                    onClose={() => {
-                        setShowAddForm(false);
-                        setIsEditing(false);
-                        setSelectedPno(null);
-                    }}
-                />
-            )}
+            {/* 제품 카드 */}
+            <div
+                style={{ position: 'relative', zIndex: 1 }}>
+                <div
+                    className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {product.dtoList && product.dtoList.map((product) => {
+                        // const product = Array.isArray(data) ? data[0] : data;
+                        return (
+                            <div key={product.pno}
+                                onClick={() => handleGetProduct(product.pno)}
+                                className="overflow-hidden transition-all duration-300 hover:shadow-xl border bg-white rounded-lg group">
+                                <div
+                                    className="relative overflow-hidden aspect-square group">
+                                    <img
+                                        src={product.uploadFileNames?.[0]
+                                            ? `${host}/random/view/${product.uploadFileNames[0]}`
+                                            : "/logo192.jpg"} // Default image if no uploadFileNames
+                                        alt={product.pname}
+                                        className="object-cover w-full h-full transition-all duration-300 group-hover:scale-110 cursor-pointer"
+                                    />
 
-            {/* 로딩 표시
+                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity
+                                duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer">
+                                        <div className="text-center p-4">
+                                            <h3 className="text-lg font-semibold text-white mb-2">{product.pname}</h3>
+                                            <p className="text-rose-500 mb-4">₩{product.pprice.toLocaleString()}</p>
+                                            {/* <div className="flex gap-2 justify-center">
+                                                <Button onClick={() => handleEdit(product, product.uploadFileNames, product.pno)}
+                                                    className="bg-white text-gray-900 hover:bg-gray-100">
+                                                    수정
+                                                </Button>
+                                                <Button onClick={() => handleDelete(product.pno)}
+                                                    className="bg-red-500 text-white hover:bg-red-600">
+                                                    삭제
+                                                </Button>
+                                            </div> */}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-4">
+                                    <h3 className="font-semibold">{product.pname}</h3>
+                                    <p className="text-gray-600">{product.categoryName}</p>
+                                    <p className="text-rose-500 font-medium">₩{product.pprice.toLocaleString()}</p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {showProductDetail && selectedProduct && (
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1001]"
+                        onClick={() => setShowProductDetail(false)}
+                    >
+                        <div
+                            className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="flex justify-between items-start mb-4">
+                                <h2 className="text-2xl font-bold">{selectedProduct.pname}</h2>
+                                <button
+                                    onClick={() => setShowProductDetail(false)}
+                                    className="text-gray-500 hover:text-gray-700"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* 이미지 섹션 */}
+                                <div className="aspect-square rounded-lg overflow-hidden">
+                                    <img
+                                        src={selectedProduct.uploadFileNames?.[0]
+                                            ? `${host}/random/view/${selectedProduct.uploadFileNames[0]}`
+                                            : "/logo192.jpg"}
+                                        alt={selectedProduct.pname}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+
+                                {/* 상세 정보 섹션 */}
+                                <div className="space-y-4">
+                                    <div>
+                                        <h3 className="text-lg font-semibold">카테고리</h3>
+                                        <p className="text-gray-600">{selectedProduct.categoryName}</p>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="text-lg font-semibold">가격</h3>
+                                        <p className="text-rose-500 text-xl font-medium">
+                                            ₩{selectedProduct.pprice.toLocaleString()}
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="text-lg font-semibold">재고</h3>
+                                        <p className="text-gray-600">{selectedProduct.pqty}개</p>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="text-lg font-semibold">상품 설명</h3>
+                                        <p className="text-gray-600 whitespace-pre-wrap">{selectedProduct.pdesc}</p>
+                                    </div>
+
+                                    {/* 추가 이미지들 */}
+                                    {selectedProduct.uploadFileNames && selectedProduct.uploadFileNames.length > 1 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold mb-2">추가 이미지</h3>
+                                            <div className="grid grid-cols-4 gap-2">
+                                                {selectedProduct.uploadFileNames.slice(1).map((fileName, index) => (
+                                                    <div key={index} className="aspect-square rounded-lg overflow-hidden">
+                                                        <img
+                                                            src={`${selectedProduct.pname} ${index + 2}`}
+                                                            alt={`${host}/random/view/${fileName}`}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="flex gap-2 pt-4">
+                                        <Button
+                                            onClick={() => {
+                                                handleEdit(selectedProduct);
+                                                setShowProductDetail(false);
+                                            }}
+                                            className="flex-1"
+                                        >
+                                            수정
+                                        </Button>
+                                        <Button
+                                            onClick={() => {
+                                                handleDelete(selectedProduct.pno);
+                                                setShowProductDetail(false);
+                                            }}
+                                            className="flex-1 bg-red-500 hover:bg-red-600"
+                                        >
+                                            삭제
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 제품 추가/편집 폼 */}
+                {showAddForm && (
+                    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
+                        <ProductForm
+                            isEditing={isEditing}
+                            initialData={isEditing ? selectedProduct : product}
+                            onSubmit={handleFormSubmit}
+                            onClose={handleClose}
+                        />
+                    </div>
+                )}
+                {/* 로딩 표시
             {fetching && <FetchingModal />} */}
+            </div>
         </div>
     );
 };

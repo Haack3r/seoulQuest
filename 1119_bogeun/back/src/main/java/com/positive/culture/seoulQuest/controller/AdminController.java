@@ -7,6 +7,7 @@ import com.positive.culture.seoulQuest.dto.ProductDTO;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
 import com.positive.culture.seoulQuest.service.ProductService;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 
 public class AdminController {
@@ -37,7 +38,7 @@ public class AdminController {
 //        return Map.of("role", "ADMIN", "success", true);
 //    }
 
-    @GetMapping("/check")
+    @GetMapping("/admin/check")
     public ResponseEntity<Map<String, Object>> checkAdmin() {
         return ResponseEntity.ok(Map.of(
                 "role", "ADMIN",
@@ -46,50 +47,38 @@ public class AdminController {
     }
 
     // admin product list 불러오기
-    @GetMapping("/product")
+    @GetMapping("/admin/product")
     public PageResponseDTO<ProductDTO> list(
             @RequestParam(required = false) String keyword,
             PageRequestDTO pageRequestDTO) {
-        log.info("어드민 product list with keyword" + keyword);
+        log.info("어드민 products list with keyword" + keyword);
         pageRequestDTO.setKeyword(keyword);
         return productService.getAdminProductList(pageRequestDTO);
     }
 
-    @GetMapping("/product/{fileName}")
-    public ResponseEntity<Resource> viewFile(@PathVariable String fileName) {
+    // 이미지 파일 로드
+//    @GetMapping("/product/{fileName}")
+//    public ResponseEntity<Resource> viewFile(@PathVariable String fileName) {
+//        return fileUtil.getFile(fileName);
+//    }
+
+    @GetMapping("/random/view/**")
+    public ResponseEntity<Resource> viewFileGet(HttpServletRequest request) {
+        String fileName = request.getRequestURI().split("/view/")[1];  // Extract everything after "/view/"
+        System.out.println("요청된 URI: " + request.getRequestURI());
+        System.out.println("추출된 파일명: " + fileName);
+
+        System.out.println("1000) fileName: " + fileName);
+        System.out.println("응답 상태: " + fileUtil.getFile(fileName).getStatusCode());
         return fileUtil.getFile(fileName);
     }
 
-//    @GetMapping("/product")
-//    public ProductDTO
-//    }
-
-    @GetMapping("/product/{pno}")
+    @GetMapping("/admin/product/{pno}")
     public ProductDTO getOne(@PathVariable("pno") Long pno) {
-        Product product = productRepository.selectOne(pno)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        // Product 엔티티를 DTO로 변환
-        return ProductDTO.builder()
-                .pno(product.getPno())
-                .categoryName(product.getCategory().getCategoryName())
-                .pname(product.getPname())
-                .pdesc(product.getPdesc())
-                .pprice(product.getPprice())
-                .pqty(product.getPqty())
-                .shippingCost(product.getShippingCost())
-                .createAt(product.getCreateAt())
-                .updateAt(product.getUpdateAt())
-                .delFlag(product.isDelFlag())
-                .likesCount(product.getLikesCount())
-                // 이미지 정보 변환
-                .uploadFileNames(product.getProductImageList().stream()
-                        .map(productImage -> productImage.getFileName())
-                        .collect(Collectors.toList()))
-                .build();
+        return productService.get(pno);
     }
 
-    @PostMapping("/product")
+    @PostMapping("/admin/product")
     @Transactional
     public Map<String, Long> register(@ModelAttribute ProductDTO productDTO) {
         log.info("register: " + productDTO);
@@ -105,9 +94,31 @@ public class AdminController {
         // 서비스 호출
         Long pno = productService.register(productDTO);
         return Map.of("RESULT", pno);
+
+        @Override
+        public Long register(ProductDTO productDTO) {
+            log.info("Product register.....");
+
+            // DTO를 엔티티로 변환
+            Product product = Product.builder()
+                    .pname(productDTO.getPname())
+                    .pdesc(productDTO.getPdesc())
+                    .pprice(productDTO.getPprice())
+                    .pqty(productDTO.getPqty())
+                    .shippingCost(productDTO.getShippingCost())
+                    .categoryName(productDTO.getCategoryName())
+                    .categoryType(productDTO.getCategoryType())
+                    .uploadFileNames(productDTO.getUploadFileNames())
+                    .delFlag(false)
+                    .build();
+
+            // 저장
+            Product savedProduct = productRepository.save(product);
+
+            return savedProduct.getPno();
     }
 
-    @PutMapping("/product/{pno}")
+    @PutMapping("/admin/product/{pno}")
     @Transactional
     public Map<String, Long> modify(
             @PathVariable("pno") Long pno,
@@ -125,7 +136,7 @@ public class AdminController {
         return Map.of("RESULT", pno);
     }
 
-    @DeleteMapping("/product/{pno}")
+    @DeleteMapping("/admin/product/{pno}")
     @Transactional
     public Map<String, Long> remove(@PathVariable("pno") Long pno) {
         log.info("상품 삭제 (pno) : " + pno);

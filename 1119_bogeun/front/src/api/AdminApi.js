@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { Loader2 } from "lucide-react"
 import { getCookie } from "../util/cookieUtil"
 
-const host = `http://localhost:8080/api/admin`
+const host = `http://localhost:8080/api`
 
 // const memberInfo = getCookie("member");
 
@@ -75,7 +75,7 @@ export const checkAdminRole = async () => {
         }
 
         // API 체크
-        const res = await jwtAxios.get(`${host}/check`, {
+        const res = await jwtAxios.get(`${host}/admin/check`, {
             timeout: 5000
         })
 
@@ -115,7 +115,7 @@ export const AdminRoute = ({ children }) => {
 
 export const fetchOrders = async () => {
     try {
-        const res = await jwtAxios.get(`${host}/order`)
+        const res = await jwtAxios.get(`${host}/admin/order`)
         console.log("주문 체크 응답", res)
         return res.data
     } catch (error) {
@@ -132,9 +132,9 @@ export const fetchOrders = async () => {
 //     return res.data
 // }
 
-export const adminProductList = async ({ keyword, type }) => {
+export const adminProductList = async ({ keyword = "", type = "t" }) => {
     try {
-        const response = await jwtAxios.get(`${host}/product`, {
+        const response = await jwtAxios.get(`${host}/admin/product`, {
             params: { keyword, type }
         });
 
@@ -175,10 +175,15 @@ export const adminProductList = async ({ keyword, type }) => {
     }
 };
 
+export const getProduct = async (pno) => {
+    const res = await jwtAxios.get(`${host}/admin/product/${pno}`)
+    return res.data
+}
+
 export const addProduct = async (formData) => {
     try {
         const res = await jwtAxios.post(
-            `${host}/product/`, formData,
+            `${host}/admin/product`, formData,
             {
                 headers: { "Content-Type": "multipart/form-data" },
             }
@@ -192,7 +197,7 @@ export const addProduct = async (formData) => {
 
 export const deleteProduct = async (pno) => {
     try {
-        const res = await jwtAxios.delete(`${host}/product/${pno}`)
+        const res = await jwtAxios.delete(`${host}/admin/product/${pno}`)
         return res.data
     } catch (error) {
         console.error('상품 삭제 오류', error)
@@ -202,7 +207,7 @@ export const deleteProduct = async (pno) => {
 
 export const modifyProduct = async (pno, formData) => {
     try {
-        const res = await jwtAxios.put(`${host}/product/${pno}`, formData,
+        const res = await jwtAxios.put(`${host}/admin/product/${pno}`, formData,
             { headers: { "Content-Type": "multipart/form-data" } }
         )
         return res.data
@@ -216,7 +221,7 @@ export const modifyProduct = async (pno, formData) => {
 
 export const fetchReservations = async () => {
     try {
-        const res = await jwtAxios.get(`${host}/reservation`)
+        const res = await jwtAxios.get(`${host}/admin/reservation`)
         console.log("상품 체크 응답", res)
         return res.data
     } catch (error) {

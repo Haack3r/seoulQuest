@@ -96,25 +96,44 @@ public class CustomFileUtil { //파일의 입출력을 담당
     //----------------------특정한 파일 조회----------------------(유저, 관리자)
     // 본문 (body)의 데이터 타입을 Resource로 지정하여 ResponseEntity로 반환
     public ResponseEntity<Resource> getFile(String fileName) {
+
+        // 디버깅을 위한 로그 추가
+        log.info("--------- File Request Debug Info ---------");
+        log.info("Requested fileName: " + fileName);
+        log.info("Full path: " + uploadPath + File.separator + fileName);
+
         // 1. 주어진 파일 이름을 사용하여 파일 시스템 리소스를 생성
         Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
 
+        // 파일 존재 여부 로깅
+        log.info("Resource exists: " + resource.exists());
+        log.info("Resource readable: " + resource.isReadable());
+
         // 2. 파일이 읽을 수 없는 경우 기본 이미지인 "default.jpeg"를 사용
         if (!resource.isReadable()) {
+            log.warn("File not readable, using default image");
             // 3. 기본 이미지를 리소스로 생성
             resource = new FileSystemResource(uploadPath + File.separator + "default.jpeg");
+            log.info("Default image exists: " + resource.exists());
         }
 
         // 4. HTTP 헤더를 생성
         HttpHeaders headers = new HttpHeaders();
+        String contentType = null;
 
         try {
             // 5. 파일의 타입을 조사하여 content-type 헤더에 추가
             headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
+            headers.add("Content-Type", contentType);
+            log.info("Content-Type: " + contentType);
         } catch (Exception e) {
+            // 에러 로깅 추가
+            log.error("Error processing file: " + e.getMessage(), e);
             // 6. 오류 발생 시 서버 내부 오류를 반환
             return ResponseEntity.internalServerError().build();
         }
+
+        log.info("----------------------------------------");
 
         // 7. 성공적으로 파일 정보를 찾은 경우, 헤더와 본문(파일 리소스)을 반환
         // ResponseEntity를 사용하여 헤더와 본문을 포함한 응답을 생성

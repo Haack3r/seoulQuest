@@ -1,7 +1,6 @@
 package com.positive.culture.seoulQuest.config;
 
 
-
 import com.positive.culture.seoulQuest.security.filter.JWTCheckFilter;
 import com.positive.culture.seoulQuest.security.handler.APILoginFailHandler;
 import com.positive.culture.seoulQuest.security.handler.APILoginSuccessHandler;
@@ -62,16 +61,34 @@ public class CustomSecurityConfig {
         http.authorizeHttpRequests(auth -> auth
 //                .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check",
 //                        "/api/member/checknickname","/api/member/login").permitAll() // Permit OPTIONS requests
-//                .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/checknickname",
-//                        "/api/member/login","/api/mypage/**","/api/user/tours/view/**","/api/user/products/view/**",
-//                        "/api/user/tours/mapData", "/api/user/tours/by-address","/api/products/**",
-//                        "/api/tours/**").permitAll()// Allow unauthenticated access
-                .requestMatchers(HttpMethod.OPTIONS,"/api/member/**","/api/tours/**", "/api/products/**",
-                        "/api/user/tours/view/**","/api/user/products/view/**", "/api/user/tours/mapData",
-                        "/api/user/tours/by-address").permitAll()
-//                .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
+                .requestMatchers(
+                        "/api/member/signup",
+                        "/api/member/check",
+                        "/api/member/checknickname",
+                        "/api/member/login",
+                        "/api/mypage/**",
+                        "/api/user/tours/view/**",
+                        "/api/user/products/view/**",
+                        "/api/user/tours/mapData",
+                        "/api/user/tours/by-address",
+                        "/api/products/**",
+                        "/api/tours/**",
+                        "/api/random/**",
+                        "/api/admin/product/view/**",
+                        "/api/admin/tour/view/**"
+                ).permitAll()// Allow unauthenticated access
+                .requestMatchers(
+                        HttpMethod.OPTIONS,
+                        "/api/member/**",
+                        "/api/tours/**",
+                        "/api/products/**",
+                        "/api/user/tours/view/**",
+                        "/api/user/products/view/**",
+                        "/api/user/tours/mapData",
+                        "/api/user/tours/by-address"
+                ).permitAll()
+                .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated());
-
 
         http.formLogin(config -> {
             config.loginPage("/api/member/login").permitAll();
@@ -125,15 +142,35 @@ public class CustomSecurityConfig {
 //        return http.build();
 //    }
 
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowCredentials(true);
+//        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+//        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","HEAD","OPTIONS"));
+//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-//        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","HEAD","OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Cache-Control",
+                "Content-Type",
+                "Origin",
+                "Accept",
+                "X-Requested-With"
+        ));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

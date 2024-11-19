@@ -1,5 +1,56 @@
 import React from "react"
 
+// export const modalStyles = {
+//     overlay: {
+//         position: 'fixed',
+//         top: 0,
+//         left: 0,
+//         right: 0,
+//         bottom: 0,
+//         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+//         zIndex: 1000,
+//         display: 'flex',
+//         justifyContent: 'center',
+//         alignItems: 'center'
+//     },
+//     content: {
+//         position: 'relative',
+//         width: '500px',
+//         backgroundColor: 'white',
+//         borderRadius: '8px',
+//         padding: 0,
+//         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+//     }
+// };
+
+// export const modalStyles = {
+//     overlay: {
+//         position: 'fixed',
+//         top: 0,
+//         left: 0,
+//         right: 0,
+//         bottom: 0,
+//         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+//         zIndex: 1000,
+//         display: 'flex',
+//         justifyContent: 'center',
+//         alignItems: 'flex-start', // center에서 flex-start로 변경
+//         paddingTop: '50px', // 상단 여백 추가
+//         overflow: 'auto' // 스크롤 가능하도록
+//     },
+//     content: {
+//         position: 'relative',
+//         backgroundColor: 'white',
+//         padding: '20px',
+//         borderRadius: '8px',
+//         maxWidth: '600px',
+//         width: '90%',
+//         maxHeight: '80vh', // 최대 높이 제한
+//         overflow: 'auto', // 내용이 많을 경우 스크롤
+//         marginBottom: '50px' // 하단 여백 추가
+//     }
+// };
+
 export const modalStyles = {
     overlay: {
         position: 'fixed',
@@ -11,14 +62,21 @@ export const modalStyles = {
         zIndex: 1000,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'flex-start',
+        paddingTop: '50px',
+        overflow: 'auto'
     },
     content: {
         position: 'relative',
-        width: '500px',
         backgroundColor: 'white',
+        padding: '20px',
         borderRadius: '8px',
-        padding: 0,
+        maxWidth: '600px',
+        width: '90%',
+        maxHeight: '80vh',
+        overflow: 'auto',
+        margin: '90px 0 0 0',
+        zIndex: 1001,
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
     }
 };

@@ -81,7 +81,7 @@ export const ProductCard = ({ product, onEdit, onDelete }) => {
                     gap: '8px',
                 }}>
                     <img
-                        src={`/api/admin/product/${uploadFileNames[0]}`}
+                        src={`/api/admin/products/${uploadFileNames[0]}`}
                         alt={pname}
                         style={{
                             width: '150px',
@@ -96,10 +96,10 @@ export const ProductCard = ({ product, onEdit, onDelete }) => {
                             gap: '4px',
                             overflowX: 'auto'
                         }}>
-                            {uploadFileNames.slice(1).map((filename, index) => (
+                            {uploadFileNames.slice(1).map((fileName, index) => (
                                 <img
                                     key={index}
-                                    src={`/api/admin/product/${filename}`}
+                                    src={`/api/admin/products/${fileName}`}
                                     alt={`${pname} ${index + 2}`}
                                     style={{
                                         width: '40px',
