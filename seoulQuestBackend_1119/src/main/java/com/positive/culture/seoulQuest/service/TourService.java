@@ -78,4 +78,8 @@ public interface TourService {
     List<TourDTO> getToursByLocation(String location);
 //
     List<TourDTO> getToursByAddress(String taddress);
+
+    public PageResponseDTO<TourDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category);
+
+
 }

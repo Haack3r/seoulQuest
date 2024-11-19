@@ -11,6 +11,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -144,6 +145,36 @@ public class TourServiceImpl implements TourService{
                 .map(TourDTO::new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public PageResponseDTO<TourDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category) {
+        // Get the pageable object with sorting
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("tno").descending());
+
+        // Fetch data based on category
+        Page<Tour> result;
+        if (category != null && !category.isEmpty()) {
+            result = tourRepository.findByCategory_CategoryName(pageable, category);
+        } else {
+            result = tourRepository.findAll(pageable);
+        }
+
+        // Convert Page<Tour> to List<TourDTO>
+        List<TourDTO> dtoList = result.stream()
+                .map(TourDTO::new)
+                .collect(Collectors.toList());
+
+        // Wrap into PageResponseDTO
+        return PageResponseDTO.<TourDTO>withAll()
+                .dtoList(dtoList)                  // Add the list of DTOs
+                .totalCount(result.getTotalElements()) // Total number of elements
+                .pageRequestDTO(pageRequestDTO)   // Original PageRequestDTO
+                .build();
+    }
+
+
+
+
     private BooleanBuilder getSearch(PageRequestDTO requestDTO){
         String type = requestDTO.getType();
         BooleanBuilder booleanBuilder = new BooleanBuilder();

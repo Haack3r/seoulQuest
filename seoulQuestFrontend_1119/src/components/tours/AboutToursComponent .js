@@ -135,7 +135,7 @@ const AboutToursComponent = () => {
       </div>
         {/* Call to Action */}
         <div className="text-center mt-20">
-          <h3 className="text-3xl font-bold text-gray-900 mb-6">
+          <h3 className="text-3xl font-bold text-yellow-500 mb-6">
             Ready to Begin Your Adventure?
           </h3>
           <p className="text-gray-700 leading-relaxed max-w-xl mx-auto">

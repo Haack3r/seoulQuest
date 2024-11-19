@@ -5,7 +5,7 @@ import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import Button from "../ui/Button";
-import { getList } from "../../api/tourApi";
+import { getList, getTourCategories } from "../../api/tourApi"; // Fetch categories
 import Input from "../ui/Input";
 import { HeartIcon, SearchIcon } from "lucide-react";
 import useCustomTourFav from "../../hooks/useCustomTourFav";
@@ -33,16 +33,29 @@ const TourListComponent = () => {
   const { loginState } = useCustomLogin();
   const { favItems, changeFav, deleteFav, refreshFav } = useCustomTourFav();
 
+  const [keyword, setKeyword] = useState("");
+  const [type, setType] = useState("t");
+  const [categories, setCategories] = useState([]); // Store fetched categories
+  const [selectedCategory, setSelectedCategory] = useState(""); // Selected category
+
   useEffect(() => {
     refreshFav();
   }, []);
 
-  const [keyword, setKeyword] = useState("");
-  const [type, setType] = useState("t");
+  useEffect(() => {
+    // Fetch categories
+    getTourCategories()
+      .then((data) => setCategories(data))
+      .catch((err) => exceptionHandle(err));
+  }, []);
+    
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
 
   const handleSearch = () => {
     setFetching(true);
-    getList({ page: 1, size, keyword, type })
+    getList({ page: 1, size, keyword, type, category: selectedCategory })
       .then((data) => {
         setServerData(data && Array.isArray(data.dtoList) ? data : initState);
         setFetching(false);
@@ -51,10 +64,10 @@ const TourListComponent = () => {
         exceptionHandle(err);
         setFetching(false);
       });
-  };
+    };
+   
 
- // Toggle favorite status
- const handleToggleFavorite = async (tour) => {
+  const handleToggleFavorite = async (tour) => {
     if (!loginState.email) {
       window.alert("Please log in to manage favorites.");
       return;
@@ -72,7 +85,7 @@ const TourListComponent = () => {
 
   useEffect(() => {
     setFetching(true);
-    getList({ page, size, keyword, type })
+    getList({ page, size, keyword, type, category: selectedCategory })
       .then((data) => {
         setServerData(data && Array.isArray(data.dtoList) ? data : initState);
         setFetching(false);
@@ -81,7 +94,7 @@ const TourListComponent = () => {
         exceptionHandle(err);
         setFetching(false);
       });
-  }, [page, size, refresh, keyword, type, favItems]);
+  }, [page, size, refresh, keyword, type, favItems, selectedCategory]);
 
   return (
     <div className="py-20">
@@ -90,9 +103,24 @@ const TourListComponent = () => {
           Explore Curated Tours
         </h2>
 
-        {/* Search Bar */}
-        <div className="mt-8 flex justify-center">
-          <div className="flex w-full max-w-2xl bg-white rounded-full shadow-lg overflow-hidden border border-gray-200">
+        {/* Search Bar with Category Dropdown */}
+        <div className="mt-8 flex justify-center items-center space-x-4">
+          {/* Dropdown for Categories */}
+          <select
+            className="bg-white border border-gray-300 rounded-lg p-3 text-sm"
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+          >
+            <option value="">All Categories</option>
+            {categories.map((categoryName, index) => (
+              <option key={index} value={categoryName}>
+                {categoryName}
+              </option>
+            ))}
+          </select>
+
+          {/* Search Input */}
+          <div className="flex w-full max-w-xl bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
             <Input
               placeholder="Search experiences..."
               className="flex-grow border-0 focus:ring-0 text-lg py-6 px-6"
@@ -100,11 +128,11 @@ const TourListComponent = () => {
               onChange={(e) => setKeyword(e.target.value)}
             />
             <Button
-              className="bg-orange-800 hover:bg-orange-700 text-white font-medium tracking-wide py-6 px-6 rounded-r-full"
+              className="hidden sm:flex bg-orange-800 hover:bg-orange-700 text-white font-medium tracking-wide py-6 "
               onClick={handleSearch}
             >
-              <SearchIcon className="h-5 w-5 mr-2" />
-              Search
+              
+              <SearchIcon className="h-5 w-5" />
             </Button>
           </div>
         </div>
@@ -144,13 +172,12 @@ const TourListComponent = () => {
                     </button>
                   </div>
                   {/* Tour Details */}
-                  <div className="mt-4">
+                      <div className="mt-4">
+                      <p className="text-xs text-gray-500">{tour.categoryName}</p>
                     <h3 className="text-md font-bold text-gray-600">
                       {tour.tname}
                     </h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      ₩{tour.tprice}
-                    </p>
+                    <p className="text-sm text-gray-500 mt-1">₩{tour.tprice}</p>
                   </div>
                 </div>
               );
