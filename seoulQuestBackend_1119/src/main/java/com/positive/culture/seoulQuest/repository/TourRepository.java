@@ -34,5 +34,6 @@ public interface TourRepository extends JpaRepository<Tour,Long>, QuerydslPredic
     List<Tour> findByTlocationContaining(String location);
     List<Tour> findByTaddress(String taddress);
     Page<Tour> findByCategory_CategoryName(Pageable pageable, String categoryName);
+
 }
 

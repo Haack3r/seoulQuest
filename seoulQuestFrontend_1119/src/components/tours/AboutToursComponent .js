@@ -28,31 +28,30 @@ const AboutToursComponent = () => {
             </h2>
           </div>
 
-          {/* Right: Typography with Background */}
           <div className="mr-44 relative text-gray-700 space-y-4">
-            {/* Background rectangle */}
-            <div className="absolute bottom-4 right-4 bg-gray-300 w-20 h-20 opacity-80 -z-10"></div>
+  {/* Background rectangle */}
+  <div className="absolute bottom-4 right-4 bg-gray-300 w-20 h-20 opacity-80 -z-10"></div>
 
-            {/* Typography */}
-            <p className="text-lg font-semibold text-gray-500">
-              Discover the heart of Korea's capital.
-            </p>
-            <p className="text-sm italic">
-              <b>Wander</b>
-              <p>through</p>
-              <p className="ml-20">timeless</p>
-              <b className="ml-32">traditions</b>
-              <p>and</p>
-              <b className="ml-9">modern</b>
-              <b className="ml-14">wonders.</b>
-            </p>
-            <p className="text-sm">
-              <p>An experience</p>
-              <p>you will</p>
-              <b>never forget</b>
-              <p>awaits you.</p>
-            </p>
-          </div>
+  {/* Typography */}
+  <p className="text-lg font-semibold text-gray-500">
+    Discover the heart of Korea's capital.
+  </p>
+  <span className="text-sm italic">
+    <b>Wander</b>
+    <span> through </span>
+    <span className="ml-20">timeless </span>
+    <b className="ml-32">traditions</b>
+    <span> and </span>
+    <b className="ml-9">modern </b>
+    <b className="ml-14">wonders.</b>
+  </span>
+  <span className="text-sm">
+    <span>An experience </span>
+    <span>you will </span>
+    <b>never forget</b>
+    <span> awaits you.</span>
+  </span>
+</div>
         </div>
       </div>
 

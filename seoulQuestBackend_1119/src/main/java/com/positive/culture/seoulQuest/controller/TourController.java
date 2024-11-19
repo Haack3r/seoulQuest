@@ -117,9 +117,10 @@ public class TourController {
 //    }
     @GetMapping("/list")
     public PageResponseDTO<TourDTO> list(PageRequestDTO pageRequestDTO, @RequestParam(required = false) String category) {
-        log.info("list with category: " + category);
+        log.info("list with category: {}", category != null ? category : "No category provided");
         return tourService.getListWithCategory(pageRequestDTO, category);
     }
+
 
 
     //파일 등록 - test 성공 (관리자)

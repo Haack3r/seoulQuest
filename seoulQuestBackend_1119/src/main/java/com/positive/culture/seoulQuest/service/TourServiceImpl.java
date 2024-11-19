@@ -148,63 +148,78 @@ public class TourServiceImpl implements TourService{
 
     @Override
     public PageResponseDTO<TourDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category) {
-        // Get the pageable object with sorting
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("tno").descending());
 
-        // Fetch data based on category
-        Page<Tour> result;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QTour qTour = QTour.tour;
+
+        // Base condition
+        BooleanExpression expression = qTour.tno.gt(0L);
+        booleanBuilder.and(expression);
+
+        // Add category filter if provided
         if (category != null && !category.isEmpty()) {
-            result = tourRepository.findByCategory_CategoryName(pageable, category);
-        } else {
-            result = tourRepository.findAll(pageable);
+            booleanBuilder.and(qTour.category.categoryName.eq(category));
         }
 
-        // Convert Page<Tour> to List<TourDTO>
+        // Add keyword search filter if provided
+        if (pageRequestDTO.getKeyword() != null && !pageRequestDTO.getKeyword().isEmpty()) {
+            String keyword = pageRequestDTO.getKeyword();
+            BooleanBuilder keywordBuilder = new BooleanBuilder();
+            keywordBuilder.or(qTour.tname.containsIgnoreCase(keyword));  // Match name
+            keywordBuilder.or(qTour.tdesc.containsIgnoreCase(keyword)); // Match description
+            booleanBuilder.and(keywordBuilder);
+        }
+
+        // Fetch data using combined filters
+        Page<Tour> result = tourRepository.findAll(booleanBuilder, pageable);
+
+        // Map to DTOs
         List<TourDTO> dtoList = result.stream()
                 .map(TourDTO::new)
                 .collect(Collectors.toList());
 
-        // Wrap into PageResponseDTO
+        // Build and return response
         return PageResponseDTO.<TourDTO>withAll()
-                .dtoList(dtoList)                  // Add the list of DTOs
-                .totalCount(result.getTotalElements()) // Total number of elements
-                .pageRequestDTO(pageRequestDTO)   // Original PageRequestDTO
+                .dtoList(dtoList)
+                .totalCount(result.getTotalElements())
+                .pageRequestDTO(pageRequestDTO)
                 .build();
     }
 
 
 
 
-    private BooleanBuilder getSearch(PageRequestDTO requestDTO){
+
+    private BooleanBuilder getSearch(PageRequestDTO requestDTO) {
         String type = requestDTO.getType();
+        String keyword = requestDTO.getKeyword();
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QTour qTour = QTour.tour;
-        String keyword = requestDTO.getKeyword();
 
+        // Default condition: tno > 0 (return all tours)
         BooleanExpression expression = qTour.tno.gt(0L);
-
-        //조건만 생성
         booleanBuilder.and(expression);
 
-        if (type == null || type.trim().length() == 0){
+        if (type == null || type.trim().isEmpty()) {
             return booleanBuilder;
         }
-        //검색 조건 작성하기
 
+        // Add keyword-based filtering
         BooleanBuilder conditionBuilder = new BooleanBuilder();
-        if (type.contains("t")){
-            conditionBuilder.or(qTour.tname.contains(keyword));
+        if (type.contains("t")) {
+            conditionBuilder.or(qTour.tname.containsIgnoreCase(keyword));
         }
-        if (type.contains("c")){
-            conditionBuilder.or(qTour.tname.contains(keyword));
+        if (type.contains("c")) {
+            conditionBuilder.or(qTour.category.categoryName.containsIgnoreCase(keyword));
         }
-        if (type.contains("w")){
-            conditionBuilder.or(qTour.tname.contains(keyword));
+        if (type.contains("w")) {
+            conditionBuilder.or(qTour.tlocation.containsIgnoreCase(keyword));
         }
-
         booleanBuilder.and(conditionBuilder);
-        return booleanBuilder;
 
+        return booleanBuilder;
     }
+
 
 }

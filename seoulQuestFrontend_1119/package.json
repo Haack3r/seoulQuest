@@ -38,7 +38,7 @@
     "react-scripts": "5.0.1",
     "react-spinners": "^0.14.1",
     "recharts": "^2.13.3",
-    "tailwind-merge": "^2.5.3",
+    "tailwind-merge": "^2.5.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

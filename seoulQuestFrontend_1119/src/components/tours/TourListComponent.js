@@ -48,7 +48,7 @@ const TourListComponent = () => {
       .then((data) => setCategories(data))
       .catch((err) => exceptionHandle(err));
   }, []);
-    
+
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
@@ -64,8 +64,7 @@ const TourListComponent = () => {
         exceptionHandle(err);
         setFetching(false);
       });
-    };
-   
+  };
 
   const handleToggleFavorite = async (tour) => {
     if (!loginState.email) {
@@ -125,13 +124,16 @@ const TourListComponent = () => {
               placeholder="Search experiences..."
               className="flex-grow border-0 focus:ring-0 text-lg py-6 px-6"
               value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
+              onChange={(e) => {
+                console.log("Keyword updated:", e.target.value);
+                setKeyword(e.target.value);
+              }}
             />
+
             <Button
               className="hidden sm:flex bg-orange-800 hover:bg-orange-700 text-white font-medium tracking-wide py-6 "
               onClick={handleSearch}
             >
-              
               <SearchIcon className="h-5 w-5" />
             </Button>
           </div>
@@ -172,8 +174,8 @@ const TourListComponent = () => {
                     </button>
                   </div>
                   {/* Tour Details */}
-                      <div className="mt-4">
-                      <p className="text-xs text-gray-500">{tour.categoryName}</p>
+                  <div className="mt-4">
+                    <p className="text-xs text-gray-500">{tour.categoryName}</p>
                     <h3 className="text-md font-bold text-gray-600">
                       {tour.tname}
                     </h3>

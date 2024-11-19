@@ -5,22 +5,27 @@ import { API_SERVER_HOST } from "./todoApi";
 const host = `${API_SERVER_HOST}/api/user/tours`;
 
 // Function to fetch the list of tours with pagination and search functionality
-export const getList = async ({ page, size, keyword = "", type = "t", category = ""  }) => {
-  try {
-    const res = await jwtAxios.get(`${host}/list`, {
-      params: {
-        page,
-        size: 9,
-        keyword, // Search keyword
-        type, // Search type
-        category, // Filter by category
-      },
-    });
-    return res.data;
-  } catch (error) {
-    throw error;
-  }
+export const getList = async ({ page, size = 9, keyword = "", type = "t", category = "" }) => {
+    try {
+        console.log("API params:", { page, size, keyword, type, category });
+        const res = await jwtAxios.get(`${host}/list`, {
+            params: {
+              page,
+              size: 9,
+              keyword, // Search keyword
+                type,
+              category  // Search type
+            },
+        });
+        console.log("API response:", res.data);
+        return res.data;
+    } catch (error) {
+        console.error("API Error:", error.message);
+        throw error;
+    }
 };
+
+  
 
 export const getTourCategories = async () => {
   try {
