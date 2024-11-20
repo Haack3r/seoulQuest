@@ -24,9 +24,15 @@ public class ProductReview {
     @JoinColumn(name = "pno")
     private Product product;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_item_id")
+    private ProductPaymentItem productPaymentItem;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    private String title;
 
     private int rating;
 

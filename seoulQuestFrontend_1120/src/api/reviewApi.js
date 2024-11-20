@@ -4,8 +4,8 @@ import jwtAxios from "../util/jwtUtil"
 export const API_SERVER_HOST = "http://localhost:8080"
 const prefix = `${API_SERVER_HOST}/api/review`
 
-export const getOne = async (no) => {  // 데이터 하나 조회
-    const res = await jwtAxios.get(`${prefix}/${no}`)
+export const getOne = async (prid) => {  // 데이터 하나 조회
+    const res = await jwtAxios.get(`${prefix}/${prid}`)
     return res.data
 }
 

@@ -3,37 +3,35 @@ import useCustomMove from '../../hooks/useCustomMove'
 import { getOne } from '../../api/reviewApi';
 
 const initState = {
-    tno: 0,
+    prid: 0,
     title: '',
     writer: '',
     dueDate: '',
     complete: false
 }
-const ReadComponent = ({ tno }) => {
+const ReadComponent = ({prid }) => {
     const [review, setReview] = useState(initState)
     const {moveToList, moveToModify} = useCustomMove()
 
     useEffect(() => {
-      getOne(tno).then(data => {
+      getOne(prid).then(data => {
             console.log(data)
             setReview(data)
       })
-    }, [tno])
+    }, [prid])
 
-
-    
   return (
     <div className = "border-2 border-sky-200 mt-10 m-2 p-4">
-        {makeDiv('Tno', review.tno)}
+        {makeDiv('reviewNo', review.prid)}
         {makeDiv('Writer', review.writer)}
         {makeDiv('Title', review.title)}
-        {makeDiv('만기일', review.dueDate)}
+        {makeDiv('작성날짜', review.dueDate)}
         {makeDiv('완료여부', review.complete? 'Completed' : 'Not Yet')}
         <div className='flex justify-end p-4'>
             <button type='button' className='rounded p-4 m-2 text-xl w-32 text-white bg-blue-500'
             onClick={() => moveToList()}>List</button>
             <button type='button' className='rounded p-4 m-2 text-xl w-32 text-white bg-red-500'
-            onClick={() => moveToModify(tno)}>Modify</button>
+            onClick={() => moveToModify(prid)}>Modify</button>
         </div>
     </div>
   )

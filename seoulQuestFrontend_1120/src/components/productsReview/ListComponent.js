@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getList } from '../../api/reviewApi';
 import useCustomMove from '../../hooks/useCustomMove';
 import PageComponent from '../common/PageComponent';
+import { StarFilled, StarOutlined } from '@ant-design/icons';
 
 const initState = {
     dtoList: [],
@@ -18,12 +19,7 @@ const initState = {
 
 const ListComponent = () => {
     const { page, size, refresh, moveToList, moveToRead} = useCustomMove();
-    // 사용자 정의 custom hook에서 반환되는 객체를 destructuring하여 변수에 저장하고 아래에서 자식으로 전달함
-    // 그 자식은 객체로 전달받음(그것을 react에서 props라고 함)
-    // 객체로 전달받은 것을 destructuring하여 사용
     const [serverData, setServerData] = useState(initState);
-    // API서버를 통하여 전달받은 데이터
-    // 목록뿐 아니라 페이징 처리에 필요한 모든 정보가 같이 전달
 
     useEffect(() => {
         getList({ page, size }).then(data => {
@@ -39,12 +35,28 @@ const ListComponent = () => {
         <div className='border-2 border-blue-100 mt-10 mr-2 ml-2'>
             <div className='flex flex-wrap mx-auto justify-center p-6'>
                 {serverData.dtoList.map(review =>
-                    <div key={review.tno} className='w-full min-w-[400px] p-2 m-2 rounded shadow-md'
-                        onClick={() => moveToRead(review.tno)}>
+                    <div key={review.prid} className='w-full min-w-[400px] p-2 m-2 rounded shadow-md'
+                        onClick={() => moveToRead(review.prid)}>
                         <div className='flex'>
-                            <div className='font-extrabold text-2xl p-2 w-1/12'>{review.tno}</div>
+                            <div className='font-extrabold text-2xl p-2 w-1/12'>{review.prid}</div>
                             <div className='text-1xl m-1 p-2 w-8/12 font-extrabold'>{review.title}</div>
+                            <div className='text-1xl m-1 p-2 w-8/12 font-extrabold'>{review.nickName}</div>
                             <div className='text-1xl m-1 p-2 2-2/10 font-medium'>{review.dueDate}</div>
+                            <div className='text-1xl m-1 p-2 2-2/10 font-medium'>{review.itemName}</div>
+                            <div className="w-3/4 flex items-center">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <span
+                                    key={star}
+                                    className="cursor-pointer mr-2"
+                                >
+                                    {review.rating >= star ? (
+                                        <StarFilled className="text-yellow-400 text-2xl" />
+                                    ) : (
+                                        <StarOutlined className="text-gray-300 text-2xl" />
+                                    )}
+                                </span>
+                            ))}
+                        </div>
                         </div>
                     </div>
                 )}

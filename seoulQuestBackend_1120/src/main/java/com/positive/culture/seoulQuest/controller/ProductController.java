@@ -87,7 +87,6 @@ public class ProductController {
 
 
     //단일 상품 조회 - test 성공 (유저, 관리자)
-
     @GetMapping("/{pno}")
     public ProductDTO read(@PathVariable(name="pno") Long pno){
         return productService.get(pno);

@@ -1,9 +1,7 @@
 package com.positive.culture.seoulQuest.controller;
 
 import com.positive.culture.seoulQuest.domain.Member;
-import com.positive.culture.seoulQuest.dto.ReviewDTO;
-import com.positive.culture.seoulQuest.dto.ReviewInfoDTO;
-import com.positive.culture.seoulQuest.dto.UserDTO;
+import com.positive.culture.seoulQuest.dto.*;
 import com.positive.culture.seoulQuest.service.MemberService;
 import com.positive.culture.seoulQuest.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +30,27 @@ public class ReviewController {
         return reviewInfoDTO;
     }
 
-//    @PostMapping("/")
-//    // product review 등록
-//    public Long register(@RequestBody ReviewDTO reviewDTO){
-//        log.info(reviewDTO);
-//
-//        Long productReviewId = reviewService.registerProductReview(reviewDTO);
-//        log.info(productReviewId);
-//        return productReviewId;
-//    }
+    @PostMapping("/")
+    // product review 등록
+    public Long register(@RequestBody ReviewDTO reviewDTO){
+        log.info(reviewDTO);
+
+        Long productReviewId = reviewService.registerProductReview(reviewDTO);
+        log.info(productReviewId);
+        return productReviewId;
+    }
+
+    //전체 목록 조회
+    @GetMapping("/list")
+    public PageResponseDTO<ReviewDTO> list(PageRequestDTO pageRequestDTO){
+        log.info("list.........." + pageRequestDTO);
+        return reviewService.getList(pageRequestDTO);
+    }
+
+    //하나 조회
+    @GetMapping("/{prid}")
+    public ReviewDTO read(@PathVariable(name="prid") Long prid){
+        return reviewService.get(prid);
+    }
 
 }

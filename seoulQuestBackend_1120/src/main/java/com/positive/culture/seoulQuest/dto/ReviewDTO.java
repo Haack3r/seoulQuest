@@ -14,14 +14,17 @@ import java.time.LocalDate;
 @Builder
 public class ReviewDTO { //사용자가 작성한 리뷰내용을 받아오는 dto
 
-    private Long reviewId;
+    private Long prid;
     private Long selectedItemId; //paymentItemId 중 사용자가 리뷰하기로 선택한 Id
 
     private String email;
+    private String nickName;
 
     private int rating;
 
     private String title;
     private String reviewContent;
+    private LocalDate dueDate;
+    private String itemName;
 
 }

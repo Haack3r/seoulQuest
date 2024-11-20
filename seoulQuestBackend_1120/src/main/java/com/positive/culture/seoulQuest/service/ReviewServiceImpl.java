@@ -2,21 +2,25 @@ package com.positive.culture.seoulQuest.service;
 
 import com.fasterxml.jackson.databind.cfg.MapperBuilder;
 import com.positive.culture.seoulQuest.domain.*;
-import com.positive.culture.seoulQuest.dto.PaymentItemDTO;
-import com.positive.culture.seoulQuest.dto.ProductDTO;
-import com.positive.culture.seoulQuest.dto.ReviewDTO;
-import com.positive.culture.seoulQuest.dto.ReviewInfoDTO;
+import com.positive.culture.seoulQuest.dto.*;
 import com.positive.culture.seoulQuest.repository.*;
+import com.querydsl.core.BooleanBuilder;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.catalina.mapper.Mapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +33,6 @@ public class ReviewServiceImpl implements ReviewService {
     private final ProductPaymentRepository productPaymentRepository;
     private final ProductPaymentItemRepository productPaymentItemRepository;
     private final ProductRepository productRepository;
-    private final ModelMapper modelMapper;
 
     //유저 닉네임, 구매 상품 찾음
     @Override
@@ -46,8 +49,14 @@ public class ReviewServiceImpl implements ReviewService {
                     .build();
         }
 
-        //결제 한 상품이 있는 경우
-        List<ProductPaymentItem> paymentItemList= productPaymentItemRepository.findByProductPaymentIn(paymentList);
+        // 이미 리뷰 작성한 상품의 paymentItemId 목록
+        List<Long> reviewedPaymentItemIds = productReviewRepository.findReviewedPaymentItemIdsByEmail(email);
+
+        // 모든 결제 상품에서 리뷰 작성되지 않은 상품 필터링
+        List<ProductPaymentItem> paymentItemList = productPaymentItemRepository.findByProductPaymentIn(paymentList)
+                .stream()
+                .filter(item -> !reviewedPaymentItemIds.contains(item.getPPaymentItemId()))
+                .toList();
 
         List<PaymentItemDTO> paymentItemDTOList = paymentItemList.stream()
                 .map(paymentItem-> PaymentItemDTO.builder()
@@ -63,24 +72,66 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
     }
 
-//    //리뷰 등록 - 상품
-//    @Override
-//    public Long registerProductReview(ReviewDTO reviewDTO) {
-//
-//        Long PaymentItemId = reviewDTO.getSelectedItemId();
-//        Product Product = productRepository.findById()
-//
-//        ProductReview productReview = ProductReview.builder()
-//                .product(reviewDTO.)
-//                .member(reviewDTO.getMember())
-//                .rating(reviewDTO.getRating())
-//                .reviewContent(reviewDTO.getReviewContent())
-//                .postedDate(reviewDTO.getPostedDate())
-//                .build();
-//
-//        productReviewRepository.save(productReview);
-//        return productReview.getPrid();
-//    }
+    //목록
+    @Override
+    public PageResponseDTO<ReviewDTO> getList(PageRequestDTO pageRequestDTO) {
+        Pageable pageable =  PageRequest.of(
+                pageRequestDTO.getPage()-1,
+                pageRequestDTO.getSize(),
+                Sort.by("prid").descending());
+
+        Page<ProductReview> result = productReviewRepository.findAll(pageable);
+
+        // Convert each Tour entity to a TourDTO
+        List<ReviewDTO> dtoList = result.stream()
+                .map(this::entityChangeDTO)
+                .collect(Collectors.toList());
+
+        long totalCount= result.getTotalElements();
+
+        return PageResponseDTO.<ReviewDTO>withAll()
+                .dtoList(dtoList) //reviewDTO 객체가 담겨있는 list
+                .totalCount(totalCount)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+    //리뷰 등록 - 상품
+    @Override
+    public Long registerProductReview(ReviewDTO reviewDTO) {
+
+        Long paymentItemId = reviewDTO.getSelectedItemId();
+        ProductPaymentItem productPaymentItem = productPaymentItemRepository.findById(paymentItemId).orElseThrow();
+
+        String email = reviewDTO.getEmail();
+        Member member = memberRepository.findByEmail(email).orElseThrow();
+
+        ProductReview productReview = ProductReview.builder()
+                .title(reviewDTO.getTitle())
+                .product(productPaymentItem.getProduct())
+                .productPaymentItem(productPaymentItem)
+                .member(member)
+                .rating(reviewDTO.getRating())
+                .reviewContent(reviewDTO.getReviewContent())
+//                .postedDate(reviewDTO.getDueDate())
+                .build();
+
+        productReviewRepository.save(productReview);
+        return productReview.getPrid();
+    }
+
+    @Override
+    public ReviewDTO get(Long prio) {
+        ProductReview productReview = productReviewRepository.findById(prio).orElseThrow();
+        ReviewDTO reviewDTO = ReviewDTO.builder()
+                .itemName(productReview.getProductPaymentItem().getPname())
+                .dueDate(productReview.getPostedDate())
+                .reviewContent(productReview.getReviewContent())
+                .reviewContent(productReview.getReviewContent())
+                .build();
+
+        return reviewDTO;
+    }
 
     //리뷰 등록 - 투어
 }
