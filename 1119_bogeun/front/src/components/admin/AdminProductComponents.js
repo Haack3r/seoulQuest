@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus } from "lucide-react";
-import { addProduct, adminProductList, deleteProduct, getProduct, modifyProduct } from '../../api/AdminApi';
+import { addProduct, adminProductList, deleteProduct, getImageUrl, getProduct, modifyProduct } from '../../api/AdminApi';
 import { layoutStyles, inputStyles, Button } from './ui/Styles';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { ProductForm } from './ui/ProductForm';
 import { ProductCard } from './ui/ProductCard';
+import { getCookie } from '../../util/cookieUtil';
 
-const adminHost = `http://localhost:8080/api/admin`
 const host = `http://localhost:8080/api`
 
 const initState = {
@@ -56,6 +56,8 @@ const AdminProductComponents = () => {
             });
     };
 
+    
+
     // 제품 목록 조회
     // const fetchProductList = () => {
     //     setFetching(true);
@@ -77,21 +79,30 @@ const AdminProductComponents = () => {
     // };
 
     // 제품 추가
-    const handleAddProduct = (formData) => {
-        setFetching(true);
-        addProduct(formData)
-            .then((response) => {
-                console.log("Add product response", response)
-                fetchProductList();
-                setShowAddForm(false);
-                setIsEditing(false);
-                setSelectedProduct(null);
-                setSelectedPno(null);
-            })
-            .catch((error) => {
-                console.error(`Add product or fetch error`, error)
-            })
-            .finally(() => setFetching(false));
+    const handleAddProduct = async (formData) => {
+        try {
+            setFetching(true);
+
+            // modify와 유사한 방식으로 처리
+            const response = await addProduct(formData);
+            console.log("상품 등록 결과:", response);
+
+            await fetchProductList();  // 목록 새로고침
+            setShowAddForm(false);
+            setIsEditing(false);
+            setSelectedProduct(null);
+            setSelectedPno(null);
+        } catch (error) {
+            console.error("상품 등록 실패:", error);
+            if (error.response?.status === 401) {
+                alert("인증이 만료되었습니다. 다시 로그인해주세요.");
+                window.location.href = '/login';
+                return;
+            }
+            alert(error.message || "상품 등록에 실패했습니다.");
+        } finally {
+            setFetching(false);
+        }
     };
 
     // 제품 추가 버튼 핸들러
@@ -194,7 +205,6 @@ const AdminProductComponents = () => {
         }
     };
 
-
     // 초기 로딩 및 검색
     useEffect(() => {
         fetchProductList();
@@ -257,13 +267,17 @@ const AdminProductComponents = () => {
                                 className="overflow-hidden transition-all duration-300 hover:shadow-xl border bg-white rounded-lg group">
                                 <div
                                     className="relative overflow-hidden aspect-square group">
-                                    <img
-                                        src={product.uploadFileNames?.[0]
-                                            ? `${host}/random/view/${product.uploadFileNames[0]}`
-                                            : "/logo192.jpg"} // Default image if no uploadFileNames
-                                        alt={product.pname}
-                                        className="object-cover w-full h-full transition-all duration-300 group-hover:scale-110 cursor-pointer"
-                                    />
+                                    {product.uploadFileNames?.[0] ? (
+                                        <img
+                                            src={`${host}/admin/product/image/${product.uploadFileNames[0]}`}
+                                            alt={product.pname}
+                                            className="object-cover w-full h-full transition-all duration-300 group-hover:scale-110 cursor-pointer"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                                            <p className="text-gray-400">이미지 없음</p>
+                                        </div>
+                                    )}
 
                                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity
                                 duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer">
@@ -315,13 +329,17 @@ const AdminProductComponents = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* 이미지 섹션 */}
                                 <div className="aspect-square rounded-lg overflow-hidden">
-                                    <img
-                                        src={selectedProduct.uploadFileNames?.[0]
-                                            ? `${host}/random/view/${selectedProduct.uploadFileNames[0]}`
-                                            : "/logo192.jpg"}
-                                        alt={selectedProduct.pname}
-                                        className="w-full h-full object-cover"
-                                    />
+                                    {selectedProduct.uploadFileNames?.[0] ? (
+                                        <img
+                                            src={`${host}/random/view/${selectedProduct.uploadFileNames[0]}`}
+                                            alt={selectedProduct.pname}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                                            <p className="text-gray-400">이미지 없음</p>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* 상세 정보 섹션 */}
@@ -348,7 +366,7 @@ const AdminProductComponents = () => {
                                         <p className="text-gray-600 whitespace-pre-wrap">{selectedProduct.pdesc}</p>
                                     </div>
 
-                                    {/* 추가 이미지들 */}
+                                    {/* 추가 이미지들 - 이미지가 있을 때만 표시 */}
                                     {selectedProduct.uploadFileNames && selectedProduct.uploadFileNames.length > 1 && (
                                         <div>
                                             <h3 className="text-lg font-semibold mb-2">추가 이미지</h3>
@@ -356,8 +374,8 @@ const AdminProductComponents = () => {
                                                 {selectedProduct.uploadFileNames.slice(1).map((fileName, index) => (
                                                     <div key={index} className="aspect-square rounded-lg overflow-hidden">
                                                         <img
-                                                            src={`${selectedProduct.pname} ${index + 2}`}
-                                                            alt={`${host}/random/view/${fileName}`}
+                                                            src={`${host}/admin/product/image/${fileName}`}
+                                                            alt={`${selectedProduct.pname} ${index + 2}`}
                                                             className="w-full h-full object-cover"
                                                         />
                                                     </div>

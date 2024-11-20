@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="tbl_product")
@@ -86,5 +87,18 @@ public class Product {
     //productImage 리스트를 삭제
     public void clearList(){
         this.productImageList.clear();
+    }
+
+    // uploadFileNames getter 메서드 추가
+    public List<String> getUploadFileNames() {
+        return this.productImageList.stream()
+                .map(ProductImage::getFileName)
+                .collect(Collectors.toList());
+    }
+
+    // uploadFileNames setter 메서드 추가
+    public void setUploadFileNames(List<String> fileNames) {
+        this.clearList(); // 기존 이미지 리스트 초기화
+        fileNames.forEach(this::addImageString);
     }
 }

@@ -39,22 +39,24 @@ const refreshJWT = async (accessToken, refreshToken) => {
 jwtAxios.interceptors.request.use(
   (config) => {
     const memberInfo = getCookie("member");
+    console.log("Request Interceptor - Original config:", config);
 
     const parsedMemberInfo = typeof memberInfo === 'string'
       ? JSON.parse(memberInfo)
       : memberInfo;
 
     if (!memberInfo) {
-      console.log("Member NOT FOUND");
+      console.log("Member NOT FOUND in interceptor");
       return Promise.reject({ response: { data: { error: "REQUIRE_LOGIN" } } });
     }
 
     const { accessToken } = parsedMemberInfo;
     config.headers.Authorization = `Bearer ${accessToken}`;
+    console.log("Request Interceptor - Final headers:", config.headers);
     return config;
   },
   (error) => {
-    console.error("Request error:", error);
+    console.error("Request interceptor error:", error);
     return Promise.reject(error);
   }
 );

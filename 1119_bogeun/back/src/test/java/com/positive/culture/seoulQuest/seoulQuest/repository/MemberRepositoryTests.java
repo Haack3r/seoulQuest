@@ -40,7 +40,7 @@ public class MemberRepositoryTests {
             // YearMonth 코드를 쓰면 유동적으로 날짜 계산 가능 ex) 4월 31일 불가, 2024-02-29 까지만 계산
 
             Member member = Member.builder()
-                    .address(new Address("길" + i, "시" + i, "도" + i, "123" + i, "나라"+i))
+                    .address(new Address("길" + i, "시" + i, "도" + i, "123" + i, "나라" + i))
                     .firstname("firstname" + i)
                     .lastname("lastname" + i)
                     .email("user" + i + "@gmail.com")
@@ -49,9 +49,10 @@ public class MemberRepositoryTests {
                     .phoneNumber("010" + "-" + middleNum + "-" + lastNum)
                     .birthday(LocalDate.of(year, month, day))
                     .build();
-            member.addRole(MemberRole.USER);
 
-            if(i>=8){
+            if (i < 8) {
+                member.addRole(MemberRole.USER);
+            } else {
                 member.addRole(MemberRole.ADMIN);
             }
             memberRepository.save(member);
@@ -61,7 +62,7 @@ public class MemberRepositoryTests {
     @Test
     public void testRead() {
 
-        String email ="user1@gmail.com";
+        String email = "user1@gmail.com";
 
         Member member = memberRepository.getWithRoles(email);
 
@@ -72,22 +73,22 @@ public class MemberRepositoryTests {
 
     @Test
     @Transactional
-    public void test1(){
+    public void test1() {
         String email = "user2@gmail.com";
         String phonenumber = "010-0000-0000";
 
-        Member member = memberRepository.findByEmailAndPhoneNumber(email,phonenumber).orElseThrow();
+        Member member = memberRepository.findByEmailAndPhoneNumber(email, phonenumber).orElseThrow();
         log.info(member);
     }
 
     @Test
     @Transactional
-    public void test2(){
+    public void test2() {
         String firstname = "hyein";
         String lastname = "suh";
         String phonenumber = "010-5182-4161";
 
-        Member member = memberRepository.findByFirstnameAndLastnameAndPhoneNumber(firstname,lastname,phonenumber).orElseThrow();
+        Member member = memberRepository.findByFirstnameAndLastnameAndPhoneNumber(firstname, lastname, phonenumber).orElseThrow();
         log.info(member);
     }
 
@@ -120,7 +121,7 @@ public class MemberRepositoryTests {
     // 이 테스트 코드를 썼을 때 primary key 가 1부터 시작 안 하는 경우가 있음
 
     @Test
-    public void emailCheck(){
+    public void emailCheck() {
         Optional<Member> member = memberRepository.findByEmail("user1@gmail.com");
         System.out.println(member.get().getEmail());
     }

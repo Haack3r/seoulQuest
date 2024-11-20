@@ -1,6 +1,5 @@
 package com.positive.culture.seoulQuest.config;
 
-
 import com.positive.culture.seoulQuest.security.filter.JWTCheckFilter;
 import com.positive.culture.seoulQuest.security.handler.APILoginFailHandler;
 import com.positive.culture.seoulQuest.security.handler.APILoginSuccessHandler;
@@ -26,30 +25,37 @@ import java.util.Arrays;
 @Configuration
 @Log4j2
 @RequiredArgsConstructor
-//@EnableMethodSecurity  // 메서드 별 권한 체크
+// @EnableMethodSecurity // 메서드 별 권한 체크
 public class CustomSecurityConfig {
     // @Configuration 아래 @Bean 을 만들면 스프링에서 객체를 관리함
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        // Enable CORS and disable CSRF (since you're using JWT and stateless sessions)
-//        http.cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS using the corsConfigurationSource
-//                .csrf(csrf -> csrf.disable());
-//
-//        // Stateless session management (JWT-based)
-//        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//
-//        // Allow unauthenticated access to the products list and product view endpoints
-//        http.authorizeHttpRequests(auth -> {
-//            auth
-//                    .requestMatchers("/api/products/list", "/api/products/view/**", "/api/products/read/", "/api/products/{pno}").permitAll() // Public access
-//                    .anyRequest().authenticated(); // Protect other endpoints
-//        });
-//
-//        // Add your JWT check filter only for authenticated routes
-//        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//    }
+    // @Bean
+    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
+    // Exception {
+    // // Enable CORS and disable CSRF (since you're using JWT and stateless
+    // sessions)
+    // http.cors(cors -> cors.configurationSource(corsConfigurationSource())) //
+    // Enable CORS using the corsConfigurationSource
+    // .csrf(csrf -> csrf.disable());
+    //
+    // // Stateless session management (JWT-based)
+    // http.sessionManagement(session ->
+    // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    //
+    // // Allow unauthenticated access to the products list and product view
+    // endpoints
+    // http.authorizeHttpRequests(auth -> {
+    // auth
+    // .requestMatchers("/api/products/list", "/api/products/view/**",
+    // "/api/products/read/", "/api/products/{pno}").permitAll() // Public access
+    // .anyRequest().authenticated(); // Protect other endpoints
+    // });
+    //
+    // // Add your JWT check filter only for authenticated routes
+    // http.addFilterBefore(new JWTCheckFilter(),
+    // UsernamePasswordAuthenticationFilter.class);
+    //
+    // return http.build();
+    // }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("----security config----");
@@ -59,8 +65,10 @@ public class CustomSecurityConfig {
                 .csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
-//                .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check",
-//                        "/api/member/checknickname","/api/member/login").permitAll() // Permit OPTIONS requests
+                // .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup",
+                // "/api/member/check",
+                // "/api/member/checknickname","/api/member/login").permitAll() // Permit
+                // OPTIONS requests
                 .requestMatchers(
                         "/api/member/signup",
                         "/api/member/check",
@@ -73,10 +81,10 @@ public class CustomSecurityConfig {
                         "/api/user/tours/by-address",
                         "/api/products/**",
                         "/api/tours/**",
-                        "/api/random/**",
+                        "/api/random/view/**",
                         "/api/admin/product/view/**",
-                        "/api/admin/tour/view/**"
-                ).permitAll()// Allow unauthenticated access
+                        "/api/admin/tour/view/**")
+                .permitAll()// Allow unauthenticated access
                 .requestMatchers(
                         HttpMethod.OPTIONS,
                         "/api/member/**",
@@ -85,9 +93,17 @@ public class CustomSecurityConfig {
                         "/api/user/tours/view/**",
                         "/api/user/products/view/**",
                         "/api/user/tours/mapData",
-                        "/api/user/tours/by-address"
-                ).permitAll()
-                .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
+                        "/api/user/tours/by-address")
+                .permitAll()
+//                .requestMatchers(HttpMethod.GET, "/api/admin/product/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.POST, "/api/admin/product/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.PUT, "/api/admin/product/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.DELETE, "/api/admin/product/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.HEAD, "/api/admin/product/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.OPTIONS,
+//                        "/api/admin/product/**")
+//                .hasRole("ADMIN")
+                 .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated());
 
         http.formLogin(config -> {
@@ -106,54 +122,56 @@ public class CustomSecurityConfig {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json");
                     response.getWriter().write("{\"error\": \"Unauthorized\"}");
-                })
-        );
+                }));
 
         return http.build();
     }
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        log.info("----security config----");
-//        // p302
-//        http.cors(httpSecurityCorsConfigurer -> {
-//            httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
-//        });
-//        http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//        http.csrf(i->i.disable());
-//
-//        // p312 post 방식으로 parameter 를 통해 로그인 처리
-//        http.formLogin(config -> {
-//            config.loginPage("/api/member/login");
-//            config.successHandler(new APILoginSuccessHandler());
-//            config.failureHandler(new APILoginFailHandler());
-//        });
-//
-//        // p329 Filter
-//        http.addFilterBefore(new JWTCheckFilter(),
-//                UsernamePasswordAuthenticationFilter.class);// JWT Check
-//
-//        // p340
-//        http.exceptionHandling(i -> {
-//            i.accessDeniedHandler(new CustomAccessDeniedHandler());
-//        });
-//
-//
-//
-//        return http.build();
-//    }
+    // @Bean
+    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    // log.info("----security config----");
+    // // p302
+    // http.cors(httpSecurityCorsConfigurer -> {
+    // httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
+    // });
+    // http.sessionManagement(sessionConfig ->
+    // sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    // http.csrf(i->i.disable());
+    //
+    // // p312 post 방식으로 parameter 를 통해 로그인 처리
+    // http.formLogin(config -> {
+    // config.loginPage("/api/member/login");
+    // config.successHandler(new APILoginSuccessHandler());
+    // config.failureHandler(new APILoginFailHandler());
+    // });
+    //
+    // // p329 Filter
+    // http.addFilterBefore(new JWTCheckFilter(),
+    // UsernamePasswordAuthenticationFilter.class);// JWT Check
+    //
+    // // p340
+    // http.exceptionHandling(i -> {
+    // i.accessDeniedHandler(new CustomAccessDeniedHandler());
+    // });
+    //
+    //
+    //
+    // return http.build();
+    // }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowCredentials(true);
-//        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-//        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","HEAD","OPTIONS"));
-//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
+    // @Bean
+    // public CorsConfigurationSource corsConfigurationSource() {
+    // CorsConfiguration configuration = new CorsConfiguration();
+    // configuration.setAllowCredentials(true);
+    // configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+    // configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+    // configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","HEAD","OPTIONS"));
+    // configuration.setAllowedHeaders(Arrays.asList("Authorization",
+    // "Cache-Control", "Content-Type"));
+    // UrlBasedCorsConfigurationSource source = new
+    // UrlBasedCorsConfigurationSource();
+    // source.registerCorsConfiguration("/**", configuration);
+    // return source;
+    // }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -161,21 +179,13 @@ public class CustomSecurityConfig {
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList(
-                "Authorization",
-                "Cache-Control",
-                "Content-Type",
-                "Origin",
-                "Accept",
-                "X-Requested-With"
-        ));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 
     // p303
     @Bean

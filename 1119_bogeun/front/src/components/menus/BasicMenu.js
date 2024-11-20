@@ -6,6 +6,7 @@ import "../../Navbar.css"; // Ensure this file includes the necessary CSS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { User, ShoppingBagIcon, UserIcon, LogInIcon } from "lucide-react";
+import { getCookie } from "../../util/cookieUtil";
 
 const BasicMenu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,11 +23,13 @@ const BasicMenu = () => {
 
   // Set up event listener for window resize
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user")); // user 객체 가져오기
-    if (user && user.role && Array.isArray(user.role)) {
-      if (user.role) setRole("ADMIN"); // role 배열에서 첫 번째 값을 가져옴
-      else setRole("USER");
+    const memberInfo = getCookie("member")
+    if (memberInfo?.role?.includes("ADMIN")) {
+      setRole("ADMIN")
+    } else {
+      setRole("USER")
     }
+
     window.addEventListener("resize", checkScreenSize);
 
     // Cleanup function to remove event listener

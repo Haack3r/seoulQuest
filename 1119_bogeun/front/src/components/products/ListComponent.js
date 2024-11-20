@@ -68,7 +68,7 @@ const ListComponent = () => {
   const handleSearch = () => {
     // Reset page to 1 when a new search is conducted
     moveToList(1); // Update to reset the page state to 1 in your `useCustomMove` logic
-    
+
     // Trigger a refresh with new keyword
     setFetching(true);
     getList({ page: 1, size, keyword, type })

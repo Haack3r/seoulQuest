@@ -3,6 +3,7 @@ import jwtAxios from "../util/jwtUtil"
 import { useNavigate } from "react-router-dom"
 import { Loader2 } from "lucide-react"
 import { getCookie } from "../util/cookieUtil"
+import axios from "axios"
 
 const host = `http://localhost:8080/api`
 
@@ -180,20 +181,32 @@ export const getProduct = async (pno) => {
     return res.data
 }
 
+export const getProductImage = async (fileName) => {
+    const res = await jwtAxios.get(`${host}/admin/product/image/${fileName}`)
+    return res.data
+}
+
 export const addProduct = async (formData) => {
     try {
-        const res = await jwtAxios.post(
-            `${host}/admin/product`, formData,
+
+        // jwtAxios 사용
+        const response = await jwtAxios.post(
+            `${host}/admin/product`,
+            formData,
             {
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             }
-        )
-        return res.data
+        );
+
+        console.log('Response:', response);
+        return response.data;
     } catch (error) {
-        console.error('상품 등록 오류', error)
-        throw error
+        console.error('상품 등록 실패:', error);
+        throw error;
     }
-}
+};
 
 export const deleteProduct = async (pno) => {
     try {
@@ -229,3 +242,12 @@ export const fetchReservations = async () => {
         throw error
     }
 }
+
+// 이미지 URL을 생성하는 함수 추가
+export const getImageUrl = (fileName) => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!fileName) return "/logo192.jpg";
+
+    // URL에 토큰을 쿼리 파라미터로 추가
+    return `${host}/random/view/${fileName}?token=${accessToken}`;
+};

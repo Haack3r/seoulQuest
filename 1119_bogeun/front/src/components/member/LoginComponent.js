@@ -53,6 +53,8 @@ const LoginComponent = () => {
           //   JSON.stringify({ email: loginParam.email, role: userRole })
           // );
           // console.log(localStorage.getItem("user"));
+          // 홈화면 이동 후 뒤로가기 하면 로그인화면 표시 X
+          //   navigate({ pathname: "/" }, { replace: true });
 
           /* -----------------------------------------------------------------------------*/
 
@@ -62,8 +64,6 @@ const LoginComponent = () => {
             accessToken: data.accessToken,
             refreshToken: data.refreshToken
           }), 1)
-          // 홈화면 이동 후 뒤로가기 하면 로그인화면 표시 X
-          //   navigate({ pathname: "/" }, { replace: true });
           moveToPath("/"); // hook 사용
         }
       });
