@@ -1,6 +1,8 @@
 package com.positive.culture.seoulQuest.controller;
 
+import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.dto.*;
+import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import com.positive.culture.seoulQuest.service.*;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import com.siot.IamportRestClient.IamportClient;
@@ -10,6 +12,7 @@ import com.siot.IamportRestClient.response.Payment;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -53,11 +57,27 @@ public class ProductController {
 
     //-----------------------------------------------------------
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getProductCategories() {
+        List<String> categories = categoryRepository.findByCategoryType("product")
+                .stream()
+                .map(Category::getCategoryName)
+                .collect(Collectors.toList());
+
+        if (categories.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(categories);
+    }
+
     //전체 목록 조회 - test 성공 (유저 , 관리자)
     @GetMapping("/list")
-    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO){
+    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO, @RequestParam(required = false) String category){
         log.info("list.........." + pageRequestDTO);
-        return productService.getList(pageRequestDTO);
+        return productService.getListWithCategory(pageRequestDTO, category);
     }
 
     //파일 등록 , 등록할때 service쪽에서 category수정해야됨

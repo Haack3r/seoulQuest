@@ -1,12 +1,10 @@
 package com.positive.culture.seoulQuest.service;
 
-import com.positive.culture.seoulQuest.domain.Product;
-import com.positive.culture.seoulQuest.domain.ProductImage;
-import com.positive.culture.seoulQuest.domain.QProduct;
-import com.positive.culture.seoulQuest.domain.Tour;
+import com.positive.culture.seoulQuest.domain.*;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
+import com.positive.culture.seoulQuest.dto.TourDTO;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -127,6 +125,47 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public void remove(Long pno) {
         productRepository.updateToDelete(pno, true);
+    }
+
+    @Override
+    public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("pno").descending());
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QProduct qProduct = QProduct.product;
+
+        // Base condition
+        BooleanExpression expression = qProduct.pno.gt(0L);
+        booleanBuilder.and(expression);
+
+        // Add category filter if provided
+        if (category != null && !category.isEmpty()) {
+            booleanBuilder.and(qProduct.category.categoryName.eq(category));
+        }
+
+        // Add keyword search filter if provided
+        if (pageRequestDTO.getKeyword() != null && !pageRequestDTO.getKeyword().isEmpty()) {
+            String keyword = pageRequestDTO.getKeyword();
+            BooleanBuilder keywordBuilder = new BooleanBuilder();
+            keywordBuilder.or(qProduct.pname.containsIgnoreCase(keyword));  // Match name
+            keywordBuilder.or(qProduct.pdesc.containsIgnoreCase(keyword)); // Match description
+            booleanBuilder.and(keywordBuilder);
+        }
+
+        // Fetch data using combined filters
+        Page<Product> result = productRepository.findAll(booleanBuilder, pageable);
+
+        // Map to DTOs
+        List<ProductDTO> dtoList = result.stream()
+                .map(ProductDTO::new)
+                .collect(Collectors.toList());
+
+        // Build and return response
+        return PageResponseDTO.<ProductDTO>withAll()
+                .dtoList(dtoList)
+                .totalCount(result.getTotalElements())
+                .pageRequestDTO(pageRequestDTO)
+                .build();
     }
 
     private BooleanBuilder getSearch(PageRequestDTO requestDTO){

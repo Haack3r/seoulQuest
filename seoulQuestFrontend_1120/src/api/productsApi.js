@@ -11,7 +11,7 @@ export const postAdd = async (product) => {
 };
 
 //p264, 서버에서 목록 데이터를 가져오기 위한 함수
-export const getList = async ({ page, size, keyword = "", type = "t" }) => {
+export const getList = async ({ page, size, keyword = "", type = "t", category = "" }) => {
   try {
     const res = await jwtAxios.get(`${host}/list`, {
       params: {
@@ -19,10 +19,21 @@ export const getList = async ({ page, size, keyword = "", type = "t" }) => {
         size:9,
         keyword, // Search keyword
         type, // Search type
+        category
       },
     });
     return res.data;
   } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductCategories = async () => {
+  try {
+    const response = await jwtAxios.get(`${host}/categories`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching tour categories:", error.message);
     throw error;
   }
 };

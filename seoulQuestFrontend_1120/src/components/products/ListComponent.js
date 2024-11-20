@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useCustomMove from "./../../hooks/useCustomMove";
-import { getList } from "../../api/productsApi";
+import { getList, getProductCategories } from "../../api/productsApi";
 import FetchingModal from "../common/FetchingModal";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import PageComponent from "../common/PageComponent";
@@ -34,10 +34,24 @@ const ListComponent = () => {
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("t");
   const [fetching, setFetching] = useState(false);
+  const [categories, setCategories] = useState([]); // Store fetched categories
+  const [selectedCategory, setSelectedCategory] = useState(""); // Selected category
+
 
   useEffect(() => {
     refreshFav();
   }, []);
+
+  useEffect(() => {
+    // Fetch categories
+    getProductCategories()
+      .then((data) => setCategories(data))
+      .catch((err) => exceptionHandle(err));
+  }, []);
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
 
   const handleToggleFavorite = async (product) => {
     if (!loginState.email) {
@@ -57,7 +71,7 @@ const ListComponent = () => {
 
   useEffect(() => {
     setFetching(true);
-    getList({ page, size, keyword, type })
+    getList({ page, size, keyword, type, category: selectedCategory  })
       .then((data) => {
         if (data && Array.isArray(data.dtoList)) {
           setServerData(data);
@@ -70,14 +84,14 @@ const ListComponent = () => {
         exceptionHandle(err);
         setFetching(false);
       });
-  }, [page, size, refresh, keyword, type, favItems]);
+  }, [page, size, refresh, keyword, type, favItems, selectedCategory]);
 
   const handleSearch = () => {
     moveToList(1);
     setFetching(true);
-    getList({ page: 1, size, keyword, type })
+    getList({ page: 1, size, keyword, type, category: selectedCategory  })
       .then((data) => {
-        setServerData(data || initState);
+        setServerData(data && Array.isArray(data.dtoList) ? data : initState);
         setFetching(false);
       })
       .catch((err) => {
@@ -96,7 +110,7 @@ const ListComponent = () => {
         {/* Search Bar with Category Dropdown */}
         <div className="mt-8 flex justify-center items-center space-x-4">
           {/* Dropdown for Categories */}
-          {/* <select
+           <select
             className="bg-white border border-gray-300 rounded-lg p-3 text-sm"
             value={selectedCategory}
             onChange={handleCategoryChange}
@@ -107,7 +121,7 @@ const ListComponent = () => {
                 {categoryName}
               </option>
             ))}
-          </select> */}
+          </select> 
 
           {/* Search Input */}
           <div className="flex w-full h-12 max-w-xl bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
@@ -147,7 +161,7 @@ const ListComponent = () => {
                   {/* Product Image */}
                   <div className="relative w-56 h-80 overflow-hidden">
                     <p className="py-1 text-gray-700 text-xs text-left">
-                      Category
+                      {product.categoryName}
                     </p>
                     <img
                       src={`${host}/api/products/view/s_${product.uploadFileNames[0]}`}

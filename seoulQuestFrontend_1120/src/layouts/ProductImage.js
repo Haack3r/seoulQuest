@@ -7,6 +7,7 @@ const ProductImage = ({
   onScrollToFashion,
   onScrollToGourmet,
   onScrollToMostPopular,
+  onScrollToList
 }) => {
   return (
     <div className="flex flex-col h-screen overflow-hidden box-border mt-12 -mb-4">
@@ -24,7 +25,7 @@ const ProductImage = ({
         <div className="relative z-10 flex flex-col items-center text-white font-bold text-3xl uppercase tracking-widest lg:text-4xl">
           Souvenirs & Gifts
           <button
-            onClick={onScrollToMostPopular}
+            onClick={onScrollToList}
             className="mt-4 px-6 py-2 bg-white bg-opacity-50 text-black font-semibold rounded-lg text-sm transition-opacity duration-300 hover:bg-opacity-80"
           >
             View Products

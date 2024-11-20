@@ -5,6 +5,7 @@ import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
+import com.positive.culture.seoulQuest.dto.TourDTO;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,4 +82,6 @@ public interface ProductService {
                 .build();
         return productDTO;
     }
+    public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category);
+
 }

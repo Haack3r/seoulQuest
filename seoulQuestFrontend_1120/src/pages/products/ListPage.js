@@ -64,10 +64,12 @@ const ListPage = () => {
           onScrollToFashion={() => scrollToRef(fashionRef)}
           onScrollToGourmet={() => scrollToRef(gourmetRef)}
           onScrollToMostPopular={() => scrollToRef(mostPopularRef)}
+          onScrollToList={() => scrollToRef(listRef)}
         />
       </div>
 
       {/* Sections */}
+      <ProcessSteps />
       <div ref={mostPopularRef}>
         <MostPopularProduct />
       </div>
