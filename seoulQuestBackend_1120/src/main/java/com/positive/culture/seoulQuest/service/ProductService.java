@@ -71,7 +71,8 @@ public interface ProductService {
     public ProductDTO entityChangeDTO(Product product){
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
-//                .categoryName(product.getCategory().getCategoryName())
+                .categoryName(product.getCategory().getCategoryName())
+                .categoryType(product.getCategory().getCategoryType())
                 .pname(product.getPname())
                 .pdesc(product.getPdesc())
                 .pprice(product.getPprice())

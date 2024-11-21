@@ -1,6 +1,6 @@
-import { API_SERVER_HOST } from "./todoApi";
 import jwtAxios from "../util/jwtUtil";
 import axios from "axios";
+import { API_SERVER_HOST } from "./todoApi";
 
 const host = `${API_SERVER_HOST}/api/mypage`;
 
@@ -18,14 +18,7 @@ export const findPassword = async (obj) => {
 
   try {
     const res = await axios.post(
-      `${host}/findpassword`,
-      {
-        email: obj.email,
-        phoneNumber1: obj.phoneNumber1,
-        phoneNumber2: obj.phoneNumber2,
-        phoneNumber3: obj.phoneNumber3,
-      },
-      { headers }
+      `${host}/findpassword`,obj,{ headers }
     );
     return res.data;
   } catch (error) {
@@ -41,14 +34,7 @@ export const findEmail = async (obj) => {
 
   try {
     const res = await axios.post(
-      `${host}/findemail`,
-      {
-        firstname: obj.firstname,
-        lastname: obj.lastname,
-        phoneNumber1: obj.phoneNumber1,
-        phoneNumber2: obj.phoneNumber2,
-        phoneNumber3: obj.phoneNumber3,
-      },
+      `${host}/findemail`, obj,
       { headers }
     );
     return res.data;
@@ -62,33 +48,12 @@ export const findEmail = async (obj) => {
 export const postUserInfoforEdit = async (obj) => {
   console.log("obj:", obj);
   const headers = { "Content-Type": "application/json" };
-
   try {
-    const res = await axios.post(
-      `${host}/editprofile`,
-      {
-        firstname: obj.firstname,
-        lastname: obj.lastname,
-        nickName: obj.nickName,
-        email: obj.email,
-        phoneNumber1: obj.phoneNumber1,
-        phoneNumber2: obj.phoneNumber2,
-        phoneNumber3: obj.phoneNumber3,
-        birthday: obj.birthday,
-        country: obj.country,
-        state: obj.state,
-        city: obj.city,
-        street: obj.street,
-        zipcode: obj.zipcode,
-        password: obj.newPassword,
-      },
-      { headers }
+    const res = await jwtAxios.post(
+      `${host}/editprofile`,obj,{ headers }
     );
     return res.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Failed to edit profile");
   }
 };
-
-
-

@@ -43,24 +43,5 @@ public class ProductDTO {
 
     @Builder.Default
     private List<String> uploadFileNames = new ArrayList<>(); //업로드한 파일들을 문자열로 저장
-    public ProductDTO(Product product) {
-        this.pno = product.getPno();
-        this.categoryName = product.getCategory().getCategoryName(); // Adjust as per your relationship
-        this.categoryType = product.getCategory().getCategoryType(); // Adjust as needed
-        this.pname = product.getPname();
-        this.pdesc = product.getPdesc();
-        this.pprice = product.getPprice();
-        this.pqty = product.getPqty();
-        this.shippingFee = product.getShippingCost();
-        this.createAt = product.getCreateAt();
-        this.updateAt = product.getUpdateAt();
-        this.delFlag = product.isDelFlag();
-        this.likesCount = product.getLikesCount();
 
-        // Map the file names from productImageList
-        this.uploadFileNames = product.getProductImageList()
-                .stream()
-                .map(ProductImage::getFileName) // Assuming ProductImage has a getFileName method
-                .collect(Collectors.toList());
-    }
 }

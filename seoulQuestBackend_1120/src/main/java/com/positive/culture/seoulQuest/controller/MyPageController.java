@@ -54,7 +54,7 @@ public class MyPageController {
 //    서비스에서 email과 phone으로 member찾기 구현 후
 //        email 에 6자리 비밀번호 보내주고
 //        암호화된 비밀번호는 update문을 통해 db에 임시 비밀번호를 넣어준다 .
-    @PreAuthorize("permitAll()")
+
     @PostMapping("/findpassword")
     public ResponseEntity<UserDTO> findPassword(@RequestBody UserDTO dto) {
         System.out.println(dto);
@@ -69,7 +69,7 @@ public class MyPageController {
         return new ResponseEntity<>(newUserDTO, HttpStatus.OK);
     }
 
-    @PreAuthorize("permitAll()")
+
     @PostMapping("/findemail")
     public ResponseEntity<UserDTO> findEmail(@RequestBody UserDTO dto) {
         System.out.println(dto);

@@ -157,7 +157,7 @@ public class ProductServiceImpl implements ProductService{
 
         // Map to DTOs
         List<ProductDTO> dtoList = result.stream()
-                .map(ProductDTO::new)
+                .map(product -> entityChangeDTO(product))
                 .collect(Collectors.toList());
 
         // Build and return response

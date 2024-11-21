@@ -4,155 +4,140 @@ const AboutSeoulCultureQuest = () => {
   return (
     <div className="flex flex-col h-auto w-full overflow-hidden box-border mt-12">
       {/* Top Section: Introduction */}
-      <div
-        className="relative flex flex-col items-center justify-center h-[60vh] w-full bg-cover bg-center group overflow-hidden"
-        style={{
-          backgroundImage:
-            "url('https://cdn.pixabay.com/photo/2020/04/02/14/25/bukchon-5001573_960_720.jpg')",
-        }}
-      >
-        {/* Background overlay */}
-        <div className="absolute inset-0 bg-black opacity-30"></div>
+      <div className="relative flex flex-col h-[60vh] w-full overflow-hidden">
+        {/* Top Half */}
+        <div
+          className="relative w-full h-1/2 bg-cover bg-[center_top] opacity-80"
+          style={{
+            backgroundImage:
+              "url('https://cdn.pixabay.com/photo/2022/04/04/13/54/city-7111380_1280.jpg')",
+          }}
+        ></div>
 
-        {/* Content Section */}
-        <div className="relative z-10 text-center px-6 text-white max-w-4xl">
+        {/* Bottom Half */}
+        <div
+          className="relative w-full h-1/2 bg-cover bg-[center_bottom] opacity-80"
+          style={{
+            backgroundImage:
+              "url('https://cdn.pixabay.com/photo/2021/12/08/05/13/gyeongbok-palace-6854763_1280.jpg')",
+          }}
+        ></div>
+
+        {/* Overlay Content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 text-white z-10">
           {/* Main Title */}
-          <h1 className="text-4xl lg:text-6xl font-serif font-bold leading-tight">
-            Where tradition and modernity <br />
-            <span className="italic">harmoniously meet</span>
+          <span className="text-2xl lg:text-3xl text-yellow-400 font-bold">
+            SeoulCultureQuest
+          </span>
+          <h1 className="text-4xl lg:text-6xl leading-tight">
+            Discover the Soul of Seoul <br />
+            <span className="font-serif italic">One Journey at a Time</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="mt-8 text-lg lg:text-xl font-light leading-relaxed">
-            At SeoulCultureQuest, we connect you to the soulful heart of Korea. Explore
-            enchanting tours and curated souvenirs that bring timeless traditions and
-            vibrant modernity to life.
+          <p
+            className="mt-8 text-xs lg:text-sm font-light text-gray-700 leading-relaxed w-[116%] uppercase"
+            style={{ backgroundColor: "#E0DCD0" }}
+          >
+            We are your gateway to the wonders of Korea. Explore our exclusive
+            tours and handcrafted souvenirs that celebrate the beauty of Seoul’s
+            rich culture, history, and modern flair.
           </p>
         </div>
+
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black opacity-20"></div>
       </div>
 
-      {/* About Us Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 px-8 lg:px-16">
-        <div className="bg-gray-100 p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">
-            About Us
-          </h2>
-          <p className="text-gray-700 leading-relaxed">
-            At <span className="font-semibold text-gray-900">SeoulCultureQuest</span>, 
-            we aim to bring the essence of Seoul to life. From curated tours that let you walk 
-            in the footsteps of kings to unique souvenirs that carry the soul of Korea, 
-            every detail is crafted to immerse you in the heart of Korean culture.
-          </p>
-        </div>
-        <div
-          className="relative bg-cover bg-center rounded-lg shadow-md"
-          style={{
-            backgroundImage:
-              "url('https://cdn.pixabay.com/photo/2016/08/19/04/59/the-bulguksa-temple-1604556_1280.jpg')",
-          }}
-        >
-          <div className="absolute inset-0 bg-black opacity-20 rounded-lg"></div>
-        </div>
-      </div>
+      <div className="relative p-10 text-center">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8">Who We Are</h2>
+        <p className="text-gray-700 leading-relaxed mx-auto max-w-4xl mb-14">
+          At{" "}
+          <span className="font-semibold text-yellow-600">
+            SeoulCultureQuest
+          </span>
+          , we believe that every journey should be unforgettable. Our mission
+          is to bring you closer to the heart of Seoul through{" "}
+          <span className="font-bold text-gray-800">immersive experiences</span>{" "}
+          and <span className="italic text-gray-800">unique creations</span>.
+          From the historic charm of palaces to the bustling streets of
+          Gangnam, we connect you with the essence of Korea, one story at a
+          time.
+        </p>
 
-      {/* Highlights Section */}
-      <div className="mt-16 px-8 lg:px-16">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          What We Offer
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div
-            className="relative flex items-center justify-center bg-cover bg-center group overflow-hidden h-[200px] rounded-lg shadow-md"
-            style={{
-              backgroundImage: "url('https://cdn.pixabay.com/photo/2020/03/09/16/02/silk-4916174_1280.jpg')",
-            }}
-          >
-            <div className="absolute inset-0 bg-black opacity-30 rounded-lg" />
-            <div className="relative z-10 text-white text-center">
-              <h3 className="text-lg font-semibold">Crafted Elegance</h3>
-              <p className="text-xs">Handmade Souvenirs</p>
-            </div>
-          </div>
-          <div
-            className="relative flex items-center justify-center bg-cover bg-center group overflow-hidden h-[200px] rounded-lg shadow-md"
-            style={{
-              backgroundImage: "url('https://cdn.pixabay.com/photo/2021/03/08/06/23/green-tea-6078275_1280.jpg')",
-            }}
-          >
-            <div className="absolute inset-0 bg-black opacity-30 rounded-lg" />
-            <div className="relative z-10 text-white text-center">
-              <h3 className="text-lg font-semibold">Herbal Infusions</h3>
-              <p className="text-xs">Relax & Rejuvenate</p>
-            </div>
-          </div>
-          <div
-            className="relative flex items-center justify-center bg-cover bg-center group overflow-hidden h-[200px] rounded-lg shadow-md"
-            style={{
-              backgroundImage: "url('https://cdn.pixabay.com/photo/2019/07/25/01/35/kimchi-4361465_1280.jpg')",
-            }}
-          >
-            <div className="absolute inset-0 bg-black opacity-30 rounded-lg" />
-            <div className="relative z-10 text-white text-center">
-              <h3 className="text-lg font-semibold">Authentic Flavors</h3>
-              <p className="text-xs">Taste Seoul</p>
-            </div>
-          </div>
-          <div
-            className="relative flex items-center justify-center bg-cover bg-center group overflow-hidden h-[200px] rounded-lg shadow-md"
-            style={{
-              backgroundImage: "url('https://cdn.pixabay.com/photo/2020/08/09/15/58/cosmetics-5475897_1280.jpg')",
-            }}
-          >
-            <div className="absolute inset-0 bg-black opacity-30 rounded-lg" />
-            <div className="relative z-10 text-white text-center">
-              <h3 className="text-lg font-semibold">Beauty & Skincare</h3>
-              <p className="text-xs">Glow with Seoul</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Tour Categories Section */}
-      <div className="mt-16 px-8 lg:px-16">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          Explore Our Tours
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gray-100 p-8 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Traditional Cultural Tours
+        {/* Explanation Sections */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+              Innovative Tours
             </h3>
-            <p className="text-gray-700">
-              Walk through history as you explore palaces, hanbok experiences, and centuries-old traditions.
+            <p className="text-sm text-gray-600">
+              Step beyond the ordinary with our expertly curated tours.
+              Explore hidden gems, local favorites, and iconic landmarks that
+              bring the spirit of Seoul to life.
             </p>
           </div>
-          <div className="bg-gray-100 p-8 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Modern Cultural Tours
+          <div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+              Handcrafted Souvenirs
             </h3>
-            <p className="text-gray-700">
-              Discover Seoul's vibrant neighborhoods, bustling nightlife, and contemporary landmarks.
+            <p className="text-sm text-gray-600">
+              Take a piece of Seoul home with you. Our souvenirs are crafted
+              with care by local artisans, blending tradition and modern
+              design.
             </p>
           </div>
-          <div className="bg-gray-100 p-8 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Hidden Gems Tours
+          <div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+              Cultural Immersion
             </h3>
-            <p className="text-gray-700">
-              Uncover Seoul's secret spots, serene temples, and local markets for a unique experience.
+            <p className="text-sm text-gray-600">
+              Immerse yourself in authentic Korean culture. From culinary
+              experiences to traditional crafts, every moment is an adventure.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+              Unforgettable Memories
+            </h3>
+            <p className="text-sm text-gray-600">
+              Let us help you create lasting memories in Seoul. Every tour and
+              product is designed to make your journey extraordinary.
             </p>
           </div>
         </div>
-      </div>
 
-      {/* Call to Action */}
-      <div className="text-center mt-16 mb-12">
-        <a
-          href="/tours"
-          className="px-6 py-3 bg-black text-white font-semibold rounded-lg text-sm hover:bg-gray-800"
-        >
-          Go Explore Our Tours
-        </a>
+        {/* Photo Grid Section */}
+        <div className="photo-grid grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
+          <div className="w-full h-40 overflow-hidden">
+            <img
+              src="https://cdn.pixabay.com/photo/2018/03/16/02/55/tunnel-3230087_1280.jpg"
+              alt="Innovative Tours"
+              className="w-full h-full object-cover opacity-80"
+            />
+          </div>
+          <div className="w-full h-40 bg-gray-200 overflow-hidden">
+            <img
+              src="https://cdn.pixabay.com/photo/2017/03/27/14/33/ancient-2179091_1280.jpg"
+              alt="Handcrafted Souvenirs"
+              className="w-full h-full object-cover opacity-80"
+            />
+          </div>
+          <div className="w-full h-40 bg-gray-200 overflow-hidden">
+            <img
+              src="https://cdn.pixabay.com/photo/2018/12/31/14/45/bukchon-3905234_1280.jpg"
+              alt="Cultural Immersion"
+              className="w-full h-full object-cover opacity-80"
+            />
+          </div>
+          <div className="w-full h-40 bg-gray-200 overflow-hidden">
+            <img
+              src="https://cdn.pixabay.com/photo/2019/11/22/01/28/seoul-4643867_1280.jpg"
+              alt="Unforgettable Memories"
+              className="w-full h-full object-cover opacity-80"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
