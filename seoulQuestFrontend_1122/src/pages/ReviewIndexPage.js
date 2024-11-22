@@ -8,19 +8,16 @@ const ReviewIndexPage = () => {
   const handleClickProductList = useCallback(() => {
     navigate({ pathname: 'product/list' });
   });
-  const handleClickProductAdd = useCallback(() => {
-    navigate({ pathname: 'product/add' });
-  });
   const handleClickTourList = useCallback(() => {
     navigate({ pathname: 'tour/list' });
   });
-  const handleClickTourAdd = useCallback(() => {
-    navigate({ pathname: 'tour/add' });
-  });
+  // const handleClickTourAdd = useCallback(() => {
+  //   navigate({ pathname: 'tour/add' });
+  // });
 
   return (
     <BasicLayout>
-      <div className="w-full flex justify-start ml-10 space-x-12 mt-20">
+      <div className=" flex flex-row max-w-5xl mx-auto mt-20 gap-x-10">
         {/* Product List */}
         <div
           className="relative group text-gray-600 text-lg font-medium cursor-pointer hover:text-gray-800 transition"
@@ -39,25 +36,16 @@ const ReviewIndexPage = () => {
           <span className="absolute left-0 bottom-[-3px] w-0 h-[2px] bg-gray-800 transition-all duration-500 group-hover:w-full"></span>
         </div>
 
-        {/* Product Add */}
-        <div
-          className="relative group text-gray-600 text-lg font-medium cursor-pointer hover:text-gray-800 transition"
-          onClick={handleClickProductAdd}
-        >
-          Add Product Review
-          <span className="absolute left-0 bottom-[-3px] w-0 h-[2px] bg-gray-800 transition-all duration-500 group-hover:w-full"></span>
-        </div>
-
         {/* Tour Add */}
-        <div
+        {/* <div
           className="relative group text-gray-600 text-lg font-medium cursor-pointer hover:text-gray-800 transition"
           onClick={handleClickTourAdd}
         >
           Add Tour Review
           <span className="absolute left-0 bottom-[-3px] w-0 h-[2px] bg-gray-800 transition-all duration-500 group-hover:w-full"></span>
-        </div>
+        </div> */}
       </div>
-
+      
       <div className="flex flex-wrap w-full mt-8">
         <Outlet />
       </div>

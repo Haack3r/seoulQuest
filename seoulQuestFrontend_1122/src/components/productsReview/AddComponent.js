@@ -48,7 +48,7 @@ const AddComponent = () => {
 
     const closeModal = () => {
         setResult(null);
-        moveToList({page:1});
+        navigate("/review")
     };
 
     useEffect(() => {

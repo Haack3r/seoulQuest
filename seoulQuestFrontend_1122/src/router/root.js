@@ -8,8 +8,6 @@ import nuToursRouter from "./nuToursRouter";
 import myPageRouter from "./myPageRouter";
 import { Alert } from "@mui/material";
 import adminRouter from "./admin/adminRouter";
-import productReviewRouter from "./productReviewRouter";
-import tourReviewRouter from "./tourReviewRouter";
 import ReviewRouter from "./ReviewRouter";
 
 

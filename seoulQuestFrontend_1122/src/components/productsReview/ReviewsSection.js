@@ -114,7 +114,7 @@ const ReviewsSection = ({ pno }) => {
                 <ReviewModal
                     selectedReview={selectedReview}
                     closeModal={closeModal}
-                    goToProductRead={goToProductRead}
+                    goToBack={goToProductRead}
                 />
             )}
         </div>

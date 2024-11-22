@@ -9,7 +9,7 @@ import {
 const CouponComponent = () => {
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [myCoupons, setMyCoupons] = useState([]);
-  
+
   const user = JSON.parse(localStorage.getItem("user"));
   const email = user?.email;
 
@@ -21,6 +21,7 @@ const CouponComponent = () => {
   const fetchAvailableCoupons = async () => {
     try {
         const userEmail = user?.email; // Fetch user email from local storage or user object
+        console.log(userEmail)
         const coupons = await getAvailableCoupons(userEmail); // Pass email as parameter
         setAvailableCoupons(coupons);
     } catch (error) {
