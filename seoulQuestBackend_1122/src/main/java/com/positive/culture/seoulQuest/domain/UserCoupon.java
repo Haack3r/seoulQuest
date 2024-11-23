@@ -31,9 +31,6 @@ public class UserCoupon {
 
     private LocalDate useDate;
 
-//    //추가 1114
-//    private boolean isActive;
-
 
     public void ChangeUseDate(LocalDate useDate){
         this.useDate = useDate;

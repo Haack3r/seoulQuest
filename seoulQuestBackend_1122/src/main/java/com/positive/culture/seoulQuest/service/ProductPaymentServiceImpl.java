@@ -62,11 +62,9 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
             //3. 결제정보 저장
             ProductPayment payment = ProductPayment.builder()
                     .pPaymentMember(paymentMember)
-                    .paymentPrice(orderdto.getTotalPrice())
-//                    .paymentPrice(paymentResponse.getAmount())
+                    .totalPrice(orderdto.getTotalPrice())
                     .paymentDate(paymentResponse.getPaidAt())
                     .paymentMethod(paymentResponse.getPayMethod())
-                    .merchantUid(paymentResponse.getMerchantUid())
                     .productOrder(productOrder)
                     .usedCoupon(usedCoupon)
                     .build();
@@ -114,8 +112,6 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
         Long orderId = orderdto.getOrderId();
         ProductOrder productOrder = productOrderRepository.findById(orderId).orElseThrow();
 
-        // 쿠폰 사용 취소
-//        UserCoupon usedCoupon = productOrder.getUsedCoupon();
         String usedCouponName = orderdto.getUsedCoupon();
         UserCoupon usedCoupon =
                 userCouponRepository.findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(paymentEmail,usedCouponName);

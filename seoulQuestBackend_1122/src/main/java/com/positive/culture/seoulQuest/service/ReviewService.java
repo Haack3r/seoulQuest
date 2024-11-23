@@ -14,7 +14,7 @@ public interface ReviewService {
     public ReviewInfoDTO getProductPaymentInfo(String email);
 
     //목록
-    PageResponseDTO<ReviewDTO> getList(PageRequestDTO pageRequestDTO);
+    PageResponseDTO<ReviewDTO> getList(PageRequestDTO pageRequestDTO, String email);
 
     //등록
     public Long registerProductReview(ReviewDTO reviewDTO);

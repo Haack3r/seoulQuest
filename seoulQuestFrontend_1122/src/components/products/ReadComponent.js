@@ -8,7 +8,7 @@ import useCustomCart from '../../hooks/useCustomCart';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import CartComponent from '../menus/CartComponent';
 import useCustomFav from '../../hooks/useCustomFav'; // Use useCustomFav for managing favorites
-import ReviewsSection from '../productsReview/ReviewsSection';
+import ReviewsSection from '../review/ReviewsSection';
 
 const initState = {
     pno: 0,

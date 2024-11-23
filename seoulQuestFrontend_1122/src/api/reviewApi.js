@@ -8,12 +8,19 @@ export const getOne = async (prid) => {  // 데이터 하나 조회
     return res.data
 }
 
-export const getList = async (pageParam) => {   // 전체 목록 조회
-    const { page, size } = pageParam
+export const getList = async (pageParam) => {
+    const { page, size, email } = pageParam;
 
-    const res = await jwtAxios.get(`${prefix}/list`, { params: { page, size } })
-    return res.data
-}
+    const res = await jwtAxios.get(`${prefix}/list`, { 
+        params: { 
+            page, 
+            size, 
+            email: email || null // email이 없으면 null로 처리
+        } 
+    });
+
+    return res.data;
+};
 
 export const deleteOne = async (prid) => {   // 데이터 하나 삭제
     const res = await jwtAxios.delete(`${prefix}/${prid}`)

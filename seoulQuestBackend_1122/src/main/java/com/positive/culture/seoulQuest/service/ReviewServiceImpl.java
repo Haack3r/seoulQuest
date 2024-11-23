@@ -64,30 +64,60 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
     }
 
-    //목록
+//    //목록
+//    @Override
+//    public PageResponseDTO<ReviewDTO> getList(PageRequestDTO pageRequestDTO) {
+//        Pageable pageable =  PageRequest.of(
+//                pageRequestDTO.getPage()-1,
+//                pageRequestDTO.getSize(),
+//                Sort.by("prid").descending());
+//
+//        Page<ProductReview> result = productReviewRepository.findAll(pageable);
+//
+//        // Convert each Tour entity to a TourDTO
+//        List<ReviewDTO> dtoList = result.stream()
+//                .map(this::entityChangeDTO)
+//                .collect(Collectors.toList());
+//
+//        long totalCount= result.getTotalElements();
+//
+//        return PageResponseDTO.<ReviewDTO>withAll()
+//                .dtoList(dtoList) //reviewDTO 객체가 담겨있는 list
+//                .totalCount(totalCount)
+//                .pageRequestDTO(pageRequestDTO)
+//                .build();
+//    }
+
     @Override
-    public PageResponseDTO<ReviewDTO> getList(PageRequestDTO pageRequestDTO) {
-        Pageable pageable =  PageRequest.of(
-                pageRequestDTO.getPage()-1,
+    public PageResponseDTO<ReviewDTO> getList(PageRequestDTO pageRequestDTO, String email) {
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
                 Sort.by("prid").descending());
 
-        Page<ProductReview> result = productReviewRepository.findAll(pageable);
+        Page<ProductReview> result;
 
-        // Convert each Tour entity to a TourDTO
+        if (email != null && !email.isEmpty()) {
+            // 이메일 필터링
+            result = productReviewRepository.findByMemberEmail(email, pageable);
+        } else {
+            // 전체 목록 조회
+            result = productReviewRepository.findAll(pageable);
+        }
+
+        // Convert each ProductReview entity to a ReviewDTO
         List<ReviewDTO> dtoList = result.stream()
                 .map(this::entityChangeDTO)
                 .collect(Collectors.toList());
 
-        long totalCount= result.getTotalElements();
+        long totalCount = result.getTotalElements();
 
         return PageResponseDTO.<ReviewDTO>withAll()
-                .dtoList(dtoList) //reviewDTO 객체가 담겨있는 list
+                .dtoList(dtoList) // reviewDTO 객체가 담겨있는 리스트
                 .totalCount(totalCount)
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
-
     //리뷰 등록 - 상품
     @Override
     public Long registerProductReview(ReviewDTO reviewDTO) {

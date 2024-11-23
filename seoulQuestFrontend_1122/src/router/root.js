@@ -8,7 +8,7 @@ import nuToursRouter from "./nuToursRouter";
 import myPageRouter from "./myPageRouter";
 import { Alert } from "@mui/material";
 import adminRouter from "./admin/adminRouter";
-import ReviewRouter from "./ReviewRouter";
+import reviewRouter from "./reviewRouter";
 
 
 const { createBrowserRouter } = require("react-router-dom")
@@ -23,7 +23,7 @@ const ToursIndex = lazy(() => import("../pages/tours/TourIndexPage"))
 const NUToursIndex = lazy(() => import("../pages/tours/NUTourIndexPage"))
 const Cart = lazy(() => import("../pages/Cart"))
 const Favorite = lazy(() => import("../pages/Favorite"))
-const ReviewIndex = lazy(() => import("../pages/ReviewIndexPage"))
+const ReviewIndex = lazy(() => import("../pages/review/ReviewIndexPage"))
 
 const root = createBrowserRouter([
     {
@@ -45,7 +45,7 @@ const root = createBrowserRouter([
     {
         path: "review",
         element: <Suspense fallback={Loading}><ReviewIndex /></Suspense>,
-        children: ReviewRouter()
+        children: reviewRouter()
     },
     {
         path: "user/products",

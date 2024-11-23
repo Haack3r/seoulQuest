@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { getInfoforProduct, postAdd } from '../../api/reviewApi';
-import ResultModal from '../common/ResultModal';
-import useCustomMove from '../../hooks/useCustomMove';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,12 +9,12 @@ const initState = {
     reviewContent: '',
     rating: 0, 
     selectedItemId: '',
+    paymentItemList: []
 };
 
-const AddComponent = () => {
+const ReviewAddModal = ({closeModal}) => {
     const [review, setReview] = useState({ ...initState });
     const [result, setResult] = useState(null);
-    const { moveToList } = useCustomMove();
     const navigate = useNavigate();
 
     const toggleRating = (star) => {
@@ -35,44 +33,30 @@ const AddComponent = () => {
     };
 
     const handleClickAdd = () => {
+        closeModal();
         postAdd(review)
             .then((result) => {
                 console.log(result)
                 setResult(result);
-                setReview({ ...initState }); // 초기화
+                setReview({ ...initState });
+                navigate("/review")
             })
             .catch((e) => {
                 console.error(e);
             });
     };
 
-    const closeModal = () => {
-        setResult(null);
-        navigate("/review")
-    };
-
     useEffect(() => {
         getInfoforProduct().then((data) => {
-            if (data.paymentItemList.length === 0) {
-                alert("There is no product to review.");
-                navigate("/review");
-            }
             setReview(data);
         });
     }, []);
 
     return (
-        <div className="max-w-3xl mx-auto bg-white border border-gray-300 rounded-lg shadow-lg mt-10 p-8">
-            {result && (
-                <ResultModal
-                    title="Add Result"
-                    content={`New review with ID: ${result} has been added`}
-                    callbackFn={closeModal}
-                />
-            )}
-
-            <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Product Review</h2>
-
+      
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                <form  onSubmit={handleClickAdd}>
             {/* Title */}
             <div className="mb-6">
                 <label className="block font-medium text-gray-600 mb-2">Title</label>
@@ -83,6 +67,7 @@ const AddComponent = () => {
                     value={review.title}
                     onChange={handleChangereview}
                     placeholder="Enter the title"
+                    required
                 />
             </div>
 
@@ -107,6 +92,7 @@ const AddComponent = () => {
                     name="selectedItemId"
                     value={review.selectedItemId}
                     onChange={handleChangereview}
+                    required
                 >
                     <option value="" disabled>
                         Select your product
@@ -155,20 +141,31 @@ const AddComponent = () => {
                     onChange={handleChangereview}
                     placeholder="Write your review here"
                     rows="4"
+                    required
                 />
             </div>
 
             {/* Submit Button */}
-            <div className="text-center">
+            <div className="flex justify-end mt-6">
                 <button
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition"
-                    onClick={handleClickAdd}
+                    type='submit'
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg transition"
                 >
                     Submit Review
                 </button>
+
+                <button
+                type='button'
+                className="ml-3 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
+                onClick={closeModal}
+              >
+                Close
+              </button>
+            </div>
+            </form>
             </div>
         </div>
     );
 };
 
-export default AddComponent;
+export default ReviewAddModal;

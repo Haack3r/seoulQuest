@@ -30,10 +30,10 @@ public class ProductPayment { //유저한명의 결제내역
     @JoinColumn(name = "user_coupon_id")
     private UserCoupon usedCoupon;
 
-    private String merchantUid;
-
-    private int paymentPrice; //결제 총액
+    private int totalPrice; //결제 총액
     private Date paymentDate;
 
     private String paymentMethod;
+
+    public void changeTotalPrice(int totalPrice){this.totalPrice = totalPrice;}
 }

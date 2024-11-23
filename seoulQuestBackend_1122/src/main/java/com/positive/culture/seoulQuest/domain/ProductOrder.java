@@ -44,13 +44,6 @@ public class ProductOrder {
     public void changePaymentStatus(String paymentStatus){
         this.paymentStatus = paymentStatus;
     }
-
-    //    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_coupon_id")
-//    private UserCoupon usedCoupon;
-
-//    public void removedUsedCoupon(){
-//        this.usedCoupon = null;
-//    }
+    public void changeTotalPrice(int totalPrice){this.totalPrice = totalPrice;}
 
 }

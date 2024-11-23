@@ -4,17 +4,19 @@ import { getItemReview } from '../../api/reviewApi';
 import { useNavigate } from 'react-router-dom';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import ReviewModal from './ReviewModal'; 
-import useCustomMove from '../../hooks/useCustomMove';
+import useCustomLogin from '../../hooks/useCustomLogin';
 
 const ReviewsSection = ({ pno }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [reviews, setReviews] = useState([]);
     const [selectedReview, setSelectedReview] = useState(null); 
     const [isModalOpen, setIsModalOpen] = useState(false); 
-    const {moveToList} = useCustomMove();
+    const { loginState } = useCustomLogin();
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log(loginState.email);
+        
         getItemReview(pno).then((data) => {
             setReviews(data);
         });
@@ -54,7 +56,6 @@ const ReviewsSection = ({ pno }) => {
             </div>
 
             <div className="relative flex items-center">
-                {/* 이전 버튼 */}
                 <button
                     className="absolute left-[-20px] z-10 bg-white border border-gray-300 rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-gray-100"
                     onClick={prevSlide}
@@ -62,13 +63,12 @@ const ReviewsSection = ({ pno }) => {
                     <ChevronLeft className="h-5 w-5 text-gray-700" />
                 </button>
 
-                {/* 리뷰 카드 */}
                 <div className="flex space-x-4 overflow-hidden w-full">
                     {reviews.slice(currentIndex, currentIndex + 2).map((review) => (
                         <div
                             key={review.prid}
-                            className="bg-white rounded-lg shadow-md p-4 w-1/2 border border-gray-200"
-                            onClick={() => openModal(review)} // 리뷰 클릭 시 모달 열기
+                            className="relative bg-white rounded-lg shadow-md p-4 w-1/2 border border-gray-200"
+                            onClick={() => openModal(review)} 
                         >
                             <div className="flex items-center mb-2">
                                 <div className="bg-stone-400 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
@@ -79,6 +79,11 @@ const ReviewsSection = ({ pno }) => {
                                     <p className="text-xs text-gray-500">{review.dueDate}</p>
                                 </div>
                             </div>
+                            {review.email === loginState.email && (
+                                <div className="absolute top-5 right-5 px-3 py-1 text-sm font-semibold text-white bg-teal-500 rounded-lg shadow-md">
+                                My Review
+                                </div>
+                            )}
                             {/* Rating */}
                             <div className="flex items-center">
                                 {[1, 2, 3, 4, 5].map((star) => (
@@ -99,8 +104,6 @@ const ReviewsSection = ({ pno }) => {
                         </div>
                     ))}
                 </div>
-
-                {/* 다음 버튼 */}
                 <button
                     className="absolute right-[-20px] z-10 bg-white border border-gray-300 rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-gray-100"
                     onClick={nextSlide}
@@ -109,7 +112,6 @@ const ReviewsSection = ({ pno }) => {
                 </button>
             </div>
 
-            {/* 모달 컴포넌트 */}
             {isModalOpen && (
                 <ReviewModal
                     selectedReview={selectedReview}

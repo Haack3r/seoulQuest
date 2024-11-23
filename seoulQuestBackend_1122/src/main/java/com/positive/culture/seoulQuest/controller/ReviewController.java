@@ -19,7 +19,6 @@ import java.util.Map;
 public class ReviewController {
 
     private final ReviewService reviewService;
-    private final MemberService memberService;
 
     //리뷰 등록시 고객 닉네임과 주문한 상품 or 투어 표시
     @PreAuthorize("hasAnyRole('ROLE_USER')")
@@ -41,12 +40,14 @@ public class ReviewController {
         return productReviewId;
     }
 
-    //전체 목록 조회
     @GetMapping("/list")
-    public PageResponseDTO<ReviewDTO> list(PageRequestDTO pageRequestDTO){
-        log.info("list.........." + pageRequestDTO);
-        return reviewService.getList(pageRequestDTO);
+    public PageResponseDTO<ReviewDTO> list(PageRequestDTO pageRequestDTO,
+                                           @RequestParam(required = false) String email) {
+        log.info("list.......... PageRequestDTO: " + pageRequestDTO + ", email: " + email);
+
+        return reviewService.getList(pageRequestDTO, email);
     }
+
 
     //하나 조회
     @GetMapping("/{prid}")

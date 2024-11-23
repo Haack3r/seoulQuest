@@ -2,6 +2,8 @@ package com.positive.culture.seoulQuest.repository;
 
 import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.domain.ProductReview;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +18,7 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview,Lon
     List<Long> findReviewedPaymentItemIdsByEmail(String email);
 
     List<ProductReview> findByProductPno(Long pno);
+
+    Page<ProductReview> findByMemberEmail(String email, Pageable pageable);
 
 }
