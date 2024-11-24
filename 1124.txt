@@ -1,0 +1,10 @@
+1. productReview Front 코드 분석
+	-Review add modal 수정
+	-review modal수정
+2. productReview Backend코드 분석
+3. product, tour 중복 코드 재활용 할수 있게 하기 
+
+coupon Code없애기
+shippingFee -> 3천원 or 0원 
+cart와  reservation이 null로 들어오는 이유/??책보고 null값 처리부분있는지 확인하기
+/reservation/item controller로 들어옴 
