@@ -4,6 +4,7 @@ import { getList } from "../../../api/productsApi";
 import { API_SERVER_HOST } from "../../../api/reviewApi";
 import useCustomFav from "../../../hooks/useCustomFav";
 import useCustomLogin from "../../../hooks/useCustomLogin";
+import useCustomMove from "../../../hooks/useCustomMove";
 
 const host = API_SERVER_HOST;
 
@@ -11,7 +12,7 @@ const ProductCategoryBeauty = () => {
   const [products, setProducts] = useState([]);
   const [visibleIndex, setVisibleIndex] = useState(0); // Index for the current visible products
   const [fetching, setFetching] = useState(false);
-
+  const { moveToRead } = useCustomMove();
   const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
   const { loginState } = useCustomLogin();
 
@@ -19,13 +20,12 @@ const ProductCategoryBeauty = () => {
   const itemsPerPage = 4; // Number of items to display at once
 
   useEffect(() => {
-    // Fetch products for the K-Beauty category
     const fetchProducts = async () => {
       setFetching(true);
       try {
         const response = await getList({
           page: 1,
-          size: 100, // Fetch a large number to allow for local pagination
+          size: 100, // Fetch a large number for local pagination
           category,
         });
         setProducts(response.dtoList || []); // Adjust to your API's response structure
@@ -40,7 +40,10 @@ const ProductCategoryBeauty = () => {
     refreshFav(); // Refresh favorite items
   }, [category]);
 
-  const visibleProducts = products.slice(visibleIndex, visibleIndex + itemsPerPage);
+  const visibleProducts = products.slice(
+    visibleIndex,
+    visibleIndex + itemsPerPage
+  );
 
   const handleNext = () => {
     if (visibleIndex + itemsPerPage < products.length) {
@@ -54,7 +57,8 @@ const ProductCategoryBeauty = () => {
     }
   };
 
-  const handleToggleFavorite = async (product) => {
+  const handleToggleFavorite = async (product, e) => {
+    e.stopPropagation(); // Prevent event from bubbling to the parent
     if (!loginState.email) {
       alert("Please log in to manage favorites.");
       return;
@@ -69,7 +73,7 @@ const ProductCategoryBeauty = () => {
       } else {
         await changeFav({ email: loginState.email, pno: product.pno });
       }
-      refreshFav();
+      refreshFav(); // Ensure the favorites list updates
     } catch (error) {
       console.error("Error toggling favorite:", error);
     }
@@ -89,9 +93,10 @@ const ProductCategoryBeauty = () => {
       {/* Right Side Products Section */}
       <div className="w-full lg:w-1/2 relative">
         <div className="mb-10 relative">
-          {/* Category Header */}
           <div className="px-10 mb-4 text-center">
-            <h2 className="text-lg font-bold text-gray-800 uppercase">{category} Essentials</h2>
+            <h2 className="text-lg font-bold text-gray-800 uppercase">
+              {category} Essentials
+            </h2>
           </div>
 
           {fetching ? (
@@ -101,19 +106,21 @@ const ProductCategoryBeauty = () => {
               {/* Products Grid */}
               <div className="grid grid-cols-2 gap-4">
                 {visibleProducts.map((product) => {
-                  const isFavorite = favItems.some((item) => item.pno === product.pno);
+                  const isFavorite = favItems.some(
+                    (item) => item.pno === product.pno
+                  );
 
                   return (
                     <div
                       key={product.pno}
-                      className="relative flex flex-col items-center"
+                      className="z-1 relative flex flex-col items-center cursor-pointer"
+                      onClick={() => moveToRead(product.pno)} // Navigate to product page
                     >
-                      {/* Product Image */}
                       <div className="relative w-48 h-60 overflow-hidden">
                         <img
                           src={`${host}/api/products/view/${product.uploadFileNames?.[0]}`}
                           alt={product.pname}
-                          className="w-full h-full object-cover opacity-80 hover:opacity-90"
+                          className=" w-full h-full object-cover opacity-80 hover:opacity-90"
                         />
                         <button
                           className={`absolute top-2 right-2 ${
@@ -122,18 +129,22 @@ const ProductCategoryBeauty = () => {
                           onClick={(e) => {
                             e.stopPropagation();
                             handleToggleFavorite(product);
-                          }}
+                          }} // Toggle favorite
                         >
-                          <HeartIcon  className={`h-6 w-6 ${
-                          isFavorite ? "fill-current" : ""
-                        }`} />
+                          <HeartIcon
+                            className={`h-6 w-6 ${
+                              isFavorite ? "fill-current" : ""
+                            }`}
+                          />
                         </button>
                       </div>
-
-                      {/* Product Details */}
                       <div className="mt-2 text-center">
-                        <h3 className="text-sm font-bold text-gray-700">{product.pname}</h3>
-                        <p className="text-sm text-gray-500 mt-1">₩{product.pprice.toLocaleString()}</p>
+                        <h3 className="text-sm font-bold text-gray-700">
+                          {product.pname}
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          ₩{product.pprice.toLocaleString()}
+                        </p>
                       </div>
                     </div>
                   );
@@ -141,12 +152,14 @@ const ProductCategoryBeauty = () => {
               </div>
 
               {/* Navigation Arrows */}
-              <div className="absolute inset-y-0 flex justify-between items-center w-full">
+              <div className="z-50 absolute inset-y-0 flex justify-between items-center w-full">
                 <button
                   onClick={handlePrev}
                   disabled={visibleIndex === 0}
-                  className={` ${
-                    visibleIndex === 0 ? "text-gray-300" : "text-gray-600 hover:text-gray-900"
+                  className={`${
+                    visibleIndex === 0
+                      ? "text-gray-300"
+                      : "text-gray-600 hover:text-gray-900"
                   }`}
                 >
                   <ChevronLeft className="h-10 w-10" />
@@ -154,7 +167,7 @@ const ProductCategoryBeauty = () => {
                 <button
                   onClick={handleNext}
                   disabled={visibleIndex + itemsPerPage >= products.length}
-                  className={` ${
+                  className={`${
                     visibleIndex + itemsPerPage >= products.length
                       ? "text-gray-300"
                       : "text-gray-600 hover:text-gray-900"

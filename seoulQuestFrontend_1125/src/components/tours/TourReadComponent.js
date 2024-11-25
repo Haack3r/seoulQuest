@@ -9,6 +9,7 @@ import useCustomReservation from "../../hooks/useCustomReservation";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import { getOne } from "../../api/tourApi";
 import TourDetails from "./TourDetails";
+import useCustomTourFav from '../../hooks/useCustomTourFav';
 
 const initState = {
   tno: 0,
@@ -31,7 +32,7 @@ const TourReadComponent = ({ tno }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [cartVisible, setCartVisible] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false); // For toggling tour details
-
+  const { favItems, changeFav, refreshFav } = useCustomTourFav();
   const { reservationItems, changeReservation } = useCustomReservation();
   const { loginState } = useCustomLogin();
 
@@ -73,6 +74,28 @@ const TourReadComponent = ({ tno }) => {
       tdate: selectedDate,
     });
     setCartVisible(true); // Automatically show the cart
+  };
+
+  const handleAddToFavorites = async () => {
+    if (!loginState.email) {
+      alert('Please log in to add favorites.');
+      return;
+    }
+
+    const isAlreadyFavorite = favItems.some((item) => item.tno === tour.tno);
+    if (isAlreadyFavorite) {
+      alert('You already liked this product!');
+      return;
+    }
+
+    try {
+      await changeFav({ email: loginState.email, tno: tour.tno });
+      alert('Product added to favorites!');
+      refreshFav();
+    } catch (error) {
+      console.error('Failed to add favorite:', error);
+      alert('Could not add to favorites. Please try again.');
+    }
   };
 
   return (
@@ -165,7 +188,7 @@ const TourReadComponent = ({ tno }) => {
               <CalendarOutlined className="mr-2" />
               Update Availability
             </button>
-            <button className="border text-gray-700 py-3 px-6 rounded-lg flex items-center justify-center hover:bg-gray-100">
+            <button onClick={handleAddToFavorites} className="border text-gray-700 py-3 px-6 rounded-lg flex items-center justify-center hover:bg-gray-100">
               <HeartIcon className="mr-2 h-5 w-5 text-red-500" />
               Add to Favorites
             </button>
