@@ -1,11 +1,13 @@
 package com.positive.culture.seoulQuest.service;
 
+import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.domain.ProductImage;
 import com.positive.culture.seoulQuest.domain.QProduct;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
+import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     // 전체 조회----(유저, 관리자)
     @Override
@@ -77,34 +80,65 @@ public class ProductServiceImpl implements ProductService {
                 pageRequestDTO.getSize(),
                 Sort.by("pno").descending());
 
-        Page<Product> result = productRepository.AdminProductList(pageable, pageRequestDTO.getKeyword());
+        // delFlag가 false인 상품만 조회
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QProduct qProduct = QProduct.product;
+        booleanBuilder.and(qProduct.delFlag.eq(false));
+
+        // 키워드 검색
+        if (pageRequestDTO.getKeyword() != null && !pageRequestDTO.getKeyword().trim().isEmpty()) {
+            booleanBuilder.and(qProduct.pname.contains(pageRequestDTO.getKeyword())
+                    .or(qProduct.category.categoryName.contains(pageRequestDTO.getKeyword())));
+        }
+
+        // fetch join으로 이미지 정보도 함께 조회
+        Page<Product> result = productRepository.findAll(booleanBuilder, pageable);
+
+        // // 모든 이미지 정보를 가져오기 위해 selectOne 호출
+        // Product fullProduct = productRepository.selectOne(product.getPno())
+        // .orElse(product);
+
+        // entityChangeDTO 에서 처리되지 않는 부분 추가
+        // dto.setDelFlag(product.isDelFlag());
+        // dto.setLikesCount(product.getLikesCount());
+
+        // 이미지 정보 처리
+        // List<String> fileNames = product.getProductImageList().stream()
+        // .map(ProductImage::getFileName)
+        // .collect(Collectors.toList());
+        // dto.setUploadFileNames(fileNames);
+
+        // 이미지가 있는 경우에만 이미지 정보 설정
+        // if (arr[1] != null) {
+        // ProductImage productImage = (ProductImage) arr[1];
+        // dto.setUploadFileNames(List.of(productImage.getFileName()));
+        // } else {
+        // // 이미지가 없는 경우 빈 리스트 설정
+        // dto.setUploadFileNames(new ArrayList<>());
+        // }
+
+        // return dto;
+        // })
+        // .collect(Collectors.toList());
 
         List<ProductDTO> dtoList = result.getContent().stream()
                 .map(product -> {
-                    ProductDTO dto = entityChangeDTO(product);
+                    // 각 상품에 대해 이미지 정보를 포함한 상세 정보 조회
+                    Optional<Product> productWithImages = productRepository.selectOne(product.getPno());
+                    Product fullProduct = productWithImages.orElse(product);
 
-                    // // 모든 이미지 정보를 가져오기 위해 selectOne 호출
-                    // Product fullProduct = productRepository.selectOne(product.getPno())
-                    // .orElse(product);
-
-                    // entityChangeDTO 에서 처리되지 않는 부분 추가
-                    dto.setDelFlag(product.isDelFlag());
-                    dto.setLikesCount(product.getLikesCount());
+                    ProductDTO dto = entityChangeDTO(fullProduct);
 
                     // 이미지 정보 처리
-                    List<String> fileNames = product.getProductImageList().stream()
-                            .map(ProductImage::getFileName)
-                            .collect(Collectors.toList());
-                    dto.setUploadFileNames(fileNames);
-
-                    // 이미지가 있는 경우에만 이미지 정보 설정
-                    // if (arr[1] != null) {
-                    // ProductImage productImage = (ProductImage) arr[1];
-                    // dto.setUploadFileNames(List.of(productImage.getFileName()));
-                    // } else {
-                    // // 이미지가 없는 경우 빈 리스트 설정
-                    // dto.setUploadFileNames(new ArrayList<>());
-                    // }
+                    List<ProductImage> imageList = fullProduct.getProductImageList();
+                    if (imageList != null && !imageList.isEmpty()) {
+                        List<String> fileNames = imageList.stream()
+                                .map(ProductImage::getFileName)
+                                .collect(Collectors.toList());
+                        dto.setUploadFileNames(fileNames);
+                    } else {
+                        dto.setUploadFileNames(new ArrayList<>());
+                    }
 
                     return dto;
                 })
@@ -112,8 +146,8 @@ public class ProductServiceImpl implements ProductService {
 
         return PageResponseDTO.<ProductDTO>withAll()
                 .dtoList(dtoList)
-                .totalCount(result.getTotalElements())
                 .pageRequestDTO(pageRequestDTO)
+                .totalCount(result.getTotalElements())
                 .build();
     }
 
@@ -168,21 +202,37 @@ public class ProductServiceImpl implements ProductService {
     // 등록 --(관리자)
     @Override
     public Long register(ProductDTO productDTO) {
-        Product product = dtoToEntity(productDTO);
-        Product result = productRepository.save(product);
-        return result.getPno();
+        String categoryName = productDTO.getCategoryName();
+        String categoryType = "product";
+
+        // 기존에 있는 카테고리인지 확인
+        Category category = categoryRepository
+                .findByCategoryNameAndCategoryType(categoryName, categoryType);
+
+        if (category == null) {
+            // 카테고리를 새로 등록
+            category = Category.builder()
+                    .categoryName(categoryName)
+                    .categoryType(categoryType)
+                    .build();
+            category = categoryRepository.save(category);
+        }
+
+        Product product = dtoToEntity(productDTO, category);
+        Product savedProduct = productRepository.save(product);
+
+        return savedProduct.getPno();
     }
 
     // ----------------------------------------------------------------
     // 수정 --(관리자)
     @Override
     public void modify(ProductDTO productDTO) {
-
-        // 1.read
+        // 1. 기존 상품 조회
         Optional<Product> result = productRepository.findById(productDTO.getPno());
         Product product = result.orElseThrow();
 
-        // 2.change pname, pdesc, pprice,quantity, catergoryName, updateAt
+        // 2. 기본 정보 업데이트
         product.changeName(productDTO.getPname());
         product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPprice());
@@ -190,17 +240,18 @@ public class ProductServiceImpl implements ProductService {
         product.changeShippingCost(productDTO.getShippingCost());
         product.preUpdate();
 
-        // 3. upload File -- clear first
-        product.clearList(); // clearList()를 이용하여 이미지 리스트를 삭제
+        // 3. 이미지 처리 - 기존 이미지는 유지하고 새 이미지만 추가
+        List<String> newUploadFileNames = productDTO.getUploadFileNames();
 
-        // 4. save
-        List<String> uploadFileNames = productDTO.getUploadFileNames();
-
-        if (uploadFileNames != null && uploadFileNames.size() > 0) {
-            uploadFileNames.stream().forEach(uploadName -> {
-                product.addImageString(uploadName);
+        if (newUploadFileNames != null && !newUploadFileNames.isEmpty()) {
+            // 기존 이미지 리스트 유지하면서 새 이미지 추가
+            newUploadFileNames.forEach(uploadName -> {
+                if (!product.getUploadFileNames().contains(uploadName)) {
+                    product.addImageString(uploadName);
+                }
             });
         }
+
         productRepository.save(product);
     }
 

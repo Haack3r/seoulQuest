@@ -29,17 +29,17 @@ public class CategoryRepositoryTests { // 투어와 상품의 카테고리 데�
     @Autowired
     TourRepository tourRepository;
 
-
-    //1.상품 카테고리 데이터 저장
+    // 1.상품 카테고리 데이터 저장
     @Test
-    public void testProductCategoryDummy(){
+    public void testProductCategoryDummy() {
         String[] productCategories = {
-                "Electronics", "Fashion", "Home Appliances", "Beauty and Personal Care",
-                "Sports Equipment", "Outdoor Gear", "Toys and Games",
-                "Books", "Furniture", "Groceries", "Health Supplements",
-                "Pet Supplies", "Stationery", "Automotive", "Garden Tools"
+                // "Electronics", "Fashion", "Home Appliances", "Beauty and Personal Care",
+                // "Sports Equipment", "Outdoor Gear", "Toys and Games",
+                // "Books", "Furniture", "Groceries", "Health Supplements",
+                // "Pet Supplies", "Stationery", "Automotive", "Garden Tools"
+                "Culture"
         };
-        IntStream.rangeClosed(0,productCategories.length-1).forEach(i->{
+        IntStream.rangeClosed(0, productCategories.length - 1).forEach(i -> {
             Category category = Category.builder()
                     .categoryName(productCategories[i])
                     .categoryType("product")
@@ -48,16 +48,21 @@ public class CategoryRepositoryTests { // 투어와 상품의 카테고리 데�
         });
     }
 
-    //2. 투어 카테고리 데이터 저장
+    // 2. 투어 카테고리 데이터 저장
     @Test
     public void testTourCategoryDummy() {
         String[] tourCategories = {
-                "Palaces & Historical Sites", "Traditional Villages", "Cultural Streets", "Shopping Districts",
-                "Towers & Panoramic Views", "Modern Architecture", "Luxury Experiences", "Multicultural Areas",
-                "Street Markets", "Rivers & Streams", "Art & Creativity", "Museums & Galleries",
-                "Parks & Nature Trails", "Mountains & Hiking", "Temples & Spiritual Sites",
-                "Olympic Sites", "Antique & Vintage Markets", "University Districts", "Presidential & Government Sites",
-                "Seasonal Festivals"
+                // "Palaces & Historical Sites", "Traditional Villages", "Cultural Streets",
+                // "Shopping Districts",
+                // "Towers & Panoramic Views", "Modern Architecture", "Luxury Experiences",
+                // "Multicultural Areas",
+                // "Street Markets", "Rivers & Streams", "Art & Creativity", "Museums &
+                // Galleries",
+                // "Parks & Nature Trails", "Mountains & Hiking", "Temples & Spiritual Sites",
+                // "Olympic Sites", "Antique & Vintage Markets", "University Districts",
+                // "Presidential & Government Sites",
+                // "Seasonal Festivals"
+                "Culture"
         };
 
         IntStream.rangeClosed(0, tourCategories.length - 1).forEach(i -> {
@@ -89,14 +94,14 @@ public class CategoryRepositoryTests { // 투어와 상품의 카테고리 데�
         Pageable pageable = PageRequest.of(0, 10, Sort.by("categoryId").descending());
 
         // 3. 페이징 조회 실행
-        Page<Category> result = categoryRepository.findAllByCategoryType(pageable,"product");
+        Page<Category> result = categoryRepository.findAllByCategoryType(pageable, "product");
 
         // 4. 결과 검증
-        log.info("Total Pages: " + result.getTotalPages());  // 전체 페이지 수
-        log.info("Total Elements: " + result.getTotalElements());  // 전체 요소 수
-        log.info("Current Page Number: " + result.getNumber());  // 현재 페이지 번호
-        log.info("Current Page Size: " + result.getSize());  // 페이지 크기
-        log.info("Has Next Page: " + result.hasNext());  // 다음 페이지 존재 여부
+        log.info("Total Pages: " + result.getTotalPages()); // 전체 페이지 수
+        log.info("Total Elements: " + result.getTotalElements()); // 전체 요소 수
+        log.info("Current Page Number: " + result.getNumber()); // 현재 페이지 번호
+        log.info("Current Page Size: " + result.getSize()); // 페이지 크기
+        log.info("Has Next Page: " + result.hasNext()); // 다음 페이지 존재 여부
 
         // 5. 현재 페이지의 데이터 확인
         result.getContent().forEach(category -> {
@@ -104,8 +109,9 @@ public class CategoryRepositoryTests { // 투어와 상품의 카테고리 데�
         });
 
         // 6. 검증
-//        assertThat(result.getContent()).hasSize(2);  // 데이터 개수 확인
-//        assertThat(result.getContent().get(0).getCategoryType()).isEqualTo("product");  // 타입 확인
+        // assertThat(result.getContent()).hasSize(2); // 데이터 개수 확인
+        // assertThat(result.getContent().get(0).getCategoryType()).isEqualTo("product");
+        // // 타입 확인
 
         // 6. 검증 - 전체 데이터 수 대신 최근 추가된 두 데이터 확인
         assertThat(result.getContent().get(0).getCategoryName()).isEqualTo("222");

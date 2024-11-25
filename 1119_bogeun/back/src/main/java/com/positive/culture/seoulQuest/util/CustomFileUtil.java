@@ -22,20 +22,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Component //자바에서 관리하는 bean객체
+@Component // 자바에서 관리하는 bean객체
 @Log4j2
 @RequiredArgsConstructor
-public class CustomFileUtil { //파일의 입출력을 담당
+public class CustomFileUtil { // 파일의 입출력을 담당
 
     @Value("${com.positive.culture.seoulQuest.path}")
     private String uploadPath;
 
-    //--------------------upload 폴더 생성----------------------------
-    @PostConstruct //CustomFileUtil 객체 생성후에 자동실행하여 upload 폴더가 없으면 새로 만듦
-    public void init(){
+    // --------------------upload 폴더 생성----------------------------
+    @PostConstruct // CustomFileUtil 객체 생성후에 자동실행하여 upload 폴더가 없으면 새로 만듦
+    public void init() {
         File tempFolder = new File(uploadPath);
 
-        if(tempFolder.exists()==false){
+        if (tempFolder.exists() == false) {
             tempFolder.mkdir();
         }
 
@@ -45,11 +45,12 @@ public class CustomFileUtil { //파일의 입출력을 담당
         log.info(uploadPath);
     }
 
-    //----------------------파일 업로드----------------------------(관리자)
+    // ----------------------파일 업로드----------------------------(관리자)
     // 파일 저장 시 이미지 파일인 경우 썸네일 생성
     public List<String> saveFiles(List<MultipartFile> files) throws RuntimeException {
         // 1. 파일이 없거나 파일 리스트의 크기가 0인 경우 빈 리스트 반환
-        if (files == null || files.size() == 0) return List.of();
+        if (files == null || files.size() == 0)
+            return List.of();
 
         // 2. 업로드한 파일 이름들을 담을 리스트를 생성
         List<String> uploadNames = new ArrayList<>();
@@ -93,7 +94,7 @@ public class CustomFileUtil { //파일의 입출력을 담당
         return uploadNames;
     }
 
-    //----------------------특정한 파일 조회----------------------(유저, 관리자)
+    // ----------------------특정한 파일 조회----------------------(유저, 관리자)
     // 본문 (body)의 데이터 타입을 Resource로 지정하여 ResponseEntity로 반환
     public ResponseEntity<Resource> getFile(String fileName) {
 
@@ -140,10 +141,11 @@ public class CustomFileUtil { //파일의 입출력을 담당
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
-    //----------------------파일 삭제----------------------(관리자)
+    // ----------------------파일 삭제----------------------(관리자)
     public void deleteFiles(List<String> fileNames) {
         // 파일 이름 목록이 비어 있거나 null이면 메서드를 종료
-        if(fileNames == null || fileNames.size() == 0) return;
+        if (fileNames == null || fileNames.size() == 0)
+            return;
 
         // 파일 이름 목록에 포함된 모든 파일에 대해 삭제 작업을 수행
         fileNames.forEach(fileName -> {
@@ -158,7 +160,7 @@ public class CustomFileUtil { //파일의 입출력을 담당
                 Files.deleteIfExists(filePath);
                 // 썸네일 파일이 존재하면 삭제
                 Files.deleteIfExists(thumbnailPath);
-            } catch(IOException e) {
+            } catch (IOException e) {
                 // 파일 삭제 중 오류가 발생하면 RuntimeException 발생
                 throw new RuntimeException(e.getMessage());
             }

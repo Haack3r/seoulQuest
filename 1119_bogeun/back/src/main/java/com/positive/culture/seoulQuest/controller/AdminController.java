@@ -45,21 +45,7 @@ public class AdminController {
     // return Map.of("role", "ADMIN", "success", true);
     // }
 
-    // 이미지 업로드 처리 (상품 등록/수정 시)
-    private List<String> handleImageUpload(List<MultipartFile> files) {
-        if (files == null || files.isEmpty()) {
-            return new ArrayList<>();
-        }
-        try {
-            List<String> uploadFileNames = fileUtil.saveFiles(files);
-            log.info("Uploaded files: " + uploadFileNames);
-            return uploadFileNames;
-        } catch (Exception e) {
-            log.error("File upload error: ", e);
-            throw new RuntimeException("파일 업로드 중 오류가 발생했습니다", e);
-        }
-    }
-
+    // 어드민 권한 체크
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/check")
     public ResponseEntity<Map<String, Object>> checkAdmin() {
@@ -68,8 +54,8 @@ public class AdminController {
                 "status", "authorized"));
     }
 
-    // admin product list 불러오기
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // 전체 상품 조회
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/product")
     public PageResponseDTO<ProductDTO> list(
             @RequestParam(required = false) String keyword,
@@ -79,25 +65,15 @@ public class AdminController {
         return productService.getAdminProductList(pageRequestDTO);
     }
 
-    // 이미지 파일 로드
-    // @GetMapping("/product/{fileName}")
-    // public ResponseEntity<Resource> viewFile(@PathVariable String fileName) {
-    // return fileUtil.getFile(fileName);
-    // }
-
-    // @GetMapping("/random/view/**")
-    // public ResponseEntity<Resource> viewFileGet(HttpServletRequest request) {
-    // try {
-    // String fileName = request.getRequestURI().split("/view/")[1];
-    // log.info("요청된 URI: " + request.getRequestURI());
-    // log.info("추출된 파일명: " + fileName);
-
-    // ResponseEntity<Resource> response = fileUtil.getFile(fileName);
-    // return response;
-    // } catch (Exception e) {
-    // log.error("이미지 로딩 중 에러 발생: ", e);
-    // return ResponseEntity.notFound().build();
-    // }
+    // admin product list 불러오기
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // @GetMapping("/admin/product")
+    // public PageResponseDTO<ProductDTO> list(
+    // @RequestParam(required = false) String keyword,
+    // PageRequestDTO pageRequestDTO) {
+    // log.info("어드민 products list with keyword" + keyword);
+    // pageRequestDTO.setKeyword(keyword);
+    // return productService.getAdminProductList(pageRequestDTO);
     // }
 
     @GetMapping("/admin/product/{pno}")
@@ -105,19 +81,21 @@ public class AdminController {
         return productService.get(pno);
     }
 
+    // 상품 등록
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/admin/product")
     @Transactional
     public Map<String, Long> register(@ModelAttribute ProductDTO productDTO) {
-        log.info("register: " + productDTO);
+        log.info("register : " + productDTO);
 
         try {
-
             // 이미지 파일 처리
-            List<String> uploadFileNames = handleImageUpload(productDTO.getFiles());
+            List<MultipartFile> files = productDTO.getFiles();
+            List<String> uploadFileNames = handleImageUpload(files);
+            productDTO.setUploadFileNames(uploadFileNames);
 
             // 카테고리 조회 및 생성 처리
-            Category selectedCategory = categoryRepository
+            Category category = categoryRepository
                     .findAllCategoriesList(productDTO.getCategoryName(), "product")
                     .orElseGet(() -> {
                         Category newCategory = Category.builder()
@@ -147,19 +125,8 @@ public class AdminController {
             // selectedCategory = categoryRepository.findAll().get(0);
             // }
 
-            // DTO를 엔티티로 변환
-            Product product = Product.builder()
-                    .pname(productDTO.getPname())
-                    .pdesc(productDTO.getPdesc())
-                    .pprice(productDTO.getPprice())
-                    .pqty(productDTO.getPqty())
-                    .shippingCost(productDTO.getShippingCost())
-                    .category(selectedCategory)
-                    .delFlag(false)
-                    .build();
-
             // 이미지 파일명 설정
-            uploadFileNames.forEach(product::addImageString);
+            // uploadFileNames.forEach(productDTO::addImageString);
 
             // // 이미지 파일명들 설정
             // if (productDTO.getUploadFileNames() != null) {
@@ -167,56 +134,144 @@ public class AdminController {
             // }
 
             // 저장
-            Product savedProduct = productRepository.save(product);
+            // Product savedProduct = productRepository.save(productDTO.toEntity());
 
-            return Map.of("RESULT", savedProduct.getPno());
+            // 카테고리 설정
+            productDTO.setCategoryName(category.getCategoryName());
+            productDTO.setCategoryType("product");
+
+            Long pno = productService.register(productDTO);
+
+            return Map.of("RESULT", pno);
+
         } catch (Exception e) {
             log.error("상품 등록 중 에러 : " + e);
             throw e;
         }
     }
 
-    // 이미지 조회 API 추가
-    @GetMapping("/admin/product/image/{fileName}")
-    public ResponseEntity<Resource> viewFile(@PathVariable String fileName) {
-        try {
-            return fileUtil.getFile(fileName);
-        } catch (Exception e) {
-            log.error("이미지 조회 중 에러: ", e);
-            return ResponseEntity.notFound().build();
-        }
-    }
-
+    // 상품 수정
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/admin/product/{pno}")
     @Transactional
-    public Map<String, Long> modify(
-            @PathVariable("pno") Long pno,
-            @ModelAttribute ProductDTO productDTO) {
-        productDTO.setPno(pno);
+    public Map<String, String> modify(@PathVariable("pno") Long pno, @ModelAttribute ProductDTO productDTO) {
+        productDTO.setPno(pno); // 값의 일관성을 보장하기 위해 pno를 다시 저장
+        ProductDTO oldProductDTO = productService.get(pno); // pno로 기존 정보를 가져와서 저장
 
+        // 기존의 파일들( DB에 존재하는 파일들 - 수정과정에서 삭제되었을수 있음)
+        List<String> oldFileNames = oldProductDTO.getUploadFileNames();
+
+        // 새로 업로드 해야하는 파일들
         List<MultipartFile> files = productDTO.getFiles();
-        if (files != null && !files.isEmpty()) {
-            List<String> uploadFileNames = fileUtil.saveFiles(files);
-            productDTO.setUploadFileNames(uploadFileNames);
+
+        // 새로 업로드 되어서 만들어진 파일 이름들
+        List<String> currentUploadFileNames = fileUtil.saveFiles(files);
+
+        // 화면에서 변화없이 계속 유지된 파일들
+        List<String> uploadedFileNames = productDTO.getUploadFileNames();
+
+        // 유지되는 파일들 + 새로 업로드 된 파일 이름들이 저장해야하는 파일 목록이 됨
+        if (currentUploadFileNames != null && currentUploadFileNames.size() > 0) {
+            uploadedFileNames.addAll(currentUploadFileNames);
         }
 
+        // 기존 이미지 유지 처리
+        productDTO.setUploadFileNames(uploadedFileNames);
+
+        // 수정작업
         productService.modify(productDTO);
-        return Map.of("RESULT", pno);
+
+        // 지워져야하는 목록찾기
+        if (oldFileNames != null && oldFileNames.size() > 0) {
+            List<String> removeFiles = oldFileNames
+                    .stream()
+                    .filter(fileName -> uploadedFileNames.indexOf(fileName) == -1)
+                    .collect(Collectors.toList());
+
+            // 실제 파일 삭제
+            fileUtil.deleteFiles(removeFiles);
+        }
+        return Map.of("RESULT", "SUCCESS");
     }
 
+    // 이미지 업로드 처리 (상품 등록/수정 시)
+    private List<String> handleImageUpload(List<MultipartFile> files) {
+        if (files == null || files.isEmpty()) {
+            return new ArrayList<>();
+        }
+        try {
+            List<String> uploadFileNames = fileUtil.saveFiles(files);
+            log.info("Uploaded files: " + uploadFileNames);
+            return uploadFileNames;
+        } catch (Exception e) {
+            log.error("File upload error: ", e);
+            throw new RuntimeException("파일 업로드 중 오류가 발생했습니다", e);
+        }
+    }
+
+    // 상품 삭제
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/admin/product/{pno}")
     @Transactional
     public Map<String, Long> remove(@PathVariable("pno") Long pno) {
         log.info("상품 삭제 (pno) : " + pno);
-        // soft delete 처리
+
+        // 삭제 해야할 파일들 알아내기
+        List<String> oldFileNames = productService.get(pno).getUploadFileNames();
         try {
-            productRepository.updateToDelete(pno, true);
+            productService.remove(pno);
+            fileUtil.deleteFiles(oldFileNames);
+
             return Map.of("RESULT", pno);
         } catch (Exception e) {
             log.error("삭제 중 에러 : " + e);
             throw e;
         }
     }
+
+    // 이미지 파일 로드
+    @GetMapping("/product/image/{fileName}")
+    public ResponseEntity<Resource> viewFile(@PathVariable String fileName) {
+        try {
+            return fileUtil.getFile(fileName);
+        } catch (Exception e) {
+            log.error("이미지 로딩 중 에러 발생: ", e);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // @GetMapping("/admin/product/image/**")
+    // public ResponseEntity<Resource> viewFileGet(HttpServletRequest request) {
+    // String fileName = request.getRequestURI().split("/admin/product/image/")[1];
+    // // Extract everything after
+    // // "/image/"
+    // System.out.println("1000) fileName: " + fileName);
+    // return fileUtil.getFile(fileName);
+    // }
+
+    // @GetMapping("/random/view/**")
+    // public ResponseEntity<Resource> viewFileGet(HttpServletRequest request) {
+    // try {
+    // String fileName = request.getRequestURI().split("/view/")[1];
+    // log.info("요청된 URI: " + request.getRequestURI());
+    // log.info("추출된 파일명: " + fileName);
+
+    // ResponseEntity<Resource> response = fileUtil.getFile(fileName);
+    // return response;
+    // } catch (Exception e) {
+    // log.error("이미지 로딩 중 에러 발생: ", e);
+    // return ResponseEntity.notFound().build();
+    // }
+    // }
+
+    // 이미지 조회 API 추가
+    // @GetMapping("/product/image/{fileName}")
+    // public ResponseEntity<Resource> viewFile(@PathVariable String fileName) {
+    // try {
+    // return fileUtil.getFile(fileName);
+    // } catch (Exception e) {
+    // log.error("이미지 조회 중 에러: ", e);
+    // return ResponseEntity.notFound().build();
+    // }
+    // }
 }

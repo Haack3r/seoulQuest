@@ -133,10 +133,10 @@ export const fetchOrders = async () => {
 //     return res.data
 // }
 
-export const adminProductList = async ({ keyword = "", type = "t" }) => {
+export const adminProductList = async ({ page, size, keyword = "", type = "t" }) => {
     try {
         const response = await jwtAxios.get(`${host}/admin/product`, {
-            params: { keyword, type }
+            params: { page, size, keyword, type }
         });
 
         // 응답 데이터 검증
@@ -181,10 +181,30 @@ export const getProduct = async (pno) => {
     return res.data
 }
 
-export const getProductImage = async (fileName) => {
-    const res = await jwtAxios.get(`${host}/admin/product/image/${fileName}`)
-    return res.data
-}
+// export const getProductImage = async (fileName) => {
+//     const res = await jwtAxios.get(`${host}/admin/product/image/${fileName}`)
+//     return res.data
+// }
+
+// 이미지 URL을 생성하는 함수 추가
+export const getImageUrl = (fileName) => {
+    if (!fileName) return "/default.jpeg";
+
+    // 쿠키에서 토큰 가져오기
+    const memberInfo = getCookie("member");
+    const parsedMemberInfo = typeof memberInfo === 'string'
+        ? JSON.parse(memberInfo)
+        : memberInfo;
+    const token = parsedMemberInfo?.token;
+
+    // URL에 토큰을 Authorization 헤더로 추가
+    return {
+        url: `${host}/product/image/${fileName}`,
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    };
+};
 
 export const addProduct = async (formData) => {
     try {
@@ -242,12 +262,3 @@ export const fetchReservations = async () => {
         throw error
     }
 }
-
-// 이미지 URL을 생성하는 함수 추가
-export const getImageUrl = (fileName) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!fileName) return "/logo192.jpg";
-
-    // URL에 토큰을 쿼리 파라미터로 추가
-    return `${host}/random/view/${fileName}?token=${accessToken}`;
-};

@@ -8,8 +8,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
+
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,7 +38,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         log.info("check uri....." + path);
 
-        // // api/member 경로의 호출은 체크 안함
+        // api/member 경로의 호출은 체크 안함
+        // startswith 로 체크하는 이유는 패턴 매칭 때문
+        // startswith 은 문자열 매칭이므로 "/**" 와 같은 패턴 매칭을 지원하지 않음
         if (path.startsWith("/api/member/"))
             return true;
 
@@ -45,9 +50,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/api/products/{pno}"))
             return true; // Do not apply this filter for these paths
 
-        if (path.startsWith("/api/products/view/**"))
+        if (path.startsWith("/api/products/view/"))
             return true;
-        if (path.startsWith("/api/user/products/view/**"))
+        if (path.startsWith("/api/user/products/view/"))
             return true;
         if (path.startsWith("/api/products/{pno}"))
             return true;
@@ -55,7 +60,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/api/tours/"))
             return true; // Do not apply this filter for these paths
 
-        if (path.startsWith("/api/tours/view/**"))
+        if (path.startsWith("/api/tours/view/"))
             return true;
         if (path.startsWith("/api/tours/{pno}"))
             return true;
@@ -67,6 +72,15 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
 
         if (path.startsWith("/api/user/tours/by-address"))
+            return true;
+
+        if (path.startsWith("/api/product/image/"))
+            return true;
+
+        if (path.startsWith("/api/admin/product/image/"))
+            return true;
+
+        if (path.startsWith("/upload/"))
             return true;
 
         // if (path.startsWith("/api/cart/**")) return true;
@@ -187,17 +201,41 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
+        log.info("asdsad");
         log.info("----- JWTCheckFilter -----");
+        log.info(request);
+        String path = request.getRequestURI();
+
+        log.info("Path: " + path);
+
+        if (path.startsWith("/api/product/image/") ||
+                path.startsWith("/api/admin/product/image/") ||
+                path.startsWith("/product/image/") ||
+                path.startsWith("/upload/")) {
+
+            // 인증되지 않은 익명 사용자로 설정
+            SecurityContextHolder.getContext().setAuthentication(
+                    new AnonymousAuthenticationToken(
+                            "anonymous",
+                            "anonymous",
+                            AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS")));
+
+            filterChain.doFilter(request, response);
+            log.info("1111111111111111111111111111111111111111111111111111111111111111111111");
+            return;
+        }
+        log.info("Anonymous authentication set");
+
+        String authHeaderStr = request.getHeader("Authorization");
+        log.info("Auth header: " + authHeaderStr);
 
         // multipart 요청인 경우 특별 처리
         if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
             log.info("Handling multipart request");
         }
 
-        String authHeaderStr = request.getHeader("Authorization");
-        log.info("Auth header: " + authHeaderStr);
-
         if (authHeaderStr == null || !authHeaderStr.startsWith("Bearer ")) {
+            // 인증 실패 시 401 상태 코드 반환
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

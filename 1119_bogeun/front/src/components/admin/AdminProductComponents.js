@@ -4,23 +4,12 @@ import { addProduct, adminProductList, deleteProduct, getImageUrl, getProduct, m
 import { layoutStyles, inputStyles, Button } from './ui/Styles';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { ProductForm } from './ui/ProductForm';
-import { ProductCard } from './ui/ProductCard';
-import { getCookie } from '../../util/cookieUtil';
+import { initState } from './ui/ProducInitState';
 
 const host = `http://localhost:8080/api`
 
-const initState = {
-    pno: 0,
-    pname: '',
-    categoryName: '',
-    pdesc: '',
-    pprice: 0,
-    pqty: 0,
-    uploadFileNames: []
-}
-
 const AdminProductComponents = () => {
-    const [product, setProduct] = useState(initState);
+    const [serverData, setServerData] = useState(initState);
     // const [uploadFileNames, setUploadFileNames] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [showAddForm, setShowAddForm] = useState(false);
@@ -36,27 +25,51 @@ const AdminProductComponents = () => {
 
     const { exceptionHandle } = useCustomLogin();
 
+    const [page, setPage] = useState(1);
+    const [size] = useState(9);
+
     const fetchProductList = () => {
+        console.log("상품 목록 요청:", {
+            페이지: page,
+            사이즈: size,
+            검색어: keyword,
+            타입: type
+        });
+
         setFetching(true);
-        adminProductList({ keyword, type })
-            .then((data) => {
-                console.log("Fetched data:", data); // Log the data to inspect its structure
-                if (data && Array.isArray(data.dtoList)) {
-                    setProduct(data);
-                } else {
-                    console.error("Unexpected data structure:", data);
-                    setProduct(initState); // Fallback to initial state if data is incorrect
-                }
-                setFetching(false);
+        adminProductList({ page, size, keyword, type })
+            .then(data => {
+                setServerData({
+                    ...data,
+                    dtoList: data.dtoList.map(product => ({
+                        ...product,
+                        uploadFileNames: product.uploadFileNames || []
+                    }))
+                });
             })
-            .catch((err) => {
-                console.error("Error fetching data:", err);
+            .catch(err => {
+                console.error("데이터 조회 실패:", err);
                 exceptionHandle(err);
-                setFetching(false); // Reset fetching state on error
+            })
+            .finally(() => {
+                setFetching(false);
             });
     };
 
-    
+    // 페이지 변경 핸들러
+    const handlePageChange = (newPage) => {
+        console.log("페이지 변경 시도:", {
+            현재페이지: page,
+            새페이지: newPage,
+            전체페이지: serverData.totalPage
+        });
+
+        try {
+            setPage(newPage);
+        } catch (error) {
+            console.error("페이지 변경 중 오류 발생:", error);
+        }
+    };
 
     // 제품 목록 조회
     // const fetchProductList = () => {
@@ -122,7 +135,6 @@ const AdminProductComponents = () => {
                 setShowAddForm(false);
                 setIsEditing(false);
                 setSelectedPno(null);
-                setSelectedProduct(null);
             })
             .catch(error => {
                 console.error("Modify or fetch error:", error);
@@ -132,21 +144,29 @@ const AdminProductComponents = () => {
     };
 
     // 제품 수정 버튼 핸들러
-    const handleEdit = (product) => {
-        setShowAddForm(true);
-        setIsEditing(true);
-        setSelectedPno(product.pno);
-        setSelectedProduct(product);
-    }
+    const handleEdit = (pno) => {
+        getProduct(pno)
+            .then(data => {
+                setShowAddForm(true);
+                setIsEditing(true);
+                setSelectedPno(pno);
+                setSelectedProduct(data);
+            })
+            .catch(error => {
+                console.error("Get product error:", error);
+                exceptionHandle(error);
+            });
+    };
 
     // 제품 삭제
-    const handleDelete = async (pno) => {
+    const handleDelete = (pno) => {
         if (!window.confirm('정말 삭제하시겠습니까?')) return;
         try {
             setFetching(true);
-            await deleteProduct(pno)
+            deleteProduct(pno)
             alert("삭제되었습니다")
-            fetchProductList();
+            handleClose();
+            window.location.reload();
         } catch (error) {
             console.error("Delete error:", error);
             if (error.response?.status === 401) {
@@ -162,8 +182,12 @@ const AdminProductComponents = () => {
     const handleGetProduct = (pno) => {
         getProduct(pno)
             .then(data => {
-                setSelectedProduct(data)
-                setShowProductDetail(true)
+                setSelectedProduct({
+                    ...data,
+                    uploadFileNames: data.uploadFileNames || []
+                });
+                setShowProductDetail(true);
+                console.log("Product data:", data);
             })
             .catch(error => {
                 console.error("Get product error:", error);
@@ -207,8 +231,39 @@ const AdminProductComponents = () => {
 
     // 초기 로딩 및 검색
     useEffect(() => {
+        console.log("useEffect 실행:", {
+            페이지: page,
+            사이즈: size,
+            검색어: keyword,
+            타입: type
+        });
         fetchProductList();
-    }, [keyword, type]);
+    }, [page, size, keyword, type]);
+
+    // img 태그 대신 useEffect로 이미지 로드
+    useEffect(() => {
+        if (selectedProduct &&
+            selectedProduct.uploadFileNames &&
+            selectedProduct.uploadFileNames.length > 0) {
+
+            const imageData = getImageUrl(selectedProduct.uploadFileNames[0]);
+
+            fetch(imageData.url, {
+                headers: imageData.headers
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    const objectUrl = URL.createObjectURL(blob);
+                    const imgElement = document.querySelector(`#product-image-${selectedProduct.pno}`);
+                    if (imgElement) {
+                        imgElement.src = objectUrl;
+                    }
+                })
+                .catch(error => {
+                    console.error('이미지 로드 실패:', error);
+                });
+        }
+    }, [selectedProduct]);
 
     return (
         <div style={layoutStyles.container}>
@@ -259,52 +314,64 @@ const AdminProductComponents = () => {
                 style={{ position: 'relative', zIndex: 1 }}>
                 <div
                     className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {product.dtoList && product.dtoList.map((product) => {
-                        // const product = Array.isArray(data) ? data[0] : data;
-                        return (
-                            <div key={product.pno}
-                                onClick={() => handleGetProduct(product.pno)}
-                                className="overflow-hidden transition-all duration-300 hover:shadow-xl border bg-white rounded-lg group">
-                                <div
-                                    className="relative overflow-hidden aspect-square group">
-                                    {product.uploadFileNames?.[0] ? (
+                    {serverData.dtoList && serverData.dtoList.map((product) => (
+                        <div key={product.pno} className="bg-white rounded-lg shadow-md p-4">
+                            <div className="relative">
+                                <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg">
+                                    {product.uploadFileNames && product.uploadFileNames.length > 0 ? (
                                         <img
-                                            src={`${host}/admin/product/image/${product.uploadFileNames[0]}`}
+                                            src={getImageUrl(product.uploadFileNames[0]).url}
                                             alt={product.pname}
-                                            className="object-cover w-full h-full transition-all duration-300 group-hover:scale-110 cursor-pointer"
+                                            className="h-48 w-full object-cover"
+                                            onClick={() => handleGetProduct(product.pno)}
                                         />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                                            <p className="text-gray-400">이미지 없음</p>
+                                        <div
+                                            className="h-48 w-full bg-gray-200 flex items-center justify-center"
+                                            onClick={() => handleGetProduct(product.pno)}
+                                        >
+                                            <span className="text-gray-500">
+                                                이미지 없음
+                                            </span>
                                         </div>
                                     )}
-
-                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity
-                                duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer">
-                                        <div className="text-center p-4">
-                                            <h3 className="text-lg font-semibold text-white mb-2">{product.pname}</h3>
-                                            <p className="text-rose-500 mb-4">₩{product.pprice.toLocaleString()}</p>
-                                            {/* <div className="flex gap-2 justify-center">
-                                                <Button onClick={() => handleEdit(product, product.uploadFileNames, product.pno)}
-                                                    className="bg-white text-gray-900 hover:bg-gray-100">
-                                                    수정
-                                                </Button>
-                                                <Button onClick={() => handleDelete(product.pno)}
-                                                    className="bg-red-500 text-white hover:bg-red-600">
-                                                    삭제
-                                                </Button>
-                                            </div> */}
-                                        </div>
-                                    </div>
                                 </div>
-                                <div className="p-4">
-                                    <h3 className="font-semibold">{product.pname}</h3>
-                                    <p className="text-gray-600">{product.categoryName}</p>
-                                    <p className="text-rose-500 font-medium">₩{product.pprice.toLocaleString()}</p>
+                                <div className="mt-4">
+                                    <h3 className="text-lg font-semibold">{product.pname}</h3>
+                                    <p className="text-gray-600">{product.pprice?.toLocaleString()}원</p>
                                 </div>
                             </div>
-                        );
-                    })}
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mt-8 flex justify-center gap-2">
+                    {serverData.prev && (
+                        <Button
+                            onClick={() => {
+                                console.log("이전 페이지 클릭:", serverData.prevPage);
+                                handlePageChange(serverData.prevPage);
+                            }}
+                        >
+                            이전
+                        </Button>
+                    )}
+
+                    {serverData.pageNumList?.map(pageNum => (
+                        <Button
+                            key={pageNum}
+                            onClick={() => handlePageChange(pageNum)}
+                            className={pageNum === serverData.current ? 'bg-rose-500' : ''}
+                        >
+                            {pageNum}
+                        </Button>
+                    ))}
+
+                    {serverData.next && (
+                        <Button onClick={() => handlePageChange(serverData.nextPage)}>
+                            다음
+                        </Button>
+                    )}
                 </div>
 
                 {showProductDetail && selectedProduct && (
@@ -329,9 +396,10 @@ const AdminProductComponents = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* 이미지 섹션 */}
                                 <div className="aspect-square rounded-lg overflow-hidden">
-                                    {selectedProduct.uploadFileNames?.[0] ? (
+                                    {selectedProduct && selectedProduct.uploadFileNames && selectedProduct.uploadFileNames?.[0] ? (
                                         <img
-                                            src={`${host}/random/view/${selectedProduct.uploadFileNames[0]}`}
+                                            id={`product-image-${selectedProduct.pno}`}
+                                            src={getImageUrl(selectedProduct.uploadFileNames[0]).url}
                                             alt={selectedProduct.pname}
                                             className="w-full h-full object-cover"
                                         />
@@ -341,6 +409,22 @@ const AdminProductComponents = () => {
                                         </div>
                                     )}
                                 </div>
+                                {/* 추가 이미지들 - 이미지가 있을 때만 표시 */}
+                                {selectedProduct.uploadFileNames && selectedProduct.uploadFileNames.length > 1 && (
+                                    <div>
+                                        <div className="grid grid-cols-4 gap-2">
+                                            {selectedProduct.uploadFileNames.slice(1).map((fileName, index) => (
+                                                <div key={index} className="aspect-square rounded-lg overflow-hidden">
+                                                    <img
+                                                        src={getImageUrl(fileName).url}
+                                                        alt={`${selectedProduct.pname} ${index + 2}`}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* 상세 정보 섹션 */}
                                 <div className="space-y-4">
@@ -366,28 +450,11 @@ const AdminProductComponents = () => {
                                         <p className="text-gray-600 whitespace-pre-wrap">{selectedProduct.pdesc}</p>
                                     </div>
 
-                                    {/* 추가 이미지들 - 이미지가 있을 때만 표시 */}
-                                    {selectedProduct.uploadFileNames && selectedProduct.uploadFileNames.length > 1 && (
-                                        <div>
-                                            <h3 className="text-lg font-semibold mb-2">추가 이미지</h3>
-                                            <div className="grid grid-cols-4 gap-2">
-                                                {selectedProduct.uploadFileNames.slice(1).map((fileName, index) => (
-                                                    <div key={index} className="aspect-square rounded-lg overflow-hidden">
-                                                        <img
-                                                            src={`${host}/admin/product/image/${fileName}`}
-                                                            alt={`${selectedProduct.pname} ${index + 2}`}
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
 
                                     <div className="flex gap-2 pt-4">
                                         <Button
                                             onClick={() => {
-                                                handleEdit(selectedProduct);
+                                                handleEdit(selectedProduct.pno);
                                                 setShowProductDetail(false);
                                             }}
                                             className="flex-1"
@@ -415,9 +482,10 @@ const AdminProductComponents = () => {
                     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
                         <ProductForm
                             isEditing={isEditing}
-                            initialData={isEditing ? selectedProduct : product}
+                            initialData={isEditing ? selectedProduct : serverData}
                             onSubmit={handleFormSubmit}
                             onClose={handleClose}
+                            selectedPno={selectedPno}
                         />
                     </div>
                 )}

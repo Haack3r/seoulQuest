@@ -81,12 +81,15 @@ public class CustomSecurityConfig {
                         "/api/user/tours/by-address",
                         "/api/products/**",
                         "/api/tours/**",
-                        "/api/random/view/**",
-                        "/api/admin/product/view/**",
-                        "/api/admin/tour/view/**")
+                        "/upload/**",
+                        "/api/admin/product/image/**",
+                        "/api/admin/tour/image/**",
+                        "/api/product/image/**",
+                        "/api/tour/image/**")
                 .permitAll()// Allow unauthenticated access
                 .requestMatchers(
                         HttpMethod.OPTIONS,
+                        "/upload/**",
                         "/api/member/**",
                         "/api/tours/**",
                         "/api/products/**",
@@ -95,15 +98,15 @@ public class CustomSecurityConfig {
                         "/api/user/tours/mapData",
                         "/api/user/tours/by-address")
                 .permitAll()
-//                .requestMatchers(HttpMethod.GET, "/api/admin/product/**").hasRole("ADMIN")
-//                .requestMatchers(HttpMethod.POST, "/api/admin/product/**").hasRole("ADMIN")
-//                .requestMatchers(HttpMethod.PUT, "/api/admin/product/**").hasRole("ADMIN")
-//                .requestMatchers(HttpMethod.DELETE, "/api/admin/product/**").hasRole("ADMIN")
-//                .requestMatchers(HttpMethod.HEAD, "/api/admin/product/**").hasRole("ADMIN")
-//                .requestMatchers(HttpMethod.OPTIONS,
-//                        "/api/admin/product/**")
-//                .hasRole("ADMIN")
-                 .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
+                // .requestMatchers(HttpMethod.GET, "/api/admin/product/**").hasRole("ADMIN")
+                // .requestMatchers(HttpMethod.POST, "/api/admin/product/**").hasRole("ADMIN")
+                // .requestMatchers(HttpMethod.PUT, "/api/admin/product/**").hasRole("ADMIN")
+                // .requestMatchers(HttpMethod.DELETE, "/api/admin/product/**").hasRole("ADMIN")
+                // .requestMatchers(HttpMethod.HEAD, "/api/admin/product/**").hasRole("ADMIN")
+                // .requestMatchers(HttpMethod.OPTIONS,
+                // "/api/admin/product/**")
+                // .hasRole("ADMIN")
+                .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated());
 
         http.formLogin(config -> {
