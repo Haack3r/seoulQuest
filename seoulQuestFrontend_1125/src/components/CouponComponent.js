@@ -9,6 +9,9 @@ import {
 const CouponComponent = () => {
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [myCoupons, setMyCoupons] = useState([]);
+  const { loginState } = useCustomLogin();
+
+  loginState.email
   
   const user = JSON.parse(localStorage.getItem("user"));
   const email = user?.email;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { API_SERVER_HOST, deleteProductOne, putProductOne } from '../../api/reviewApi';
+import { API_SERVER_HOST, deleteProductOne, putProductOne ,getProductItemReview} from '../../api/reviewApi';
 import useCustomMove from '../../hooks/useCustomMove';
 import { StarIcon, ShoppingCartIcon, HeartIcon } from 'lucide-react';
 import { getOne } from '../../api/productsApi';

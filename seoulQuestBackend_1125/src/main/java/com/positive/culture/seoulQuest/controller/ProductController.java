@@ -42,6 +42,8 @@ public class ProductController {
     private final ProductOrderService productOrderService;
     private final ProductPaymentService productPaymentService;
     private IamportClient iamportClient;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Value("${iamport.api_key}")
     private String apiKey;
@@ -57,14 +59,6 @@ public class ProductController {
     }
 
     //-----------------------------------------------------------
-
-    //전체 목록 조회 - test 성공 (유저 , 관리자)
-    @GetMapping("/list")
-    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO){
-        log.info("list.........." + pageRequestDTO);
-        return productService.getList(pageRequestDTO);
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @GetMapping("/categories")
     public ResponseEntity<List<String>> getProductCategories() {
