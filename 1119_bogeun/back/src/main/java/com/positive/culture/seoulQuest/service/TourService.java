@@ -4,29 +4,35 @@ import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.dto.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
 public interface TourService {
 
-    //전체 조회
+    // 전체 조회
     PageResponseDTO<TourDTO> getList(PageRequestDTO pageRequestDTO);
 
-    //하나 조회
+    // 전체 조회 ( 관리자 용 )
+    PageResponseDTO<TourDTO> getAdminTourList(PageRequestDTO pageRequestDTO);
+
+    // 하나 조회
     TourDTO get(Long tno);
 
-    //등록
+    // 등록
     Long register(TourDTO tourDTO);
 
-    //수정
+    // 수정
     void modify(TourDTO tourDTO);
 
-    //삭제
+    // 삭제
     void remove(Long tno);
 
+    // 이미지 삭제
+    void removeTourImage(Long tno, String fileName);
 
-    //등록시 카테고리 부분 추가 수정 필요함
-    default  //DTO를 엔티티로 변환해주는 메서드 -> register에 사용
+    // 등록시 카테고리 부분 추가 수정 필요함
+    default // DTO를 엔티티로 변환해주는 메서드 -> register에 사용
     public Tour dtoToEntity(TourDTO tourDTO) {
         Tour tour = Tour.builder()
                 .tno(tourDTO.getTno())
@@ -41,7 +47,7 @@ public interface TourService {
                 .tDate(tourDTO.getTDate())
                 .build();
 
-        //업로드 처리가 끝난 파일들의 이름 리스트
+        // 업로드 처리가 끝난 파일들의 이름 리스트
         List<String> uploadFileNames = tourDTO.getUploadFileNames();
 
         if (uploadFileNames == null) {
@@ -55,7 +61,7 @@ public interface TourService {
         return tour;
     }
 
-    default   //엔티티를 DTO로 변환해주는 메서드  -> getList와 get에 사용
+    default // 엔티티를 DTO로 변환해주는 메서드 -> getList와 get에 사용
     public TourDTO entityChangeDTO(Tour tour) {
         TourDTO tourDTO = TourDTO.builder()
                 .tno(tour.getTno())
@@ -70,6 +76,14 @@ public interface TourService {
                 .createAt(tour.getCreateAt())
                 .updateAt(tour.getUpdateAt())
                 .build();
+
+        // 이미지 정보 처리 - null 체크 추가 필요
+        if (tour.getUploadFileNames() != null && !tour.getUploadFileNames().isEmpty()) {
+            tourDTO.setUploadFileNames(tour.getUploadFileNames());
+        } else {
+            tourDTO.setUploadFileNames(new ArrayList<>()); // 빈 배열로 초기화
+        }
+
         return tourDTO;
     }
 
@@ -77,6 +91,5 @@ public interface TourService {
     List<TourDTO> getToursByLocation(String location);
 
     List<TourDTO> getToursByAddress(String taddress);
-
 
 }

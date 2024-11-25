@@ -74,13 +74,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/api/user/tours/by-address"))
             return true;
 
-        if (path.startsWith("/api/product/image/"))
+        if ((path.startsWith("/api/product/image/")))
             return true;
 
-        if (path.startsWith("/api/admin/product/image/"))
+        if ((path.startsWith("/api/admin/product/image/")))
             return true;
 
-        if (path.startsWith("/upload/"))
+        if ((path.startsWith("/upload/")))
             return true;
 
         // if (path.startsWith("/api/cart/**")) return true;
@@ -208,10 +208,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         log.info("Path: " + path);
 
-        if (path.startsWith("/api/product/image/") ||
-                path.startsWith("/api/admin/product/image/") ||
-                path.startsWith("/product/image/") ||
-                path.startsWith("/upload/")) {
+        if ((path.startsWith("/api/product/image/"))||
+                (path.startsWith("/api/tour/image/"))||
+                (path.startsWith("/upload/"))) {
 
             // 인증되지 않은 익명 사용자로 설정
             SecurityContextHolder.getContext().setAuthentication(

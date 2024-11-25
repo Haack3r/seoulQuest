@@ -9,6 +9,7 @@ import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
+import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final CustomFileUtil fileUtil;
 
     // 전체 조회----(유저, 관리자)
     @Override
@@ -45,6 +47,8 @@ public class ProductServiceImpl implements ProductService {
 
         // Create search filter using BooleanBuilder
         BooleanBuilder booleanBuilder = getSearch(pageRequestDTO);
+        QProduct qProduct = QProduct.product;
+        booleanBuilder.and(qProduct.delFlag.eq(false));
 
         // 기본 조건 delFlag = false
         // booleanBuilder.and(qProduct.delFlag.eq(false));
@@ -228,29 +232,33 @@ public class ProductServiceImpl implements ProductService {
     // 수정 --(관리자)
     @Override
     public void modify(ProductDTO productDTO) {
-        // 1. 기존 상품 조회
         Optional<Product> result = productRepository.findById(productDTO.getPno());
         Product product = result.orElseThrow();
+        Category category = product.getCategory();
 
-        // 2. 기본 정보 업데이트
+        // 기존 이미지 목록 초기화
+        product.clearList();
+
+        // 새로운 이미지 목록 설정
+        if (productDTO.getUploadFileNames() != null && !productDTO.getUploadFileNames().isEmpty()) {
+            productDTO.getUploadFileNames().forEach(product::addImageString);
+        }
+
+        category.ChangeCategoryName(productDTO.getCategoryName());
+        category.ChangeCategoryType(productDTO.getCategoryType());
         product.changeName(productDTO.getPname());
         product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPprice());
         product.changeQuantity(productDTO.getPqty());
-        product.changeShippingCost(productDTO.getShippingCost());
-        product.preUpdate();
+        product.changeShippingFee(productDTO.getShippingFee());
 
-        // 3. 이미지 처리 - 기존 이미지는 유지하고 새 이미지만 추가
-        List<String> newUploadFileNames = productDTO.getUploadFileNames();
-
-        if (newUploadFileNames != null && !newUploadFileNames.isEmpty()) {
-            // 기존 이미지 리스트 유지하면서 새 이미지 추가
-            newUploadFileNames.forEach(uploadName -> {
-                if (!product.getUploadFileNames().contains(uploadName)) {
-                    product.addImageString(uploadName);
-                }
-            });
-        }
+        // // 나머지 필드 업데이트
+        // product.changeBasicInfo(
+        // productDTO.getPname(),
+        // productDTO.getPdesc(),
+        // productDTO.getPprice(),
+        // productDTO.getPqty(),
+        // productDTO.getShippingCost());
 
         productRepository.save(product);
     }
@@ -260,6 +268,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void remove(Long pno) {
         productRepository.updateToDelete(pno, true);
+    }
+
+    @Override
+    public void removeProductImage(Long pno, String fileName) {
+        // DB에서 이미지 레코드 삭제
+        productRepository.deleteProductImage(pno, fileName);
+
+        // 실제 파일 시스템에서도 이미지 삭제
+        try {
+            fileUtil.deleteFiles(List.of(fileName));
+        } catch (Exception e) {
+            log.error("파일 삭제 실패: " + fileName, e);
+            throw new RuntimeException("이미지 파일 삭제 실패");
+        }
     }
 
     private BooleanBuilder getSearch(PageRequestDTO requestDTO) {

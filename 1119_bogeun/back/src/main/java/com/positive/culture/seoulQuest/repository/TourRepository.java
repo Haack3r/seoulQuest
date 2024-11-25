@@ -14,24 +14,34 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface TourRepository extends JpaRepository<Tour,Long>, QuerydslPredicateExecutor<Tour>{
+public interface TourRepository extends JpaRepository<Tour, Long>, QuerydslPredicateExecutor<Tour> {
 
-
-    //전체 조회
+    // 전체 조회
     @Query("select t, ti from Tour t left join t.tourImageList ti where ti.ord = 0 and t.delFlag=false")
     Page<Object[]> selectList(Pageable pageable);
 
-    //하나 조회
-    @EntityGraph(attributePaths = "tourImageList") //해당 속성 조인처리하여 쿼리 실행 횟수 줄임
+    // 하나 조회
+    @EntityGraph(attributePaths = "tourImageList") // 해당 속성 조인처리하여 쿼리 실행 횟수 줄임
     @Query("select t from Tour t where t.tno = :tno")
-    Optional<Tour> selectOne(@Param("tno")Long tno);
+    Optional<Tour> selectOne(@Param("tno") Long tno);
 
-    //상품 삭제 (delete 대신 update로 삭제여부를 true/false 처리 - Soft Delete)
+    // 상품 삭제 (delete 대신 update로 삭제여부를 true/false 처리 - Soft Delete)
     @Modifying
     @Query("update Tour t set t.delFlag = :flag where t.tno = :tno")
-    void updateToDelete(@Param("tno")Long tno, @Param("flag") boolean flag);
+    void updateToDelete(@Param("tno") Long tno, @Param("flag") boolean flag);
 
     List<Tour> findByTlocationContaining(String location);
-    List<Tour> findByTaddress(String taddress);
-}
 
+    List<Tour> findByTaddress(String taddress);
+
+    // 이미지 포함한 여행 정보 조회
+    @Query("select t from Tour t " +
+            "left join fetch t.tourImageList " +
+            "where t.delFlag = false " +
+            "and (:keyword is null or t.tname like concat('%',:keyword,'%'))")
+    Page<Tour> AdminTourList(Pageable pageable, @Param("keyword") String keyword);
+
+    @Modifying
+    @Query("delete from Tour t join t.tourImageList ti where t.tno = :tno and ti.fileName = :fileName")
+    void deleteTourImage(@Param("tno") Long tno, @Param("fileName") String fileName);
+}

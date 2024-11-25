@@ -31,7 +31,6 @@ public class Product {
     private String pdesc;
     private int pprice;
     private int pqty;
-
     private int shippingCost;
 
     // 통계를 내거나 정보를 확인할 때 사용
@@ -90,36 +89,60 @@ public class Product {
     // ------------------------------------------------------
     // 이미지 정보 추가
     public void addImage(ProductImage productImage) {
+        // if (this.productImageList == null) {
+        // this.productImageList = new ArrayList<>();
+        // }
         productImage.setOrd(this.productImageList.size());
         productImageList.add(productImage);
     }
 
     // 이미지 파일 이름 추가
     public void addImageString(String fileName) {
+        // if (fileName != null && !fileName.trim().isEmpty()) {
         ProductImage productImage = ProductImage.builder()
                 .fileName(fileName)
                 .build();
         addImage(productImage);
+        // }
     }
 
     // productImage 리스트를 삭제
     public void clearList() {
-        this.productImageList.clear();
+        // if (this.productImageList != null) {
+        // this.productImageList.clear();
+        // }
+        this.productImageList = new ArrayList<>();
     }
 
-    // uploadFileNames getter 메서드 추가
+    // uploadFileNames getter 메서드
     public List<String> getUploadFileNames() {
+        if (this.productImageList == null) {
+            return new ArrayList<>();
+        }
         return this.productImageList.stream()
                 .map(ProductImage::getFileName)
+                .filter(fileName -> fileName != null && !fileName.trim().isEmpty())
                 .collect(Collectors.toList());
     }
 
-    // uploadFileNames setter 메서드 추가
+    // uploadFileNames setter 메서드
     public void setUploadFileNames(List<String> fileNames) {
-        fileNames.forEach(fileName -> {
-            if (!this.getUploadFileNames().contains(fileName)) {
-                this.addImageString(fileName);
-            }
-        });
+        clearList(); // 기존 리스트 초기화
+        if (fileNames != null) {
+            fileNames.stream()
+                    .filter(fileName -> fileName != null && !fileName.trim().isEmpty())
+                    .forEach(this::addImageString);
+        }
     }
+
+    // 기본 정보 변경을 위한 메서드 추가
+    // public void changeBasicInfo(String pname, String pdesc, int pprice, int pqty,
+    // int shippingCost) {
+    // this.pname = pname;
+    // this.pdesc = pdesc;
+    // this.pprice = pprice;
+    // this.pqty = pqty;
+    // this.shippingCost = shippingCost;
+    // this.updateAt = LocalDate.now(); // 수정 시간 업데이트
+    // }
 }

@@ -1,3 +1,5 @@
+package com.positive.culture.seoulQuest.service;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -10,8 +12,8 @@ public class TourApiService {
         String url = "http://apis.data.go.kr/B551011/KorService/areaBasedList";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("serviceKey", apiKey)
-                .queryParam("areaCode", "1")  // Code for Seoul
-                .queryParam("numOfRows", "20")  // Adjust as needed
+                .queryParam("areaCode", "1") // Code for Seoul
+                .queryParam("numOfRows", "20") // Adjust as needed
                 .queryParam("pageNo", "1")
                 .queryParam("MobileOS", "ETC")
                 .queryParam("MobileApp", "YourAppName")

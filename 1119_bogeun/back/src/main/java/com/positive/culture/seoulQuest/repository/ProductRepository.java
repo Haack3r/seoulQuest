@@ -1,8 +1,6 @@
 package com.positive.culture.seoulQuest.repository;
 
-import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.domain.Product;
-import com.positive.culture.seoulQuest.domain.Tour;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -12,8 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product> {
@@ -32,17 +28,23 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
         @Query("update Product p set p.delFlag = :flag where p.pno = :pno")
         void updateToDelete(@Param("pno") Long pno, @Param("flag") boolean flag);
 
+        // 이미지 포함한 상품 정보 조회
         @Query("select p from Product p " +
                         "left join fetch p.productImageList " +
                         "where p.delFlag = false " +
                         "and (:keyword is null or p.pname like concat('%',:keyword,'%'))")
         Page<Product> AdminProductList(Pageable pageable, @Param("keyword") String keyword);
 
-        // 새로운 쿼리 - 이미지 없이 상품 정보만 조회
+        // 이미지 없이 상품 정보만 조회
         @Query("select p from Product p " +
                         "where p.delFlag = false " +
                         "and (:keyword is null or p.pname like concat('%',:keyword,'%'))")
         Page<Product> AdminProductListNoImage(Pageable pageable, @Param("keyword") String keyword);
+
+        // 특정 상품의 이미지 삭제
+        @Modifying
+        @Query("delete from Product p join p.productImageList pi where p.pno = :pno and pi.fileName = :fileName")
+        void deleteProductImage(@Param("pno") Long pno, @Param("fileName") String fileName);
 
         /*
          * ------------------------AI 추천 쿼리문( 써도 되고 안 써도 되고

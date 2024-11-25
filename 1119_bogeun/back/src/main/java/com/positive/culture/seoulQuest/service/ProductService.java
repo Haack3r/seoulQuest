@@ -7,8 +7,8 @@ import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 public interface ProductService {
@@ -16,7 +16,7 @@ public interface ProductService {
     // 전체 조회
     PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO);
 
-    // 전체 조회 ( 관리자 용 ) ( 테스트 )
+    // 전체 조회 ( 관리자 용 )
     PageResponseDTO<ProductDTO> getAdminProductList(PageRequestDTO pageRequestDTO);
 
     // delFlag ( 삭제 처리 ) = true 를 제외한 * 이미지가 있는 * 리스트 조회
@@ -33,6 +33,9 @@ public interface ProductService {
 
     // 삭제
     void remove(Long pno);
+
+    // 이미지 삭제
+    void removeProductImage(Long pno, String fileName);
 
     // DTO를 엔티티로 변환해주는 메서드 -> register에 사용
     default public Product dtoToEntity(ProductDTO productDTO, Category category) {
@@ -80,8 +83,12 @@ public interface ProductService {
                 .likesCount(product.getLikesCount())
                 .build();
 
-        // 이미지 정보 처리 getUploadFileNames() 사용
-        productDTO.setUploadFileNames(product.getUploadFileNames());
+        // 이미지 정보 처리 - null 체크 추가 필요
+        if (product.getUploadFileNames() != null && !product.getUploadFileNames().isEmpty()) {
+            productDTO.setUploadFileNames(product.getUploadFileNames());
+        } else {
+            productDTO.setUploadFileNames(new ArrayList<>()); // 빈 배열로 초기화
+        }
 
         return productDTO;
     }

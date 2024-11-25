@@ -111,22 +111,28 @@ public class CustomFileUtil { // 파일의 입출력을 담당
         log.info("Resource readable: " + resource.isReadable());
 
         // 2. 파일이 읽을 수 없는 경우 기본 이미지인 "default.jpeg"를 사용
-        if (!resource.isReadable()) {
-            log.warn("File not readable, using default image");
-            // 3. 기본 이미지를 리소스로 생성
-            resource = new FileSystemResource(uploadPath + File.separator + "default.jpeg");
-            log.info("Default image exists: " + resource.exists());
+        // 파일이 읽을 수 없는 경우 404 반환
+        // if (!resource.isReadable()) {
+        // // log.warn("File not readable, using default image");
+        // // // 3. 기본 이미지를 리소스로 생성
+        // // resource = new FileSystemResource(uploadPath + File.separator +
+        // // "default.jpeg");
+        // // log.info("Default image exists: " + resource.exists());
+        // log.warn("File not readable");
+        // return ResponseEntity.notFound().build();
+        // }
+
+        // 파일이 없거나 읽을 수 없는 경우 404 반환
+        if (!resource.exists() || !resource.isReadable()) {
+            log.warn("File not found or not readable: " + fileName);
+            return ResponseEntity.notFound().build();
         }
 
         // 4. HTTP 헤더를 생성
         HttpHeaders headers = new HttpHeaders();
-        String contentType = null;
-
         try {
             // 5. 파일의 타입을 조사하여 content-type 헤더에 추가
             headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
-            headers.add("Content-Type", contentType);
-            log.info("Content-Type: " + contentType);
         } catch (Exception e) {
             // 에러 로깅 추가
             log.error("Error processing file: " + e.getMessage(), e);

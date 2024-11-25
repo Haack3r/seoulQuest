@@ -36,7 +36,7 @@ public class ProductDTO {
     private int likesCount;
 
     @Builder.Default
-    private List<MultipartFile> files = new ArrayList<>(); // 실제 업로드 한 파일 저장
+    private List<MultipartFile> files = new ArrayList<>(); // 실제 파일만 유지
 
     @Builder.Default
     private List<String> uploadFileNames = new ArrayList<>(); // 업로드한 파일들을 문자열로 저장

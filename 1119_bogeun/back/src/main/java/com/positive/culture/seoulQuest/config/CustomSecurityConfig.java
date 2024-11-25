@@ -81,6 +81,8 @@ public class CustomSecurityConfig {
                         "/api/user/tours/by-address",
                         "/api/products/**",
                         "/api/tours/**",
+                        "/api/mypage/findpassword",
+                        "/api/mypage/findemail",
                         "/upload/**",
                         "/api/admin/product/image/**",
                         "/api/admin/tour/image/**",
@@ -90,7 +92,10 @@ public class CustomSecurityConfig {
                 .requestMatchers(
                         HttpMethod.OPTIONS,
                         "/upload/**",
-                        "/api/member/**",
+                        "/api/member/signup",
+                        "/api/member/check",
+                        "/api/member/checknickname",
+                        "/api/member/login",
                         "/api/tours/**",
                         "/api/products/**",
                         "/api/user/tours/view/**",
@@ -126,7 +131,6 @@ public class CustomSecurityConfig {
                     response.setContentType("application/json");
                     response.getWriter().write("{\"error\": \"Unauthorized\"}");
                 }));
-
         return http.build();
     }
     // @Bean
@@ -182,8 +186,25 @@ public class CustomSecurityConfig {
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        // 허용할 헤더 설정
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With",
+                "Accept",
+                "Origin",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers"));
+
+        // 클라이언트에게 노출할 헤더 설정
+        configuration.setExposedHeaders(Arrays.asList(
+                "Authorization", // JWT 토큰
+                "X-Total-Count", // 페이징 정보
+                "Content-Disposition" // 파일 다운로드
+        ));
+
+        // preflight 요청의 캐시 시간 설정 (1시간)
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
