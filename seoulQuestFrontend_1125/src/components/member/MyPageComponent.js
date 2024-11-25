@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { UserOutlined, ShoppingCartOutlined, HeartOutlined, CarOutlined, QuestionCircleOutlined, TagsOutlined, CalendarOutlined } from '@ant-design/icons';
+import { UserOutlined, ShoppingCartOutlined, HeartOutlined, MessageOutlined, QuestionCircleOutlined, TagsOutlined, CalendarOutlined } from '@ant-design/icons';
 import {getUserInfo } from "../../api/myPageApi";
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { useNavigate } from 'react-router-dom';
+import { MessageCircle } from 'lucide-react';
 
 const initState = {
     email : "",
@@ -81,27 +82,6 @@ const MyPageComponent = () => {
                   </button>
               </div>
 
-              
-              {/* 배송 카드 */}
-              <div className="p-6 text-center bg-gray-100 hover:bg-gray-200 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
-                  <CarOutlined className="text-4xl text-gray-600 mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Delivery</h3>
-                  <p className="text-gray-500 mb-4">Track your shipments</p>
-                  <button className="text-white bg-gray-700 hover:bg-gray-800 py-2 px-4 rounded-full shadow-md">
-                      View Delivery
-                  </button>
-              </div>
-
-              {/* 쿠폰 카드 */}
-              <div className="p-6 text-center bg-gray-100 hover:bg-gray-200 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
-                  <TagsOutlined className="text-4xl text-gray-600 mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Coupons</h3>
-                  <p className="text-gray-500 mb-4">Check available discounts</p>
-                  <button className="text-white bg-gray-700 hover:bg-gray-800 py-2 px-4 rounded-full shadow-md">
-                      View Coupons
-                  </button>
-              </div>
-
               {/* 예약 카드 */}
               <div className="p-6 text-center bg-gray-100 hover:bg-gray-200 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
                   <CalendarOutlined className="text-4xl text-gray-600 mb-4" />
@@ -112,6 +92,26 @@ const MyPageComponent = () => {
                   </button>
               </div>
 
+              
+              {/* 리뷰 카드 */}
+              <div className="p-6 text-center bg-gray-100 hover:bg-gray-200 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 flex flex-col items-center justify-center">
+                <MessageOutlined className="text-4xl text-gray-600 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Customer Reviews</h3>
+                <p className="text-gray-500 mb-4">Share your experience with others</p>
+                <button onClick={()=>navigate("/review/")} className="text-white bg-gray-700 hover:bg-gray-800 py-2 px-4 rounded-full shadow-md">
+                    View All Reviews
+                </button>
+            </div>
+
+              {/* 쿠폰 카드 */}
+              <div className="p-6 text-center bg-gray-100 hover:bg-gray-200 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
+                  <TagsOutlined className="text-4xl text-gray-600 mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Coupons</h3>
+                  <p className="text-gray-500 mb-4">Check available discounts</p>
+                  <button className="text-white bg-gray-700 hover:bg-gray-800 py-2 px-4 rounded-full shadow-md">
+                      View Coupons
+                  </button>
+              </div>
 
               {/* Q&A 카드 */}
               <div className="p-6 text-center bg-gray-100 hover:bg-gray-200 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">

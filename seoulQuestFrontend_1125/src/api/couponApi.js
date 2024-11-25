@@ -1,7 +1,9 @@
+import useCustomLogin from "../hooks/useCustomLogin";
 import jwtAxios from "../util/jwtUtil";
-import { API_SERVER_HOST } from "./todoApi";
+import { API_SERVER_HOST } from "./reviewApi";
 
 const host = `${API_SERVER_HOST}/api/mypage/coupon`;
+
 
 export const getAvailableCoupons = async (email) => {
   try {
@@ -15,10 +17,8 @@ export const getAvailableCoupons = async (email) => {
   }
 };
 
-export const addCouponToMyList = async (couponId) => {
+export const addCouponToMyList = async (couponId, email) => {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const email = user.email;
 
     if (!email) {
       throw new Error("User email not found in localStorage");
@@ -38,11 +38,10 @@ export const addCouponToMyList = async (couponId) => {
   }
 };
 
-export const getMyCoupons = async () => {
+export const getMyCoupons = async (email) => {
+    
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const email = user?.email;
-
+    
     if (!email) {
       throw new Error("User email not found in localStorage");
     }

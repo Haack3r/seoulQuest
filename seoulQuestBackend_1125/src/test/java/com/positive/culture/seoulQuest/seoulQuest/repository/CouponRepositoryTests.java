@@ -1,6 +1,7 @@
 package com.positive.culture.seoulQuest.seoulQuest.repository;
 
 import com.positive.culture.seoulQuest.domain.Coupon;
+import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.UserCoupon;
 import com.positive.culture.seoulQuest.repository.CouponRepository;
 import com.positive.culture.seoulQuest.repository.MemberRepository;
@@ -13,7 +14,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Log4j2
 @SpringBootTest
@@ -71,6 +75,51 @@ public class CouponRepositoryTests {
             // 생성한 쿠폰을 저장소에 저장
             couponRepository.save(coupon);
         }
+    }
+
+    //각 user가 가지고 있는 쿠폰 데이터 넣기
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void insertUserCouponsWithActiveCoupons() {
+        // 1. 모든 멤버와 활성화된 쿠폰 데이터 가져오기
+        List<Member> members = memberRepository.findAll();
+        List<Coupon> activeCoupons = couponRepository.findAll().stream()
+                .filter(Coupon::isActive) // isActive가 true인 쿠폰만 필터링
+                .collect(Collectors.toList());
+
+        if (members.isEmpty() || activeCoupons.isEmpty()) {
+            System.out.println("Required data (members or active coupons) is missing.");
+            return;
+        }
+
+        // 2. 멤버별로 UserCoupon 생성
+        members.forEach(member -> {
+            // 각 멤버에게 2~3개의 쿠폰을 랜덤으로 할당
+            int couponCount = 2 + (int) (Math.random() * 2); // 2~3개의 쿠폰 할당
+            Set<Long> assignedCoupons = new HashSet<>(); // 중복 방지용 Set
+
+            for (int i = 0; i < couponCount; i++) {
+                Coupon coupon;
+                do {
+                    coupon = activeCoupons.get((int) (Math.random() * activeCoupons.size())); // 랜덤 쿠폰 선택
+                } while (assignedCoupons.contains(coupon.getCouponId())); // 이미 할당된 쿠폰이면 다시 선택
+
+                assignedCoupons.add(coupon.getCouponId()); // 쿠폰 ID 저장
+
+                // UserCoupon 생성
+                UserCoupon userCoupon = UserCoupon.builder()
+                        .coupon(coupon)
+                        .couponOwner(member)
+                        .useDate(null) // 초기에는 사용되지 않은 상태로 설정
+                        .build();
+
+                // UserCoupon 저장
+                userCouponRepository.save(userCoupon);
+
+                System.out.println("Saved UserCoupon: Member=" + member.getEmail() + ", Coupon=" + coupon.getCouponName());
+            }
+        });
     }
 
     //랜덤으로 유저에게 쿠폰넣기

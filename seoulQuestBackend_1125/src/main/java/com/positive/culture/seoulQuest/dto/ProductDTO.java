@@ -43,5 +43,4 @@ public class ProductDTO {
 
     @Builder.Default
     private List<String> uploadFileNames = new ArrayList<>(); //업로드한 파일들을 문자열로 저장
-
 }

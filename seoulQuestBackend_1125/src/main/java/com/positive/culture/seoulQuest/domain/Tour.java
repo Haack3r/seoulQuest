@@ -24,7 +24,7 @@ public class Tour {
     private Long tno;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryNo", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     private String tname;

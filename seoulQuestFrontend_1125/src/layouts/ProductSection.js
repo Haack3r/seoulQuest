@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useCustomMove from '../hooks/useCustomMove';
-
 import FetchingModal from '../components/common/FetchingModal';
-import { API_SERVER_HOST } from '../api/todoApi';
 // import useCustomLogin from '../hooks/useCustomLogin';
 import Button from '../components/ui/Button';
 import {
@@ -14,6 +12,7 @@ import {
 } from "../components/ui/Card";
 import { useNavigate } from 'react-router-dom';
 import { getListForMain } from '../api/nuProductApi';
+import { API_SERVER_HOST } from '../api/reviewApi';
 
 const host = API_SERVER_HOST
 

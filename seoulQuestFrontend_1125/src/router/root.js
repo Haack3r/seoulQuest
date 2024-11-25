@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import { SyncLoader } from "react-spinners";
-import todoRouter from "./todoRouter";
 import productsRouter from "./productsRouter";
 import memberRouter from "./memberRouter";
 import toursRouter from "./toursRouter";
@@ -9,6 +8,7 @@ import nuToursRouter from "./nuToursRouter";
 import myPageRouter from "./myPageRouter";
 import { Alert } from "@mui/material";
 import adminRouter from "./admin/adminRouter";
+import reviewRouter from "./reviewRouter";
 
 
 const { createBrowserRouter } = require("react-router-dom")
@@ -16,14 +16,14 @@ const { createBrowserRouter } = require("react-router-dom")
 const Loading = <div><SyncLoader /></div>
 // MainPage 로딩 지연
 const Main = lazy(() => import("../pages/MainPage"))
-const About = lazy(() => import("../pages/AboutSCQ"))
-const TodoIndex = lazy(() => import("../pages/todo/IndexPage"))
+const About = lazy(() => import("../pages/AboutPage"))
 const ProductsIndex = lazy(() => import("../pages/products/IndexPage"))
 const NUProductsIndex = lazy(() => import("../pages/products/NUIndexPage"))
 const ToursIndex = lazy(() => import("../pages/tours/TourIndexPage"))
 const NUToursIndex = lazy(() => import("../pages/tours/NUTourIndexPage"))
 const Cart = lazy(() => import("../pages/Cart"))
 const Favorite = lazy(() => import("../pages/Favorite"))
+const ReviewIndex = lazy(() => import("../pages/review/ReviewIndexPage"))
 
 const root = createBrowserRouter([
     {
@@ -43,10 +43,9 @@ const root = createBrowserRouter([
         element: <Suspense fallback={Loading}><Favorite /></Suspense>
     },
     {
-        path: "todo",
-        element: <Suspense fallback={Loading}><TodoIndex /></Suspense>,
-        // 중첩 라우팅
-        children: todoRouter()
+        path: "review",
+        element: <Suspense fallback={Loading}><ReviewIndex /></Suspense>,
+        children: reviewRouter()
     },
     {
         path: "user/products",

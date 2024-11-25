@@ -5,13 +5,15 @@ import {
   addCouponToMyList,
   getMyCoupons,
 } from "../api/couponApi";
+import useCustomLogin from "../hooks/useCustomLogin";
 
 const CouponComponent = () => {
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [myCoupons, setMyCoupons] = useState([]);
-  
-  const user = JSON.parse(localStorage.getItem("user"));
-  const email = user?.email;
+  const { loginState } = useCustomLogin();
+
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  const email = loginState.email;
 
   useEffect(() => {
     fetchAvailableCoupons();
@@ -20,53 +22,51 @@ const CouponComponent = () => {
 
   const fetchAvailableCoupons = async () => {
     try {
-        const userEmail = user?.email; // Fetch user email from local storage or user object
-        const coupons = await getAvailableCoupons(userEmail); // Pass email as parameter
-        setAvailableCoupons(coupons);
+      const userEmail = email; // Fetch user email from local storage or user object
+      const coupons = await getAvailableCoupons(userEmail); // Pass email as parameter
+      setAvailableCoupons(coupons);
     } catch (error) {
-        console.error("Error fetching available coupons:", error);
+      console.error("Error fetching available coupons:", error);
     }
-};
+  };
 
-
-    const fetchMyCoupons = async () => {
-
+  const fetchMyCoupons = async () => {
     try {
-        const coupons = await getMyCoupons(email);
-        setMyCoupons(coupons.map(coupon => ({
-            ...coupon,
-            isUsed: coupon.useDate !== null, // Add isUsed property
-        })));
+      const coupons = await getMyCoupons(email);
+      setMyCoupons(
+        coupons.map((coupon) => ({
+          ...coupon,
+          isUsed: coupon.useDate !== null, // Add isUsed property
+        }))
+      );
     } catch (error) {
-        console.error("Error fetching my coupons:", error);
+      console.error("Error fetching my coupons:", error);
     }
-};
+  };
 
-  
-
-const handleAddCoupon = async (couponId) => {
-    const coupon = myCoupons.find(coupon => coupon.couponId === couponId);
+  const handleAddCoupon = async (couponId) => {
+    const coupon = myCoupons.find((coupon) => coupon.couponId === couponId);
     if (coupon?.isUsed) {
-        alert("This coupon has already been used!");
-        return;
+      alert("This coupon has already been used!");
+      return;
     }
     if (coupon) {
-        alert("You already added this coupon!");
-        return;
+      alert("You already added this coupon!");
+      return;
     }
 
     try {
-        await addCouponToMyList(couponId);
-        fetchMyCoupons(); // Refresh the list after adding
-        alert("Coupon added to your list!");
+      await addCouponToMyList(couponId, email);
+      fetchMyCoupons(); // Refresh the list after adding
+      alert("Coupon added to your list!");
     } catch (error) {
-        if (error.response && error.response.status === 409) {
-            alert("An error occurred while adding the coupon. Please try again.");
-        } else {
-            console.error("Error adding coupon to my list:", error);
-        }
+      if (error.response && error.response.status === 409) {
+        alert("An error occurred while adding the coupon. Please try again.");
+      } else {
+        console.error("Error adding coupon to my list:", error);
+      }
     }
-};
+  };
 
   return (
     <div className="min-h-screen p-10 flex flex-col items-center bg-gray-100 mt-20 mb-20">

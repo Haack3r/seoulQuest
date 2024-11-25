@@ -1,5 +1,6 @@
 package com.positive.culture.seoulQuest.controller;
 
+import com.positive.culture.seoulQuest.dto.*;
 import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.dto.*;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
@@ -57,6 +58,7 @@ public class ProductController {
 
     //-----------------------------------------------------------
 
+    //전체 목록 조회 - test 성공 (유저 , 관리자)
     @Autowired
     private CategoryRepository categoryRepository;
 

@@ -60,8 +60,8 @@ public class CustomSecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/api/member/signup", "/api/member/check", "/api/member/checknickname","/api/member/login").permitAll() // Permit OPTIONS requests
-                .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/checknickname", "/api/member/login", "/api/user/tours/view/**","/api/user/products/view/**", "/api/user/tours/mapData", "/api/user/tours/by-address","/api/mypage/findpassword","/api/mypage/findemail").permitAll()
-                .requestMatchers("/api/products/**", "/api/user/products/**","/api/tours/**").permitAll()// Allow unauthenticated access
+                .requestMatchers("/api/member/signup", "/api/member/check", "/api/member/checknickname", "/api/member/login", "/api/user/tours/view/**","/api/user/products/view/**", "/api/user/tours/mapData", "/api/user/tours/by-address").permitAll()
+                .requestMatchers("/api/products/**", "/api/user/products/**","/api/tours/**","/api/mypage/findpassword","/api/mypage/findemail").permitAll()// Allow unauthenticated access
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated());
 

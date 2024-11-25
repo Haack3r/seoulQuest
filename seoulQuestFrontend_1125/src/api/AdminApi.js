@@ -1,9 +1,10 @@
 import { getCookie } from "../util/cookieUtil"
 import jwtAxios from "../util/jwtUtil"
-import { API_SERVER_HOST } from "./todoApi"
+import { API_SERVER_HOST } from "./reviewApi"
 
 const host = `${API_SERVER_HOST}/api/admin`
 
+// 관리자 권한 체크
 export const checkAdminRole = async () => {
     try {
         // localStorage 체크

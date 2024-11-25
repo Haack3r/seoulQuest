@@ -22,11 +22,14 @@ public class TourPaymentItem {
     @JoinColumn(name = "t_payment_id")
     private TourPayment tourPayment;
 
-    private int tPaymentQty; //투어 결제 수량
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tno")
+    private Tour tour;
 
     //결제시의 투어 이름과 가격, 예약 날짜 정보
     private String tname;
     private int tprice;
     private LocalDate tdate;
 
+    private int tPaymentQty; //투어 결제 수량
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { API_SERVER_HOST } from "../../api/todoApi";
+import { API_SERVER_HOST, getTourItemReview ,putTourOne,deleteTourOne} from "../../api/reviewApi";
+import ReviewsSection from '../review/ReviewsSection';
 import { StarIcon, HeartIcon, ShoppingCart } from "lucide-react";
 import { Calendar, Popover, Badge } from "antd";
 import { UserOutlined, CalendarOutlined } from "@ant-design/icons";
@@ -49,7 +50,9 @@ const TourReadComponent = ({ tno }) => {
         fullscreen={false}
         onSelect={(e) => setSelectedDate(e.format("YYYY-MM-DD"))}
         disabledDate={(current) =>
-          !tour.tDate.some((date) => date.tourDate === current.format("YYYY-MM-DD"))
+          !tour.tDate.some(
+            (date) => date.tourDate === current.format("YYYY-MM-DD")
+          )
         }
       />
       <div style={{ textAlign: "center", marginTop: 10, color: "#888" }}>
@@ -149,7 +152,9 @@ const TourReadComponent = ({ tno }) => {
             </div>
           </div>
 
-          <p className="text-sm text-gray-400 mt-2">Max Participants: {tour.maxCapacity}</p>
+          <p className="text-sm text-gray-400 mt-2">
+            Max Participants: {tour.maxCapacity}
+          </p>
 
           {/* Action Buttons */}
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-6">
@@ -160,9 +165,7 @@ const TourReadComponent = ({ tno }) => {
               <CalendarOutlined className="mr-2" />
               Update Availability
             </button>
-            <button
-              className="border text-gray-700 py-3 px-6 rounded-lg flex items-center justify-center hover:bg-gray-100"
-            >
+            <button className="border text-gray-700 py-3 px-6 rounded-lg flex items-center justify-center hover:bg-gray-100">
               <HeartIcon className="mr-2 h-5 w-5 text-red-500" />
               Add to Favorites
             </button>
@@ -171,7 +174,9 @@ const TourReadComponent = ({ tno }) => {
           {/* Tour Details Section */}
           <div className="mt-10 bg-gray-100 p-6 rounded-lg">
             <div className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold text-gray-900">Tour Details</h2>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Tour Details
+              </h2>
               <button
                 onClick={() => setDetailsVisible(!detailsVisible)}
                 className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -203,6 +208,15 @@ const TourReadComponent = ({ tno }) => {
         } transition-transform duration-300`}
       >
         <ReservationComponent maxCapacity={tour.maxCapacity} />
+      </div>
+      {/* Reviews Section */}
+      <div className="mt-5">
+        <ReviewsSection
+          itemNo={tno}
+          getItemReview={getTourItemReview}
+          putOne={putTourOne}
+          deleteOne={deleteTourOne}
+        />
       </div>
     </div>
   );

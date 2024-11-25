@@ -1,25 +1,16 @@
 package com.positive.culture.seoulQuest.controller;
 
-import com.positive.culture.seoulQuest.domain.Address;
 import com.positive.culture.seoulQuest.domain.Member;
-import com.positive.culture.seoulQuest.dto.MemberDTO;
-import com.positive.culture.seoulQuest.dto.ReservationItemListDTO;
-import com.positive.culture.seoulQuest.dto.TourDTO;
 import com.positive.culture.seoulQuest.dto.UserDTO;
-import com.positive.culture.seoulQuest.repository.MemberRepository;
 import com.positive.culture.seoulQuest.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequiredArgsConstructor

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { API_SERVER_HOST } from '../../api/todoApi';
+
 import { StarIcon, ShoppingCart, HeartIcon } from 'lucide-react';
 import { Badge } from 'antd';
 import CartComponent from '../menus/CartComponent';
@@ -7,6 +6,9 @@ import useCustomCart from '../../hooks/useCustomCart';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { getOne } from '../../api/productsApi';
 import useCustomFav from '../../hooks/useCustomFav';
+import { useEffect, useState } from 'react';
+import ReviewsSection from '../review/ReviewsSection';
+import { API_SERVER_HOST, deleteProductOne, putProductOne ,getProductItemReview} from '../../api/reviewApi';
 
 const initState = {
   pno: 0,
@@ -190,7 +192,15 @@ const ReadComponent = ({ pno }) => {
         } transition-transform duration-300`}
       >
         <CartComponent />
-      </div>
+          </div>
+          {/* Reviews Section */}
+          <div className="mt-5">
+                        <ReviewsSection 
+                            itemNo={pno} 
+                            getItemReview ={getProductItemReview}
+                            putOne={putProductOne} 
+                            deleteOne={deleteProductOne}/>
+                    </div>
     </div>
   );
 };

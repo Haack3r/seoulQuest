@@ -54,13 +54,7 @@ public class TourRepositoryTests {
                 {"Vintage Finds at Hwanghak-dong Market", "Hunt for antiques and vintage treasures at this bustling flea market.", "Hwanghak-dong, Jung-gu, Seoul", "Shopping & Lifestyle"},
                 {"Artistic Energy at Daehangno", "Soak up the youthful energy of this university district filled with theaters and creativity.", "Daehangno, Jongno-gu, Seoul", "Art & Creativity"},
                 {"Presidential Prestige at The Blue House", "Visit the iconic residence of Korea's President with stunning architecture and history.", "1 Cheongwadae-ro, Jongno-gu, Seoul", "Historical & Cultural Sites"},
-//      카테고리 삭제 항목,  없어도됨
-//                {"Lotus Lantern Festival Delight", "Celebrate Buddha’s birthday with dazzling lantern parades and cultural events.", "Various locations in Seoul", "Festivals & Events"},
-//                {"Traditional Korean Pottery Workshop", "Create your own masterpiece in this hands-on pottery experience.", "234-1 Insadong-gil, Jongno-gu, Seoul", "Cultural Experiences"},
-//                {"Tea Ceremony Bliss", "Discover the art of Korean tea culture in a tranquil traditional setting.", "45-2 Samcheong-ro, Jongno-gu, Seoul", "Cultural Experiences"},
-//                {"Hanbok Experience at Gyeongbokgung", "Feel like royalty as you don a traditional Korean hanbok in a palace setting.", "161 Sajik-ro, Jongno-gu, Seoul", "Cultural Experiences"},
-//                {"Korean Calligraphy Class", "Learn the graceful art of Korean calligraphy in this interactive session.", "89-4 Insadong-gil, Jongno-gu, Seoul", "Cultural Experiences"},
-//                {"Kimchi-Making Adventure", "Dive into Korea's culinary heritage by making your own delicious kimchi.", "101-3 Itaewon-dong, Yongsan-gu, Seoul", "Cultural Experiences"}
+             {"Kimchi-Making Adventure", "Dive into Korea's culinary heritage by making your own delicious kimchi.", "101-3 Itaewon-dong, Yongsan-gu, Seoul", "Cultural Experiences"}
         };
 
 

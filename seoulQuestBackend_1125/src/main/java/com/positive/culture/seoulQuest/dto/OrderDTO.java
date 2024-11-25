@@ -41,6 +41,6 @@ public class OrderDTO {
     private String phoneNumber;
     private int totalPrice;
 
-    //삭제고려, paymentResponse에 저장되어서 있음
+    //삭제고려, paymentResponse에 저장되어 있음
 //    private String paymentMethod;
 }

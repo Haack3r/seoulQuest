@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getCookie, setCookie } from "./cookieUtil";
-import { API_SERVER_HOST } from "../api/todoApi";
+import { API_SERVER_HOST } from "../api/reviewApi";
 
 const jwtAxios = axios.create();
 

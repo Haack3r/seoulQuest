@@ -23,6 +23,7 @@ public class TourPaymentServiceImpl implements TourPaymentService {
     private final ReservationRepository reservationRepository;
     private final ReservationItemRepository reservationItemRepository;
     private final TourDateRepository tourDateRepository;
+    private final TourRepository tourRepository;
 
     //결제 정보를 저장하고, order엔티티의 status를 complete으로 변경함.
     @Override
@@ -37,31 +38,33 @@ public class TourPaymentServiceImpl implements TourPaymentService {
             TourOrder tourOrder = tourOrderRepository.findById(orderId).orElseThrow();
 
             tourOrder.changePaymentStatus(paymentResponse.getStatus());
-            tourOrderRepository.save(tourOrder); //order테이블의 paymentState도 변경
+            tourOrderRepository.save(tourOrder);
+
+            String usedCouponName = orderdto.getUsedCoupon();
+            UserCoupon usedCoupon = null;
+
+            if(usedCouponName !=null){
+                //유저가 사용한 쿠폰 조회
+                usedCoupon =
+                        userCouponRepository.findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(paymentEmail,usedCouponName);
+
+                //사용한 쿠폰의 날짜를 변경
+                if(usedCoupon != null){
+                    usedCoupon.ChangeUseDate(LocalDate.now());
+                    userCouponRepository.save(usedCoupon);
+                }
+            }
 
             //1.결제정보 저장
             TourPayment payment = TourPayment.builder()
-                    .paymentStatus(paymentResponse.getStatus())
                     .tPaymentMember(paymentMember)
-                    .paymentPrice(paymentResponse.getAmount())
+                    .totalPrice(orderdto.getTotalPrice())
                     .paymentDate(paymentResponse.getPaidAt())
                     .paymentMethod(paymentResponse.getPayMethod())
-                    .merchantUid(paymentResponse.getMerchantUid())
                     .tourOrder(tourOrder)
+                    .usedCoupon(usedCoupon)
                     .build();
             paymentRepository.save(payment);
-
-            //2. orderId로 order를 찾아 해당 Order의 상태와 쿠폰 사용날짜 변경
-            //   User가 사용한 쿠폰의 날짜를 오늘날짜로 변경.
-            String usedCouponName = orderdto.getUsedCoupon();
-            UserCoupon usedCoupon =
-                    userCouponRepository.findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(paymentEmail,usedCouponName);
-
-            if(usedCoupon != null){  // 사용한 쿠폰이 있는지 확인.
-                System.out.println(1.5 + "usedCoupon");
-                usedCoupon.ChangeUseDate(LocalDate.now()); //오늘 날짜를 저장
-                userCouponRepository.save(usedCoupon);
-            }
 
             //3. 해당 유저의 reservation를 조회하여, reservation에 들어있는 item들 중 결제 완료된 item들은 삭제
             Reservation reservation = reservationRepository.getReservationOfMember(paymentEmail).orElseThrow();
@@ -89,6 +92,8 @@ public class TourPaymentServiceImpl implements TourPaymentService {
                 tourDate.changeAvailableCapacity(newCapacity);
                 tourDateRepository.save(tourDate);
 
+                Tour tour = tourRepository.findById(i.getTno()).orElseThrow();
+
                 // PaymentItem 저장
                 TourPaymentItem tourPaymentItem = TourPaymentItem.builder()
                         .tourPayment(payment)
@@ -96,54 +101,35 @@ public class TourPaymentServiceImpl implements TourPaymentService {
                         .tPaymentQty(i.getTqty())
                         .tprice(i.getTprice())
                         .tdate(i.getTdate())
+                        .tour(tour)
                         .build();
                 paymentItemRepository.save(tourPaymentItem);
             });
-
-
-
-
-//            orderdto.getTorderItems().forEach(i->{
-//                //4.paymentItem 저장
-//                TourPaymentItem tourPaymentItem = TourPaymentItem.builder()
-//                        .tourPayment(payment)
-//                        .tname(i.getTname())
-//                        .tPaymentQty(i.getTqty())
-//                        .tprice(i.getTprice())
-//                        .tdate(i.getTdate())
-//                        .build();
-//                paymentItemRepository.save(tourPaymentItem);
-//
-//                //5.해당 tour의 tourdate의 available capacity 변경 (결제 갯수만큼 마이너스)
-//                //tour와 tourdate가 모두 일치하는 데이터를 찾아야함.
-//                TourDate tourDate = tourDateRepository.findByTourDateAndTourTno(i.getTdate(),i.getTno()).orElseThrow();
-//                tourDate.changeAvailableCapacity(tourDate.getAvailableCapacity()-i.getTqty());
-//                tourDateRepository.save(tourDate);
-//            });
-
-
         } catch (Exception e) {
             // 결제 실패 로직
-            handlePaymentFailure(orderdto);
+            handlePaymentFailure(paymentResponse,orderdto);
             throw new RuntimeException("Payment failed", e);
         }
     }
 
     // 결제 실패 시 처리 로직
-    public void handlePaymentFailure(OrderDTO orderdto) {
+    public void handlePaymentFailure(Payment paymentResponse,OrderDTO orderdto) {
+        String paymentEmail = paymentResponse.getBuyerEmail();
         Long orderId = orderdto.getOrderId();
         TourOrder tourOrder = tourOrderRepository.findById(orderId).orElseThrow();
 
-        // 결제 상태를 "failed"로 설정
-        tourOrder.changePaymentStatus("failed");
-        tourOrderRepository.save(tourOrder);
+        String usedCouponName = orderdto.getUsedCoupon();
+        UserCoupon usedCoupon =
+                userCouponRepository.findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(paymentEmail,usedCouponName);
 
-        // 쿠폰 사용 취소
-        UserCoupon usedCoupon = tourOrder.getUsedCoupon();
         if (usedCoupon != null) {
             usedCoupon.ChangeUseDate(null); // 사용날짜를 null로 되돌려 쿠폰을 사용하지 않은 상태로 복구
             userCouponRepository.save(usedCoupon);
         }
+
+        // 결제 상태를 "failed"로 설정
+        tourOrder.changePaymentStatus("failed");
+        tourOrderRepository.save(tourOrder);
 
     }
 
