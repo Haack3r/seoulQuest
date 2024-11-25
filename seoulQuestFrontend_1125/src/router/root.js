@@ -16,7 +16,7 @@ const { createBrowserRouter } = require("react-router-dom")
 const Loading = <div><SyncLoader /></div>
 // MainPage 로딩 지연
 const Main = lazy(() => import("../pages/MainPage"))
-const About = lazy(() => import("../pages/AboutPage"))
+const About = lazy(() => import("../pages/AboutSCQ"))
 const ProductsIndex = lazy(() => import("../pages/products/IndexPage"))
 const NUProductsIndex = lazy(() => import("../pages/products/NUIndexPage"))
 const ToursIndex = lazy(() => import("../pages/tours/TourIndexPage"))
