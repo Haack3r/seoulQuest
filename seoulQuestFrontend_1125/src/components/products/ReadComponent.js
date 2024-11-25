@@ -1,4 +1,3 @@
-
 import { StarIcon, ShoppingCart, HeartIcon } from 'lucide-react';
 import { Badge } from 'antd';
 import CartComponent from '../menus/CartComponent';
@@ -8,7 +7,12 @@ import { getOne } from '../../api/productsApi';
 import useCustomFav from '../../hooks/useCustomFav';
 import { useEffect, useState } from 'react';
 import ReviewsSection from '../review/ReviewsSection';
-import { API_SERVER_HOST, deleteProductOne, putProductOne ,getProductItemReview} from '../../api/reviewApi';
+import {
+  API_SERVER_HOST,
+  deleteProductOne,
+  putProductOne,
+  getProductItemReview,
+} from '../../api/reviewApi';
 
 const initState = {
   pno: 0,
@@ -48,7 +52,8 @@ const ReadComponent = ({ pno }) => {
 
     const existingItem = cartItems.find((item) => item.pno === product.pno);
     if (existingItem) {
-      if (!window.confirm('This item is already in the cart. Do you want to add it again?')) return;
+      if (!window.confirm('This item is already in the cart. Do you want to add it again?'))
+        return;
     }
 
     changeCart({
@@ -83,23 +88,23 @@ const ReadComponent = ({ pno }) => {
   };
 
   return (
-    <div className="min-h-screen py-12 px-6 lg:px-32 relative">
+    <div className="min-h-screen py-12 px-6 lg:px-32">
       <div className="flex flex-col lg:flex-row lg:space-x-12">
         {/* Left Section: Image Gallery */}
-        <div className="lg:w-1/3 flex flex-col items-center space-y-6">
-          <div className="w-full h-[650px]">
+        <div className="md:w-1/3 lg:w-1/4 flex flex-col items-center space-y-6">
+          <div className="w-full aspect-[2/3]">
             <img
               src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
               alt={product.pname}
-              className="w-full h-full object-cover"
-            /> 
+              className="w-full h-full object-cover opacity-90"
+            />
           </div>
           <div className="flex space-x-3 overflow-x-auto w-full">
             {product.uploadFileNames.map((image, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentImage(index)}
-                className={`w-20 h-20 overflow-hidden ${
+                className={`w-16 h-16 overflow-hidden opacity-90 ${
                   currentImage === index ? 'ring-2 ring-blue-500' : ''
                 }`}
               >
@@ -114,15 +119,15 @@ const ReadComponent = ({ pno }) => {
         </div>
 
         {/* Right Section: Product Details */}
-        <div className="lg:w-1/2 space-y-6">
-          <h1 className="text-4xl font-light text-gray-900">{product.pname}</h1>
+        <div className="lg:w-2/3 space-y-6">
+          <h1 className="text-3xl font-light text-gray-900">{product.pname}</h1>
           <div className="flex items-center space-x-2">
             {[...Array(5)].map((_, i) => (
               <StarIcon key={i} className="h-5 w-5 text-yellow-400" />
             ))}
             <span className="text-gray-600">(4.8) 24 reviews</span>
           </div>
-          <p className="text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
+          <p className="text-xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
           <p className="text-gray-700">{product.pdesc}</p>
 
           {/* Quantity Selector */}
@@ -187,20 +192,22 @@ const ReadComponent = ({ pno }) => {
 
       {/* Cart Drawer */}
       <div
-        className={`fixed top-0 right-0 h-[70%] w-96 bg-white shadow-lg mt-40 p-6 overflow-auto transform ${
+        className={`z-50 fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${
           cartVisible ? 'translate-x-0' : 'translate-x-full'
         } transition-transform duration-300`}
       >
         <CartComponent />
-          </div>
-          {/* Reviews Section */}
-          <div className="mt-5">
-                        <ReviewsSection 
-                            itemNo={pno} 
-                            getItemReview ={getProductItemReview}
-                            putOne={putProductOne} 
-                            deleteOne={deleteProductOne}/>
-                    </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="mt-5">
+        <ReviewsSection
+          itemNo={pno}
+          getItemReview={getProductItemReview}
+          putOne={putProductOne}
+          deleteOne={deleteProductOne}
+        />
+      </div>
     </div>
   );
 };

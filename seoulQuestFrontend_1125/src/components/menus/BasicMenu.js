@@ -30,11 +30,11 @@ const BasicMenu = () => {
 
   // Set up event listener for window resize
   useEffect(() => {
-    const memberInfo = getCookie("member")
+    const memberInfo = getCookie("member");
     if (memberInfo?.role?.includes("ADMIN")) {
-      setRole("ADMIN")
+      setRole("ADMIN");
     } else {
-      setRole("USER")
+      setRole("USER");
     }
     window.addEventListener("resize", checkScreenSize);
 
@@ -89,9 +89,13 @@ const BasicMenu = () => {
               <Link to="/about/" className="menu-animation-color">
                 About
               </Link>
-              <Link to="/contact/" className="menu-animation-color">
-                Contact
-              </Link>
+              {loginState.email ? (
+                <Link to="/contact/" className="menu-animation-color">
+                  Contact
+                </Link>
+              ) : (
+                ""
+              )}
             </nav>
 
             {/* Right section with login/sign-up or cart/logout */}

@@ -11,7 +11,7 @@ import lombok.*;
 public class TourImage {
     private String fileName;
     private int ord;
-    private String categoryName;
+//    private String categoryName;
 
     public void setOrd(int ord){
         this.ord= ord;

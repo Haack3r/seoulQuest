@@ -203,7 +203,7 @@ const TourReadComponent = ({ tno }) => {
 
       {/* Reservation Drawer */}
       <div
-        className={`fixed top-0 right-0 h-[70%] w-96 bg-white shadow-lg mt-40 p-6 overflow-auto transform ${
+        className={`z-50 fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${
           cartVisible ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300`}
       >
