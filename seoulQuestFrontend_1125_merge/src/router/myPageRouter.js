@@ -1,4 +1,5 @@
 import React, { lazy, Suspense } from 'react'
+import { Navigate } from 'react-router-dom'
 
 const myPageRouter = () => {
 
@@ -12,12 +13,15 @@ const myPageRouter = () => {
     return [
        
         {
-            path: "",
+            path: "myprofile",
             element: <Suspense fallback={Loading}><MyPage/></Suspense>,
         },
-        ,
         {
-            path: "editProfile",
+            path: "",
+            element: <Navigate replace to="/mypage/myprofile" />
+          },
+        {
+            path: "editprofile",
             element: <Suspense fallback={Loading}><EditProfilePage/></Suspense>,
         },
         // {

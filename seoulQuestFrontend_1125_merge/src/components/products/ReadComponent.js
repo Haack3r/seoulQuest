@@ -195,12 +195,12 @@ const ReadComponent = ({ pno }) => {
           </div>
           {/* Reviews Section */}
           <div className="mt-5">
-                        <ReviewsSection 
-                            itemNo={pno} 
-                            getItemReview ={getProductItemReview}
-                            putOne={putProductOne} 
-                            deleteOne={deleteProductOne}/>
-                    </div>
+              <ReviewsSection 
+                  itemNo={pno} 
+                  getItemReview ={getProductItemReview}
+                  putOne={putProductOne} 
+                  deleteOne={deleteProductOne}/>
+          </div>
     </div>
   );
 };

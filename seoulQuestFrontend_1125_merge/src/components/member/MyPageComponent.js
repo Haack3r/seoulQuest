@@ -24,25 +24,28 @@ const MyPageComponent = () => {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    
+    
+    <div className="bg-white rounded-lg shadow-lg p-10 space-y-2">
+     
       {/* Header Section */}
-      <div className="flex items-center space-x-4 mb-8">
-        <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+      <div className="flex items-center space-x-4 mb-8 border-b pb-5">
+        {/* <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
           <span className="text-3xl font-bold text-gray-500">
             {userInfo.firstname.charAt(0)}
           </span>
-        </div>
+        </div> */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-xl font-bold text-gray-800">
             {`${userInfo.firstname} ${userInfo.lastname}`}
           </h1>
           <p className="text-sm text-gray-500">{userInfo.nickName}</p>
         </div>
       </div>
-
+  
       {/* Personal Information Section */}
-      <section className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">
+      <section className="pb-8 border-b">
+        <h2 className="text-l font-semibold text-gray-800 mb-4">
           Personal Information
         </h2>
         <div className="grid grid-cols-2 gap-4">
@@ -64,10 +67,10 @@ const MyPageComponent = () => {
           </div>
         </div>
       </section>
-
+  
       {/* Address Section */}
       <section>
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Address</h2>
+        <h2 className="text-l font-semibold text-gray-800 mb-4">Address</h2>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-sm text-gray-500">Country</p>
@@ -87,7 +90,8 @@ const MyPageComponent = () => {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    
   );
 };
 

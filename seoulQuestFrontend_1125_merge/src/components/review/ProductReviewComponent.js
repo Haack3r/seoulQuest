@@ -74,11 +74,11 @@ const ProductReviewComponent = () => {
   }, [page, size, refresh]);
 
   return (
-    <div className="max-w-7xl min-w-[320px] md:min-w-[768px] mt-10 mx-auto mb-20">
+    <div className="max-w-6xl min-w-[320px] md:min-w-[768px] mt-5 mx-auto mb-20">
       <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-8 mb-10">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-extrabold text-gray-900 ">
+          <h2 className="text-xl font-extrabold text-gray-900 ">
             My Reviews
           </h2>
           <button
@@ -94,13 +94,13 @@ const ProductReviewComponent = () => {
           serverData.dtoList.map((review) => (
             <div
               key={review.prid}
-              className="flex flex-row gap-4 mb-5 items-center bg-gray-50 hover:bg-gray-100 rounded-lg shadow transition-shadow p-6 cursor-pointer"
+              className="flex flex-row gap-4 mb-5 items-center bg-gray-50 hover:bg-gray-100 rounded-lg shadow transition-shadow p-3 cursor-pointer"
               onClick={() => openEditModal(review)}
             >
               <div className="text-sm text-gray-500 w-1/6 text-center">
                 {review.dueDate}
               </div>
-              <div className="text-lg font-semibold text-gray-800 w-2/6 truncate">
+              <div className="text-l font-semibold text-gray-800 w-2/6 truncate">
                 {review.title}
               </div>
               <div className="text-sm text-gray-600 w-1/6 truncate">
