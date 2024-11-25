@@ -10,8 +10,8 @@ import {
   ShoppingBagIcon,
   UserIcon,
   LogInIcon,
-    Heart,
-    Tickets
+  Heart,
+  Tickets,
 } from "lucide-react";
 import { getCookie } from "../../util/cookieUtil";
 
@@ -152,8 +152,8 @@ const BasicMenu = () => {
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
                         <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
-                                                  </Link>
-                                                  <Link
+                      </Link>
+                      <Link
                         to="/mypage/coupon"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
@@ -286,8 +286,8 @@ const BasicMenu = () => {
                         className="flex items-center space-x-2 menu-animation-color"
                       >
                         <ShoppingBagIcon className="h-5 w-5 menu-animation-color" />
-                                                  </Link>
-                                                  <Link
+                      </Link>
+                      <Link
                         to={"/mypage/coupon"}
                         className="flex items-center space-x-2 menu-animation-color"
                       >

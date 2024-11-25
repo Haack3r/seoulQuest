@@ -51,11 +51,9 @@ const useCustomMove = () => {
     const moveToRead = (num) => {
         // 조회로 이동, 여기에서 navigate에 객체로 인자를 전달하면서 path와 검색어를 전달하고
         // 그것을 나중에 사용하려고 하고 custom hook을 이용하여 재활용함
-        console.log(num)
         console.log(queryDefault)
         navigate({ pathname: `../read/${num}`, search: queryDefault })
     }
-
     const moveToReadProductFromMain = (num) => {
         // 조회로 이동, 여기에서 navigate에 객체로 인자를 전달하면서 path와 검색어를 전달하고
         // 그것을 나중에 사용하려고 하고 custom hook을 이용하여 재활용함

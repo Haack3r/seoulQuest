@@ -51,12 +51,11 @@ public class MemberRepositoryTests {
                     .birthday(LocalDate.of(year, month, day))
                     .build();
 
-            if(i<8){
+            if (i < 8) {
                 member.addRole(MemberRole.USER);
-            }else {
+            } else {
                 member.addRole(MemberRole.ADMIN);
             }
-
             memberRepository.save(member);
         }
     }

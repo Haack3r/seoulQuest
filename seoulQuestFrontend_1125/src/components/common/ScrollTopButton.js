@@ -16,7 +16,7 @@ const ScrollTopButton = () => {
                 onClick={handleClickTopButton} 
                 title="going to the top"
                 className='
-                    opacity-80 z-50 fixed bottom-5 right-5 
+                    opacity-80 z-50 fixed bottom-10 right-9 
                     border border-stone-200 bg-stone-50 
                     p-2 rounded-full 
                     hover:bg-stone-100 hover:border-stone-300 

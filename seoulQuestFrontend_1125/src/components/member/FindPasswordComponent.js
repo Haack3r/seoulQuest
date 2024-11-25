@@ -7,7 +7,7 @@ const initState = { email: '', phoneNumber1: '', phoneNumber2: '', phoneNumber3:
 
 const FindPasswordComponent = () => {
     const navigate = useNavigate();
-    const [userInfo, setUserInfo] = useState({...initState});
+    const [userInfo, setUserInfo] = useState({ ...initState });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false); 
 
@@ -17,7 +17,6 @@ const FindPasswordComponent = () => {
     };
 
     const findPasswordHandler = () => {
-        console.log(userInfo)
         setIsLoading(true); 
         findPassword(userInfo)
             .then((data) => {

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapPin } from "@fortawesome/free-solid-svg-icons";
+import { faMapPin, faPerson } from "@fortawesome/free-solid-svg-icons";
 import { createRoot } from "react-dom/client";
 import "../TourMap.css";
 import { Link } from "react-router-dom";
@@ -22,11 +22,10 @@ const TourMap = () => {
       className={`marker-icon ${isSelected ? "selected" : ""}`}
       style={{
         cursor: "pointer",
-        color: isSelected ? "blue" : "red",
-        fontSize: isSelected ? "28px" : "24px",
+        fontSize: isSelected ? "50px" : "35px",
       }}
     >
-      <FontAwesomeIcon icon={faMapPin} />
+      <FontAwesomeIcon icon={faPerson} />
     </div>
   );
 
@@ -38,7 +37,7 @@ const TourMap = () => {
           const container = document.getElementById("map");
           const mapOption = {
             center: new window.kakao.maps.LatLng(37.5665, 126.978),
-            level: 8,
+            level: 7,
           };
           const newMap = new window.kakao.maps.Map(container, mapOption);
           setMap(newMap);
@@ -136,7 +135,7 @@ const TourMap = () => {
         Explore On Map
       </h2>
       <div className="flex items-center justify-center mt-16">
-        <div className="relative lg:w-2/4 md:w-3/4 h-600px">
+        <div className="relative w-3/4 h-600px">
           <div
             id="map"
             style={{ width: "100%", height: "600px" }}
@@ -159,7 +158,7 @@ const TourMap = () => {
             </button>
             {selectedSpot.uploadFileNames && selectedSpot.uploadFileNames.length > 0 ? (
               <img
-                className="h-1/3 w-full object-cover"
+                className="h-1/3 w-full object-cover opacity-80"
                 src={`/api/user/tours/view/${selectedSpot.uploadFileNames[0]}`}
                 alt="Tour Spot"
               />

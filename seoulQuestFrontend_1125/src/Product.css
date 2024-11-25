@@ -66,3 +66,21 @@
     color: #333;
   }
   
+  .about-title {
+    font-family: "Playfair Display", serif; /* Elegant serif font */
+    font-size: 2.5rem; /* Adjust the size */
+    font-weight: 500; /* Make it less bold for a refined look */
+    text-transform: none; /* Remove uppercase */
+    letter-spacing: 0.05em; /* Slightly space out letters */
+    color: #555; /* Softer gray */
+    font-style: italic; /* Add italics */
+  }
+  
+  .about-subtitle {
+   /* A matching serif font */
+    font-size: 1rem; /* Adjust the size for readability */
+    line-height: 1.8; /* Increase line height for elegance */
+    letter-spacing: 0.02em; /* Slight spacing for readability */
+    color: #242222; /* Softer gray for the subtitle */
+  }
+  

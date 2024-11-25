@@ -11,18 +11,29 @@ export const postAdd = async (product) => {
 };
 
 //p264, 서버에서 목록 데이터를 가져오기 위한 함수
-export const getList = async ({ page, size, keyword = "", type = "t" }) => {
+export const getList = async ({ page, size, keyword = "", type = "t", category = "" }) => {
   try {
     const res = await jwtAxios.get(`${host}/list`, {
       params: {
         page,
-        size,
+        size:9,
         keyword, // Search keyword
         type, // Search type
+        category
       },
     });
     return res.data;
   } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductCategories = async () => {
+  try {
+    const response = await jwtAxios.get(`${host}/categories`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching tour categories:", error.message);
     throw error;
   }
 };
@@ -66,6 +77,7 @@ export const postOrderInfo = async (orderInfo) => {
     throw new Error(error.response?.data?.message || "Failed to Post order info");
   }
 };
+
 
 // payment: 유저의 결제 정보를 서버로 보냄 , impUid포함한 정보.
 export const postPayInfo = async (orderInfoWithOrderId, impUid) => {

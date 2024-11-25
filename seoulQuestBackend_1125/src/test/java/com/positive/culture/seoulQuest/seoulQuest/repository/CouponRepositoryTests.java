@@ -122,6 +122,32 @@ public class CouponRepositoryTests {
         });
     }
 
+    //랜덤으로 유저에게 쿠폰넣기
+    @Test
+    @Transactional
+    @Rollback(false) // 자동 롤백 방지
+    public void insertCouponUser() {
+        String[] emails = {"user1@gmail.com", "user2@gmail.com", "user3@gmail.com",
+                "user4@gmail.com", "user5@gmail.com", "user6@gmail.com", "user7@gmail.com"};
+
+        for (String email : emails) {
+            Coupon randomCoupon = couponRepository.getReferenceById((long) (Math.random() * 23) + 1);
+
+            if (randomCoupon.isActive()) {
+                UserCoupon userCoupon = UserCoupon.builder()
+                        .coupon(randomCoupon)
+                        .couponOwner(memberRepository.findByEmail(email).orElseThrow())
+                        //.useDate(LocalDate.parse("2024-11-0"+(i+1))) //사용날짜가 있는경우
+                        .build();
+                userCouponRepository.save(userCoupon);
+                System.out.println("Saved UserCoupon for email: " + email + " with Coupon ID: " + randomCoupon.getCouponId());
+            } else {
+                System.out.println("Coupon ID " + randomCoupon.getCouponId() + " is not active.");
+            }
+        }
+    }
+
+
     @Test
     public void findCouponByEmailTest(){
         String email = "user1@gmail.com";

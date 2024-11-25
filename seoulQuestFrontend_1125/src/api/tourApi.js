@@ -4,18 +4,34 @@ import { API_SERVER_HOST } from "./reviewApi";
 const host = `${API_SERVER_HOST}/api/user/tours`;
 
 // Function to fetch the list of tours with pagination and search functionality
-export const getList = async ({ page, size, keyword = "", type = "t" }) => {
+export const getList = async ({ page, size = 9, keyword = "", type = "t", category = "" }) => {
+    try {
+        console.log("API params:", { page, size, keyword, type, category });
+        const res = await jwtAxios.get(`${host}/list`, {
+            params: {
+              page,
+              size: 9,
+              keyword, // Search keyword
+                type,
+              category  // Search type
+            },
+        });
+        console.log("API response:", res.data);
+        return res.data;
+    } catch (error) {
+        console.error("API Error:", error.message);
+        throw error;
+    }
+};
+
+  
+
+export const getTourCategories = async () => {
   try {
-    const res = await jwtAxios.get(`${host}/list`, {
-      params: {
-        page,
-        size,
-        keyword, // Search keyword
-        type,    // Search type
-      },
-    });
-    return res.data;
+    const response = await jwtAxios.get(`${host}/categories`);
+    return response.data;
   } catch (error) {
+    console.error("Error fetching tour categories:", error.message);
     throw error;
   }
 };
@@ -54,11 +70,14 @@ export const postBookInfo = async (filteredBookInfo) => {
   const headers = { "Content-Type": "application/json" };
 
   try {
-    const res = await jwtAxios.post(
-      `${host}/orders`,filteredBookInfo,{ headers });
+    const res = await jwtAxios.post(`${host}/orders`, filteredBookInfo, {
+      headers,
+    });
     return res.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to Post order info");
+    throw new Error(
+      error.response?.data?.message || "Failed to Post order info"
+    );
   }
 };
 
@@ -75,6 +94,8 @@ export const postPayInfo = async (orderInfoWithOrderId, impUid) => {
     );
     return res.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to Post payment info");
+    throw new Error(
+      error.response?.data?.message || "Failed to Post payment info"
+    );
   }
 };

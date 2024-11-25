@@ -11,6 +11,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -144,36 +145,81 @@ public class TourServiceImpl implements TourService{
                 .map(TourDTO::new)
                 .collect(Collectors.toList());
     }
-    private BooleanBuilder getSearch(PageRequestDTO requestDTO){
-        String type = requestDTO.getType();
+
+    @Override
+    public PageResponseDTO<TourDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("tno").descending());
+
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QTour qTour = QTour.tour;
-        String keyword = requestDTO.getKeyword();
 
+        // Base condition
         BooleanExpression expression = qTour.tno.gt(0L);
-
-        //조건만 생성
         booleanBuilder.and(expression);
 
-        if (type == null || type.trim().length() == 0){
+        // Add category filter if provided
+        if (category != null && !category.isEmpty()) {
+            booleanBuilder.and(qTour.category.categoryName.eq(category));
+        }
+
+        // Add keyword search filter if provided
+        if (pageRequestDTO.getKeyword() != null && !pageRequestDTO.getKeyword().isEmpty()) {
+            String keyword = pageRequestDTO.getKeyword();
+            BooleanBuilder keywordBuilder = new BooleanBuilder();
+            keywordBuilder.or(qTour.tname.containsIgnoreCase(keyword));  // Match name
+            keywordBuilder.or(qTour.tdesc.containsIgnoreCase(keyword)); // Match description
+            booleanBuilder.and(keywordBuilder);
+        }
+
+        // Fetch data using combined filters
+        Page<Tour> result = tourRepository.findAll(booleanBuilder, pageable);
+
+        // Map to DTOs
+        List<TourDTO> dtoList = result.stream()
+                .map(TourDTO::new)
+                .collect(Collectors.toList());
+
+        // Build and return response
+        return PageResponseDTO.<TourDTO>withAll()
+                .dtoList(dtoList)
+                .totalCount(result.getTotalElements())
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+
+
+
+
+    private BooleanBuilder getSearch(PageRequestDTO requestDTO) {
+        String type = requestDTO.getType();
+        String keyword = requestDTO.getKeyword();
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QTour qTour = QTour.tour;
+
+        // Default condition: tno > 0 (return all tours)
+        BooleanExpression expression = qTour.tno.gt(0L);
+        booleanBuilder.and(expression);
+
+        if (type == null || type.trim().isEmpty()) {
             return booleanBuilder;
         }
-        //검색 조건 작성하기
 
+        // Add keyword-based filtering
         BooleanBuilder conditionBuilder = new BooleanBuilder();
-        if (type.contains("t")){
-            conditionBuilder.or(qTour.tname.contains(keyword));
+        if (type.contains("t")) {
+            conditionBuilder.or(qTour.tname.containsIgnoreCase(keyword));
         }
-        if (type.contains("c")){
-            conditionBuilder.or(qTour.tname.contains(keyword));
+        if (type.contains("c")) {
+            conditionBuilder.or(qTour.category.categoryName.containsIgnoreCase(keyword));
         }
-        if (type.contains("w")){
-            conditionBuilder.or(qTour.tname.contains(keyword));
+        if (type.contains("w")) {
+            conditionBuilder.or(qTour.tlocation.containsIgnoreCase(keyword));
         }
-
         booleanBuilder.and(conditionBuilder);
-        return booleanBuilder;
 
+        return booleanBuilder;
     }
+
 
 }

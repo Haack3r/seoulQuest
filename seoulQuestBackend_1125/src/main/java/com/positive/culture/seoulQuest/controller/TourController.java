@@ -1,7 +1,9 @@
 package com.positive.culture.seoulQuest.controller;
 
+import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.dto.*;
+import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
 import com.positive.culture.seoulQuest.service.CouponService;
 import com.positive.culture.seoulQuest.service.TourOrderService;
@@ -67,6 +69,25 @@ public class TourController {
 //                .collect(Collectors.toList());
 //    }
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getTourCategories() {
+        List<String> categories = categoryRepository.findByCategoryType("tour")
+                .stream()
+                .map(Category::getCategoryName)
+                .collect(Collectors.toList());
+
+        if (categories.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(categories);
+    }
+
+
+
+
     @GetMapping("/by-address")
     public ResponseEntity<List<TourDTO>> getToursByAddress(@RequestParam String address) {
         List<TourDTO> tourDTOs = tourService.getToursByAddress(address);
@@ -89,11 +110,18 @@ public class TourController {
 
 
     //전체 목록 조회 - test 성공 (유저 , 관리자)
+//    @GetMapping("/list")
+//    public PageResponseDTO<TourDTO> list(PageRequestDTO pageRequestDTO) {
+//        log.info("list.........." + pageRequestDTO);
+//        return tourService.getList(pageRequestDTO);
+//    }
     @GetMapping("/list")
-    public PageResponseDTO<TourDTO> list(PageRequestDTO pageRequestDTO) {
-        log.info("list.........." + pageRequestDTO);
-        return tourService.getList(pageRequestDTO);
+    public PageResponseDTO<TourDTO> list(PageRequestDTO pageRequestDTO, @RequestParam(required = false) String category) {
+        log.info("list with category: {}", category != null ? category : "No category provided");
+        return tourService.getListWithCategory(pageRequestDTO, category);
     }
+
+
 
     //파일 등록 - test 성공 (관리자)
     @PostMapping("/")
@@ -174,7 +202,7 @@ public class TourController {
         return Map.of("RESULT", "SUCCESS");
     }
 
-    //orderDTO로 받아서 order 엔티티에 저장.
+    //orderDTO로 받아서 order, orderItem 엔티티에 저장.
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/orders")
     public ResponseEntity<Map<String,Object>> book(@RequestBody OrderDTO orderDTO){

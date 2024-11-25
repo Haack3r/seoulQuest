@@ -5,6 +5,7 @@ import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
+import com.positive.culture.seoulQuest.dto.TourDTO;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import java.util.List;
 
 @Transactional
 public interface ProductService {
+
+
 
     //전체 조회
     PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO);
@@ -68,7 +71,8 @@ public interface ProductService {
     public ProductDTO entityChangeDTO(Product product){
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
-//                .categoryName(product.getCategory().getCategoryName())
+                .categoryName(product.getCategory().getCategoryName())
+                .categoryType(product.getCategory().getCategoryType())
                 .pname(product.getPname())
                 .pdesc(product.getPdesc())
                 .pprice(product.getPprice())
@@ -79,4 +83,6 @@ public interface ProductService {
                 .build();
         return productDTO;
     }
+    public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category);
+
 }
