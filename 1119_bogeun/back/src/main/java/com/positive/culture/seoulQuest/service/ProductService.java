@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 public interface ProductService {
@@ -34,9 +35,12 @@ public interface ProductService {
     // 삭제
     void remove(Long pno);
 
+<<<<<<< HEAD
     // 이미지 삭제
     void removeProductImage(Long pno, String fileName);
 
+=======
+>>>>>>> 123e949 (1)
     // DTO를 엔티티로 변환해주는 메서드 -> register에 사용
     default public Product dtoToEntity(ProductDTO productDTO, Category category) {
         Product product = Product.builder()

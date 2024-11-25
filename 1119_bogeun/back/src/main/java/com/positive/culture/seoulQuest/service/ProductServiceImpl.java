@@ -34,7 +34,10 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+<<<<<<< HEAD
     private final CustomFileUtil fileUtil;
+=======
+>>>>>>> 123e949 (1)
 
     // 전체 조회----(유저, 관리자)
     @Override
@@ -232,10 +235,15 @@ public class ProductServiceImpl implements ProductService {
     // 수정 --(관리자)
     @Override
     public void modify(ProductDTO productDTO) {
+<<<<<<< HEAD
+=======
+        // 1. 기존 상품 조회
+>>>>>>> 123e949 (1)
         Optional<Product> result = productRepository.findById(productDTO.getPno());
         Product product = result.orElseThrow();
         Category category = product.getCategory();
 
+<<<<<<< HEAD
         // 기존 이미지 목록 초기화
         product.clearList();
 
@@ -246,12 +254,16 @@ public class ProductServiceImpl implements ProductService {
 
         category.ChangeCategoryName(productDTO.getCategoryName());
         category.ChangeCategoryType(productDTO.getCategoryType());
+=======
+        // 2. 기본 정보 업데이트
+>>>>>>> 123e949 (1)
         product.changeName(productDTO.getPname());
         product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPprice());
         product.changeQuantity(productDTO.getPqty());
         product.changeShippingFee(productDTO.getShippingFee());
 
+<<<<<<< HEAD
         // // 나머지 필드 업데이트
         // product.changeBasicInfo(
         // productDTO.getPname(),
@@ -260,6 +272,20 @@ public class ProductServiceImpl implements ProductService {
         // productDTO.getPqty(),
         // productDTO.getShippingCost());
 
+=======
+        // 3. 이미지 처리 - 기존 이미지는 유지하고 새 이미지만 추가
+        List<String> newUploadFileNames = productDTO.getUploadFileNames();
+
+        if (newUploadFileNames != null && !newUploadFileNames.isEmpty()) {
+            // 기존 이미지 리스트 유지하면서 새 이미지 추가
+            newUploadFileNames.forEach(uploadName -> {
+                if (!product.getUploadFileNames().contains(uploadName)) {
+                    product.addImageString(uploadName);
+                }
+            });
+        }
+
+>>>>>>> 123e949 (1)
         productRepository.save(product);
     }
 

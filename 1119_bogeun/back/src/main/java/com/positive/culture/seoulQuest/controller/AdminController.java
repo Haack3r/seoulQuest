@@ -171,12 +171,20 @@ public class AdminController {
         // 새로 업로드 되어서 만들어진 파일 이름들
         List<String> currentUploadFileNames = fileUtil.saveFiles(files);
 
+<<<<<<< HEAD
         // 화면에서 유지된 파일들 (없으면 새 ArrayList 생성)
         List<String> uploadedFileNames = productDTO.getUploadFileNames() != null ? productDTO.getUploadFileNames()
                 : new ArrayList<>();
 
         // 새로 업로드된 파일들 추가
         if (currentUploadFileNames != null && !currentUploadFileNames.isEmpty()) {
+=======
+        // 화면에서 변화없이 계속 유지된 파일들
+        List<String> uploadedFileNames = productDTO.getUploadFileNames();
+
+        // 유지되는 파일들 + 새로 업로드 된 파일 이름들이 저장해야하는 파일 목록이 됨
+        if (currentUploadFileNames != null && currentUploadFileNames.size() > 0) {
+>>>>>>> 123e949 (1)
             uploadedFileNames.addAll(currentUploadFileNames);
         }
 
@@ -186,6 +194,7 @@ public class AdminController {
         // 수정작업
         productService.modify(productDTO);
 
+<<<<<<< HEAD
         // 삭제된 파일 처리
         if (oldFileNames != null && !oldFileNames.isEmpty()) {
             List<String> removedFiles = oldFileNames.stream()
@@ -198,6 +207,18 @@ public class AdminController {
             }
         }
 
+=======
+        // 지워져야하는 목록찾기
+        if (oldFileNames != null && oldFileNames.size() > 0) {
+            List<String> removeFiles = oldFileNames
+                    .stream()
+                    .filter(fileName -> uploadedFileNames.indexOf(fileName) == -1)
+                    .collect(Collectors.toList());
+
+            // 실제 파일 삭제
+            fileUtil.deleteFiles(removeFiles);
+        }
+>>>>>>> 123e949 (1)
         return Map.of("RESULT", "SUCCESS");
     }
 
@@ -263,6 +284,7 @@ public class AdminController {
     }
 
     // 이미지 삭제
+<<<<<<< HEAD
     // @DeleteMapping("/admin/product/image/{fileName}")
     // @PreAuthorize("hasRole('ROLE_ADMIN')")
     // public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
@@ -287,6 +309,18 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("이미지 삭제 실패: " + e.getMessage());
+=======
+    @DeleteMapping("/admin/product/image/delete/{fileName}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
+        try {
+            fileUtil.deleteFiles(List.of(fileName));
+            return ResponseEntity.ok("File deleted successfully");
+        } catch (Exception e) {
+            log.error("파일 삭제 중 에러: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to delete file");
+>>>>>>> 123e949 (1)
         }
     }
 

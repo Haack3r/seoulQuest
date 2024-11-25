@@ -1,5 +1,6 @@
 package com.positive.culture.seoulQuest.repository;
 
+import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.domain.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,19 +29,27 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
         @Query("update Product p set p.delFlag = :flag where p.pno = :pno")
         void updateToDelete(@Param("pno") Long pno, @Param("flag") boolean flag);
 
+<<<<<<< HEAD
         // 이미지 포함한 상품 정보 조회
+=======
+>>>>>>> 123e949 (1)
         @Query("select p from Product p " +
                         "left join fetch p.productImageList " +
                         "where p.delFlag = false " +
                         "and (:keyword is null or p.pname like concat('%',:keyword,'%'))")
         Page<Product> AdminProductList(Pageable pageable, @Param("keyword") String keyword);
 
+<<<<<<< HEAD
         // 이미지 없이 상품 정보만 조회
+=======
+        // 새로운 쿼리 - 이미지 없이 상품 정보만 조회
+>>>>>>> 123e949 (1)
         @Query("select p from Product p " +
                         "where p.delFlag = false " +
                         "and (:keyword is null or p.pname like concat('%',:keyword,'%'))")
         Page<Product> AdminProductListNoImage(Pageable pageable, @Param("keyword") String keyword);
 
+<<<<<<< HEAD
         // 특정 상품의 이미지 삭제
         @Modifying
         @Query("delete from Product p join p.productImageList pi where p.pno = :pno and pi.fileName = :fileName")
@@ -51,6 +60,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
          * )--------------------------------
          */
 
+=======
+        /*
+         * ------------------------AI 추천 쿼리문( 써도 되고 안 써도 되고
+         * )--------------------------------
+         */
+
+>>>>>>> 123e949 (1)
         // // 카테고리별 상품 조회
         // @Query("select p, pi from Product p left join p.productImageList pi " +
         // "where pi.ord = 0 and p.delFlag = false and p.category.categoryName =

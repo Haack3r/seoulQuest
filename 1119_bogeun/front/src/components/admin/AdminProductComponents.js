@@ -3,13 +3,21 @@ import { Search, Plus } from "lucide-react";
 import { addProduct, adminProductList, deleteProduct, getImage, getProduct, modifyProduct } from '../../api/AdminApi';
 import { layoutStyles, inputStyles, Button } from './ui/Styles';
 import useCustomLogin from '../../hooks/useCustomLogin';
+<<<<<<< HEAD
 import ProductForm from './ui/ProductForm';
+=======
+import { ProductForm } from './ui/ProductForm';
+>>>>>>> 123e949 (1)
 import { initState } from './ui/ProducInitState';
 
 const host = `http://localhost:8080/api`
 
 const AdminProductComponents = () => {
     const [serverData, setServerData] = useState(initState);
+<<<<<<< HEAD
+=======
+    // const [uploadFileNames, setUploadFileNames] = useState([]);
+>>>>>>> 123e949 (1)
     const [isEditing, setIsEditing] = useState(false);
     const [showAddForm, setShowAddForm] = useState(false);
     const [selectedPno, setSelectedPno] = useState(null);
@@ -38,7 +46,17 @@ const AdminProductComponents = () => {
         setFetching(true);
         adminProductList({ page, size, keyword, type })
             .then(data => {
+<<<<<<< HEAD
                 setServerData(data);
+=======
+                setServerData({
+                    ...data,
+                    dtoList: data.dtoList.map(product => ({
+                        ...product,
+                        uploadFileNames: product.uploadFileNames || []
+                    }))
+                });
+>>>>>>> 123e949 (1)
             })
             .catch(err => {
                 console.error("데이터 조회 실패:", err);
@@ -175,7 +193,14 @@ const AdminProductComponents = () => {
     const handleGetProduct = (pno) => {
         getProduct(pno)
             .then(data => {
+<<<<<<< HEAD
                 setSelectedProduct(data);
+=======
+                setSelectedProduct({
+                    ...data,
+                    uploadFileNames: data.uploadFileNames || []
+                });
+>>>>>>> 123e949 (1)
                 setShowProductDetail(true);
                 console.log("Product data:", data);
             })
@@ -285,6 +310,7 @@ const AdminProductComponents = () => {
                                 <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg">
                                     {(product.uploadFileNames && Array.isArray(product.uploadFileNames) && product.uploadFileNames.length > 0) ? (
                                         <img
+<<<<<<< HEAD
                                             src={`${host}/product/image/${product.uploadFileNames[0]}`}
                                             alt={product.pname}
                                             className="h-48 w-full object-cover"
@@ -293,6 +319,12 @@ const AdminProductComponents = () => {
                                                 e.target.onerror = null; // 무한 루프 방지    
                                                 console.log('이미지 로드 실패:', product.uploadFileNames[0]);
                                             }}
+=======
+                                            src={getImageUrl(product.uploadFileNames[0])?.url}
+                                            alt={product.pname}
+                                            className="h-48 w-full object-cover"
+                                            onClick={() => handleGetProduct(product.pno)}
+>>>>>>> 123e949 (1)
                                         />
                                     ) : (
                                         <div
@@ -365,7 +397,12 @@ const AdminProductComponents = () => {
                                 <div className="aspect-square rounded-lg overflow-hidden">
                                     {(selectedProduct?.uploadFileNames?.length > 0) ? (
                                         <img
+<<<<<<< HEAD
                                             src={`${host}/product/image/${selectedProduct.uploadFileNames[0]}`}
+=======
+                                            id={`product-image-${selectedProduct.pno}`}
+                                            src={getImageUrl(selectedProduct.uploadFileNames[0])?.url}
+>>>>>>> 123e949 (1)
                                             alt={selectedProduct.pname}
                                             className="w-full h-full object-cover"
                                         />
@@ -382,7 +419,11 @@ const AdminProductComponents = () => {
                                             {selectedProduct.uploadFileNames.slice(1).map((fileName, index) => (
                                                 <div key={index} className="aspect-square rounded-lg overflow-hidden">
                                                     <img
+<<<<<<< HEAD
                                                         src={`${host}/product/image/${fileName}`}
+=======
+                                                        src={getImageUrl(fileName).url}
+>>>>>>> 123e949 (1)
                                                         alt={`${selectedProduct.pname} ${index + 2}`}
                                                         className="w-full h-full object-cover"
                                                     />

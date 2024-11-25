@@ -188,6 +188,7 @@ export const getProduct = async (pno) => {
 
 // 이미지 URL을 생성하는 함수 추가
 // URL 로 저장하기 때문에 upload 폴더에 저장되지 않고 바로 접근 가능 (서로 장단점이 있음)
+<<<<<<< HEAD
 export const getImage = async (fileName) => {
     if (!fileName) return null;
     try {
@@ -203,6 +204,22 @@ export const deleteImage = async (fileName) => {
     try {
         const response = await jwtAxios.delete(
             `${host}/admin/product/image/${fileName}`
+=======
+export const getImageUrl = (fileName) => {
+    if (!fileName || typeof fileName !== 'string' || fileName.trim() === '') {
+        return null;
+    }
+
+    return {
+        url: `${host}/product/image/${fileName}`,
+    };
+};
+
+export const delImgUrl = async (fileName) => {
+    try {
+        const response = await jwtAxios.delete(
+            `${host}/admin/product/image/delete/${fileName}`
+>>>>>>> 123e949 (1)
         )
         return response;
     } catch (err) {

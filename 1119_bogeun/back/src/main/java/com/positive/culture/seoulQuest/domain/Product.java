@@ -89,16 +89,22 @@ public class Product {
     // ------------------------------------------------------
     // 이미지 정보 추가
     public void addImage(ProductImage productImage) {
+<<<<<<< HEAD
         // if (this.productImageList == null) {
         // this.productImageList = new ArrayList<>();
         // }
+=======
+>>>>>>> 123e949 (1)
         productImage.setOrd(this.productImageList.size());
         productImageList.add(productImage);
     }
 
     // 이미지 파일 이름 추가
     public void addImageString(String fileName) {
+<<<<<<< HEAD
         // if (fileName != null && !fileName.trim().isEmpty()) {
+=======
+>>>>>>> 123e949 (1)
         ProductImage productImage = ProductImage.builder()
                 .fileName(fileName)
                 .build();
@@ -108,16 +114,25 @@ public class Product {
 
     // productImage 리스트를 삭제
     public void clearList() {
+<<<<<<< HEAD
         // if (this.productImageList != null) {
         // this.productImageList.clear();
         // }
         this.productImageList = new ArrayList<>();
+=======
+        this.productImageList.clear();
+>>>>>>> 123e949 (1)
     }
 
     // uploadFileNames getter 메서드
     public List<String> getUploadFileNames() {
+<<<<<<< HEAD
         if (this.productImageList == null) {
             return new ArrayList<>();
+=======
+        if (this.productImageList == null || this.productImageList.isEmpty()) {
+            return new ArrayList<>(); // 빈 리스트 반환
+>>>>>>> 123e949 (1)
         }
         return this.productImageList.stream()
                 .map(ProductImage::getFileName)
@@ -127,12 +142,20 @@ public class Product {
 
     // uploadFileNames setter 메서드
     public void setUploadFileNames(List<String> fileNames) {
+<<<<<<< HEAD
         clearList(); // 기존 리스트 초기화
         if (fileNames != null) {
             fileNames.stream()
                     .filter(fileName -> fileName != null && !fileName.trim().isEmpty())
                     .forEach(this::addImageString);
         }
+=======
+        fileNames.forEach(fileName -> {
+            if (!this.getUploadFileNames().contains(fileName)) {
+                this.addImageString(fileName);
+            }
+        });
+>>>>>>> 123e949 (1)
     }
 
     // 기본 정보 변경을 위한 메서드 추가

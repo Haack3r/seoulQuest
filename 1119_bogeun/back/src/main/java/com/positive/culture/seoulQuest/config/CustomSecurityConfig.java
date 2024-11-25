@@ -81,8 +81,11 @@ public class CustomSecurityConfig {
                         "/api/user/tours/by-address",
                         "/api/products/**",
                         "/api/tours/**",
+<<<<<<< HEAD
                         "/api/mypage/findpassword",
                         "/api/mypage/findemail",
+=======
+>>>>>>> 123e949 (1)
                         "/upload/**",
                         "/api/admin/product/image/**",
                         "/api/admin/tour/image/**",
@@ -92,10 +95,14 @@ public class CustomSecurityConfig {
                 .requestMatchers(
                         HttpMethod.OPTIONS,
                         "/upload/**",
+<<<<<<< HEAD
                         "/api/member/signup",
                         "/api/member/check",
                         "/api/member/checknickname",
                         "/api/member/login",
+=======
+                        "/api/member/**",
+>>>>>>> 123e949 (1)
                         "/api/tours/**",
                         "/api/products/**",
                         "/api/user/tours/view/**",

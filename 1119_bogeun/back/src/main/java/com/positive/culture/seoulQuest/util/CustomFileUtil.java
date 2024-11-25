@@ -121,12 +121,15 @@ public class CustomFileUtil { // 파일의 입출력을 담당
         // log.warn("File not readable");
         // return ResponseEntity.notFound().build();
         // }
+<<<<<<< HEAD
 
         // 파일이 없거나 읽을 수 없는 경우 404 반환
         if (!resource.exists() || !resource.isReadable()) {
             log.warn("File not found or not readable: " + fileName);
             return ResponseEntity.notFound().build();
         }
+=======
+>>>>>>> 123e949 (1)
 
         // 4. HTTP 헤더를 생성
         HttpHeaders headers = new HttpHeaders();
