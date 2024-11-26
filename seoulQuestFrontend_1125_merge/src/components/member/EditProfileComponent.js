@@ -34,7 +34,7 @@ const EditProfileComponent = () => {
     getUserInfo().then((data) => {
       setUserInfo(data);
     });
-  }, []);
+  }, [isLoading]);
 
   const handleChange = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });

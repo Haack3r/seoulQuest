@@ -144,7 +144,7 @@ const ReviewAddModal = ({closeAddModal, getInfo, postAdd}) => {
             <div className="flex justify-end mt-6">
                 <button
                     type='submit'
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg transition"
+                    className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 px-8 rounded-lg transition"
                 >
                     Write Review
                 </button>

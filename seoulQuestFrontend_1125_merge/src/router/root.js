@@ -22,6 +22,7 @@ const ToursIndex = lazy(() => import("../pages/tours/TourIndexPage"))
 const NUToursIndex = lazy(() => import("../pages/tours/NUTourIndexPage"))
 const Cart = lazy(() => import("../pages/Cart"))
 const Favorite = lazy(() => import("../pages/Favorite"))
+const Coupon = lazy(() => import("../pages/member/CouponPage"))
 
 const root = createBrowserRouter([
     {
@@ -71,6 +72,10 @@ const root = createBrowserRouter([
     {
         path: "mypage",
         children: myPageRouter()
+    },
+    {
+        path: "coupon",
+        element: <Suspense fallback={Loading}><Coupon /></Suspense>,
     },
     {
         path: "admin",

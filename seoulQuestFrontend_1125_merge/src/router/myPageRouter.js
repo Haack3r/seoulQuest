@@ -6,8 +6,7 @@ const myPageRouter = () => {
     const Loading = <div>Loading...</div>
     const MyPage = lazy(() => import("../pages/mypage/MyPage"))
     const EditProfilePage = lazy(() => import("../pages/mypage/EditProfilePage"))
-    const ReviewProductPage = lazy(() => import("../pages/mypage/ProductReviewPage"))
-    const ReviewTourPage = lazy(() => import("../pages/mypage/TourReviewPage"))
+    const ReviewPage = lazy(() => import("../pages/mypage/ReviewPage"))
     // const OrderPage = lazy(() => import("../pages/review/OrderPage"))
     // const BookingPage = lazy(() => import("../pages/review/BookingPage"))
     return [
@@ -33,12 +32,8 @@ const myPageRouter = () => {
         //     element: <Suspense fallback={Loading}><BookingPage /></Suspense>
         // },
         {
-            path: "review/products",
-            element: <Suspense fallback={Loading}><ReviewProductPage /></Suspense>
-        },
-        {
-            path: "review/tours",
-            element: <Suspense fallback={Loading}><ReviewTourPage /></Suspense>
+            path: "review",
+            element: <Suspense fallback={Loading}><ReviewPage /></Suspense>
         },
     ]
 }

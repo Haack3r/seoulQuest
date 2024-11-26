@@ -5,12 +5,15 @@ import {
   deleteFavItem,
   deleteFavItemsBulk,
 } from "../api/favoriteApi";
+import useCustomLogin from "../hooks/useCustomLogin";
 
 // Define the existing async thunks
 export const getFavItemsAsync = createAsyncThunk(
   "fav/getFavItems",
   async () => {
-    const response = await getFavItems();
+    const { loginState } = useCustomLogin();
+    const email = loginState.email; // Ensure email is present
+    const response = await getFavItems(email);
     return response; // This should be the data from the API
   }
 );

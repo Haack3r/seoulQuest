@@ -52,7 +52,7 @@ public class ProductRepositoryTests {
                     .pprice(100*(i+1))
                     .pdesc(productDescriptions[i])
                     .pqty(25*(i+1))
-                    .shippingCost(i<13?3000:0)
+                    .shippingFee(i<13?3000:0)
                     .category(categoryRepository.getReferenceById(5l))
                     .build();
             product.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE1.jpg");

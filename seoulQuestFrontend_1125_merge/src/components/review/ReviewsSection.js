@@ -25,12 +25,7 @@ const ReviewsSection = ({ itemNo, getItemReview ,putOne, deleteOne }) => {
     }, [itemNo,refresh]);
 
     const handleNavigation = () => {
-        const currentPath = window.location.pathname;
-        if (currentPath.includes('products')) {
-            navigate('/review/products/list');
-        } else if (currentPath.includes('tours')) {
-            navigate('/review/tours/list');
-        }
+            navigate('/mypage/review'); 
     };
 
     const nextSlide = () => {
@@ -64,7 +59,7 @@ const ReviewsSection = ({ itemNo, getItemReview ,putOne, deleteOne }) => {
                     className="px-4 py-2 text-gray-500 underline hover:text-gray-600"
                     onClick={handleNavigation}
                 >
-                    Go to List
+                    Go to Your Review List
                 </button>
             </div>
 

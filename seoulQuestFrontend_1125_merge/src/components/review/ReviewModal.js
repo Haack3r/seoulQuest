@@ -102,7 +102,7 @@ const ReviewModal = ({ selectedReview, closeEditModal, deleteOne ,putOne}) => {
                     Modify
                   </button>
                   <button
-                    className="px-4 py-2 bg-stone-500 text-white rounded-lg mr-2 hover:bg-yellow-600"
+                    className="px-4 py-2 bg-stone-400 text-white rounded-lg mr-2 hover:bg-stone-500"
                     onClick={() => handleClickDelete(selectedReview.prid||selectedReview.trid)}
                   >
                     Delete

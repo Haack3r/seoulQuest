@@ -154,7 +154,7 @@ const BasicMenu = () => {
                         <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
-                        to="/mypage/coupon"
+                        to="/coupon"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
                         <Tickets className="h-5 w-5 text-gray-600 hover:text-gray-900" />
@@ -288,7 +288,7 @@ const BasicMenu = () => {
                         <ShoppingBagIcon className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
-                        to={"/mypage/coupon"}
+                        to={"/coupon"}
                         className="flex items-center space-x-2 menu-animation-color"
                       >
                         <Tickets className="h-5 w-5 menu-animation-color" />
