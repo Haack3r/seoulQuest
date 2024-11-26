@@ -1,45 +1,31 @@
 import React, { lazy, Suspense } from 'react'
-import { Navigate } from 'react-router-dom'
 
 const myPageRouter = () => {
 
     const Loading = <div>Loading...</div>
     const MyPage = lazy(() => import("../pages/mypage/MyPage"))
     const EditProfilePage = lazy(() => import("../pages/mypage/EditProfilePage"))
-    const ReviewProductPage = lazy(() => import("../pages/mypage/ProductReviewPage"))
-    const ReviewTourPage = lazy(() => import("../pages/mypage/TourReviewPage"))
-    // const OrderPage = lazy(() => import("../pages/review/OrderPage"))
-    // const BookingPage = lazy(() => import("../pages/review/BookingPage"))
+    const ProductReviewList = lazy(() => import("../pages/review/ProductReviewPage"))
+    // const TourReviewList = lazy(() => import("../pages/review/TourReviewPage"))
     return [
        
         {
-            path: "myprofile",
+            path: "",
             element: <Suspense fallback={Loading}><MyPage/></Suspense>,
         },
+        ,
         {
-            path: "",
-            element: <Navigate replace to="/mypage/myprofile" />
-          },
-        {
-            path: "editprofile",
+            path: "editProfile",
             element: <Suspense fallback={Loading}><EditProfilePage/></Suspense>,
         },
-        // {
-        //     path: "orders",
-        //     element: <Suspense fallback={Loading}><OrderPage /></Suspense>
-        // },
-        // {
-        //     path: "bookings",
-        //     element: <Suspense fallback={Loading}><BookingPage /></Suspense>
-        // },
         {
             path: "review/products",
-            element: <Suspense fallback={Loading}><ReviewProductPage /></Suspense>
+            element: <Suspense fallback={Loading}><ProductReviewList /></Suspense>
         },
-        {
-            path: "review/tours",
-            element: <Suspense fallback={Loading}><ReviewTourPage /></Suspense>
-        },
+        // {
+        //     path: "review/tours",
+        //     element: <Suspense fallback={Loading}><TourReviewList /></Suspense>
+        //   },
     ]
 }
 

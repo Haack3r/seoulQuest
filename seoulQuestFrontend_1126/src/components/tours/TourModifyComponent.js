@@ -19,7 +19,7 @@ const TourModifyComponent = ({ tno }) => {
   const [tour, setTour] = useState(initState);
   const [fetching, setFetching] = useState(false);
   const [result, setResult] = useState(null);
-  const { moveToList, moveToRead, page, size } = useCustomMove();
+  const { moveToList, moveToTourRead, page, size } = useCustomMove();
   const uploadRef = useRef();
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const TourModifyComponent = ({ tno }) => {
 
   const closeModal = () => {
     if (result === "Modified") {
-      moveToRead(tno);
+      moveToTourRead(tno);
     } else if (result === "Deleted") {
       moveToList({ page, size });
     }

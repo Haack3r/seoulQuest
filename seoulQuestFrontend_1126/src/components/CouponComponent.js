@@ -21,8 +21,8 @@ const CouponComponent = () => {
 
   const fetchAvailableCoupons = async () => {
     try {
-      const userEmail = email;
-      const coupons = await getAvailableCoupons(userEmail);
+      const userEmail = email; // Fetch user email from local storage or user object
+      const coupons = await getAvailableCoupons(userEmail); // Pass email as parameter
       setAvailableCoupons(coupons);
     } catch (error) {
       console.error("Error fetching available coupons:", error);
@@ -35,7 +35,7 @@ const CouponComponent = () => {
       setMyCoupons(
         coupons.map((coupon) => ({
           ...coupon,
-          isUsed: coupon.useDate !== null,
+          isUsed: coupon.useDate !== null, // Add isUsed property
         }))
       );
     } catch (error) {

@@ -27,7 +27,7 @@ const initState = {
 
 const TourListComponent = () => {
   const { exceptionHandle } = useCustomLogin();
-  const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
+  const { page, size, refresh, moveToList, moveToTourRead } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
   const [fetching, setFetching] = useState(false);
   const { isLogin, loginState } = useCustomLogin();
@@ -49,8 +49,18 @@ const TourListComponent = () => {
   useEffect(() => {
     // Fetch categories
     getTourCategories()
-      .then((data) => setCategories(data))
-      .catch((err) => exceptionHandle(err));
+      .then((data) => {
+        if (data && Array.isArray(data)) {
+          setCategories(data);
+        } else {
+          console.log("No categories found");
+          setCategories([]);
+        }
+      })
+      .catch((err) => {
+        exceptionHandle(err);
+        setCategories([]);
+      });
   }, []);
 
   const handleCategoryChange = (e) => {
@@ -152,7 +162,7 @@ const TourListComponent = () => {
                 <div
                   key={tour.tno}
                   className="flex flex-col items-center text-center"
-                  onClick={() => moveToRead(tour.tno)}
+                  onClick={() => moveToTourRead(tour.tno)}
                 >
                   {/* Image with Heart Icon */}
                   <div className="relative w-full max-w-xs h-52 overflow-hidden">
@@ -162,18 +172,16 @@ const TourListComponent = () => {
                       className="w-full h-full object-cover opacity-80 hover:opacity-90"
                     />
                     <button
-                      className={`absolute top-2 right-2 ${
-                        isFavorite ? "text-red-500" : "text-white"
-                      }`}
+                      className={`absolute top-2 right-2 ${isFavorite ? "text-red-500" : "text-white"
+                        }`}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleToggleFavorite(tour);
                       }}
                     >
                       <HeartIcon
-                        className={`h-6 w-6 ${
-                          isFavorite ? "fill-current" : ""
-                        }`}
+                        className={`h-6 w-6 ${isFavorite ? "fill-current" : ""
+                          }`}
                       />
                     </button>
                   </div>

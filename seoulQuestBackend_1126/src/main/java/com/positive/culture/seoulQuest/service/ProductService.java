@@ -11,77 +11,89 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
 public interface ProductService {
 
-
-
-    //전체 조회
+    // 전체 조회
     PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO);
 
-    //하나 조회
+    // 전체 조회 ( 관리자 용 )
+    PageResponseDTO<ProductDTO> getAdminProductList(PageRequestDTO pageRequestDTO);
+
+    // 하나 조회
     ProductDTO get(Long pno);
 
-    //등록
+    // 등록
     Long register(ProductDTO productDTO);
 
-    //수정
+    // 수정
     void modify(ProductDTO productDTO);
 
-    //삭제
+    // 삭제
     void remove(Long pno);
 
-    //DTO를 엔티티로 변환해주는 메서드 -> register에 사용
-    default
-    public Product dtoToEntity(ProductDTO productDTO){
+    // 이미지 삭제
+    void removeProductImage(Long pno, String fileName);
 
-        //나중에 수정해야함
-        Category cartegory =new Category(5l,"sadfa","asdfaf");
-
-        Product product =Product.builder()
-                .category(cartegory)
+    // DTO를 엔티티로 변환해주는 메서드 -> register에 사용
+    default public Product dtoToEntity(ProductDTO productDTO, Category category) {
+        Product product = Product.builder()
                 .pno(productDTO.getPno())
+                .category(category)
                 .pname(productDTO.getPname())
                 .pdesc(productDTO.getPdesc())
                 .pprice(productDTO.getPprice())
                 .pqty(productDTO.getPqty())
+                .shippingFee(productDTO.getShippingFee())
                 .createAt(productDTO.getCreateAt())
                 .updateAt(productDTO.getUpdateAt())
+                .delFlag(productDTO.isDelFlag())
                 .build();
 
-        //업로드 처리가 끝난 파일들의 이름 리스트
+        // 업로드 처리가 끝난 파일들의 이름 리스트
         List<String> uploadFileNames = productDTO.getUploadFileNames();
 
-        if(uploadFileNames== null){
+        if (uploadFileNames == null) {
             return product;
         }
 
-        uploadFileNames.stream().forEach(uploadNames ->{
+        uploadFileNames.stream().forEach(uploadNames -> {
             product.addImageString(uploadNames);
         });
 
         return product;
     }
 
-    //엔티티를 DTO로 변환해주는 메서드  -> getList와 get에 사용
-    default
-    public ProductDTO entityChangeDTO(Product product){
+    // 엔티티를 DTO로 변환해주는 메서드 -> getList와 get에 사용
+    default public ProductDTO entityChangeDTO(Product product) {
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
                 .categoryName(product.getCategory().getCategoryName())
-                .categoryType(product.getCategory().getCategoryType())
                 .pname(product.getPname())
                 .pdesc(product.getPdesc())
                 .pprice(product.getPprice())
                 .shippingFee(product.getShippingFee())
                 .pqty(product.getPqty())
+                .shippingFee(product.getShippingFee())
                 .createAt(product.getCreateAt())
-                .createAt(product.getUpdateAt())
+                .updateAt(product.getUpdateAt())
+                .delFlag(product.isDelFlag())
                 .build();
+
+        // 이미지 정보 처리 - null 체크 추가 필요
+        if (product.getUploadFileNames() != null && !product.getUploadFileNames().isEmpty()) {
+            productDTO.setUploadFileNames(product.getUploadFileNames());
+        } else {
+            productDTO.setUploadFileNames(new ArrayList<>()); // 빈 배열로 초기화
+        }
+
         return productDTO;
     }
-    public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category);
+
+    // public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO
+    // pageRequestDTO, String category);
 
 }

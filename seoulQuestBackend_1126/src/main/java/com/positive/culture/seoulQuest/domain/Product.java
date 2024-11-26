@@ -6,9 +6,10 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
-@Table(name="tbl_product")
+@Table(name = "tbl_product")
 @Getter
 @ToString(exclude = "productImageList")
 @Builder
@@ -21,7 +22,7 @@ public class Product {
     private Long pno;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     private String pname;
@@ -33,23 +34,37 @@ public class Product {
 
     private int shippingFee;
 
-    //통계를 내거나 정보를 확인할 때 사용
-    private LocalDate createAt; //생성 일자
-    private LocalDate updateAt; //수정 일자
+    // 통계를 내거나 정보를 확인할 때 사용
+    private LocalDate createAt; // 생성 일자
+    private LocalDate updateAt; // 수정 일자
 
-    private boolean delFlag; //상품 삭제여부
+    private boolean delFlag; // 상품 삭제여부
 
-    //실행시 , 자동으로 product_image_list table이 생성됨.
-    //하나의 엔티티가 여러개의 VO(값타입 객체)를 담을때 사용, 자동으로 이에 해당하는 테이블이 생성됨
+    // 실행시 , 자동으로 product_image_list table이 생성됨.
+    // 하나의 엔티티가 여러개의 VO(값타입 객체)를 담을때 사용, 자동으로 이에 해당하는 테이블이 생성됨
     @ElementCollection
     @Builder.Default
     private List<ProductImage> productImageList = new ArrayList<>();
 
-    public void changeName(String pname){this.pname = pname;}
-    public void changeDesc(String pdesc){this.pdesc = pdesc;}
-    public void changePrice(int pprice){this.pprice=pprice;}
-    public void changeQuantity(int pqty){this.pqty=pqty;}
-    public void changeShippingFee(int shippingFee) {this.shippingFee = shippingFee;}
+    public void changeName(String pname) {
+        this.pname = pname;
+    }
+
+    public void changeDesc(String pdesc) {
+        this.pdesc = pdesc;
+    }
+
+    public void changePrice(int pprice) {
+        this.pprice = pprice;
+    }
+
+    public void changeQuantity(int pqty) {
+        this.pqty = pqty;
+    }
+
+    public void changeShippingFee(int shippingFee) {
+        this.shippingFee = shippingFee;
+    }
 
     @PrePersist
     public void prePersist() {
@@ -62,25 +77,48 @@ public class Product {
         this.updateAt = LocalDate.now();
     }
 
-    public void changeDel(boolean delFlag){this.delFlag =delFlag;}
+    public void changeDel(boolean delFlag) {
+        this.delFlag = delFlag;
+    }
 
-    //------------------------------------------------------
-    //이미지 정보 추가
-    public void addImage(ProductImage productImage){
+    // ------------------------------------------------------
+    // 이미지 정보 추가
+    public void addImage(ProductImage productImage) {
         productImage.setOrd(this.productImageList.size());
         productImageList.add(productImage);
     }
 
-    //이미지 파일 이름 추가
-    public void addImageString(String fileName){
+    // 이미지 파일 이름 추가
+    public void addImageString(String fileName) {
         ProductImage productImage = ProductImage.builder()
                 .fileName(fileName)
                 .build();
         addImage(productImage);
     }
 
-    //productImage 리스트를 삭제
-    public void clearList(){
+    // productImage 리스트를 삭제
+    public void clearList() {
         this.productImageList.clear();
+    }
+
+    // uploadFileNames getter 메서드
+    public List<String> getUploadFileNames() {
+        if (this.productImageList == null) {
+            return new ArrayList<>();
+        }
+        return this.productImageList.stream()
+                .map(ProductImage::getFileName)
+                .filter(fileName -> fileName != null && !fileName.trim().isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    // uploadFileNames setter 메서드
+    public void setUploadFileNames(List<String> fileNames) {
+        clearList(); // 기존 리스트 초기화
+        if (fileNames != null) {
+            fileNames.stream()
+                    .filter(fileName -> fileName != null && !fileName.trim().isEmpty())
+                    .forEach(this::addImageString);
+        }
     }
 }

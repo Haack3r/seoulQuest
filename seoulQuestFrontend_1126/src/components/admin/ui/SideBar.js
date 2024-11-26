@@ -87,11 +87,11 @@ export default function SideBar() {
             children: [
                 {
                     key: '3',
-                    label: '상품 목록 및 관리',
+                    label: <Link to="/admin/product">상품 목록 및 관리</Link>,
                 },
                 {
                     key: '4',
-                    label: '재고 통계'
+                    label: <Link to="/admin/inventory">재고 통계</Link>,
                 }
 
             ]
@@ -103,15 +103,15 @@ export default function SideBar() {
             children: [
                 {
                     key: '5',
-                    label: '배송 관리',
+                    label: <Link to="/admin/delivery">배송 관리</Link>,
                 },
                 {
                     key: '6',
-                    label: '반품 및 교환',
+                    label: <Link to="/admin/exchange">반품 및 교환</Link>,
                 },
                 {
                     key: '7',
-                    label: '배송 비용 관리'
+                    label: <Link to="/admin/cost">배송 비용 관리</Link>,
                 }
             ]
         },
@@ -122,7 +122,7 @@ export default function SideBar() {
             children: [
                 {
                     key: '8',
-                    label: '고객 정보 및 관리',
+                    label: <Link to="/admin/customer">고객 정보 및 관리</Link>,
                 }
             ]
         },
@@ -133,11 +133,11 @@ export default function SideBar() {
             children: [
                 {
                     key: '9',
-                    label: '투어 목록 및 관리',
+                    label: <Link to="/admin/tour">투어 목록 및 관리</Link>,
                 },
                 {
                     key: '10',
-                    label: '고객 예약 관리',
+                    label: <Link to="/admin/reservation">고객 예약 관리</Link>,
                 }
             ]
         },

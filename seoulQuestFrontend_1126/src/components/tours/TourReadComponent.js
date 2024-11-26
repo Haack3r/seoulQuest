@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { API_SERVER_HOST, getTourItemReview ,putTourOne,deleteTourOne} from "../../api/reviewApi";
-import ReviewsSection from '../review/ReviewsSection';
+import {
+  API_SERVER_HOST,
+  getTourItemReview,
+  putTourOne,
+  deleteTourOne,
+} from "../../api/reviewApi";
+import ReviewsSection from "../review/ReviewsSection";
 import { StarIcon, HeartIcon, ShoppingCart } from "lucide-react";
 import { Calendar, Popover, Badge } from "antd";
 import { UserOutlined, CalendarOutlined } from "@ant-design/icons";
@@ -9,7 +14,7 @@ import useCustomReservation from "../../hooks/useCustomReservation";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import { getOne } from "../../api/tourApi";
 import TourDetails from "./TourDetails";
-import useCustomTourFav from '../../hooks/useCustomTourFav';
+import useCustomTourFav from "../../hooks/useCustomTourFav";
 
 const initState = {
   tno: 0,
@@ -33,10 +38,9 @@ const TourReadComponent = ({ tno }) => {
   const [cartVisible, setCartVisible] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false); // For toggling tour details
   const { isLogin, loginState } = useCustomLogin();
-    const email = loginState.email;
-    const { favItems, changeFav, refreshFav } = useCustomTourFav(email);
+  const email = loginState.email;
+  const { favItems, changeFav, refreshFav } = useCustomTourFav(email);
   const { reservationItems, changeReservation } = useCustomReservation();
- 
 
   useEffect(() => {
     // Fetch tour data
@@ -80,23 +84,23 @@ const TourReadComponent = ({ tno }) => {
 
   const handleAddToFavorites = async () => {
     if (!loginState.email) {
-      alert('Please log in to add favorites.');
+      alert("Please log in to add favorites.");
       return;
     }
 
     const isAlreadyFavorite = favItems.some((item) => item.tno === tour.tno);
     if (isAlreadyFavorite) {
-      alert('You already liked this product!');
+      alert("You already liked this product!");
       return;
     }
 
     try {
       await changeFav({ email: loginState.email, tno: tour.tno });
-      alert('Product added to favorites!');
+      alert("Product added to favorites!");
       refreshFav();
     } catch (error) {
-      console.error('Failed to add favorite:', error);
-      alert('Could not add to favorites. Please try again.');
+      console.error("Failed to add favorite:", error);
+      alert("Could not add to favorites. Please try again.");
     }
   };
 
@@ -190,7 +194,7 @@ const TourReadComponent = ({ tno }) => {
               <CalendarOutlined className="mr-2" />
               Update Availability
             </button>
-            <button onClick={handleAddToFavorites} className="border text-gray-700 py-3 px-6 rounded-lg flex items-center justify-center hover:bg-gray-100">
+            <button className="border text-gray-700 py-3 px-6 rounded-lg flex items-center justify-center hover:bg-gray-100">
               <HeartIcon className="mr-2 h-5 w-5 text-red-500" />
               Add to Favorites
             </button>

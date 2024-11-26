@@ -4,6 +4,7 @@ import { getList } from "../../../api/productsApi";
 import { API_SERVER_HOST } from "../../../api/reviewApi";
 import useCustomFav from "../../../hooks/useCustomFav";
 import useCustomLogin from "../../../hooks/useCustomLogin";
+import useCustomMove from "../../../hooks/useCustomMove";
 
 const host = API_SERVER_HOST;
 
@@ -14,11 +15,12 @@ const ProductCategoryBeauty = () => {
 
   const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
   const { loginState } = useCustomLogin();
-
+  const {moveToProductRead} = useCustomMove();
   const category = "K-Beauty"; // Category filter
   const itemsPerPage = 4; // Number of items to display at once
 
   useEffect(() => {
+    
     // Fetch products for the K-Beauty category
     const fetchProducts = async () => {
       setFetching(true);
@@ -107,9 +109,14 @@ const ProductCategoryBeauty = () => {
                     <div
                       key={product.pno}
                       className="relative flex flex-col items-center"
+                      
                     >
                       {/* Product Image */}
-                      <div className="relative w-48 h-60 overflow-hidden">
+                      <div className="relative w-48 h-60 overflow-hidden z-10"
+                       onClick={() => {
+                        moveToProductRead(product.pno);
+                      }}
+                      >
                         <img
                           src={`${host}/api/products/view/${product.uploadFileNames?.[0]}`}
                           alt={product.pname}

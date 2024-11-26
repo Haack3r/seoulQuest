@@ -4,6 +4,7 @@ import { getList } from "../../../api/productsApi";
 import { API_SERVER_HOST } from "../../../api/reviewApi";
 import useCustomFav from "../../../hooks/useCustomFav";
 import useCustomLogin from "../../../hooks/useCustomLogin";
+import useCustomMove from "../../../hooks/useCustomMove";
 
 const host = API_SERVER_HOST;
 
@@ -11,7 +12,7 @@ const ProductCategoryFashion = () => {
   const [products, setProducts] = useState([]);
   const [visibleIndex, setVisibleIndex] = useState(0);
   const [fetching, setFetching] = useState(false);
-
+  const {moveToProductRead} = useCustomMove();
   const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
   const { loginState } = useCustomLogin();
 
@@ -106,7 +107,10 @@ const ProductCategoryFashion = () => {
                   return (
                     <div key={product.pno} className="relative flex flex-col items-center">
                       {/* Product Image */}
-                      <div className="relative w-48 h-60 overflow-hidden">
+                      <div className="relative w-48 h-60 overflow-hidden z-10"
+                      onClick={() => {
+                        moveToProductRead(product.pno);
+                      }}>
                         <img
                           src={`${host}/api/products/view/${product.uploadFileNames?.[0]}`}
                           alt={product.pname}

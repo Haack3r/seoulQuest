@@ -1,6 +1,5 @@
 package com.positive.culture.seoulQuest.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +8,7 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="tbl_tour_date")
+@Table(name = "tbl_tour_date")
 @Getter
 @Builder
 @AllArgsConstructor
@@ -34,7 +33,8 @@ public class TourDate {
     public void changeTourDate(LocalDate tourDate) {
         this.tourDate = tourDate;
     }
-    public void changeAvailableCapacity(int availableCapacity){
+
+    public void changeAvailableCapacity(int availableCapacity) {
         this.availableCapacity = availableCapacity;
     }
 

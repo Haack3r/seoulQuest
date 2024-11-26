@@ -1,11 +1,15 @@
 package com.positive.culture.seoulQuest.service;
 
+import com.positive.culture.seoulQuest.domain.Category;
+import com.positive.culture.seoulQuest.domain.QProduct;
 import com.positive.culture.seoulQuest.domain.QTour;
 import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.domain.TourImage;
 import com.positive.culture.seoulQuest.dto.*;
+import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import com.positive.culture.seoulQuest.repository.TourDateRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
+import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +28,15 @@ import java.util.stream.Collectors;
 
 @Service
 @Log4j2
-@RequiredArgsConstructor //final이 적용된 필드에 대한 생성자 만들어줌
+@RequiredArgsConstructor // final이 적용된 필드에 대한 생성자 만들어줌
 @Transactional
-public class TourServiceImpl implements TourService{
+public class TourServiceImpl implements TourService {
 
     private final TourRepository tourRepository;
+    private final CategoryRepository categoryRepository;
+    private final CustomFileUtil fileUtil;
 
-
-    //전체 조회----(유저, 관리자)
+    // 전체 조회----(유저, 관리자)
     @Override
     public PageResponseDTO<TourDTO> getList(PageRequestDTO pageRequestDTO) {
 
@@ -39,11 +44,12 @@ public class TourServiceImpl implements TourService{
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
-                Sort.by("tno").descending()
-        );
+                Sort.by("tno").descending());
 
         // Create search filter using BooleanBuilder
         BooleanBuilder booleanBuilder = getSearch(pageRequestDTO);
+        QTour qTour = QTour.tour;
+        booleanBuilder.and(qTour.delFlag.eq(false));
 
         // Execute search query with the filter
         Page<Tour> result = tourRepository.findAll(booleanBuilder, pageable);
@@ -64,8 +70,39 @@ public class TourServiceImpl implements TourService{
                 .build();
     }
 
+    @Override
+    public PageResponseDTO<TourDTO> getAdminTourList(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("tno").descending());
 
-    //하나 조회---(유저, 관리자)
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QTour qTour = QTour.tour;
+        booleanBuilder.and(qTour.delFlag.eq(false));
+
+        // 키워드 검색
+        if (pageRequestDTO.getKeyword() != null && !pageRequestDTO.getKeyword().trim().isEmpty()) {
+            booleanBuilder.and(qTour.tname.contains(pageRequestDTO.getKeyword()))
+                    .or(qTour.category.categoryName.contains(pageRequestDTO.getKeyword()));
+        }
+
+        Page<Tour> result = tourRepository.findAll(booleanBuilder, pageable);
+
+        List<TourDTO> dtoList = result.stream()
+                .map(this::entityChangeDTO)
+                .collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+
+        return PageResponseDTO.<TourDTO>withAll()
+                .dtoList(dtoList)
+                .totalCount(totalCount)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+    // 하나 조회---(유저, 관리자)
     @Override
     public TourDTO get(Long tno) {
         Optional<Tour> result = tourRepository.selectOne(tno);
@@ -73,36 +110,50 @@ public class TourServiceImpl implements TourService{
         TourDTO tourDTO = entityChangeDTO(tour);
 
         List<TourImage> imageList = tour.getTourImageList();
-        if(imageList == null|| imageList.size()==0 )return tourDTO; //이미지가 없는 상품인 경우
+        if (imageList == null || imageList.size() == 0)
+            return tourDTO; // 이미지가 없는 상품인 경우
 
-        //이미지가 있는 상품인 경우
+        // 이미지가 있는 상품인 경우
         List<String> fileNameList = imageList.stream().map(tourImage -> tourImage.getFileName()).toList();
         tourDTO.setUploadFileNames(fileNameList);
 
         return tourDTO;
     }
 
+    // //---------------------------------------------------------------
 
-//    //---------------------------------------------------------------
-
-    //등록 --(관리자)
+    // 등록 --(관리자)
     @Override
     public Long register(TourDTO tourDTO) {
-        Tour tour = dtoToEntity(tourDTO);
+        String categoryName = tourDTO.getCategoryName();
+        String categoryType = "tour";
+
+        Category category = categoryRepository
+                .findByCategoryNameAndCategoryType(categoryName, categoryType);
+
+        if (category == null) {
+            category = Category.builder()
+                    .categoryName(categoryName)
+                    .categoryType(categoryType)
+                    .build();
+            category = categoryRepository.save(category);
+        }
+
+        Tour tour = dtoToEntity(tourDTO, category);
         Tour result = tourRepository.save(tour);
         return result.getTno();
     }
 
-    //----------------------------------------------------------------
-    //수정 --(관리자)
+    // ----------------------------------------------------------------
+    // 수정 --(관리자)
     @Override
     public void modify(TourDTO tourDTO) {
 
-        //1.read
+        // 1.read
         Optional<Tour> result = tourRepository.findById(tourDTO.getTno());
         Tour tour = result.orElseThrow();
 
-        //2.change
+        // 2.change
         tour.changeCategory(tour.getCategory());
         tour.changeName(tourDTO.getTname());
         tour.changeDesc(tourDTO.getTdesc());
@@ -111,25 +162,35 @@ public class TourServiceImpl implements TourService{
         tour.changeLocation(tourDTO.getTlocation());
         tour.preUpdate();
 
-        //3. upload File -- clear first
+        // 3. upload File -- clear first
         tour.clearList(); // clearList()를 이용하여 이미지 리스트를 삭제
 
-        //4. save
+        // 4. save
         List<String> uploadFileNames = tourDTO.getUploadFileNames();
 
-        if(uploadFileNames !=null && uploadFileNames.size()>0){
-            uploadFileNames.stream().forEach(uploadName->{
+        if (uploadFileNames != null && uploadFileNames.size() > 0) {
+            uploadFileNames.stream().forEach(uploadName -> {
                 tour.addImageString(uploadName);
             });
         }
         tourRepository.save(tour);
     }
 
-    //----------------------------------------------------------
-    //삭제 -- (관리자)
+    // ----------------------------------------------------------
+    // 삭제 -- (관리자)
     @Override
     public void remove(Long tno) {
         tourRepository.updateToDelete(tno, true);
+    }
+
+    @Override
+    public void removeTourImage(Long tno, String fileName) {
+        tourRepository.deleteTourImage(tno, fileName);
+        try {
+            fileUtil.deleteFiles(List.of(fileName));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     @Override
@@ -142,7 +203,8 @@ public class TourServiceImpl implements TourService{
     public List<TourDTO> getToursByAddress(String taddress) {
         List<Tour> tours = tourRepository.findByTaddress(taddress);
         return tours.stream()
-                .map(TourDTO::new)
+                // .map(this::entityChangeDTO)
+                .map(tour -> entityChangeDTO(tour))
                 .collect(Collectors.toList());
     }
 
@@ -166,7 +228,7 @@ public class TourServiceImpl implements TourService{
         if (pageRequestDTO.getKeyword() != null && !pageRequestDTO.getKeyword().isEmpty()) {
             String keyword = pageRequestDTO.getKeyword();
             BooleanBuilder keywordBuilder = new BooleanBuilder();
-            keywordBuilder.or(qTour.tname.containsIgnoreCase(keyword));  // Match name
+            keywordBuilder.or(qTour.tname.containsIgnoreCase(keyword)); // Match name
             keywordBuilder.or(qTour.tdesc.containsIgnoreCase(keyword)); // Match description
             booleanBuilder.and(keywordBuilder);
         }
@@ -176,7 +238,8 @@ public class TourServiceImpl implements TourService{
 
         // Map to DTOs
         List<TourDTO> dtoList = result.stream()
-                .map(TourDTO::new)
+                // .map(this::entityChangeDTO)
+                .map(tour -> entityChangeDTO(tour))
                 .collect(Collectors.toList());
 
         // Build and return response
@@ -187,10 +250,6 @@ public class TourServiceImpl implements TourService{
                 .build();
     }
 
-
-
-
-
     private BooleanBuilder getSearch(PageRequestDTO requestDTO) {
         String type = requestDTO.getType();
         String keyword = requestDTO.getKeyword();
@@ -199,6 +258,8 @@ public class TourServiceImpl implements TourService{
 
         // Default condition: tno > 0 (return all tours)
         BooleanExpression expression = qTour.tno.gt(0L);
+
+        // 삭제되지 않은 관광지만 조회
         booleanBuilder.and(expression);
 
         if (type == null || type.trim().isEmpty()) {
@@ -220,6 +281,5 @@ public class TourServiceImpl implements TourService{
 
         return booleanBuilder;
     }
-
 
 }

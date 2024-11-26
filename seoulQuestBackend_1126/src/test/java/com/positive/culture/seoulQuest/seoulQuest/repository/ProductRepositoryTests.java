@@ -25,7 +25,7 @@ public class ProductRepositoryTests {
     @Autowired
     CategoryRepository categoryRepository;
 
-    //3. product data 추가
+    // 3. product data 추가
 
     @Test
     public void testInsertSeoulProducts() {
@@ -105,7 +105,7 @@ public class ProductRepositoryTests {
                 }
         };
 
-        String[] categoryNames = {"K-Beauty", "Exotic Tea", "Fashion", "Gourmet"};
+        String[] categoryNames = { "K-Beauty", "Exotic Tea", "Fashion", "Gourmet" };
 
         for (int categoryIndex = 0; categoryIndex < productDetails.length; categoryIndex++) {
             String[] details = productDetails[categoryIndex];
@@ -137,12 +137,11 @@ public class ProductRepositoryTests {
         }
     }
 
-
-//    ----------------------------------------------------------------
+    // ----------------------------------------------------------------
 
     @Test
-    public void testRead2(){
-        Long pno =1l;
+    public void testRead2() {
+        Long pno = 1l;
         Optional<Product> result = productRepository.selectOne(pno);
 
         Product product = result.orElseThrow();
@@ -154,29 +153,28 @@ public class ProductRepositoryTests {
     @Commit
     @Transactional
     @Test
-    public void testDelete(){
-        Long pno =2l;
-        productRepository.updateToDelete(pno,true);
+    public void testDelete() {
+        Long pno = 2l;
+        productRepository.updateToDelete(pno, true);
     }
 
     @Test
-    public void testUpdate(){
-        Long pno =10l;
+    public void testUpdate() {
+        Long pno = 10l;
 
         Product product = productRepository.selectOne(pno).get();
         product.changeName("10번상품");
         product.changeDesc("10번상품 설명");
         product.changePrice(5000);
 
-        product.clearList(); //이미지 파일 리스트 비움.
+        product.clearList(); // 이미지 파일 리스트 비움.
 
-        product.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE1.jpg");
-        product.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE2.jpg");
-        product.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE3.jpg");
+        product.addImageString(UUID.randomUUID().toString() + "_" + "IMAGE1.jpg");
+        product.addImageString(UUID.randomUUID().toString() + "_" + "IMAGE2.jpg");
+        product.addImageString(UUID.randomUUID().toString() + "_" + "IMAGE3.jpg");
 
         productRepository.save(product);
 
     }
-
 
 }

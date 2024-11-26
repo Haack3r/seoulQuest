@@ -21,7 +21,9 @@ const useCustomTourFav = (email) => {
 
   const changeFav = useCallback(
     async (favItem) => {
-      const isAlreadyFavorite = favItems.some((item) => item.tno === favItem.tno);
+      const isAlreadyFavorite = favItems.some(
+        (item) => item.tno === favItem.tno
+      );
       if (isAlreadyFavorite) {
         alert("This tour is already in your favorites!");
         return;

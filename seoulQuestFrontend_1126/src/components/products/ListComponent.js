@@ -28,16 +28,15 @@ const initState = {
 const ListComponent = () => {
   const [serverData, setServerData] = useState(initState);
   const { exceptionHandle } = useCustomLogin();
-  const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
-    const { loginState, isLogin } = useCustomLogin();
-    const email = loginState.email;
-  const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav(email);
+  const { page, size, refresh, moveToList, moveToProductRead } = useCustomMove();
+  const { loginState, isLogin } = useCustomLogin();
+  const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("t");
   const [fetching, setFetching] = useState(false);
   const [categories, setCategories] = useState([]); // Store fetched categories
   const [selectedCategory, setSelectedCategory] = useState(""); // Selected category
-
+  const email = loginState.email;
 
   useEffect(() => {
     if (isLogin && email) {
@@ -57,6 +56,7 @@ const ListComponent = () => {
   };
 
   const handleToggleFavorite = async (product) => {
+    console.log("product",product)
     if (!email) {
       window.alert("Please log in to manage favorites.");
       return;
@@ -159,7 +159,7 @@ const ListComponent = () => {
                 <div
                   key={product.pno}
                   className="flex flex-col items-center"
-                  onClick={() => moveToRead(product.pno)}
+                  onClick={() => moveToProductRead(product.pno)}
                 >
                   {/* Product Image */}
                   <div className="relative w-56 h-80 overflow-hidden">

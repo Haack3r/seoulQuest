@@ -90,28 +90,28 @@ const AdminIndexPage = () => {
     //     </AdminLayout>
     // ) : null
 
-    const navigate = useNavigate()
-    const [role, setRole] = useState(null);
+    // const navigate = useNavigate()
+    // const [role, setRole] = useState(null);
 
-    useEffect(() => {
-        try {
-            const user = JSON.parse(localStorage.getItem("user")); // user 객체 가져오기
-            if (user && user.role && Array.isArray(user.role)) {
-                if (user.role[1]) setRole("ADMIN"); // role 배열에서 첫 번째 값을 가져옴
-                else {
-                    setRole("USER");
-                    alert("어드민 권한이 없습니다")
-                    navigate("/")
-                }
-            }
-        } catch (error) {
-            console.log("사용자 권한 에러", error)
-                setRole(null)
-            alert("권한 체크 실패")
-            navigate("/")
-        }
+    // useEffect(() => {
+    //     try {
+    //         const user = JSON.parse(localStorage.getItem("user")); // user 객체 가져오기
+    //         if (user && user.role && Array.isArray(user.role)) {
+    //             if (user.role[1]) setRole("ADMIN"); // role 배열에서 첫 번째 값을 가져옴
+    //             else {
+    //                 setRole("USER");
+    //                 alert("어드민 권한이 없습니다")
+    //                 navigate("/")
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.log("사용자 권한 에러", error)
+    //             setRole(null)
+    //         alert("권한 체크 실패")
+    //         navigate("/")
+    //     }
 
-    }, []);
+    // }, []);
 
 
     return (
@@ -122,5 +122,4 @@ const AdminIndexPage = () => {
         </AdminLayout>
     )
 }
-// }
 export default AdminIndexPage
