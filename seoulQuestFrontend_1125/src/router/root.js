@@ -8,7 +8,6 @@ import nuToursRouter from "./nuToursRouter";
 import myPageRouter from "./myPageRouter";
 import { Alert } from "@mui/material";
 import adminRouter from "./admin/adminRouter";
-import reviewRouter from "./reviewRouter";
 
 
 const { createBrowserRouter } = require("react-router-dom")
@@ -23,7 +22,7 @@ const ToursIndex = lazy(() => import("../pages/tours/TourIndexPage"))
 const NUToursIndex = lazy(() => import("../pages/tours/NUTourIndexPage"))
 const Cart = lazy(() => import("../pages/Cart"))
 const Favorite = lazy(() => import("../pages/Favorite"))
-const ReviewIndex = lazy(() => import("../pages/review/ReviewIndexPage"))
+const Coupon = lazy(() => import("../pages/member/CouponPage"));
 
 const root = createBrowserRouter([
     {
@@ -41,11 +40,6 @@ const root = createBrowserRouter([
     {
         path: "favorite",
         element: <Suspense fallback={Loading}><Favorite /></Suspense>
-    },
-    {
-        path: "review",
-        element: <Suspense fallback={Loading}><ReviewIndex /></Suspense>,
-        children: reviewRouter()
     },
     {
         path: "user/products",
@@ -83,6 +77,14 @@ const root = createBrowserRouter([
         path: "admin",
         children: adminRouter(),
         errorElement: <Alert severity="error">오류가 발생했습니다.</Alert>
+    },
+    {
+        path: "coupon",
+        element: (
+          <Suspense fallback={Loading}>
+            <Coupon />
+          </Suspense>
+        ),
     },
 ])
 

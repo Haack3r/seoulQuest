@@ -58,7 +58,6 @@ public class TourDTO {
         this.tprice = tour.getTprice();
         this.maxCapacity = tour.getMaxCapacity();
         this.tlocation = tour.getTlocation();
-        this.likeCount = tour.getLikeCount();
         this.taddress = tour.getTaddress();
         this.tDate = tour.getTDate(); // Assuming TourDate is directly compatible
 

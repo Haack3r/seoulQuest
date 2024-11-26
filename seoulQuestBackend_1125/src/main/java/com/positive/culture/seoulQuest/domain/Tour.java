@@ -42,7 +42,6 @@ public class Tour {
     private LocalDate updateAt; //수정 일자
 
     private boolean delFlag; //상품 삭제여부
-    private int likeCount; //좋아요 갯수
 
     //실행시 , 자동으로 product_image_list table이 생성됨.
     //하나의 엔티티가 여러개의 VO(값타입 객체)를 담을때 사용, 자동으로 이에 해당하는 테이블이 생성됨
@@ -75,7 +74,6 @@ public class Tour {
     }
 
     public void changeDel(boolean delFlag){this.delFlag =delFlag;}
-    public void changeLikeCount(int likeCount){this.likeCount = likeCount;}
 
     //------------------------------------------------------
     //이미지 정보 추가

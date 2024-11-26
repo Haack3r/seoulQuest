@@ -5,11 +5,14 @@ import {
   deleteFavTourItem,
   deleteFavTourItemsBulk,
 } from "../api/favTourApi";
+import useCustomLogin from "../hooks/useCustomLogin";
+
 
 export const getFavTourItemsAsync = createAsyncThunk(
   "favTour/getFavTourItems",
   async () => {
-    const response = await getFavTourItems(); // Calls tour-specific API
+    const { loginState } = useCustomLogin();
+    const response = await getFavTourItems(loginState.email); // Calls tour-specific API
     return response;
   }
 );

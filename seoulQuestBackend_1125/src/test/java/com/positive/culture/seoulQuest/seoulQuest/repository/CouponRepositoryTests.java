@@ -51,15 +51,15 @@ public class CouponRepositoryTests {
                 {"Clearance Sale Coupon", "1500"},
                 {"Weekend Special Coupon", "4000"},
                 {"Limited Time Offer Coupon", "2500"},
-//                {"Autumn Sale Coupon", "3000"},
-//                {"Winter Sale Coupon", "5500"},
-//                {"End of Season Coupon", "6000"},
-//                {"Clearance Coupon", "4000"},
-//                {"Buy More Save More Coupon", "2000"},
-//                {"Bulk Purchase Coupon", "10000"},
-//                {"Exclusive Member Coupon", "7000"},
-//                {"Holiday Bonus Coupon", "3000"},
-//                {"Last Minute Deal Coupon", "2500"}
+                {"Autumn Sale Coupon", "3000"},
+                {"Winter Sale Coupon", "5500"},
+                {"End of Season Coupon", "6000"},
+                {"Clearance Coupon", "4000"},
+                {"Buy More Save More Coupon", "2000"},
+                {"Bulk Purchase Coupon", "10000"},
+                {"Exclusive Member Coupon", "7000"},
+                {"Holiday Bonus Coupon", "3000"},
+                {"Last Minute Deal Coupon", "2500"}
         };
 
         for (int i = 0; i < coupons.length; i++) {

@@ -127,7 +127,7 @@ public class ProductRepositoryTests {
                         .pprice(100 * (i + 1))
                         .pdesc(pdesc)
                         .pqty(25 * (i + 1))
-                        .shippingCost(i < 13 ? 3000 : 0)
+                        .shippingFee(i < 13 ? 3000 : 0)
                         .category(category)
                         .build();
                 product.addImageString(UUID.randomUUID().toString() + "_" + "IMAGE1.jpg");
@@ -136,44 +136,6 @@ public class ProductRepositoryTests {
             }
         }
     }
-
-
-//    @Test
-//    public void testInsert(){
-//        String[] productDescriptions = {
-//                "Experience the ultimate comfort with our premium cotton bedding set. Soft, breathable, and perfect for a good night's sleep.",
-//                "Elevate your home with our modern ceramic vase, crafted to add a touch of elegance to any room decor.",
-//                "Stay connected with our latest wireless earbuds featuring crystal-clear audio and long-lasting battery life.",
-//                "Enhance your outdoor adventures with our waterproof hiking boots, designed for both comfort and durability.",
-//                "Enjoy your favorite music on the go with our portable Bluetooth speaker, delivering high-quality sound wherever you are.",
-//                "Unleash your creativity with our professional-grade watercolor set, including a variety of colors for all your artistic needs.",
-//                "Step up your fashion game with our classic leather belt, handmade for durability and style.",
-//                "Keep your kitchen organized with our stackable storage containers, perfect for keeping food fresh and easy to find.",
-//                "Embrace sustainable living with our eco-friendly bamboo toothbrush set, designed to minimize plastic waste.",
-//                "Achieve a flawless complexion with our lightweight foundation, formulated to provide natural coverage throughout the day.",
-//                "Relax in luxury with our plush bathrobe, made from soft microfiber to keep you warm and comfortable.",
-//                "Improve your productivity with our ergonomic office chair, designed to provide maximum support and comfort during long working hours.",
-//                "Take control of your cooking with our non-stick frying pan, ensuring even heat distribution and easy clean-up.",
-//                "Stay hydrated with our insulated stainless steel water bottle, keeping drinks cold for up to 24 hours.",
-//                "Protect your phone with our sleek, shockproof case, designed to prevent damage from drops and scratches."
-//        };
-//
-//        for(int i= 0; i<productDescriptions.length; i++){
-//            Product product = Product.builder()
-//                    .pname("product"+(i+1))
-//                    .pprice(100*(i+1))
-//                    .pdesc(productDescriptions[i])
-//                    .pqty(25*(i+1))
-//                    .shippingCost(i<13?3000:0)
-//                    .category(categoryRepository.getReferenceById(5l))
-//                    .build();
-//            product.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE1.jpg");
-//            product.addImageString(UUID.randomUUID().toString()+"_"+"IMAGE2.jpg");
-//            productRepository.save(product);
-//            log.info("----------------------");
-//        }
-//
-//    }
 
 
 //    ----------------------------------------------------------------

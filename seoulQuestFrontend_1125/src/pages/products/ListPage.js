@@ -3,7 +3,7 @@ import ProductImage from "../../layouts/ProductImage";
 import ProcessSteps from "../../layouts/ProcessSteps";
 import AboutProduct from "../../components/products/AboutProduct";
 import MostPopularProduct from "../../components/products/MostpopularProduct";
-
+import ProductCategoryBeauty from "../../components/products/category/ProductCategoryBeauty";
 import ProductCategoryTea from "../../components/products/category/ProductCategoryTea";
 import ProductCategoryFashion from "../../components/products/category/ProductCategoryFashion";
 import ProductCategoryGourmet from "../../components/products/category/ProductCategoryGourmet";
@@ -18,7 +18,6 @@ import {
   faGift,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import ProductCategoryBeauty from "../../components/products/category/ProductCategoryBeauty";
 
 const ListPage = () => {
   // Refs for each section

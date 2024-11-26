@@ -49,7 +49,6 @@ public interface ProductService {
                 .pqty(productDTO.getPqty())
                 .createAt(productDTO.getCreateAt())
                 .updateAt(productDTO.getUpdateAt())
-                .likesCount(productDTO.getLikesCount())
                 .build();
 
         //업로드 처리가 끝난 파일들의 이름 리스트
@@ -76,7 +75,7 @@ public interface ProductService {
                 .pname(product.getPname())
                 .pdesc(product.getPdesc())
                 .pprice(product.getPprice())
-                .shippingFee(product.getShippingCost())
+                .shippingFee(product.getShippingFee())
                 .pqty(product.getPqty())
                 .createAt(product.getCreateAt())
                 .createAt(product.getUpdateAt())

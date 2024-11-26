@@ -19,7 +19,7 @@ export const getProductList = async (pageParam) => { //reviewList 조회
         params: { 
             page, 
             size, 
-            email: email || null // email이 없으면 null로 처리
+            email
         } 
     });
     return res.data;

@@ -30,11 +30,11 @@ const BasicMenu = () => {
 
   // Set up event listener for window resize
   useEffect(() => {
-    const memberInfo = getCookie("member");
+    const memberInfo = getCookie("member")
     if (memberInfo?.role?.includes("ADMIN")) {
-      setRole("ADMIN");
+      setRole("ADMIN")
     } else {
-      setRole("USER");
+      setRole("USER")
     }
     window.addEventListener("resize", checkScreenSize);
 
@@ -88,14 +88,11 @@ const BasicMenu = () => {
               </Link>
               <Link to="/about/" className="menu-animation-color">
                 About
-              </Link>
-              {loginState.email ? (
-                <Link to="/contact/" className="menu-animation-color">
-                  Contact
-                </Link>
-              ) : (
-                ""
-              )}
+                          </Link>
+                          {loginState.email ? <Link to="/contact/" className="menu-animation-color">
+                Contact
+              </Link>: ""}
+              
             </nav>
 
             {/* Right section with login/sign-up or cart/logout */}
@@ -158,7 +155,7 @@ const BasicMenu = () => {
                         <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
-                        to="/mypage/coupon"
+                        to="/coupon"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
                         <Tickets className="h-5 w-5 text-gray-600 hover:text-gray-900" />
@@ -193,9 +190,7 @@ const BasicMenu = () => {
                     <Link to="/about/" className="menu-animation-color">
                       About
                     </Link>
-                    <Link to="/contact/" className="menu-animation-color">
-                      Contact
-                    </Link>
+                    
                   </nav>
                   <Link
                     to={"/member/login/"}
@@ -292,7 +287,7 @@ const BasicMenu = () => {
                         <ShoppingBagIcon className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
-                        to={"/mypage/coupon"}
+                        to={"/coupon"}
                         className="flex items-center space-x-2 menu-animation-color"
                       >
                         <Tickets className="h-5 w-5 menu-animation-color" />

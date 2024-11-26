@@ -63,7 +63,7 @@ public class ReviewController {
 
     @GetMapping("/products/list")
     public PageResponseDTO<ReviewDTO> productReviewList(PageRequestDTO pageRequestDTO,
-                                           @RequestParam(required = false) String email) {
+                                           @RequestParam String email) {
         log.info("list.......... PageRequestDTO: " + pageRequestDTO + ", email: " + email);
 
         return reviewService.getProductList(pageRequestDTO, email);

@@ -3,7 +3,6 @@ package com.positive.culture.seoulQuest.service;
 import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.domain.ProductImage;
 import com.positive.culture.seoulQuest.domain.QProduct;
-import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
@@ -105,7 +104,7 @@ public class ProductServiceImpl implements ProductService{
         product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPprice());
         product.changeQuantity(productDTO.getPqty());
-        product.changeShippingCost(productDTO.getShippingFee());
+        product.changeShippingFee(productDTO.getShippingFee());
         product.preUpdate();
 
         //3. upload File -- clear first

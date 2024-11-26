@@ -4,10 +4,10 @@ import { API_SERVER_HOST } from "./reviewApi";
 const host = `${API_SERVER_HOST}/api/favoriteTour`;
 
 // Get favorite tour items for the logged-in user
-export const getFavTourItems = async () => {
+export const getFavTourItems = async (email) => {
     console.log("GetFavTourItems 호출");
-    const user = JSON.parse(localStorage.getItem("user"));
-    const email = user?.email; // Ensure email is present
+    // const user = JSON.parse(localStorage.getItem("user")); 
+    // const email = user.email; // Ensure email is present
 
     if (!email) {
         console.error("User is not logged in or email is missing.");

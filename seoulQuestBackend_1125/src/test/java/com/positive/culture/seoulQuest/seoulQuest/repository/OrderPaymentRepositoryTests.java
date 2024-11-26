@@ -154,6 +154,7 @@ public class OrderPaymentRepositoryTests {
 
 
     @Test
+    @Transactional
     public void testInsertOrderPaymentItemsForAllMembers() {
         // Step 1: Fetch all members and tours
         List<Member> members = memberRepository.findAll();

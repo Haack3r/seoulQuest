@@ -4,10 +4,10 @@ import { API_SERVER_HOST } from "./reviewApi";
 const host = `${API_SERVER_HOST}/api/favorite`;
 
 // Fetch favorite items with error handling
-export const getFavItems = async () => {
+export const getFavItems = async (email) => {
   console.log("GetTourItems 호출");
-  const user = JSON.parse(localStorage.getItem("user"));
-  const email = user?.email;
+//   const user = JSON.parse(localStorage.getItem("user"));
+//   const email = user?.email;
 
   if (!email) {
     console.error("User is not logged in or email is missing.");

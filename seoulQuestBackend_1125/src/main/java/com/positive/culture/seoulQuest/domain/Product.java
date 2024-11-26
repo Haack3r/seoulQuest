@@ -31,15 +31,13 @@ public class Product {
     private int pprice;
     private int pqty;
 
-    private int shippingCost;
+    private int shippingFee;
 
     //통계를 내거나 정보를 확인할 때 사용
     private LocalDate createAt; //생성 일자
     private LocalDate updateAt; //수정 일자
 
     private boolean delFlag; //상품 삭제여부
-
-    private int likesCount; //좋아요 갯수
 
     //실행시 , 자동으로 product_image_list table이 생성됨.
     //하나의 엔티티가 여러개의 VO(값타입 객체)를 담을때 사용, 자동으로 이에 해당하는 테이블이 생성됨
@@ -51,7 +49,7 @@ public class Product {
     public void changeDesc(String pdesc){this.pdesc = pdesc;}
     public void changePrice(int pprice){this.pprice=pprice;}
     public void changeQuantity(int pqty){this.pqty=pqty;}
-    public void changeShippingCost(int shippingCost) {this.shippingCost = shippingCost;}
+    public void changeShippingFee(int shippingFee) {this.shippingFee = shippingFee;}
 
     @PrePersist
     public void prePersist() {
@@ -65,8 +63,6 @@ public class Product {
     }
 
     public void changeDel(boolean delFlag){this.delFlag =delFlag;}
-
-    public void changeLikeCount(int likesCount){this.likesCount = likesCount;}
 
     //------------------------------------------------------
     //이미지 정보 추가

@@ -37,7 +37,6 @@ public interface TourService {
                 .tlocation(tourDTO.getTlocation())
                 .createAt(tourDTO.getCreateAt())
                 .updateAt(tourDTO.getUpdateAt())
-                .likeCount(tourDTO.getLikeCount())
                 .tDate(tourDTO.getTDate())
                 .build();
 
@@ -66,7 +65,6 @@ public interface TourService {
                 .tprice(tour.getTprice())
                 .maxCapacity(tour.getMaxCapacity())
                 .tlocation(tour.getTlocation())
-                .likeCount(tour.getLikeCount())
                 .tDate(tour.getTDate())
                 .createAt(tour.getCreateAt())
                 .updateAt(tour.getUpdateAt())
