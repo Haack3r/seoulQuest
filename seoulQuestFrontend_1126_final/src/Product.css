@@ -1,0 +1,86 @@
+.about-product-page {
+  background-color: #f9f9f950;
+}
+
+.about-product-page h1,
+.about-content h3 {
+  color: #7a7c69;
+}
+
+.about-product-page p {
+  color: #cccccc;
+  max-width: 700px;
+}
+
+/* CTA button styling */
+.cta-button {
+  background-color: #ac9e94;
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #a88269;
+}
+
+.best-product-title {
+    color: #333;
+  }
+  
+  /* Product Grid */
+.grid-item {
+    transition: transform 0.3s ease;
+    border-radius: 0.5rem;
+  }
+  
+  .grid-item:hover {
+    transform: scale(1.02);
+  }
+  
+  .group:hover .group-hover\\:opacity-100 {
+    opacity: 1;
+  }
+  
+  /* Button Styling */
+  .cta-button,
+  .add-button {
+    background-color: #ff6a00;
+    color: #fff;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-button:hover {
+    background-color: #e75d00;
+    color: #333;
+  }
+  
+  .about-title {
+    font-family: "Playfair Display", serif; /* Elegant serif font */
+    font-size: 2.5rem; /* Adjust the size */
+    font-weight: 500; /* Make it less bold for a refined look */
+    text-transform: none; /* Remove uppercase */
+    letter-spacing: 0.05em; /* Slightly space out letters */
+    color: #555; /* Softer gray */
+    font-style: italic; /* Add italics */
+  }
+  
+  .about-subtitle {
+   /* A matching serif font */
+    font-size: 1rem; /* Adjust the size for readability */
+    line-height: 1.8; /* Increase line height for elegance */
+    letter-spacing: 0.02em; /* Slight spacing for readability */
+    color: #242222; /* Softer gray for the subtitle */
+  }
+  
