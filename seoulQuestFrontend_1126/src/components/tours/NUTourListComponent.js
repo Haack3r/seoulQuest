@@ -23,7 +23,7 @@ const initState = {
 };
 
 const NUTourListComponent = () => {
-  const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
+  const { page, size, refresh, moveToList, moveToTourRead } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
   const [error, setError] = useState(null);
   const [fetching, setFetching] = useState(false);
@@ -100,7 +100,7 @@ const NUTourListComponent = () => {
             <div
               key={tour.tno}
               className="flex flex-col items-center transition-transform duration-300 cursor-pointer group"
-              onClick={() => moveToRead(tour.tno)}
+              onClick={() => moveToTourRead(tour.tno)}
             >
               {/* Card Frame with Unified Hover Effect */}
               <div className="relative w-[320px] h-[430px] rounded-lg border border-white border-opacity-40 p-4 bg-opacity-20 backdrop-blur-lg transition-all duration-300 transform group-hover:scale-105 group-hover:shadow-lg">

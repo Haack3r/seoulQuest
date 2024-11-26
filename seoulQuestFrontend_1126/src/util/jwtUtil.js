@@ -37,7 +37,7 @@ const refreshJWT = async (accessToken, refreshToken) => {
     console.error("=== Refresh 토큰 에러 ===");
     console.error("Error details:", error.response?.data || error.message);
     removeCookie("member");
-    window.location.href = '/login';
+    window.location.href = '/member/login';
     throw error;
   }
 };
@@ -111,7 +111,7 @@ jwtAxios.interceptors.response.use(
       } catch (error) {
         console.error("토큰 갱신 실패:", error);
         removeCookie("member");
-        window.location.href = '/login';
+        window.location.href = '/member/login';
         return Promise.reject(error);
       }
     }
@@ -124,7 +124,7 @@ jwtAxios.interceptors.response.use(
     if (error.response?.status === 404) {
       console.log("404 Error - Resource not found");
       removeCookie("member");
-      window.location.href = '/login';
+      window.location.href = '/member/login';
     }
     return Promise.reject(error);
   }

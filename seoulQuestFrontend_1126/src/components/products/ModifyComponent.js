@@ -19,7 +19,7 @@ const ModifyComponent = ({ pno }) => {
     const [product, setProduct] = useState(initState)
     const [fetching, setFetching] = useState(false)
     const [result, setResult] = useState(null)
-    const { moveToRead, moveToList, page, size } = useCustomMove()
+    const { moveToProductRead, moveToList, page, size } = useCustomMove()
     const uploadRef = useRef()
 
     useEffect(() => {
@@ -84,7 +84,7 @@ const ModifyComponent = ({ pno }) => {
 
     const closeModal = () => {
         if (result === 'Modified') {
-            moveToRead(pno)
+            moveToProductRead(pno)
         } else if (result === 'Deleted') {
             // moveToList({ page: 1 })
             moveToList({ page, size })

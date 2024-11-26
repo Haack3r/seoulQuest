@@ -8,7 +8,7 @@ export const getFavItems = async (email) => {
   console.log("GetTourItems 호출");
 //   const user = JSON.parse(localStorage.getItem("user"));
 //   const email = user?.email;
-
+console.log(email)
   if (!email) {
     console.error("User is not logged in or email is missing.");
     throw new Error("User is not logged in.");

@@ -4,14 +4,14 @@ import { getList } from "../../../api/productsApi";
 import { API_SERVER_HOST } from "../../../api/reviewApi";
 import useCustomFav from "../../../hooks/useCustomFav";
 import useCustomLogin from "../../../hooks/useCustomLogin";
-
+import useCustomMove from "../../../hooks/useCustomMove";
 const host = API_SERVER_HOST;
 
 const ProductCategoryGourmet = () => {
   const [products, setProducts] = useState([]);
   const [visibleIndex, setVisibleIndex] = useState(0);
   const [fetching, setFetching] = useState(false);
-
+  const {moveToProductRead} = useCustomMove();
   const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
   const { loginState } = useCustomLogin();
 
@@ -39,10 +39,7 @@ const ProductCategoryGourmet = () => {
     refreshFav(); // Refresh favorite items
   }, [category]);
 
-  const visibleProducts = products.slice(
-    visibleIndex,
-    visibleIndex + itemsPerPage
-  );
+  const visibleProducts = products.slice(visibleIndex, visibleIndex + itemsPerPage);
 
   const handleNext = () => {
     if (visibleIndex + itemsPerPage < products.length) {
@@ -93,9 +90,7 @@ const ProductCategoryGourmet = () => {
         <div className="mb-10 relative">
           {/* Category Header */}
           <div className="px-10 mb-4 text-center">
-            <h2 className="text-lg font-bold text-gray-800 uppercase">
-              {category} Delights
-            </h2>
+            <h2 className="text-lg font-bold text-gray-800 uppercase">{category} Delights</h2>
           </div>
 
           {fetching ? (
@@ -105,9 +100,7 @@ const ProductCategoryGourmet = () => {
               {/* Products Grid */}
               <div className="grid grid-cols-2 gap-4">
                 {visibleProducts.map((product) => {
-                  const isFavorite = favItems.some(
-                    (item) => item.pno === product.pno
-                  );
+                  const isFavorite = favItems.some((item) => item.pno === product.pno);
 
                   return (
                     <div
@@ -115,7 +108,11 @@ const ProductCategoryGourmet = () => {
                       className="relative flex flex-col items-center"
                     >
                       {/* Product Image */}
-                      <div className="relative w-48 h-60 overflow-hidden">
+                      <div className="relative w-48 h-60 overflow-hidden z-10"
+                        onClick={() => {
+                          moveToProductRead(product.pno);
+                        }}
+                      >
                         <img
                           src={`${host}/api/products/view/${product.uploadFileNames?.[0]}`}
                           alt={product.pname}
@@ -140,12 +137,8 @@ const ProductCategoryGourmet = () => {
 
                       {/* Product Details */}
                       <div className="mt-2 text-center">
-                        <h3 className="text-sm font-bold text-gray-700">
-                          {product.pname}
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                          ₩{product.pprice.toLocaleString()}
-                        </p>
+                        <h3 className="text-sm font-bold text-gray-700">{product.pname}</h3>
+                        <p className="text-sm text-gray-500 mt-1">₩{product.pprice.toLocaleString()}</p>
                       </div>
                     </div>
                   );
@@ -158,9 +151,7 @@ const ProductCategoryGourmet = () => {
                   onClick={handlePrev}
                   disabled={visibleIndex === 0}
                   className={`${
-                    visibleIndex === 0
-                      ? "text-gray-300"
-                      : "text-gray-600 hover:text-gray-900"
+                    visibleIndex === 0 ? "text-gray-300" : "text-gray-600 hover:text-gray-900"
                   }`}
                 >
                   <ChevronLeft className="h-10 w-10" />

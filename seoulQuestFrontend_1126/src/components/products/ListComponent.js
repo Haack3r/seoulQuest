@@ -28,16 +28,15 @@ const initState = {
 const ListComponent = () => {
   const [serverData, setServerData] = useState(initState);
   const { exceptionHandle } = useCustomLogin();
-  const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
-    const { loginState, isLogin } = useCustomLogin();
-    const email = loginState.email;
-  const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav(email);
+  const { page, size, refresh, moveToList, moveToProductRead } = useCustomMove();
+  const { loginState, isLogin } = useCustomLogin();
+  const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("t");
   const [fetching, setFetching] = useState(false);
   const [categories, setCategories] = useState([]); // Store fetched categories
   const [selectedCategory, setSelectedCategory] = useState(""); // Selected category
-
+  const email = loginState.email;
 
   useEffect(() => {
     if (isLogin && email) {
@@ -48,18 +47,8 @@ const ListComponent = () => {
   useEffect(() => {
     // Fetch categories
     getProductCategories()
-      .then((data) => {
-        if (data && Array.isArray(data)) {
-          setCategories(data);
-        } else {
-          console.log("No categories found");
-          setCategories([]);
-        }
-      })
-      .catch((err) => {
-        exceptionHandle(err);
-        setCategories([]);
-      });
+      .then((data) => setCategories(data))
+      .catch((err) => exceptionHandle(err));
   }, []);
 
   const handleCategoryChange = (e) => {
@@ -67,6 +56,7 @@ const ListComponent = () => {
   };
 
   const handleToggleFavorite = async (product) => {
+    console.log("product",product)
     if (!email) {
       window.alert("Please log in to manage favorites.");
       return;
@@ -84,7 +74,7 @@ const ListComponent = () => {
 
   useEffect(() => {
     setFetching(true);
-    getList({ page, size, keyword, type, category: selectedCategory })
+    getList({ page, size, keyword, type, category: selectedCategory  })
       .then((data) => {
         if (data && Array.isArray(data.dtoList)) {
           setServerData(data);
@@ -102,7 +92,7 @@ const ListComponent = () => {
   const handleSearch = () => {
     moveToList(1);
     setFetching(true);
-    getList({ page: 1, size, keyword, type, category: selectedCategory })
+    getList({ page: 1, size, keyword, type, category: selectedCategory  })
       .then((data) => {
         setServerData(data && Array.isArray(data.dtoList) ? data : initState);
         setFetching(false);
@@ -123,19 +113,18 @@ const ListComponent = () => {
         {/* Search Bar with Category Dropdown */}
         <div className="mt-8 flex justify-center items-center space-x-4">
           {/* Dropdown for Categories */}
-          <select
+           <select
             className="bg-white border border-gray-300 rounded-lg p-3 text-sm"
             value={selectedCategory}
             onChange={handleCategoryChange}
           >
             <option value="">All Categories</option>
-            {/* {categories.map((categoryName, index) => ( */}
-            {categories.length > 0 && categories.map((categoryName, index) => (
+            {categories.map((categoryName, index) => (
               <option key={index} value={categoryName}>
                 {categoryName}
               </option>
             ))}
-          </select>
+          </select> 
 
           {/* Search Input */}
           <div className="flex w-full h-12 max-w-xl bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
@@ -170,7 +159,7 @@ const ListComponent = () => {
                 <div
                   key={product.pno}
                   className="flex flex-col items-center"
-                  onClick={() => moveToRead(product.pno)}
+                  onClick={() => moveToProductRead(product.pno)}
                 >
                   {/* Product Image */}
                   <div className="relative w-56 h-80 overflow-hidden">
@@ -183,16 +172,18 @@ const ListComponent = () => {
                       className="w-full h-full object-cover opacity-80 hover:opacity-90"
                     />
                     <button
-                      className={`absolute top-8 right-2 ${isFavorite ? "text-red-500" : "text-white"
-                        }`}
+                      className={`absolute top-8 right-2 ${
+                        isFavorite ? "text-red-500" : "text-white"
+                      }`}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleToggleFavorite(product);
                       }}
                     >
                       <HeartIcon
-                        className={`h-6 w-6 ${isFavorite ? "fill-current" : ""
-                          }`}
+                        className={`h-6 w-6 ${
+                          isFavorite ? "fill-current" : ""
+                        }`}
                       />
                     </button>
                   </div>
@@ -217,10 +208,10 @@ const ListComponent = () => {
             </p>
           )}
         </div>
-      </section >
+      </section>
 
       <PageComponent serverData={serverData} movePage={moveToList} />
-    </div >
+    </div>
   );
 };
 

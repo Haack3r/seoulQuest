@@ -26,7 +26,7 @@ const initState = {
 };
 
 const NUListComponent = () => {
-  const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
+  const { page, size, refresh, moveToList, moveToProductRead } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
   const [error, setError] = useState(null);
   const [fetching, setFetching] = useState(false);
@@ -101,7 +101,7 @@ const NUListComponent = () => {
             serverData.dtoList.map((product) => (
               <Card
                 key={product.pno}
-                onClick={() => moveToRead(product.pno)}
+                onClick={() => moveToProductRead(product.pno)}
                 className="relative w-[320px] h-[430px] rounded-lg overflow-hidden bg-white border border-white border-opacity-40 p-4 bg-opacity-20 backdrop-blur-lg transition-transform duration-300 transform group-hover:scale-105 group-hover:shadow-lg cursor-pointer"
               >
                 <div className="relative w-full h-48 mb-3 rounded-lg overflow-hidden">

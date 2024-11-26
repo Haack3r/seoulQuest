@@ -27,7 +27,7 @@ const initState = {
 
 const TourListComponent = () => {
   const { exceptionHandle } = useCustomLogin();
-  const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
+  const { page, size, refresh, moveToList, moveToTourRead } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
   const [fetching, setFetching] = useState(false);
   const { isLogin, loginState } = useCustomLogin();
@@ -162,7 +162,7 @@ const TourListComponent = () => {
                 <div
                   key={tour.tno}
                   className="flex flex-col items-center text-center"
-                  onClick={() => moveToRead(tour.tno)}
+                  onClick={() => moveToTourRead(tour.tno)}
                 >
                   {/* Image with Heart Icon */}
                   <div className="relative w-full max-w-xs h-52 overflow-hidden">

@@ -6,24 +6,28 @@ import {
   deleteFavItemAsync,
   deleteBulkFavItemAsync,
 } from "../slices/favSlice";
+import useCustomLogin from "../hooks/useCustomLogin";
 
-const useCustomFav = (email) => {
+// const useCustomFav = (email) => {
+const useCustomFav = () => {
+  const { loginState } = useCustomLogin();
+  const email = loginState.email; // Ensure email is present
+
   const favItems = useSelector((state) => state.fav.items || []);
   const dispatch = useDispatch();
 
   const refreshFav = useCallback(() => {
-    if (!email) {
-      console.warn("Cannot refresh favorites without an email.");
-      return;
-    }
+
+    // if (!email) {
+    //   console.warn("Cannot refresh favorites without an email.");
+    //   return;
+    // }
     dispatch(getFavItemsAsync(email));
-  }, [dispatch, email]);
+  }, [dispatch]);
 
   const changeFav = useCallback(
     async (favItem) => {
-      const isAlreadyFavorite = favItems.some(
-        (item) => item.pno === favItem.pno
-      );
+      const isAlreadyFavorite = favItems.some((item) => item.pno === favItem.pno);
       if (isAlreadyFavorite) {
         alert("This product is already in your favorites!");
         return;

@@ -4,6 +4,7 @@ import { getList } from "../../../api/productsApi";
 import { API_SERVER_HOST } from "../../../api/reviewApi";
 import useCustomFav from "../../../hooks/useCustomFav";
 import useCustomLogin from "../../../hooks/useCustomLogin";
+import useCustomMove from "../../../hooks/useCustomMove";
 
 const host = API_SERVER_HOST;
 
@@ -11,7 +12,7 @@ const ProductCategoryFashion = () => {
   const [products, setProducts] = useState([]);
   const [visibleIndex, setVisibleIndex] = useState(0);
   const [fetching, setFetching] = useState(false);
-
+  const {moveToProductRead} = useCustomMove();
   const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
   const { loginState } = useCustomLogin();
 
@@ -40,10 +41,7 @@ const ProductCategoryFashion = () => {
     refreshFav(); // Refresh favorite items
   }, [category]);
 
-  const visibleProducts = products.slice(
-    visibleIndex,
-    visibleIndex + itemsPerPage
-  );
+  const visibleProducts = products.slice(visibleIndex, visibleIndex + itemsPerPage);
 
   const handleNext = () => {
     if (visibleIndex + itemsPerPage < products.length) {
@@ -94,9 +92,7 @@ const ProductCategoryFashion = () => {
         <div className="mb-10 relative">
           {/* Category Header */}
           <div className="px-10 mb-4 text-center">
-            <h2 className="text-lg font-bold text-gray-800 uppercase">
-              {category} Essentials
-            </h2>
+            <h2 className="text-lg font-bold text-gray-800 uppercase">{category} Essentials</h2>
           </div>
 
           {fetching ? (
@@ -106,17 +102,15 @@ const ProductCategoryFashion = () => {
               {/* Products Grid */}
               <div className="grid grid-cols-2 gap-4">
                 {visibleProducts.map((product) => {
-                  const isFavorite = favItems.some(
-                    (item) => item.pno === product.pno
-                  );
+                  const isFavorite = favItems.some((item) => item.pno === product.pno);
 
                   return (
-                    <div
-                      key={product.pno}
-                      className="relative flex flex-col items-center"
-                    >
+                    <div key={product.pno} className="relative flex flex-col items-center">
                       {/* Product Image */}
-                      <div className="relative w-48 h-60 overflow-hidden">
+                      <div className="relative w-48 h-60 overflow-hidden z-10"
+                      onClick={() => {
+                        moveToProductRead(product.pno);
+                      }}>
                         <img
                           src={`${host}/api/products/view/${product.uploadFileNames?.[0]}`}
                           alt={product.pname}
@@ -132,21 +126,15 @@ const ProductCategoryFashion = () => {
                           }}
                         >
                           <HeartIcon
-                            className={`h-6 w-6 ${
-                              isFavorite ? "fill-current" : ""
-                            }`}
+                            className={`h-6 w-6 ${isFavorite ? "fill-current" : ""}`}
                           />
                         </button>
                       </div>
 
                       {/* Product Details */}
                       <div className="mt-2 text-center">
-                        <h3 className="text-sm font-bold text-gray-700">
-                          {product.pname}
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                          ₩{product.pprice.toLocaleString()}
-                        </p>
+                        <h3 className="text-sm font-bold text-gray-700">{product.pname}</h3>
+                        <p className="text-sm text-gray-500 mt-1">₩{product.pprice.toLocaleString()}</p>
                       </div>
                     </div>
                   );
