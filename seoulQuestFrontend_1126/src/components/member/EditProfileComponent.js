@@ -43,7 +43,9 @@ const EditProfileComponent = () => {
   const handleClickEditProfile = async (e) => {
     e.preventDefault();
     if (!userInfo.newPassword || !userInfo.confirmPassword) {
-      alert("Please enter both the new password and the confirmation password.");
+      alert(
+        "Please enter both the new password and the confirmation password."
+      );
       return;
     }
     if (userInfo.newPassword !== userInfo.confirmPassword) {
@@ -214,7 +216,9 @@ const EditProfileComponent = () => {
 
         {/* Password Section */}
         <section className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800">Change Password</h3>
+          <h3 className="text-lg font-semibold text-gray-800">
+            Change Password
+          </h3>
           <div>
             <label className="block text-gray-600 mb-1">New Password</label>
             <input
@@ -226,7 +230,9 @@ const EditProfileComponent = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-600 mb-1">Confirm New Password</label>
+            <label className="block text-gray-600 mb-1">
+              Confirm New Password
+            </label>
             <input
               className="w-full p-3 border border-gray-300 rounded"
               name="confirmPassword"

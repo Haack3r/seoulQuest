@@ -190,22 +190,21 @@ public class CustomSecurityConfig {
         // configuration.setExposedHeaders(Arrays.asList("Authorization"));
         // 허용할 헤더 설정
         configuration.setAllowedHeaders(Arrays.asList(
-            "Authorization",
-            "Content-Type",
-            "X-Requested-With",
-            "Accept",
-            "Origin",
-            "Access-Control-Request-Method",
-            "Access-Control-Request-Headers"
-        ));
-        
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With",
+                "Accept",
+                "Origin",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers"));
+
         // 클라이언트에게 노출할 헤더 설정
         configuration.setExposedHeaders(Arrays.asList(
-            "Authorization",           // JWT 토큰
-            "X-Total-Count",          // 페이징 정보
-            "Content-Disposition"      // 파일 다운로드
+                "Authorization", // JWT 토큰
+                "X-Total-Count", // 페이징 정보
+                "Content-Disposition" // 파일 다운로드
         ));
-        
+
         // preflight 요청의 캐시 시간 설정 (1시간)
         configuration.setMaxAge(3600L);
 

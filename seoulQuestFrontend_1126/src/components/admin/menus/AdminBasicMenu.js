@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import SearchIcon from '@mui/icons-material/Search';
-import { styled, alpha } from '@mui/material/styles';
-import NotificationMenu from '../ui/Notification';
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+import { styled, alpha } from "@mui/material/styles";
+import NotificationMenu from "../ui/Notification";
 import {
   divideKorean,
   combineKorean,
@@ -10,32 +10,32 @@ import {
   isKorean,
   CHO_KOREAN,
   JUNG_KOREAN,
-  JONG_KOREAN
-} from '../../ui/KoreanComplete';
+  JONG_KOREAN,
+} from "../../ui/KoreanComplete";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
+  "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
-    width: 'auto',
+    width: "auto",
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 }));
 
 // 검색창에 대한 CSS 추가
@@ -84,16 +84,15 @@ const searchStyles = `
               }
               `;
 
-
 const AdminBasicMenu = () => {
   // const loginState = useSelector(state => state.loginSlice)
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const searchRef = useRef(null);
 
   // 자동완성 옵션 (예시)
-  const dataList = ["빨간색", "주황색", "노랑색", "초록색", "파란색"]
+  const dataList = ["빨간색", "주황색", "노랑색", "초록색", "파란색"];
 
   // 초성검색
   function makeRegexByCho(search = "") {
@@ -101,7 +100,9 @@ const AdminBasicMenu = () => {
       (acc, cho, index) =>
         acc.replace(
           new RegExp(cho, "g"),
-          `[${String.fromCharCode(0xAC00 + index * 588)}-${String.fromCharCode(0xAC00 + (index + 1) * 588 - 1)}]`
+          `[${String.fromCharCode(0xac00 + index * 588)}-${String.fromCharCode(
+            0xac00 + (index + 1) * 588 - 1
+          )}]`
         ),
       search
     );
@@ -120,44 +121,43 @@ const AdminBasicMenu = () => {
       return;
     }
 
-    const matchDataList = dataList.filter(label =>
-      label.includes(value) || includeByCho(value, label)
+    const matchDataList = dataList.filter(
+      (label) => label.includes(value) || includeByCho(value, label)
     );
     setSuggestions(matchDataList);
-  }
+  };
 
   // 방향키와 엔터 키로 단어 선택
   const handleKeyDown = (e) => {
-    if (suggestions.length === 0) return
+    if (suggestions.length === 0) return;
 
     switch (e.keyCode) {
-
       // up key
       case 38:
-        setActiveIndex(prev => Math.max(prev - 1, 0))
-        break
+        setActiveIndex((prev) => Math.max(prev - 1, 0));
+        break;
 
       // down key
       case 40:
-        setActiveIndex(prev => Math.min(prev + 1, suggestions.length - 1))
-        break
+        setActiveIndex((prev) => Math.min(prev + 1, suggestions.length - 1));
+        break;
 
       // enter key
       case 13:
         if (suggestions[activeIndex]) {
-          setSearchTerm(suggestions[activeIndex])
-          setSuggestions([])
+          setSearchTerm(suggestions[activeIndex]);
+          setSuggestions([]);
         }
-        break
+        break;
 
       default:
-        break
+        break;
     }
-  }
+  };
 
   // 검색어 하이라이트 처리
   const highlightMatch = (text) => {
-    if (!searchTerm) return text
+    if (!searchTerm) return text;
 
     // 일반 검색어 매칭을 위한 정규식
     const normalRegex = new RegExp(`(${searchTerm})`, "gi");
@@ -176,7 +176,7 @@ const AdminBasicMenu = () => {
     }
 
     return text;
-  }
+  };
 
   return (
     <>
@@ -189,47 +189,50 @@ const AdminBasicMenu = () => {
             <div className="flex-grow flex justify-center lg:justify-start">
               {/* <Link to={'/'} */}
               <Link
-                to={'/'}
-                className="text-2xl font-semibold tracking-wide text-gray-900">
+                to={"/"}
+                className="text-2xl font-semibold tracking-wide text-gray-900"
+              >
                 Seoul
                 <span className="text-red-800">Culture</span>
                 <span className="text-blue-900">Quest</span>
               </Link>
             </div>
             {/* <div className='hidden lg:flex lg:flex-grow lg:justify-between lg:items-center px-8'> */}
-            <div className='hidden lg:flex items-center space-x-4'>
+            <div className="hidden lg:flex items-center space-x-4">
               {/* 검색기능 */}
               <nav className="flex space-x-4 items-center">
-                <div className="relative"> {/* 검색 컨테이너 추가 */}
+                <div className="relative">
+                  {" "}
+                  {/* 검색 컨테이너 추가 */}
                   <Search>
                     <SearchIconWrapper>
-                      <SearchIcon sx={{ color: '#fb8c00' }} />
+                      <SearchIcon sx={{ color: "#fb8c00" }} />
                     </SearchIconWrapper>
                     {/* 검색어 입력 폼 */}
                     <input
                       ref={searchRef}
-                      type='text'
+                      type="text"
                       value={searchTerm}
                       onChange={(e) => {
-                        setSearchTerm(e.target.value)
-                        filterSuggestions(e.target.value)
+                        setSearchTerm(e.target.value);
+                        filterSuggestions(e.target.value);
                       }}
                       onKeyDown={handleKeyDown}
-                      placeholder='Search...'
-                      autoComplete='off'
+                      placeholder="Search..."
+                      autoComplete="off"
                     />
                     {suggestions.length > 0 && (
                       <div className="autocomplete">
                         {suggestions.map((suggestion, index) => (
                           <div
                             key={suggestion}
-                            className={index === activeIndex ? 'active' : ''}
+                            className={index === activeIndex ? "active" : ""}
                             onClick={() => {
                               setSearchTerm(suggestion);
                               setSuggestions([]);
                             }}
                             dangerouslySetInnerHTML={{
-                              __html: highlightMatch(suggestion)
+                              __html: highlightMatch(suggestion),
                             }}
                           />
                         ))}
@@ -243,15 +246,20 @@ const AdminBasicMenu = () => {
               {/* <NotificationMenu className="h-5 w-5 text-gray-600 hover:text-gray-900" /> */}
               <NotificationMenu className="text-gray-600 hover:text-gray-900" />
               {/* <nav className="flex space-x-4 items-center"> */}
-              <Link to={'/member/logout/'} className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">Logout</Link>
+              <Link
+                to={"/member/logout/"}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              >
+                Logout
+              </Link>
               {/* </nav> */}
               {/* </div> */}
             </div>
-          </div >
-        </div >
-      </header >
+          </div>
+        </div>
+      </header>
     </>
-  )
-}
+  );
+};
 
-export default AdminBasicMenu
+export default AdminBasicMenu;

@@ -20,10 +20,7 @@ public class CategoryRepositoryTests { // 투어와 상품의 카테고리 데�
     @Test
     public void testProductCategoryDummy(){
         String[] productCategories = {
-                "Electronics", "Fashion", "Home Appliances", "Beauty and Personal Care",
-                "Sports Equipment", "Outdoor Gear", "Toys and Games",
-                "Books", "Furniture", "Groceries", "Health Supplements",
-                "Pet Supplies", "Stationery", "Automotive", "Garden Tools"
+                "K-Beauty", "Exotic Tea", "Fashion", "Gourmet"
         };
         IntStream.rangeClosed(0,productCategories.length-1).forEach(i->{
             Category category = Category.builder()

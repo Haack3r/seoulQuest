@@ -6,7 +6,13 @@ import useCustomLogin from "../../hooks/useCustomLogin";
 import ReviewModal from "./ReviewModal";
 import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import ReviewAddModal from "./ReviewAddModal";
-import { getProductList, getInfoforProduct, postProductAdd, deleteProductOne, putProductOne } from "../../api/reviewApi";
+import {
+  getProductList,
+  getInfoforProduct,
+  postProductAdd,
+  deleteProductOne,
+  putProductOne,
+} from "../../api/reviewApi";
 
 const initState = {
   dtoList: [],
@@ -74,13 +80,11 @@ const ProductReviewComponent = () => {
   }, [page, size, refresh]);
 
   return (
-    <div className="max-w-7xl min-w-[320px] md:min-w-[768px] mx-auto mt-20 mb-20">
+    <div className="max-w-6xl min-w-[320px] md:min-w-[768px] mt-5 mx-auto mb-20">
       <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-8 mb-10">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-extrabold text-gray-900 ">
-            My Reviews
-          </h2>
+          <h2 className="text-xl font-extrabold text-gray-900 ">My Reviews</h2>
           <button
             className="text-gray-500 underline hover:text-blue-600 hover:underline font-semibold py-2 px-4 transition duration-200"
             onClick={OpenAddModal}

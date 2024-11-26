@@ -1,19 +1,23 @@
-
-import { StarIcon, ShoppingCart, HeartIcon } from 'lucide-react';
-import { Badge } from 'antd';
-import CartComponent from '../menus/CartComponent';
-import useCustomCart from '../../hooks/useCustomCart';
-import useCustomLogin from '../../hooks/useCustomLogin';
-import { getOne } from '../../api/productsApi';
-import useCustomFav from '../../hooks/useCustomFav';
-import { useEffect, useState } from 'react';
-import ReviewsSection from '../review/ReviewsSection';
-import { API_SERVER_HOST, deleteProductOne, putProductOne ,getProductItemReview} from '../../api/reviewApi';
+import { StarIcon, ShoppingCart, HeartIcon } from "lucide-react";
+import { Badge } from "antd";
+import CartComponent from "../menus/CartComponent";
+import useCustomCart from "../../hooks/useCustomCart";
+import useCustomLogin from "../../hooks/useCustomLogin";
+import { getOne } from "../../api/productsApi";
+import useCustomFav from "../../hooks/useCustomFav";
+import { useEffect, useState } from "react";
+import ReviewsSection from "../review/ReviewsSection";
+import {
+  API_SERVER_HOST,
+  deleteProductOne,
+  putProductOne,
+  getProductItemReview,
+} from "../../api/reviewApi";
 
 const initState = {
   pno: 0,
-  pname: '',
-  pdesc: '',
+  pname: "",
+  pdesc: "",
   pprice: 0,
   pqty: 0,
   uploadFileNames: [],
@@ -42,13 +46,18 @@ const ReadComponent = ({ pno }) => {
 
   const handleAddToCart = () => {
     if (!selectedQuantity) {
-      alert('Please select a quantity.');
+      alert("Please select a quantity.");
       return;
     }
 
     const existingItem = cartItems.find((item) => item.pno === product.pno);
     if (existingItem) {
-      if (!window.confirm('This item is already in the cart. Do you want to add it again?')) return;
+      if (
+        !window.confirm(
+          "This item is already in the cart. Do you want to add it again?"
+        )
+      )
+        return;
     }
 
     changeCart({
@@ -62,23 +71,23 @@ const ReadComponent = ({ pno }) => {
 
   const handleAddToFavorites = async () => {
     if (!loginState.email) {
-      alert('Please log in to add favorites.');
+      alert("Please log in to add favorites.");
       return;
     }
 
     const isAlreadyFavorite = favItems.some((item) => item.pno === product.pno);
     if (isAlreadyFavorite) {
-      alert('You already liked this product!');
+      alert("You already liked this product!");
       return;
     }
 
     try {
       await changeFav({ email: loginState.email, pno: product.pno });
-      alert('Product added to favorites!');
+      alert("Product added to favorites!");
       refreshFav();
     } catch (error) {
-      console.error('Failed to add favorite:', error);
-      alert('Could not add to favorites. Please try again.');
+      console.error("Failed to add favorite:", error);
+      alert("Could not add to favorites. Please try again.");
     }
   };
 
@@ -92,7 +101,7 @@ const ReadComponent = ({ pno }) => {
               src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
               alt={product.pname}
               className="w-full h-full object-cover"
-            /> 
+            />
           </div>
           <div className="flex space-x-3 overflow-x-auto w-full">
             {product.uploadFileNames.map((image, index) => (
@@ -100,7 +109,7 @@ const ReadComponent = ({ pno }) => {
                 key={index}
                 onClick={() => setCurrentImage(index)}
                 className={`w-20 h-20 overflow-hidden ${
-                  currentImage === index ? 'ring-2 ring-blue-500' : ''
+                  currentImage === index ? "ring-2 ring-blue-500" : ""
                 }`}
               >
                 <img
@@ -122,7 +131,9 @@ const ReadComponent = ({ pno }) => {
             ))}
             <span className="text-gray-600">(4.8) 24 reviews</span>
           </div>
-          <p className="text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
+          <p className="text-2xl text-gray-900">
+            ₩{product.pprice.toLocaleString()}
+          </p>
           <p className="text-gray-700">{product.pdesc}</p>
 
           {/* Quantity Selector */}
@@ -161,7 +172,9 @@ const ReadComponent = ({ pno }) => {
 
           {/* Product Details */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-900">Product Details</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Product Details
+            </h2>
             <ul className="list-disc list-inside text-gray-700">
               <li>Material: 100% premium silk</li>
               <li>Handcrafted in Seoul, South Korea</li>
@@ -188,19 +201,20 @@ const ReadComponent = ({ pno }) => {
       {/* Cart Drawer */}
       <div
         className={`fixed top-0 right-0 h-[70%] w-96 bg-white shadow-lg mt-40 p-6 overflow-auto transform ${
-          cartVisible ? 'translate-x-0' : 'translate-x-full'
+          cartVisible ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300`}
       >
         <CartComponent />
-          </div>
-          {/* Reviews Section */}
-          <div className="mt-5">
-                        <ReviewsSection 
-                            itemNo={pno} 
-                            getItemReview ={getProductItemReview}
-                            putOne={putProductOne} 
-                            deleteOne={deleteProductOne}/>
-                    </div>
+      </div>
+      {/* Reviews Section */}
+      <div className="mt-5">
+        <ReviewsSection
+          itemNo={pno}
+          getItemReview={getProductItemReview}
+          putOne={putProductOne}
+          deleteOne={deleteProductOne}
+        />
+      </div>
     </div>
   );
 };

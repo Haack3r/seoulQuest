@@ -238,49 +238,45 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    // @Override
-    // public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO
-    // pageRequestDTO, String category) {
-    // Pageable pageable = pageRequestDTO.getPageable(Sort.by("pno").descending());
+    public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("pno").descending());
 
-    // BooleanBuilder booleanBuilder = new BooleanBuilder();
-    // QProduct qProduct = QProduct.product;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QProduct qProduct = QProduct.product;
 
-    // // Base condition
-    // BooleanExpression expression = qProduct.pno.gt(0L);
-    // booleanBuilder.and(expression);
+        // Base condition
+        BooleanExpression expression = qProduct.pno.gt(0L);
+        booleanBuilder.and(expression);
 
-    // // Add category filter if provided
-    // if (category != null && !category.isEmpty()) {
-    // booleanBuilder.and(qProduct.category.categoryName.eq(category));
-    // }
+        // Add category filter if provided
+        if (category != null && !category.isEmpty()) {
+            booleanBuilder.and(qProduct.category.categoryName.eq(category));
+        }
 
-    // // Add keyword search filter if provided
-    // if (pageRequestDTO.getKeyword() != null &&
-    // !pageRequestDTO.getKeyword().isEmpty()) {
-    // String keyword = pageRequestDTO.getKeyword();
-    // BooleanBuilder keywordBuilder = new BooleanBuilder();
-    // keywordBuilder.or(qProduct.pname.containsIgnoreCase(keyword)); // Match name
-    // keywordBuilder.or(qProduct.pdesc.containsIgnoreCase(keyword)); // Match
-    // description
-    // booleanBuilder.and(keywordBuilder);
-    // }
+        // Add keyword search filter if provided
+        if (pageRequestDTO.getKeyword() != null && !pageRequestDTO.getKeyword().isEmpty()) {
+            String keyword = pageRequestDTO.getKeyword();
+            BooleanBuilder keywordBuilder = new BooleanBuilder();
+            keywordBuilder.or(qProduct.pname.containsIgnoreCase(keyword)); // Match name
+            keywordBuilder.or(qProduct.pdesc.containsIgnoreCase(keyword)); // Match description
+            booleanBuilder.and(keywordBuilder);
+        }
 
-    // // Fetch data using combined filters
-    // Page<Product> result = productRepository.findAll(booleanBuilder, pageable);
+        // Fetch data using combined filters
+        Page<Product> result = productRepository.findAll(booleanBuilder, pageable);
 
-    // // Map to DTOs
-    // List<ProductDTO> dtoList = result.stream()
-    // .map(product -> entityChangeDTO(product))
-    // .collect(Collectors.toList());
+        // Map to DTOs
+        List<ProductDTO> dtoList = result.stream()
+                .map(product -> entityChangeDTO(product))
+                .collect(Collectors.toList());
 
-    // // Build and return response
-    // return PageResponseDTO.<ProductDTO>withAll()
-    // .dtoList(dtoList)
-    // .totalCount(result.getTotalElements())
-    // .pageRequestDTO(pageRequestDTO)
-    // .build();
-    // }
+        // Build and return response
+        return PageResponseDTO.<ProductDTO>withAll()
+                .dtoList(dtoList)
+                .totalCount(result.getTotalElements())
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
 
     private BooleanBuilder getSearch(PageRequestDTO requestDTO) {
         String type = requestDTO.getType();

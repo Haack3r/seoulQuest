@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { API_SERVER_HOST, getTourItemReview ,putTourOne,deleteTourOne} from "../../api/reviewApi";
-import ReviewsSection from '../review/ReviewsSection';
+import {
+  API_SERVER_HOST,
+  getTourItemReview,
+  putTourOne,
+  deleteTourOne,
+} from "../../api/reviewApi";
+import ReviewsSection from "../review/ReviewsSection";
 import { StarIcon, HeartIcon, ShoppingCart } from "lucide-react";
 import { Calendar, Popover, Badge } from "antd";
 import { UserOutlined, CalendarOutlined } from "@ant-design/icons";
@@ -9,6 +14,7 @@ import useCustomReservation from "../../hooks/useCustomReservation";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import { getOne } from "../../api/tourApi";
 import TourDetails from "./TourDetails";
+import useCustomTourFav from "../../hooks/useCustomTourFav";
 
 const initState = {
   tno: 0,
@@ -31,9 +37,10 @@ const TourReadComponent = ({ tno }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [cartVisible, setCartVisible] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false); // For toggling tour details
-
+  const { isLogin, loginState } = useCustomLogin();
+  const email = loginState.email;
+  const { favItems, changeFav, refreshFav } = useCustomTourFav(email);
   const { reservationItems, changeReservation } = useCustomReservation();
-  const { loginState } = useCustomLogin();
 
   useEffect(() => {
     // Fetch tour data
@@ -73,6 +80,28 @@ const TourReadComponent = ({ tno }) => {
       tdate: selectedDate,
     });
     setCartVisible(true); // Automatically show the cart
+  };
+
+  const handleAddToFavorites = async () => {
+    if (!loginState.email) {
+      alert("Please log in to add favorites.");
+      return;
+    }
+
+    const isAlreadyFavorite = favItems.some((item) => item.tno === tour.tno);
+    if (isAlreadyFavorite) {
+      alert("You already liked this product!");
+      return;
+    }
+
+    try {
+      await changeFav({ email: loginState.email, tno: tour.tno });
+      alert("Product added to favorites!");
+      refreshFav();
+    } catch (error) {
+      console.error("Failed to add favorite:", error);
+      alert("Could not add to favorites. Please try again.");
+    }
   };
 
   return (
@@ -203,7 +232,7 @@ const TourReadComponent = ({ tno }) => {
 
       {/* Reservation Drawer */}
       <div
-        className={`fixed top-0 right-0 h-[70%] w-96 bg-white shadow-lg mt-40 p-6 overflow-auto transform ${
+        className={`z-50 fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${
           cartVisible ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300`}
       >

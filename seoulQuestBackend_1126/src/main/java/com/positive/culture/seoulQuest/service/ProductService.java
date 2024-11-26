@@ -75,6 +75,7 @@ public interface ProductService {
                 .pname(product.getPname())
                 .pdesc(product.getPdesc())
                 .pprice(product.getPprice())
+                .shippingFee(product.getShippingFee())
                 .pqty(product.getPqty())
                 .shippingFee(product.getShippingFee())
                 .createAt(product.getCreateAt())

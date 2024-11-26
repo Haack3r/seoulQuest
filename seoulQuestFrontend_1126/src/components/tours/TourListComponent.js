@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useCustomMove from "../../hooks/useCustomMove";
 import FetchingModal from "../common/FetchingModal";
-import { API_SERVER_HOST } from "../../api/todoApi";
+import { API_SERVER_HOST } from "../../api/reviewApi";
 import PageComponent from "../common/PageComponent";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import Button from "../ui/Button";
@@ -30,17 +30,21 @@ const TourListComponent = () => {
   const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
   const [fetching, setFetching] = useState(false);
-  const { loginState } = useCustomLogin();
-  const { favItems, changeFav, deleteFav, refreshFav } = useCustomTourFav();
+  const { isLogin, loginState } = useCustomLogin();
+  const email = loginState.email; // Get email from login state
+  const { favItems, changeFav, deleteFav, refreshFav } = useCustomTourFav(email);
 
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("t");
   const [categories, setCategories] = useState([]); // Store fetched categories
   const [selectedCategory, setSelectedCategory] = useState(""); // Selected category
 
-  useEffect(() => {
-    refreshFav();
-  }, []);
+    
+    useEffect(() => {
+        if (isLogin && email) {
+            refreshFav();
+        }
+  }, [isLogin, email, refreshFav]);
 
   useEffect(() => {
     // Fetch categories

@@ -24,6 +24,8 @@ const NUToursIndex = lazy(() => import("../pages/tours/NUTourIndexPage"))
 const Cart = lazy(() => import("../pages/Cart"))
 const Favorite = lazy(() => import("../pages/Favorite"))
 const ReviewIndex = lazy(() => import("../pages/review/ReviewIndexPage"))
+const Coupon = lazy(() => import("../pages/member/CouponPage"));
+const Contact = lazy(() => import("../pages/ContactPage"))
 
 const root = createBrowserRouter([
     {
@@ -33,6 +35,10 @@ const root = createBrowserRouter([
     {
         path: "about",
         element: <Suspense fallback={Loading}><About /></Suspense>
+    },
+    {
+        path: "contact",
+        element: <Suspense fallback={Loading}><Contact /></Suspense>
     },
     {
         path: "cart",
@@ -83,6 +89,14 @@ const root = createBrowserRouter([
         path: "admin",
         children: adminRouter(),
         errorElement: <Alert severity="error">오류가 발생했습니다.</Alert>
+    },
+    {
+        path: "coupon",
+        element: (
+          <Suspense fallback={Loading}>
+            <Coupon />
+          </Suspense>
+        ),
     },
 ])
 

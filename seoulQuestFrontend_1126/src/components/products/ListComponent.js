@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useCustomMove from "./../../hooks/useCustomMove";
 import { getList, getProductCategories } from "../../api/productsApi";
 import FetchingModal from "../common/FetchingModal";
-import { API_SERVER_HOST } from "../../api/todoApi";
+import { API_SERVER_HOST } from "../../api/reviewApi";
 import PageComponent from "../common/PageComponent";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import Button from "../ui/Button";
@@ -29,8 +29,9 @@ const ListComponent = () => {
   const [serverData, setServerData] = useState(initState);
   const { exceptionHandle } = useCustomLogin();
   const { page, size, refresh, moveToList, moveToRead } = useCustomMove();
-  const { loginState } = useCustomLogin();
-  const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
+    const { loginState, isLogin } = useCustomLogin();
+    const email = loginState.email;
+  const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav(email);
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("t");
   const [fetching, setFetching] = useState(false);
@@ -39,8 +40,10 @@ const ListComponent = () => {
 
 
   useEffect(() => {
-    refreshFav();
-  }, []);
+    if (isLogin && email) {
+        refreshFav();
+    }
+}, [isLogin, email, refreshFav]);
 
   useEffect(() => {
     // Fetch categories
@@ -64,7 +67,7 @@ const ListComponent = () => {
   };
 
   const handleToggleFavorite = async (product) => {
-    if (!loginState.email) {
+    if (!email) {
       window.alert("Please log in to manage favorites.");
       return;
     }
@@ -75,7 +78,7 @@ const ListComponent = () => {
       const favoriteItem = favItems.find((item) => item.pno === product.pno);
       await deleteFav(favoriteItem.fino);
     } else {
-      await changeFav({ email: loginState.email, pno: product.pno });
+      await changeFav({ email, pno: product.pno });
     }
   };
 

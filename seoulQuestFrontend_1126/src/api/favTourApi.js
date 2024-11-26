@@ -4,25 +4,21 @@ import { API_SERVER_HOST } from "./reviewApi";
 const host = `${API_SERVER_HOST}/api/favoriteTour`;
 
 // Get favorite tour items for the logged-in user
-export const getFavTourItems = async () => {
-    console.log("GetFavTourItems 호출");
-    const user = JSON.parse(localStorage.getItem("user"));
-    const email = user?.email; // Ensure email is present
-
+export const getFavTourItems = async (email) => {
     if (!email) {
-        console.error("User is not logged in or email is missing.");
-        throw new Error("User is not logged in.");
+      console.error("User is not logged in or email is missing.");
+      throw new Error("User is not logged in.");
     }
-
+  
     try {
-        console.log("Fetching favorite tour items for:", email);
-        const res = await jwtAxios.get(`${host}/items/${email}`);
-        return res.data;
+      console.log("Fetching favorite tour items for:", email);
+      const res = await jwtAxios.get(`${host}/items/${email}`);
+      return res.data;
     } catch (error) {
-        console.error("Error fetching favorite tour items:", error);
-        throw error;
+      console.error("Error fetching favorite tour items:", error);
+      throw error;
     }
-};
+  };
 
 // Add or update a favorite tour item
 export const postChangeFavTour = async (favTourItem) => {
