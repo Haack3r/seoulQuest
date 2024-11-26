@@ -6,8 +6,8 @@ const myPageRouter = () => {
     const Loading = <div>Loading...</div>
     const MyPage = lazy(() => import("../pages/mypage/MyPage"))
     const EditProfilePage = lazy(() => import("../pages/mypage/EditProfilePage"))
-    const ReviewProductPage = lazy(() => import("../pages/review/ProductReviewPage"))
-    const ReviewTourPage = lazy(() => import("../pages/review/TourReviewPage"))
+    const ReviewProductPage = lazy(() => import("../pages/mypage/ProductReviewPage"))
+    const ReviewTourPage = lazy(() => import("../pages/mypage/TourReviewPage"))
     // const OrderPage = lazy(() => import("../pages/review/OrderPage"))
     // const BookingPage = lazy(() => import("../pages/review/BookingPage"))
     return [

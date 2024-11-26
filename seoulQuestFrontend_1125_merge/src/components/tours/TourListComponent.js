@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useCustomMove from "../../hooks/useCustomMove";
 import FetchingModal from "../common/FetchingModal";
-import { API_SERVER_HOST } from "../../api/todoApi";
+import { API_SERVER_HOST } from "../../api/reviewApi";
 import PageComponent from "../common/PageComponent";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import Button from "../ui/Button";
