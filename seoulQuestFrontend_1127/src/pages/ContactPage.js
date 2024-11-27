@@ -245,7 +245,7 @@ const ContactPage = () => {
                                 <button
                                     type="submit"
                                     className="w-full py-4 bg-stone-400 text-white rounded-lg font-semibold cursor-pointer hover:bg-stone-500">
-                                    Contact us
+                                    Submit Inquiry
                                 </button>
 
                             </form>
