@@ -1,9 +1,10 @@
 import React, { lazy, Suspense } from 'react'
 import { Navigate } from 'react-router-dom'
+import { SyncLoader } from 'react-spinners'
 
 const myPageRouter = () => {
 
-    const Loading = <div>Loading...</div>
+    const Loading = <div><SyncLoader /></div>
     const MyPage = lazy(() => import("../pages/mypage/MyPage"))
     const EditProfilePage = lazy(() => import("../pages/mypage/EditProfilePage"))
     const ReviewPage = lazy(() => import("../pages/mypage/ReviewPage"))

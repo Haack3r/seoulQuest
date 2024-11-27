@@ -1,5 +1,5 @@
 
-import { StarIcon, ShoppingCart, HeartIcon } from 'lucide-react';
+import { ShoppingCart, HeartIcon } from 'lucide-react';
 import { Badge } from 'antd';
 import CartComponent from '../menus/CartComponent';
 import useCustomCart from '../../hooks/useCustomCart';
@@ -9,6 +9,7 @@ import useCustomFav from '../../hooks/useCustomFav';
 import { useEffect, useState } from 'react';
 import ReviewsSection from '../review/ReviewsSection';
 import { API_SERVER_HOST, deleteProductOne, putProductOne ,getProductItemReview} from '../../api/reviewApi';
+import { StarFilled, StarOutlined } from '@ant-design/icons';
 
 const initState = {
   pno: 0,
@@ -27,18 +28,58 @@ const ReadComponent = ({ pno }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [cartVisible, setCartVisible] = useState(false);
   const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const [reviews, setReviews] = useState([]);
   const { changeCart, cartItems } = useCustomCart();
   const { loginState } = useCustomLogin();
   const { favItems, changeFav, refreshFav } = useCustomFav();
+  const [refresh, setRefresh] = useState(false)
+  const [reviewAvg, setReviewAvg] = useState(0)
 
-  // Fetch product details
-  useEffect(() => {
-    setFetching(true);
-    getOne(pno).then((data) => {
-      setProduct(data);
+//   // Fetch product details
+//   useEffect(() => {
+//     setFetching(true);
+//     getOne(pno).then((data) => {
+//       setProduct(data);
+//       setFetching(false);
+//     });
+//   }, [pno]);
+
+//   useEffect(() => {
+//     console.log(loginState.email);
+//     getProductItemReview(pno).then((data) => {
+//         console.log(data)
+//         setReviews(data);
+//     });
+// }, [refresh]);
+
+// 평균 계산 함수
+
+
+const calculateAverage = (reviews) =>{
+  if (reviews.length === 0) return 0; 
+  const sum = reviews.reduce((acc, review) => acc + review.rating, 0); 
+  setReviewAvg(sum / reviews.length)
+
+}
+
+
+useEffect(() => {
+  setFetching(true);
+
+  // Product 데이터 가져오기
+  getOne(pno).then((productData) => {
+      setProduct(productData);
       setFetching(false);
-    });
-  }, [pno]);
+  });
+
+  // Review 데이터 가져오기
+  console.log(loginState.email);
+  getProductItemReview(pno).then((reviews) => {
+      console.log(reviews);
+      setReviews(reviews);
+      calculateAverage(reviews)
+  });
+}, [pno, refresh]);
 
   const handleAddToCart = () => {
     if (!selectedQuantity) {
@@ -117,10 +158,28 @@ const ReadComponent = ({ pno }) => {
         <div className="lg:w-1/2 space-y-6">
           <h1 className="text-4xl font-light text-gray-900">{product.pname}</h1>
           <div className="flex items-center space-x-2">
-            {[...Array(5)].map((_, i) => (
-              <StarIcon key={i} className="h-5 w-5 text-yellow-400" />
-            ))}
-            <span className="text-gray-600">(4.8) 24 reviews</span>
+          {[...Array(5)].map((_, star) => 
+          (
+           <span key={star}>
+             {reviewAvg >= star+1 ? (
+                      <StarFilled className="text-yellow-400 text-xl" />
+                  ) : (
+                      <StarOutlined className="text-gray-300 text-xl" />
+                  )}
+            </span>
+          )
+          )}
+
+        {/* {[...Array(5)].map((star) => (
+                                    <span key={star}>
+                                        {review.rating >= star ? (
+                                            <StarFilled className="text-yellow-400 text-xl" />
+                                        ) : (
+                                            <StarOutlined className="text-gray-300 text-xl" />
+                                        )}
+                                    </span>
+                                ))} */}
+              <span className="text-gray-600">({reviewAvg}) {reviews.length} reviews</span>
           </div>
           <p className="text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
           <p className="text-gray-700">{product.pdesc}</p>
@@ -196,8 +255,9 @@ const ReadComponent = ({ pno }) => {
           {/* Reviews Section */}
           <div className="mt-5">
               <ReviewsSection 
-                  itemNo={pno} 
-                  getItemReview ={getProductItemReview}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  reviews={reviews}
                   putOne={putProductOne} 
                   deleteOne={deleteProductOne}/>
           </div>

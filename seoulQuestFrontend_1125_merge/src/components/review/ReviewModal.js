@@ -4,7 +4,6 @@ import useCustomLogin from "../../hooks/useCustomLogin";
 
 const ReviewModal = ({ selectedReview, closeEditModal, deleteOne ,putOne}) => {
   console.log("selectedReview.trid",selectedReview.trid)
-
   const { loginState } = useCustomLogin();
   const [isEditMode, setIsEditMode] = useState(false);
   const [editData, setEditData] = useState({

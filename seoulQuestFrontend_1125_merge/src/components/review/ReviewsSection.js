@@ -5,24 +5,21 @@ import ReviewModal from './ReviewModal';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { useNavigate } from 'react-router-dom';
 
-const ReviewsSection = ({ itemNo, getItemReview ,putOne, deleteOne }) => {
+const ReviewsSection = ({ 
+    refresh,
+    setRefresh,
+    reviews,
+    putOne, 
+    deleteOne }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [reviews, setReviews] = useState([]);
     const [selectedReview, setSelectedReview] = useState(null); 
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const { loginState } = useCustomLogin();
-    const [refresh, setRefresh] = useState(false)
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(loginState.email);
-        console.log(itemNo)
-        
-        getItemReview(itemNo).then((data) => {
-            console.log(data)
-            setReviews(data);
-        });
-    }, [itemNo,refresh]);
+    }, [refresh])
+    
 
     const handleNavigation = () => {
             navigate('/mypage/review'); 
