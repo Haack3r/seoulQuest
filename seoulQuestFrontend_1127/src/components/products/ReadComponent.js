@@ -35,14 +35,15 @@ const ReadComponent = ({ pno }) => {
   const [reviews, setReviews] = useState([]);
   const [refresh, setRefresh] = useState(false)
 
-  const calculateAverage = (reviews) =>{
-    if (reviews.length === 0) return 0; 
-    const sum = reviews.reduce((acc, review) => acc + review.rating, 0); 
-    setReviewAvg(sum / reviews.length)
-  }
-
+  const calculateAverage = (reviews) => {
+    if (reviews.length === 0) return 0;
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return sum / reviews.length;
+  };
+  
   // Fetch product details
   useEffect(() => {
+    window.scrollTo(0, 0);
     setFetching(true);
     // Product 데이터 가져오기
     getOne(pno).then((productData) => {
@@ -55,7 +56,7 @@ const ReadComponent = ({ pno }) => {
     getProductItemReview(pno).then((reviews) => {
         console.log(reviews);
         setReviews(reviews);
-        calculateAverage(reviews)
+        setReviewAvg(calculateAverage(reviews))
     });
   }, [pno, refresh]);
 

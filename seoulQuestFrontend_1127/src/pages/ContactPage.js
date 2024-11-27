@@ -3,6 +3,7 @@ import BasicLayout from '../layouts/BasicLayout';
 import { postAdd } from '../api/ContactApi';
 
 const ContactPage = () => {
+    window.scrollTo(0, 0);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -12,43 +13,42 @@ const ContactPage = () => {
     const [isError, setIsError] = useState(false);      // 오류 여부를 추적하는 상태
     const [openIndex, setOpenIndex] = useState(null);   // 어떤 입력 필드가 열려있는지 추적하는 상태
 
-    // 임시 데이터
     const faqData = [
         {
-            question: "투어는 어떻게 예약하나요?",
-            answer: "Tours 페이지에서 원하시는 투어를 선택하신 후 예약 버튼을 클릭하시면 예약이 가능합니다. 예약 시 날짜와 인원수를 선택하실 수 있습니다."
+            question: "How can I book a tour?",
+            answer: "You can book a tour by selecting your desired tour on the Tours page and clicking the 'Book Now' button. During the booking process, you can choose the date and number of participants."
         },
         {
-            question: "환불 정책은 어떻게 되나요?",
-            answer: "투어 시작 7일 전까지 취소 시 100% 환불, 3일 전까지 취소 시 50% 환불이 가능합니다. 그 이후 취소 시에는 환불이 불가능합니다."
+            question: "What is your refund policy?",
+            answer: "Cancellations made up to 7 days before the tour start date are eligible for a 100% refund. Cancellations up to 3 days before the start date are eligible for a 50% refund. No refunds are available for cancellations made less than 3 days before the tour."
         },
         {
-            question: "단체 예약도 가능한가요?",
-            answer: "10인 이상 단체 예약의 경우 별도의 할인이 적용됩니다. 자세한 사항은 이메일로 문의해 주시기 바랍니다."
+            question: "Is group booking available?",
+            answer: "Yes, group bookings for 10 or more participants are eligible for special discounts. For more details, please contact us via email."
         },
         {
-            question: "투어 소요 시간은 얼마나 되나요?",
-            answer: "일반 투어는 약 2-3시간 정도 소요되며, 프리미엄 투어의 경우 4-5시간 정도 소요됩니다. 각 투어별 상세 소요시간은 투어 상세페이지에서 확인하실 수 있습니다."
+            question: "How long do tours take?",
+            answer: "Standard tours typically last about 2-3 hours, while premium tours may take 4-5 hours. Detailed durations for each tour can be found on the tour detail page."
         },
         {
-            question: "준비물은 무엇이 필요한가요?",
-            answer: "편한 복장과 걷기 좋은 신발을 준비해 주시면 됩니다. 여름철에는 모자와 선크림, 겨울철에는 따뜻한 외투를 준비해주세요. 카메라는 선택사항입니다."
+            question: "What should I bring?",
+            answer: "Please wear comfortable clothing and walking shoes. In summer, bring a hat and sunscreen. In winter, prepare a warm coat. A camera is optional."
         },
         {
-            question: "우천시에도 투어가 진행되나요?",
-            answer: "가벼운 비의 경우 우산을 제공해드리며 정상적으로 투어가 진행됩니다. 단, 폭우나 폭설 등 극심한 기상악화 시에는 안전을 위해 투어가 취소될 수 있으며, 이 경우 전액 환불해드립니다."
+            question: "Do tours proceed in rainy weather?",
+            answer: "In light rain, we provide umbrellas and proceed with the tour as scheduled. However, in cases of severe weather such as heavy rain or snowstorms, tours may be canceled for safety reasons, and a full refund will be provided."
         },
         {
-            question: "외국어 가이드도 가능한가요?",
-            answer: "네, 영어, 일본어, 중국어 가이드 투어를 제공하고 있습니다. 예약 시 원하시는 언어를 선택해 주시면 됩니다."
+            question: "Are foreign language guides available?",
+            answer: "Yes, we offer guided tours in English, Japanese, and Chinese. If you prefer a specific language, please contact us after booking."
         },
         {
-            question: "투어 집합 장소는 어디인가요?",
-            answer: "대부분의 투어는 지하철역 근처에서 시작됩니다. 예약 확정 후 상세한 집합 장소와 지도를 이메일로 보내드립니다."
+            question: "Where is the meeting point for tours?",
+            answer: "Most tours start near subway stations. After your booking is confirmed, we will send you the exact meeting location and a map via email."
         },
         {
-            question: "결제는 어떤 방식으로 가능한가요?",
-            answer: "신용카드, 계좌이체, 페이팔 등 다양한 결제 방식을 지원하고 있습니다. 모든 결제는 안전한 보안 시스템을 통해 처리됩니다."
+            question: "What payment methods are available?",
+            answer: "We accept various payment methods, including credit cards and bank transfers. All payments are processed through a secure system."
         }
     ];
 
@@ -124,7 +124,7 @@ const ContactPage = () => {
 
                 {/* 메인 섹션 */}
                 <div className="relative z-10">
-                    <h1 className="text-5xl text-gray-800 text-center mb-10 mt-5">
+                    <h1 className="text-3xl font-semibold text-gray-900 text-center mb-10 mt-10">
                         Customer Support Center
                     </h1>
 
@@ -132,7 +132,7 @@ const ContactPage = () => {
 
                         {/* FAQ 섹션 */}
                         <div className="bg-white rounded-2xl p-8 shadow-lg h-full">
-                            <h2 className="text-3xl text-gray-800 mb-8 text-center">
+                            <h2 className="text-2xl text-gray-800 mb-8 text-center">
                                 Frequently Asked Questions
                             </h2>
 
@@ -148,7 +148,7 @@ const ContactPage = () => {
                                     >
                                         <button
                                             onClick={() => toggleFaq(index)}
-                                            className={`w-full px-5 py-4 text-left ${openIndex === index ? 'bg-blue-500 text-white' : 'bg-gray-50 text-gray-800'}
+                                            className={`w-full px-5 py-4 text-left ${openIndex === index ? 'bg-stone-500 text-white' : 'bg-gray-50 text-gray-800'}
                                              border-none cursor-pointer flex justify-between items-center text-base font-medium`}>
                                             {faq.question}
 
@@ -170,7 +170,7 @@ const ContactPage = () => {
 
                         {/* 문의하기 섹션 */}
                         <div className="bg-white rounded-2xl p-8 shadow-lg h-full">
-                            <h2 className="text-3xl text-gray-800 mb-8 text-center">
+                            <h2 className="text-2xl text-gray-800 mb-8 text-center">
                                 Contact us
                             </h2>
 
@@ -191,7 +191,7 @@ const ContactPage = () => {
                                         onChange={handleChange}
                                         required maxLength="100"
                                         placeholder="Please enter your name"
-                                        className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500"
+                                        className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm outline-none focus:border-stone-500"
                                     />
                                 </div>
 
@@ -207,7 +207,7 @@ const ContactPage = () => {
                                         onChange={handleChange}
                                         required maxLength="200"
                                         placeholder="Please enter your email"
-                                        className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500"
+                                        className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm outline-none focus:border-stone-500"
                                     />
                                 </div>
 
@@ -223,7 +223,7 @@ const ContactPage = () => {
                                         required maxLength="1000"
                                         placeholder="Please enter your inquiry information"
                                         rows="5"
-                                        className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm resize-y min-h-[120px] outline-none focus:border-blue-500"
+                                        className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm resize-y min-h-[120px] outline-none focus:border-stone-500"
                                     />
 
                                     {/* 현재 폼에서 사용자가 입력한 문의사항을 나타내는 값 */}
@@ -244,7 +244,7 @@ const ContactPage = () => {
 
                                 <button
                                     type="submit"
-                                    className="w-full py-4 bg-blue-500 text-white rounded-lg font-semibold cursor-pointer hover:bg-blue-600">
+                                    className="w-full py-4 bg-stone-400 text-white rounded-lg font-semibold cursor-pointer hover:bg-stone-500">
                                     Contact us
                                 </button>
 

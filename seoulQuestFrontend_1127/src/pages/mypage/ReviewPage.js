@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import ProductReviewComponent from "../../components/review/ProductReviewComponent";
 import MyPageLayout from "../../layouts/MyPageLayout";
 import BasicLayout from "../../layouts/BasicLayout";
-import { Segmented } from "antd";
 import TourReviewComponent from "../../components/review/TourReviewComponent";
 
 const ReviewPage = () => {
+  window.scrollTo(0, 0);
   const [activeSegment, setActiveSegment] = useState("Product Reviews"); // 기본값 설정
 
   const handleSegmentChange = (value) => {

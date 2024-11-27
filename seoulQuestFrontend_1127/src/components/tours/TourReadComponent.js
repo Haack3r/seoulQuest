@@ -45,14 +45,14 @@ const TourReadComponent = ({ tno }) => {
   const [refresh, setRefresh] = useState(false)
   const { loginState } = useCustomLogin();
 
-  const calculateAverage = (reviews) =>{
-    if (reviews.length === 0) return 0; 
-    const sum = reviews.reduce((acc, review) => acc + review.rating, 0); 
-    setReviewAvg(sum / reviews.length)
-  
-  }
+  const calculateAverage = (reviews) => {
+    if (reviews.length === 0) return 0;
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return sum / reviews.length;
+  };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     // Fetch tour data
     setFetching(true);
     getOne(tno).then((data) => {
@@ -65,7 +65,7 @@ const TourReadComponent = ({ tno }) => {
     getTourItemReview(tno).then((reviews) => {
         console.log(reviews);
         setReviews(reviews);
-        calculateAverage(reviews)
+        setReviewAvg(calculateAverage(reviews))
     });
 
   }, [tno,refresh]);
