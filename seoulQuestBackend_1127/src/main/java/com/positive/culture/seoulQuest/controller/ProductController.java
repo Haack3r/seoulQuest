@@ -61,6 +61,18 @@ public class ProductController {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @GetMapping("/listByCategory")
+    public PageResponseDTO<ProductDTO> listByCategory(
+            PageRequestDTO pageRequestDTO,
+            @RequestParam String category) {
+        log.info("Fetching products for category: {}", category); // Debug log
+        PageResponseDTO<ProductDTO> response = productService.getProductsByCategory(pageRequestDTO, category);
+        log.info("Response DTO: {}", response); // Check the actual response
+        return response;
+    }
+
+
+
     @GetMapping("/categories")
     public ResponseEntity<List<String>> getProductCategories() {
         List<String> categories = categoryRepository.findByCategoryType("product")
@@ -74,12 +86,10 @@ public class ProductController {
         return ResponseEntity.ok(categories);
     }
 
-    // 전체 목록 조회 - test 성공 (유저 , 관리자)
     @GetMapping("/list")
-    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO,
-            @RequestParam(required = false) String category) {
-        log.info("list.........." + pageRequestDTO);
-        return productService.getList(pageRequestDTO);
+    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO, @RequestParam(required = false) String category) {
+        log.info("list with category: {}", category != null ? category : "No category provided");
+        return productService.getListWithCategory(pageRequestDTO, category);
     }
 
     // 파일 등록 , 등록할때 service쪽에서 category수정해야됨

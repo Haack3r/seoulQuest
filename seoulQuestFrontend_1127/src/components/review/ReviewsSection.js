@@ -1,36 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import ReviewModal from './ReviewModal'; 
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { useNavigate } from 'react-router-dom';
 
-const ReviewsSection = ({ itemNo, getItemReview ,putOne, deleteOne }) => {
+const ReviewsSection = ({ 
+    refresh,
+    setRefresh,
+    reviews,
+    putOne, 
+    deleteOne }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [reviews, setReviews] = useState([]);
     const [selectedReview, setSelectedReview] = useState(null); 
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const { loginState } = useCustomLogin();
-    const [refresh, setRefresh] = useState(false)
     const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log(loginState.email);
-        console.log(itemNo)
-        
-        getItemReview(itemNo).then((data) => {
-            console.log(data)
-            setReviews(data);
-        });
-    }, [itemNo,refresh]);
+    console.log(reviews)
 
     const handleNavigation = () => {
-        const currentPath = window.location.pathname;
-        if (currentPath.includes('products')) {
-            navigate('/review/products/list');
-        } else if (currentPath.includes('tours')) {
-            navigate('/review/tours/list');
-        }
+            navigate('/mypage/review'); 
     };
 
     const nextSlide = () => {
@@ -64,7 +54,7 @@ const ReviewsSection = ({ itemNo, getItemReview ,putOne, deleteOne }) => {
                     className="px-4 py-2 text-gray-500 underline hover:text-gray-600"
                     onClick={handleNavigation}
                 >
-                    Go to List
+                    Go to Your Review List
                 </button>
             </div>
 
@@ -77,7 +67,7 @@ const ReviewsSection = ({ itemNo, getItemReview ,putOne, deleteOne }) => {
                 </button>
 
                 <div className="flex space-x-4 overflow-hidden w-full">
-                    {reviews.slice(currentIndex, currentIndex + 2).map((review) => (
+                    { reviews &&reviews.slice(currentIndex, currentIndex + 2).map((review) => (
                         <div
                             key={review.prid || review.trid}
                             className="relative bg-white rounded-lg shadow-md p-4 w-1/2 border border-gray-200"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { HeartIcon, ChevronLeft, ChevronRight } from "lucide-react";
-import { getList } from "../../../api/productsApi";
+import { getProductsByCategory } from "../../../api/productsApi";
 import { API_SERVER_HOST } from "../../../api/reviewApi";
 import useCustomFav from "../../../hooks/useCustomFav";
 import useCustomLogin from "../../../hooks/useCustomLogin";
@@ -13,7 +13,6 @@ const ProductCategoryBeauty = () => {
   const [products, setProducts] = useState([]);
   const [visibleIndex, setVisibleIndex] = useState(0); // Index for the current visible products
   const [fetching, setFetching] = useState(false);
-
   const { favItems, changeFav, deleteFav, refreshFav } = useCustomFav();
   const { loginState } = useCustomLogin();
   const {moveToProductRead, moveToProductReadNU} = useCustomMove();
@@ -21,13 +20,19 @@ const ProductCategoryBeauty = () => {
   const itemsPerPage = 4; // Number of items to display at once
 
   useEffect(() => {
+    console.log(category)
+    console.log(loginState.email)
     
     // Fetch products for the K-Beauty category
     const fetchProducts = async () => {
+    
       setFetching(true);
-      if(!loginState.email === null){
+      console.log(loginState.email)
+      // if(loginState.email === null){
+      
+        console.log("여기서도 카테고리",category)
       try {
-        const response = await getList({
+        const response = await getProductsByCategory({
           page: 1,
           size: 100, // Fetch a large number to allow for local pagination
           category,
@@ -38,20 +43,20 @@ const ProductCategoryBeauty = () => {
       } finally {
         setFetching(false);
       }
-    } else {
-      try {
-        const response = await getListNU({
-          page: 1,
-          size: 100, // Fetch a large number to allow for local pagination
-          category,
-        });
-        setProducts(response.dtoList || []); // Adjust to your API's response structure
-      } catch (error) {
-        console.error("Error fetching K-Beauty products:", error);
-      } finally {
-        setFetching(false);
-      }
-    }
+    // } else {
+    //   try {
+    //     const response = await getListNU({
+    //       page: 1,
+    //       size: 100, // Fetch a large number to allow for local pagination
+    //       category,
+    //     });
+    //     setProducts(response.dtoList || []); // Adjust to your API's response structure
+    //   } catch (error) {
+    //     console.error("Error fetching K-Beauty products:", error);
+    //   } finally {
+    //     setFetching(false);
+    //   }
+    // }
     };
 
     fetchProducts();

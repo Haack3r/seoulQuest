@@ -89,8 +89,8 @@ public class CustomSecurityConfig {
                                                 "/api/admin/product/image/**",
                                                 "/api/admin/tour/image/**",
                                                 "/api/product/image/**",
-                                                "/api/tour/image/**",
-                                        "/api/review/tours/list/**")
+                                                "/api/tour/image/**"
+                                                 )
                                 .permitAll()// Allow unauthenticated access
                                 .requestMatchers(
                                                 HttpMethod.OPTIONS,

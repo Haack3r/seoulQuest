@@ -34,7 +34,7 @@ const EditProfileComponent = () => {
     getUserInfo().then((data) => {
       setUserInfo(data);
     });
-  }, []);
+  }, [isLoading]);
 
   const handleChange = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
@@ -43,9 +43,7 @@ const EditProfileComponent = () => {
   const handleClickEditProfile = async (e) => {
     e.preventDefault();
     if (!userInfo.newPassword || !userInfo.confirmPassword) {
-      alert(
-        "Please enter both the new password and the confirmation password."
-      );
+      alert("Please enter both the new password and the confirmation password.");
       return;
     }
     if (userInfo.newPassword !== userInfo.confirmPassword) {
@@ -84,13 +82,13 @@ const EditProfileComponent = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-10 space-y-8">
         {/* Header */}
-        <h2 className="text-3xl font-bold text-center text-gray-700">
+        <h2 className="text-xl font-bold text-center text-gray-700">
           Edit Profile
         </h2>
 
         {/* Personal Information Section */}
         <section className="space-y-6">
-          <h3 className="text-lg font-semibold text-gray-800">
+          <h3 className="text-l font-semibold text-gray-800">
             Personal Information
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -139,7 +137,7 @@ const EditProfileComponent = () => {
 
         {/* Nickname Section */}
         <section className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800">Nickname</h3>
+          <h3 className="text-l font-semibold text-gray-800">Nickname</h3>
           <div className="flex items-center gap-4">
             <input
               className="flex-1 p-3 border border-gray-300 rounded"
@@ -159,7 +157,7 @@ const EditProfileComponent = () => {
 
         {/* Address Section */}
         <section className="space-y-6">
-          <h3 className="text-lg font-semibold text-gray-800">Address</h3>
+          <h3 className="text-l font-semibold text-gray-800">Address</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-600 mb-1">Country</label>
@@ -216,9 +214,7 @@ const EditProfileComponent = () => {
 
         {/* Password Section */}
         <section className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800">
-            Change Password
-          </h3>
+          <h3 className="text-l font-semibold text-gray-800">Change Password</h3>
           <div>
             <label className="block text-gray-600 mb-1">New Password</label>
             <input
@@ -230,9 +226,7 @@ const EditProfileComponent = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-600 mb-1">
-              Confirm New Password
-            </label>
+            <label className="block text-gray-600 mb-1">Confirm New Password</label>
             <input
               className="w-full p-3 border border-gray-300 rounded"
               name="confirmPassword"

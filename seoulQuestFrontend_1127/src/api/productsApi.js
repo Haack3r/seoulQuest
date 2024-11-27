@@ -28,6 +28,22 @@ export const getList = async ({ page, size, keyword = "", type = "t", category =
   }
 };
 
+export const getProductsByCategory = async ({ page, size, category }) => {
+  try {
+    const res = await jwtAxios.get(`${host}/listByCategory`, {
+      params: {
+        page,
+        size,
+        category,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching products by category:", error);
+    throw error;
+  }
+};
+
 export const getProductCategories = async () => {
   try {
     const response = await jwtAxios.get(`${host}/categories`);

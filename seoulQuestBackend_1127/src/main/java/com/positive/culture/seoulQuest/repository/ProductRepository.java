@@ -15,10 +15,12 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product> {
 
-    // //전체 조회
-    // @Query("select p, pi from Product p left join p.productImageList pi where
-    // pi.ord = 0 and p.delFlag=false")
-    // Page<Object[]> selectList(Pageable pageable);
+     //전체 조회
+     @Query("select p, pi from Product p left join p.productImageList pi where pi.ord = 0 and p.delFlag=false")
+     Page<Object[]> selectList(Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE p.category.categoryName = :category AND p.delFlag = false")
+    Page<Product> findByCategory(@Param("category") String category, Pageable pageable);
 
     // 하나 조회
     @EntityGraph(attributePaths = "productImageList") // 해당 속성 조인처리하여 쿼리 실행 횟수 줄임

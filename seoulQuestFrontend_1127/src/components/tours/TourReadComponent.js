@@ -6,7 +6,7 @@ import {
   deleteTourOne,
 } from "../../api/reviewApi";
 import ReviewsSection from "../review/ReviewsSection";
-import { StarIcon, HeartIcon, ShoppingCart } from "lucide-react";
+import { HeartIcon, ShoppingCart } from "lucide-react";
 import { Calendar, Popover, Badge } from "antd";
 import { UserOutlined, CalendarOutlined } from "@ant-design/icons";
 import ReservationComponent from "../menus/ReservationComponent";
@@ -15,6 +15,7 @@ import useCustomLogin from "../../hooks/useCustomLogin";
 import { getOne } from "../../api/tourApi";
 import TourDetails from "./TourDetails";
 import useCustomTourFav from "../../hooks/useCustomTourFav";
+import { StarFilled, StarOutlined } from '@ant-design/icons';
 
 const initState = {
   tno: 0,
@@ -37,19 +38,37 @@ const TourReadComponent = ({ tno }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [cartVisible, setCartVisible] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false); // For toggling tour details
-  const { isLogin, loginState } = useCustomLogin();
-  const email = loginState.email;
-  const { favItems, changeFav, refreshFav } = useCustomTourFav(email);
+  const { favItems, changeFav, refreshFav } = useCustomTourFav();
   const { reservationItems, changeReservation } = useCustomReservation();
+  const [reviewAvg, setReviewAvg] = useState(0)
+  const [reviews, setReviews] = useState([]);
+  const [refresh, setRefresh] = useState(false)
+  const { loginState } = useCustomLogin();
+
+  const calculateAverage = (reviews) => {
+    if (reviews.length === 0) return 0;
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return sum / reviews.length;
+  };
 
   useEffect(() => {
     // Fetch tour data
+    window.scrollTo(0, 0);
     setFetching(true);
     getOne(tno).then((data) => {
       setTour({ ...initState, ...data, tDate: data.tdate });
       setFetching(false);
     });
-  }, [tno]);
+
+    // Review 데이터 가져오기
+    console.log(loginState.email);
+    getTourItemReview(tno).then((reviews) => {
+        console.log(reviews);
+        setReviews(reviews);
+        setReviewAvg(calculateAverage(reviews))
+    });
+
+  }, [tno,refresh]);
 
   const calendarContent = (
     <div style={{ width: 300 }}>
@@ -90,7 +109,7 @@ const TourReadComponent = ({ tno }) => {
 
     const isAlreadyFavorite = favItems.some((item) => item.tno === tour.tno);
     if (isAlreadyFavorite) {
-      alert("You already liked this product!");
+      alert("You already liked this tour!");
       return;
     }
 
@@ -141,10 +160,18 @@ const TourReadComponent = ({ tno }) => {
             {tour.tname}
           </h1>
           <div className="flex items-center mb-4">
-            {[...Array(5)].map((_, i) => (
-              <StarIcon key={i} className="h-5 w-5 text-yellow-400" />
-            ))}
-            <span className="ml-2 text-gray-600">(4.8) 24 reviews</span>
+          {[...Array(5)].map((_, star) => 
+            (
+            <span key={star}>
+              {reviewAvg >= star+1 ? (
+                        <StarFilled className="text-yellow-400 text-xl" />
+                    ) : (
+                        <StarOutlined className="text-gray-300 text-xl" />
+                    )}
+              </span>
+            )
+            )}
+            <span className="ml-2 text-gray-600">({reviewAvg}) {reviews.length}  reviews</span>
           </div>
           <p className="text-xl md:text-2xl font-light text-gray-900 mb-6">
             ₩{tour.tprice.toLocaleString()}
@@ -194,8 +221,11 @@ const TourReadComponent = ({ tno }) => {
               <CalendarOutlined className="mr-2" />
               Update Availability
             </button>
-            <button className="border text-gray-700 py-3 px-6 rounded-lg flex items-center justify-center hover:bg-gray-100">
-              <HeartIcon className="mr-2 h-5 w-5 text-red-500" />
+            <button
+              onClick={handleAddToFavorites}
+              className="flex-1 border text-gray-700 py-3 rounded-lg flex items-center justify-center hover:bg-gray-100"
+            >
+              <HeartIcon className="mr-2 text-red-500" />
               Add to Favorites
             </button>
           </div>
@@ -241,8 +271,9 @@ const TourReadComponent = ({ tno }) => {
       {/* Reviews Section */}
       <div className="mt-5">
         <ReviewsSection
-          itemNo={tno}
-          getItemReview={getTourItemReview}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          reviews={reviews}
           putOne={putTourOne}
           deleteOne={deleteTourOne}
         />

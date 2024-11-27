@@ -94,6 +94,6 @@ export const getProductItemReview = async(pno)=>{
 
 //해당 투어에 대한 리뷰 불러오기
 export const getTourItemReview = async(tno)=>{
-    const res = await axios.get(`${prefix}/tours/list/${tno}`)
+    const res = await jwtAxios.get(`${prefix}/tours/list/${tno}`)
     return res.data
 }

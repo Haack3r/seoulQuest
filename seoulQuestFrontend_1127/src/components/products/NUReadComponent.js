@@ -35,6 +35,7 @@ const NUReadComponent = ({ pno }) => {
 
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setFetching(true);
     getOneNU(pno).then(data => {
       setProduct(data);

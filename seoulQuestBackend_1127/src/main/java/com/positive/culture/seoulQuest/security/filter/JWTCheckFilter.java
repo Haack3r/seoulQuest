@@ -46,8 +46,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         if (path.startsWith("/api/products/"))
             return true; // Do not apply this filter for these paths
-         if (path.startsWith("/api/review/tours/list/**"))
-         return true; // Do not apply this filter for these paths
         if (path.startsWith("/api/products/view/**"))
             return true;
         if (path.startsWith("/api/user/products/view/**"))

@@ -93,7 +93,10 @@ public interface ProductService {
         return productDTO;
     }
 
-    // public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO
-    // pageRequestDTO, String category);
+     public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO
+     pageRequestDTO, String category);
+
+    PageResponseDTO<ProductDTO> getProductsByCategory(PageRequestDTO pageRequestDTO, String category);
+
 
 }

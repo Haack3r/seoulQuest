@@ -51,6 +51,7 @@ public class ProductServiceImpl implements ProductService {
         booleanBuilder.and(qProduct.delFlag.eq(false));
 
         // <Object[]>에는 product, productImage 객체가 담겨있음
+
         Page<Product> result = productRepository.findAll(booleanBuilder, pageable);
 
         // Convert each Tour entity to a TourDTO
@@ -243,6 +244,7 @@ public class ProductServiceImpl implements ProductService {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QProduct qProduct = QProduct.product;
+        booleanBuilder.and(qProduct.delFlag.eq(false));
 
         // Base condition
         BooleanExpression expression = qProduct.pno.gt(0L);
@@ -306,5 +308,36 @@ public class ProductServiceImpl implements ProductService {
 
         return booleanBuilder;
     }
+
+    @Override
+    public PageResponseDTO<ProductDTO> getProductsByCategory(PageRequestDTO pageRequestDTO, String category) {
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("pno").descending());
+
+        // Add category filter
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QProduct qProduct = QProduct.product;
+        booleanBuilder.and(qProduct.delFlag.eq(false));
+        booleanBuilder.and(qProduct.category.categoryName.eq(category));
+
+        // Fetch data
+        Page<Product> result = productRepository.findByCategory(category, pageable);
+
+        // Map to DTO
+        List<ProductDTO> dtoList = result.stream()
+                .map(this::entityChangeDTO)
+                .collect(Collectors.toList());
+
+        // Build response
+        return PageResponseDTO.<ProductDTO>withAll()
+                .dtoList(dtoList)
+                .totalCount(result.getTotalElements())
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+
 
 }

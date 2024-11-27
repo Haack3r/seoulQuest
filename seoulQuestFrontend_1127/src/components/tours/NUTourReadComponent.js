@@ -115,6 +115,7 @@ const NUTourReadComponent = ({ tno }) => {
     };
 
     useEffect(() => {
+      window.scrollTo(0, 0);
         setFetching(true);
 
         getOneTNU(tno).then(data => {

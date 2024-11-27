@@ -1,31 +1,41 @@
 import React, { lazy, Suspense } from 'react'
+import { Navigate } from 'react-router-dom'
+import { SyncLoader } from 'react-spinners'
 
 const myPageRouter = () => {
 
-    const Loading = <div>Loading...</div>
+    const Loading = <div><SyncLoader /></div>
     const MyPage = lazy(() => import("../pages/mypage/MyPage"))
     const EditProfilePage = lazy(() => import("../pages/mypage/EditProfilePage"))
-    const ProductReviewList = lazy(() => import("../pages/review/ProductReviewPage"))
-    // const TourReviewList = lazy(() => import("../pages/review/TourReviewPage"))
+    const ReviewPage = lazy(() => import("../pages/mypage/ReviewPage"))
+    // const OrderPage = lazy(() => import("../pages/review/OrderPage"))
+    // const BookingPage = lazy(() => import("../pages/review/BookingPage"))
     return [
        
         {
-            path: "",
+            path: "myprofile",
             element: <Suspense fallback={Loading}><MyPage/></Suspense>,
         },
-        ,
         {
-            path: "editProfile",
+            path: "",
+            element: <Navigate replace to="/mypage/myprofile" />
+          },
+        {
+            path: "editprofile",
             element: <Suspense fallback={Loading}><EditProfilePage/></Suspense>,
         },
-        {
-            path: "review/products",
-            element: <Suspense fallback={Loading}><ProductReviewList /></Suspense>
-        },
         // {
-        //     path: "review/tours",
-        //     element: <Suspense fallback={Loading}><TourReviewList /></Suspense>
-        //   },
+        //     path: "orders",
+        //     element: <Suspense fallback={Loading}><OrderPage /></Suspense>
+        // },
+        // {
+        //     path: "bookings",
+        //     element: <Suspense fallback={Loading}><BookingPage /></Suspense>
+        // },
+        {
+            path: "review",
+            element: <Suspense fallback={Loading}><ReviewPage /></Suspense>
+        },
     ]
 }
 
