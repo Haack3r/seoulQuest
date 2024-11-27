@@ -31,7 +31,6 @@ const TourReadComponent = ({ tno }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [cartVisible, setCartVisible] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false); // For toggling tour details
-
   const { reservationItems, changeReservation } = useCustomReservation();
   const { loginState } = useCustomLogin();
 
