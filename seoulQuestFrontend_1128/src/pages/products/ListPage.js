@@ -17,6 +17,7 @@ import {
   faCircleInfo,
   faGift,
   faMagnifyingGlass,
+  faFire,
 } from "@fortawesome/free-solid-svg-icons";
 
 const ListPage = () => {
@@ -99,6 +100,7 @@ const ListPage = () => {
             <li>
               <button
                 onClick={() => scrollToRef(aboutRef)}
+                title="About Our Product"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faCircleInfo} />
@@ -106,7 +108,17 @@ const ListPage = () => {
             </li>
             <li>
               <button
+                onClick={() => scrollToRef(mostPopularRef)}
+                title="Most Popular Product"
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                <FontAwesomeIcon icon={faFire} />
+              </button>
+            </li>
+            <li>
+              <button
                 onClick={() => scrollToRef(beautyRef)}
+                title="K-Beauty"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faHeart} />
@@ -115,6 +127,7 @@ const ListPage = () => {
             <li>
               <button
                 onClick={() => scrollToRef(teaRef)}
+                title="Exotic Tea"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faLeaf} />
@@ -123,6 +136,7 @@ const ListPage = () => {
             <li>
               <button
                 onClick={() => scrollToRef(fashionRef)}
+                title="Fashion"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faTshirt} />
@@ -131,6 +145,7 @@ const ListPage = () => {
             <li>
               <button
                 onClick={() => scrollToRef(gourmetRef)}
+                title="Gourmet"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faUtensils} />
@@ -139,6 +154,7 @@ const ListPage = () => {
                       <li>
               <button
                 onClick={() => scrollToRef(listRef)}
+                title="Search Product"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faMagnifyingGlass} />

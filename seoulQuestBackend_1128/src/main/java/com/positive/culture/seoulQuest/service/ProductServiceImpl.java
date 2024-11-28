@@ -8,6 +8,7 @@ import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
+import com.positive.culture.seoulQuest.repository.ProductPaymentItemRepository;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import com.querydsl.core.BooleanBuilder;
@@ -35,6 +36,31 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final CustomFileUtil fileUtil;
+    private final ProductPaymentItemRepository productPaymentItemRepository;
+
+
+    @Override
+    public List<ProductDTO> getTopSellingProducts(int limit) {
+        List<Object[]> topProducts = productPaymentItemRepository.findTopSellingProducts();
+
+        return topProducts.stream()
+                .limit(limit)
+                .map(obj -> {
+                    Long pno = (Long) obj[0]; // Product ID
+                    int totalQty = ((Number) obj[1]).intValue(); // Total Quantity
+
+                    // Fetch the Product entity
+                    Product product = productRepository.findById(pno).orElseThrow();
+
+                    // Convert to ProductDTO
+                    ProductDTO productDTO = entityChangeDTO(product);
+                    productDTO.setPqty(totalQty); // Include total sales quantity
+
+                    return productDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
 
     // 전체 조회----(유저)
     @Override

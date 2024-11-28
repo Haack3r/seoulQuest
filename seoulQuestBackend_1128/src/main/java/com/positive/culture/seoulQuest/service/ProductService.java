@@ -98,5 +98,5 @@ public interface ProductService {
 
     PageResponseDTO<ProductDTO> getProductsByCategory(PageRequestDTO pageRequestDTO, String category);
 
-
+    List<ProductDTO> getTopSellingProducts(int limit);
 }

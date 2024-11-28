@@ -30,6 +30,11 @@ public class NUProductController {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @GetMapping("/top-selling")
+    public List<ProductDTO> getTopSellingProducts(@RequestParam(defaultValue = "3") int limit) {
+        return productService.getTopSellingProducts(limit);
+    }
+
     @GetMapping("/listByCategory")
     public PageResponseDTO<ProductDTO> listByCategory(
             PageRequestDTO pageRequestDTO,

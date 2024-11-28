@@ -72,6 +72,12 @@ public class TourController {
     @Autowired
     private CategoryRepository categoryRepository;
 
+
+    @GetMapping("/top")
+    public List<TourDTO> getTopReservedTours(@RequestParam(defaultValue = "3") int limit) {
+        return tourService.getTopReservedTours(limit);
+    }
+
     @GetMapping("/categories")
     public ResponseEntity<List<String>> getTourCategories() {
         List<String> categories = categoryRepository.findByCategoryType("tour")

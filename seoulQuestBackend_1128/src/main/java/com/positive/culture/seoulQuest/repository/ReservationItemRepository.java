@@ -22,4 +22,5 @@ public interface ReservationItemRepository extends JpaRepository<ReservationItem
 
     //reservation 번호와 투어번호에 해당하는 카트 아이템들 삭제
     public void deleteByReservationRnoAndTourTnoIn(Long rno, List<Long> tnoList);
+
 }

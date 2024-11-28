@@ -112,3 +112,14 @@ export const postPayInfo = async (orderInfoWithOrderId, impUid) => {
   }
 };
 
+export const getTopSellingProducts = async (limit = 3) => {
+  try {
+    const response = await jwtAxios.get(`${host}/top-selling`, {
+      params: { limit }, // Pass the limit as a query parameter
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching top-selling products:", error.message);
+    throw error;
+  }
+};

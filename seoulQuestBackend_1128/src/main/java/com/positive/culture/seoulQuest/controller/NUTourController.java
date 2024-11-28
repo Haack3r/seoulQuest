@@ -29,6 +29,11 @@ public class NUTourController {
     private final CustomFileUtil fileUtil;
     private final TourService tourService;
 
+
+    @GetMapping("/top")
+    public List<TourDTO> getTopReservedTours(@RequestParam(defaultValue = "3") int limit) {
+        return tourService.getTopReservedTours(limit);
+    }
     //전체 목록 조회 - test 성공 (유저 , 관리자)
     @GetMapping("/list")
     public PageResponseDTO<TourDTO> list(PageRequestDTO pageRequestDTO, @RequestParam(required = false) String category) {

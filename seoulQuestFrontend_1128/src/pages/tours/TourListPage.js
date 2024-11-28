@@ -4,6 +4,7 @@ import {
   faMapLocationDot,
   faCircleInfo,
   faMagnifyingGlass,
+  faFire
 } from "@fortawesome/free-solid-svg-icons";
 import TourListComponent from "../../components/tours/TourListComponent";
 import TourImage from "../../layouts/TourImage";
@@ -17,6 +18,7 @@ const TourListPage = () => {
   const aboutRef = useRef(null);
   const tourMapRef = useRef(null);
   const tourListRef = useRef(null);
+  const tourPopularRef = useRef(null);
   const tourImageRef = useRef(null);
 
   // State to track visibility of the navigation bar
@@ -38,6 +40,12 @@ const TourListPage = () => {
   const scrollToTourList = () => {
     if (tourListRef.current) {
       tourListRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const scrollToPopularTour = () => {
+    if (tourPopularRef.current) {
+      tourPopularRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -69,7 +77,9 @@ const TourListPage = () => {
       <div ref={tourMapRef}>
         <TourMap />
       </div>
-      <MostPopularTour />
+      <div ref={tourPopularRef}>
+        <MostPopularTour />
+        </div>
       <div ref={aboutRef}>
         <AboutToursComponent />
       </div>
@@ -84,6 +94,7 @@ const TourListPage = () => {
             <li>
               <button
                 onClick={scrollToTourMap}
+                title="Map"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faMapLocationDot} />
@@ -91,7 +102,17 @@ const TourListPage = () => {
             </li>
             <li>
               <button
+                onClick={scrollToPopularTour}
+                title="Popular Tour"
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                <FontAwesomeIcon icon={faFire} />
+              </button>
+            </li>
+            <li>
+              <button
                 onClick={scrollToAbout}
+                title="About Our Tour"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faCircleInfo} />
@@ -100,6 +121,7 @@ const TourListPage = () => {
             <li>
               <button
                 onClick={scrollToTourList}
+                title="Search Tour"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faMagnifyingGlass} />

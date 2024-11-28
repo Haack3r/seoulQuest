@@ -95,4 +95,6 @@ public interface TourService {
 
     public PageResponseDTO<TourDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category);
 
+    List<TourDTO> getTopReservedTours(int limit);
+
 }

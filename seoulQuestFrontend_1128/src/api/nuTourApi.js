@@ -24,6 +24,16 @@ export const getListTNU = async ({ page, size = 9, keyword = "", type = "t", cat
     }
 };
 
+export const getTopReservedToursNU = async (limit) => {
+  try {
+    const response = await axios.get(`${host}/top`, { params: { limit } });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching top reserved tours:", error);
+    throw error;
+  }
+};
+
 export const getTourCategoriesTNU = async () => {
     try {
       const response = await axios.get(`${host}/categories`);

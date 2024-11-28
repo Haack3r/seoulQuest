@@ -24,7 +24,15 @@ export const getList = async ({ page, size = 9, keyword = "", type = "t", catego
     }
 };
 
-  
+export const getTopReservedTours = async (limit) => {
+  try {
+    const response = await jwtAxios.get(`${host}/top`, { params: { limit } });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching top reserved tours:", error);
+    throw error;
+  }
+};
 
 export const getTourCategories = async () => {
   try {

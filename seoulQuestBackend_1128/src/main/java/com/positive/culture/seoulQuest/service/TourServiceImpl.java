@@ -1,13 +1,10 @@
 package com.positive.culture.seoulQuest.service;
 
-import com.positive.culture.seoulQuest.domain.Category;
-import com.positive.culture.seoulQuest.domain.QProduct;
-import com.positive.culture.seoulQuest.domain.QTour;
-import com.positive.culture.seoulQuest.domain.Tour;
-import com.positive.culture.seoulQuest.domain.TourImage;
+import com.positive.culture.seoulQuest.domain.*;
 import com.positive.culture.seoulQuest.dto.*;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import com.positive.culture.seoulQuest.repository.TourDateRepository;
+import com.positive.culture.seoulQuest.repository.TourPaymentItemRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
 import com.querydsl.core.BooleanBuilder;
@@ -35,6 +32,19 @@ public class TourServiceImpl implements TourService {
     private final TourRepository tourRepository;
     private final CategoryRepository categoryRepository;
     private final CustomFileUtil fileUtil;
+    private final TourPaymentItemRepository tourPaymentItemRepository;
+
+    @Override
+    public List<TourDTO> getTopReservedTours(int limit) {
+        return tourPaymentItemRepository.findTopReservedTours().stream()
+                .limit(limit) // Limit the results
+                .map(obj -> TourDTO.builder()
+                        .tno((Long) obj[0])        // Tour ID
+                        .tname((String) obj[1])    // Tour Name
+                        .tprice(((Number) obj[2]).intValue())  // Tour Price
+                        .build())
+                .collect(Collectors.toList());
+    }
 
     // 전체 조회----(유저, 관리자)
     @Override
@@ -283,3 +293,4 @@ public class TourServiceImpl implements TourService {
     }
 
 }
+

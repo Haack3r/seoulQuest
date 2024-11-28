@@ -57,6 +57,12 @@ public class ProductController {
 
     // -----------------------------------------------------------
 
+    @GetMapping("/top-selling")
+    public List<ProductDTO> getTopSellingProducts(@RequestParam(defaultValue = "3") int limit) {
+        return productService.getTopSellingProducts(limit);
+    }
+
+
     // 전체 목록 조회 - test 성공 (유저 , 관리자)
     @Autowired
     private CategoryRepository categoryRepository;

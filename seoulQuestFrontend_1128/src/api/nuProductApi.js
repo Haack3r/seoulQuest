@@ -60,3 +60,15 @@ export const getOneNU = async (pno) => {
   const res = await axios.get(`${host}/${pno}`);
   return res.data;
 };
+
+export const getTopSellingProductsNU = async (limit = 3) => {
+  try {
+    const response = await axios.get(`${host}/top-selling`, {
+      params: { limit }, // Pass the limit as a query parameter
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching top-selling products:", error.message);
+    throw error;
+  }
+};
