@@ -3,6 +3,7 @@ package com.positive.culture.seoulQuest.service;
 import com.positive.culture.seoulQuest.dto.ContactRequestDTO;
 import com.positive.culture.seoulQuest.dto.ContactResponseDTO;
 
+
 import java.util.List;
 
 public interface ContactService {

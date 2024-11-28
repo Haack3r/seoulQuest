@@ -2,7 +2,6 @@ package com.positive.culture.seoulQuest.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +18,10 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tbl_contact")
 public class Contact {
+    // 상태 상수 추가
+    public static final String STATUS_PENDING = "미처리";
+    public static final String STATUS_IN_PROGRESS = "처리중";
+    public static final String STATUS_COMPLETED = "처리완료";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,8 +42,9 @@ public class Contact {
     @Column(length = 1000)
     private String tempReply;
 
+    @Builder.Default
     @Column(nullable = false)
-    private String status;
+    private String status = STATUS_PENDING;
 
     @CreatedDate
     @Column(updatable = false)
@@ -51,23 +56,41 @@ public class Contact {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        status = "미처리";
+        this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = STATUS_PENDING;
+        }
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     // 답변 업데이트 메소드
-    public void updateReply(String reply) {
-        this.reply = reply;
-        this.status = "처리완료";
+    public void setReply(String reply) {
+        System.out.println("Setting reply: " + reply); // 디버깅
+        if (reply != null && !reply.trim().isEmpty()) {
+            this.reply = reply.trim();
+            this.status = STATUS_COMPLETED;  // 상태를 '처리완료'로 변경
+            this.updatedAt = LocalDateTime.now();
+        }
     }
 
     // 임시 답변 업데이트 메소드
-    public void updateTempReply(String tempReply) {
-        this.tempReply = tempReply;
+    public void setTempReply(String tempReply) {
+        if (tempReply != null && !tempReply.trim().isEmpty()) {
+            this.tempReply = tempReply.trim();
+            this.status = STATUS_IN_PROGRESS;  // 상태를 '처리중'으로 변경
+            this.updatedAt = LocalDateTime.now();
+        }
+    }
+
+    // 상태 업데이트 메소드
+    public void setStatus(String status) {
+        if (status != null && !status.trim().isEmpty()) {
+            this.status = status.trim();
+            this.updatedAt = LocalDateTime.now();
+        }
     }
 }

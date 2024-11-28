@@ -78,7 +78,7 @@ class ContactRepositoryTests {
                 .email("complete@example.com")
                 .inquiry("처리완료 테스트입니다.")
                 .build();
-        contact1.updateReply("답변완료");
+        contact1.setReply("답변완료");
 
         Contact contact2 = Contact.builder()
                 .name("미처리테스트")
@@ -113,9 +113,8 @@ class ContactRepositoryTests {
 
         // when
         String replyText = "답변 테스트입니다.";
-        savedContact.updateReply(replyText);
-        Contact updatedContact = contactRepository.findById(savedContact.getId())
-                .orElseThrow(() -> new RuntimeException("문의를 찾을 수 없습니다."));
+        savedContact.setReply(replyText);  // updateReply -> setReply로 변경
+        Contact updatedContact = contactRepository.save(savedContact); // 변경사항 저장
 
         // then
         System.out.println("✅ 문의 답변 업데이트 결과:");
@@ -137,9 +136,8 @@ class ContactRepositoryTests {
 
         // when
         String tempReplyText = "임시 답변입니다.";
-        savedContact.updateTempReply(tempReplyText);
-        Contact updatedContact = contactRepository.findById(savedContact.getId())
-                .orElseThrow(() -> new RuntimeException("문의를 찾을 수 없습니다."));
+        savedContact.setTempReply(tempReplyText);  // updateTempReply -> setTempReply로 변경
+        Contact updatedContact = contactRepository.save(savedContact); // 변경사항 저장
 
         // then
         System.out.println("✅ 임시 답변 저장 결과:");

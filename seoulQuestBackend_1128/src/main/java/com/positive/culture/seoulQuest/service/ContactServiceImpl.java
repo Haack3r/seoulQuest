@@ -9,13 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ContactServiceImpl implements ContactService{
+
     private final ContactRepository contactRepository;
 
     @Override
@@ -25,7 +25,6 @@ public class ContactServiceImpl implements ContactService{
                 .name(requestDTO.getName())
                 .email(requestDTO.getEmail())
                 .inquiry(requestDTO.getInquiry())
-                .createdAt(LocalDateTime.now())
                 .build();
 
         Contact savedContact = contactRepository.save(contact);
@@ -47,7 +46,18 @@ public class ContactServiceImpl implements ContactService{
         Contact contact = contactRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + id));
 
-        contact.updateReply(reply);
+        System.out.println("Before update - Status: " + contact.getStatus()); // 디버깅
+        System.out.println("Before update - Reply: " + contact.getReply()); // 디버깅
+
+        if (reply != null && !reply.trim().isEmpty()) {
+            contact.setReply(reply.trim());
+            contact.setStatus("처리완료");
+            contact = contactRepository.saveAndFlush(contact);  // 즉시 저장 및 동기화
+        }
+
+        System.out.println("After update - Status: " + contact.getStatus()); // 디버깅
+        System.out.println("After update - Reply: " + contact.getReply()); // 디버깅
+
         return convertToDTO(contact);
     }
 
@@ -57,7 +67,12 @@ public class ContactServiceImpl implements ContactService{
         Contact contact = contactRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + id));
 
-        contact.updateTempReply(tempReply);
+        if (tempReply != null && !tempReply.trim().isEmpty()) {
+            contact.setTempReply(tempReply.trim());
+            contact.setStatus(Contact.STATUS_IN_PROGRESS);  // 상태를 '처리중'으로 변경
+            contact = contactRepository.saveAndFlush(contact);
+        }
+
         return convertToDTO(contact);
     }
 

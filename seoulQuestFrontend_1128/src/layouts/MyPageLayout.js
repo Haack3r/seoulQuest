@@ -51,46 +51,42 @@ const MyPageLayout = () => {
   ];
 
   return (
-    <section className="bg-white rounded-lg shadow-md p-6">
-      <header className="mb-6">
-        <h1 className="text-xl font-bold text-gray-800">Menu</h1>
-      </header>
-      <ul className="space-y-4">
+    <div className="lg:flex lg:flex-col">
+      <ul className="flex lg:flex-col justify-around lg:items-start items-center space-y-4 lg:space-y-0 lg:space-x-0 px-4 lg:px-0 lg:py-9 lg:bg-white rounded-lg lg:mt-6">
         {menuItems.map((item) => (
           <li
             key={item.id}
             onClick={() => navigate(item.path[0])}
-            className={`flex items-center gap-4 cursor-pointer p-4 rounded-md transition-all transform ${
-              item.path.some((p) => location.pathname.includes(p))
-                ? "bg-gray-200 scale-105 shadow-md"
-                : "hover:bg-gray-100 hover:scale-105 hover:shadow"
+            className={`flex items-center justify-center lg:justify-start gap-4 cursor-pointer h-16 p-4 rounded-md transition-all transform ${
+              location.pathname.includes(item.path[0])
+                ? "bg-gray-200 shadow-md"
+                : "hover:bg-gray-100 hover:shadow"
             }`}
           >
             <div
-              className={`p-2 rounded-full transition-colors ${
-                item.path.some((p) => location.pathname.includes(p))
+              className={`flex items-center justify-center h-12 w-12 rounded-full transition-colors ${
+                location.pathname.includes(item.path[0])
                   ? "bg-stone-500 text-white"
                   : "bg-gray-100 text-gray-600"
               }`}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                lineHeight: "1",
+                fontSize: "20px", // Uniform font size for all icons
+              }}
             >
               {item.icon}
             </div>
-            <div>
-              <p
-                className={`text-l font-medium transition-colors ${
-                  item.path.some((p) => location.pathname.includes(p))
-                    ? "text-stone-600"
-                    : "text-gray-800"
-                }`}
-              >
-                {item.title}
-              </p>
+            <div className="hidden lg:block">
+              <p className="text-l font-medium">{item.title}</p>
               <p className="text-xs text-gray-500">{item.description}</p>
             </div>
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   );
 };
 

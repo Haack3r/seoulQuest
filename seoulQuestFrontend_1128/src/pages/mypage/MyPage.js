@@ -6,17 +6,25 @@ import MyPageLayout from "../../layouts/MyPageLayout";
 const MyPage = () => {
   return (
     <BasicLayout>
-    <div className="p-6 bg-gray-100 flex justify-center items-center min-h-screen">
-     <div className="grid grid-cols-3 gap-6 w-full max-w-6xl mt-20">
-       <div className="col-span-1 min-h-screen max-h-screen bg-gray-100">
-         <MyPageLayout/>
-       </div>
-       <div className="col-span-2">
-         <MyPageComponent/>
-       </div>
-     </div>
-   </div>
- </BasicLayout>
+      <div className="bg-gray-100 flex justify-center items-start min-h-screen mt-14">
+        <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-6 mt-20">
+          {/* Sidebar for Large Screens */}
+          <div className="hidden lg:block w-1/3">
+            <MyPageLayout />
+          </div>
+
+          {/* Horizontal Menu for Small Screens */}
+          <div className="lg:hidden absolute top-16 left-0 w-full ">
+            <MyPageLayout />
+          </div>
+
+          {/* Main Content Area */}
+          <div className="w-full lg:w-2/3 p-6">
+            <MyPageComponent />
+          </div>
+        </div>
+      </div>
+    </BasicLayout>
   );
 };
 
