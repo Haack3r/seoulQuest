@@ -23,9 +23,10 @@ const initState = {
   categoryName: "",
   tdesc: "",
   tprice: 0,
+  taddress: '', //둘중 하나 빼기?
   tlocation: "",
   uploadFileNames: [],
-  tDate: [],
+  tdate: [],
   maxCapacity: 0,
   availableCapacity: 0,
 };
@@ -56,9 +57,11 @@ const TourReadComponent = ({ tno }) => {
     window.scrollTo(0, 0);
     setFetching(true);
     getOne(tno).then((data) => {
-      setTour({ ...initState, ...data, tDate: data.tdate });
+      setTour(data);
       setFetching(false);
     });
+
+    console.log(tour)
 
     // Review 데이터 가져오기
     console.log(loginState.email);
@@ -67,17 +70,17 @@ const TourReadComponent = ({ tno }) => {
         setReviews(reviews);
         setReviewAvg(calculateAverage(reviews))
     });
-
+ 
   }, [tno,refresh]);
 
   const calendarContent = (
     <div style={{ width: 300 }}>
       <Calendar
         fullscreen={false}
-        onSelect={(e) => setSelectedDate(e.format("YYYY-MM-DD"))}
+        onSelect={(e) => setSelectedDate(e.format("YYYY-MM-DD"))} //문자열로 포맷
         disabledDate={(current) =>
-          !tour.tDate.some(
-            (date) => date.tourDate === current.format("YYYY-MM-DD")
+          !tour.tdate.some(
+            (date) => date === current.format("YYYY-MM-DD") 
           )
         }
       />
@@ -176,6 +179,8 @@ const TourReadComponent = ({ tno }) => {
           <p className="text-xl md:text-2xl font-light text-gray-900 mb-6">
             ₩{tour.tprice.toLocaleString()}
           </p>
+          <p className="text-gray-700 mb-2"><strong>Tour Address:</strong> {tour.taddress}</p>
+          <p className="text-gray-700 mb-2"><strong>Tour Location:</strong> {tour.tlocation}</p>
           <p className="text-gray-700 mb-6">{tour.tdesc}</p>
 
           {/* Date and Quantity Selection */}

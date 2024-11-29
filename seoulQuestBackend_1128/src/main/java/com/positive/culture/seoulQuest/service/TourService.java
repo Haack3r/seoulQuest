@@ -3,10 +3,13 @@ package com.positive.culture.seoulQuest.service;
 import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.dto.*;
+import com.positive.culture.seoulQuest.formatter.LocalDateFormatter;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Transactional
 public interface TourService {
@@ -45,7 +48,7 @@ public interface TourService {
                 .tlocation(tourDTO.getTlocation())
                 .createAt(tourDTO.getCreateAt())
                 .updateAt(tourDTO.getUpdateAt())
-                .tDate(tourDTO.getTDate())
+//                .tDate(tourDTO.getTDate())
                 .build();
 
         // 업로드 처리가 끝난 파일들의 이름 리스트
@@ -72,7 +75,10 @@ public interface TourService {
                 .tprice(tour.getTprice())
                 .maxCapacity(tour.getMaxCapacity())
                 .tlocation(tour.getTlocation())
-                .tDate(tour.getTDate())
+                .taddress(tour.getTaddress())
+                .tDate(tour.getTDate().stream()
+                        .map(i -> i.getTourDate().toString())
+                        .collect(Collectors.toList()))
                 .createAt(tour.getCreateAt())
                 .updateAt(tour.getUpdateAt())
                 .build();

@@ -29,8 +29,11 @@ public class TourDTO {
     private String tlocation;
     private String taddress;
 
+//    @Builder.Default
+//    private List<TourDate> tDate = new ArrayList<>();
+
     @Builder.Default
-    private List<TourDate> tDate = new ArrayList<>();
+    private List<String> tDate = new ArrayList<>();
 
     // 통계를 내거나 정보를 확인할 때 사용
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
