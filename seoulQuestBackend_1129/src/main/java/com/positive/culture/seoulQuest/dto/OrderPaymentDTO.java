@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -26,7 +26,7 @@ public class OrderPaymentDTO {
     private String phoneNumber;
 
     //Payment 엔티티에서 불러올 정보
-    private LocalDateTime paymentDate;
+    private String paymentDate;
     private String paymentMethod;
     private int totalPrice;
     private String usedCoupon;

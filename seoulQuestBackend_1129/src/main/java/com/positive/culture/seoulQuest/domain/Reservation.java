@@ -22,6 +22,4 @@ public class Reservation {
     @JoinColumn(name="member_owner")
     private Member owner;
 
-    private String status;
-
 }

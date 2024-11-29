@@ -3,6 +3,8 @@ package com.positive.culture.seoulQuest.service;
 import com.positive.culture.seoulQuest.domain.*;
 
 import com.positive.culture.seoulQuest.dto.OrderDTO;
+import com.positive.culture.seoulQuest.dto.OrderPaymentDTO;
+import com.positive.culture.seoulQuest.dto.OrderPaymentItemDTO;
 import com.positive.culture.seoulQuest.repository.*;
 
 
@@ -11,7 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -105,6 +110,63 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
             throw new RuntimeException("Payment failed", e);
         }
     }
+
+    @Override
+    public List<OrderPaymentDTO> getOrderPaymentInfo(Member member) {
+        // 1. 회원의 모든 상품 결제 내역 가져오기
+        List<ProductPayment> productPayments = productPaymentRepository.findBypPaymentMember(member);
+
+        // 2. OrderPaymentDTO 리스트 생성
+        List<OrderPaymentDTO> orderPaymentDTOList = productPayments.stream()
+                .map(productPayment -> {
+                    // 3. 결제 내역에서 Order 엔티티 관련 정보 가져오기
+                    ProductOrder productOrder = productPayment.getProductOrder();
+                    if (productOrder == null) {
+                        throw new IllegalArgumentException("ProductOrder not found for payment ID: " + productPayment.getPPaymentId());
+                    }
+
+                    // 4. OrderPaymentDTO 빌드
+                    OrderPaymentDTO orderPaymentDTO = OrderPaymentDTO.builder()
+                            .country(productOrder.getCountry())
+                            .state(productOrder.getState())
+                            .city(productOrder.getCity())
+                            .street(productOrder.getStreet())
+                            .zipCode(productOrder.getZipcode())
+                            .fullName(productOrder.getRecipientLastName()+" "+productOrder.getRecipientFirstName())
+                            .phoneNumber(productOrder.getContactNumber())
+                            .paymentDate(productPayment.getPaymentDate().toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDateTime()
+                                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                            .paymentMethod(productPayment.getPaymentMethod())
+                            .totalPrice(productPayment.getTotalPrice())
+                            .usedCoupon(Optional.ofNullable(productPayment.getUsedCoupon())
+                                    .map(usedCoupon -> usedCoupon.getCoupon().getCouponName())
+                                    .orElse(null))
+                            .build();
+
+                    // 5. 결제 항목(ProductPaymentItem)을 OrderPaymentItemDTO로 매핑
+                    List<OrderPaymentItemDTO> paymentItems = productPaymentItemRepository.findByProductPayment(productPayment)
+                            .stream()
+                            .map(productPaymentItem -> OrderPaymentItemDTO.builder()
+                                    .pname(productPaymentItem.getPname())
+                                    .pqty(productPaymentItem.getPPaymentQty())
+                                    .pprice(productPaymentItem.getPprice())
+                                    .build()
+                            )
+                            .toList();
+
+                    // 6. OrderPaymentDTO에 결제 항목 리스트 설정
+                    orderPaymentDTO.setPaymentItems(paymentItems);
+
+                    return orderPaymentDTO;
+                })
+                .toList();
+
+        // 7. 완성된 OrderPaymentDTO 리스트 반환
+        return orderPaymentDTOList;
+    }
+
 
     // 결제 실패 시 처리 로직
     public void handlePaymentFailure(Payment paymentResponse,OrderDTO orderdto) {

@@ -76,7 +76,6 @@ public class TourRepositoryTests {
                     .tdesc(tdesc)
                     .tprice(1000 + (i * 100))  // Example price
                     .maxCapacity(20)           // Set default max capacity
-                    .tlocation("Seoul")        // Default location as "Seoul"
                     .taddress(taddress)
                     .category(category)        // Set retrieved category
                     .build();

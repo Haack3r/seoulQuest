@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
@@ -82,14 +83,14 @@ public class MyPageController {
     }
 
 
-//    @PreAuthorize("hasAnyRole('ROLE_USER')")
-//    @GetMapping("/products/orderPaymentInfo")
-//    public OrderPaymentDTO getOrderPaymentList(Principal principal){
-//        String email = principal.getName();
-//        Member member = memberService.findByEmail(email).orElseThrow();
-//        System.out.println("member: " + member);
-//        OrderPaymentDTO orderPaymentDTO = productPaymentService.getOrderPaymentInfo(member);
-//        System.out.println(OrderPaymentDTO);
-//        return OrderPaymentDTO;
-//    }
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping("/products/orderPaymentInfo")
+    public List<OrderPaymentDTO> getOrderPaymentList(Principal principal){
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email).orElseThrow();
+        System.out.println("member: " + member);
+        List<OrderPaymentDTO> orderPaymentDTOs = productPaymentService.getOrderPaymentInfo(member);
+        System.out.println(orderPaymentDTOs);
+        return orderPaymentDTOs;
+    }
 }

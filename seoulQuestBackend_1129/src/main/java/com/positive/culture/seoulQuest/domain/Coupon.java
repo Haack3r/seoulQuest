@@ -18,7 +18,6 @@ public class Coupon {
     private Long couponId;
 
     private String couponName;
-    private String couponCode;
 
     private int discount;
 

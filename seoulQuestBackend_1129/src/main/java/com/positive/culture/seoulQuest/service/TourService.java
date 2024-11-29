@@ -45,7 +45,6 @@ public interface TourService {
                 .tdesc(tourDTO.getTdesc())
                 .tprice(tourDTO.getTprice())
                 .maxCapacity(tourDTO.getMaxCapacity())
-                .tlocation(tourDTO.getTlocation())
                 .createAt(tourDTO.getCreateAt())
                 .updateAt(tourDTO.getUpdateAt())
 //                .tDate(tourDTO.getTDate())
@@ -74,7 +73,6 @@ public interface TourService {
                 .tdesc(tour.getTdesc())
                 .tprice(tour.getTprice())
                 .maxCapacity(tour.getMaxCapacity())
-                .tlocation(tour.getTlocation())
                 .taddress(tour.getTaddress())
                 .tDate(tour.getTDate().stream()
                         .map(i -> i.getTourDate().toString())
@@ -93,8 +91,6 @@ public interface TourService {
         return tourDTO;
     }
 
-    // 서울 관광지 조회
-    List<TourDTO> getToursByLocation(String location);
 
     //
     List<TourDTO> getToursByAddress(String taddress);

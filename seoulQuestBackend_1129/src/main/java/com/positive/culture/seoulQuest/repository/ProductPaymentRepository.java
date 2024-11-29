@@ -10,4 +10,6 @@ import java.util.List;
 public interface ProductPaymentRepository extends JpaRepository<ProductPayment, Long> {
     @Query("SELECT p FROM ProductPayment p WHERE p.pPaymentMember.email = :email")
     List<ProductPayment> findByMemberEmail(String email);
+
+    List<ProductPayment> findBypPaymentMember(Member member);
 }

@@ -30,7 +30,6 @@ public interface TourRepository extends JpaRepository<Tour, Long>, QuerydslPredi
     @Query("update Tour t set t.delFlag = :flag where t.tno = :tno")
     void updateToDelete(@Param("tno") Long tno, @Param("flag") boolean flag);
 
-    List<Tour> findByTlocationContaining(String location);
 
     List<Tour> findByTaddress(String taddress);
 

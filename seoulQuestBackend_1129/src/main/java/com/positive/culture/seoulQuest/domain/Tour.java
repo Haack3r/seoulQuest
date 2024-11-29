@@ -33,7 +33,6 @@ public class Tour {
 
     private int tprice;
     private int maxCapacity;
-    private String tlocation;
     private String taddress;
 
     // 통계를 내거나 정보를 확인할 때 사용
@@ -77,9 +76,6 @@ public class Tour {
         this.maxCapacity = maxCapacity;
     }
 
-    public void changeLocation(String tlocation) {
-        this.tlocation = tlocation;
-    }
 
     @PrePersist
     public void prePersist() {

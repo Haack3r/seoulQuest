@@ -169,7 +169,6 @@ public class TourServiceImpl implements TourService {
         tour.changeDesc(tourDTO.getTdesc());
         tour.changePrice(tourDTO.getTprice());
         tour.changeMaxCapacity(tourDTO.getMaxCapacity());
-        tour.changeLocation(tourDTO.getTlocation());
         tour.preUpdate();
 
         // 3. upload File -- clear first
@@ -203,11 +202,7 @@ public class TourServiceImpl implements TourService {
         }
     }
 
-    @Override
-    public List<TourDTO> getToursByLocation(String location) {
-        List<Tour> tours = tourRepository.findByTlocationContaining(location);
-        return tours.stream().map(this::entityChangeDTO).collect(Collectors.toList());
-    }
+
 
     @Override
     public List<TourDTO> getToursByAddress(String taddress) {
@@ -284,9 +279,7 @@ public class TourServiceImpl implements TourService {
         if (type.contains("c")) {
             conditionBuilder.or(qTour.category.categoryName.containsIgnoreCase(keyword));
         }
-        if (type.contains("w")) {
-            conditionBuilder.or(qTour.tlocation.containsIgnoreCase(keyword));
-        }
+
         booleanBuilder.and(conditionBuilder);
 
         return booleanBuilder;

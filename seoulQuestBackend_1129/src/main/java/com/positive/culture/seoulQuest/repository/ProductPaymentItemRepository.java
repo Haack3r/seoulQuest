@@ -18,4 +18,6 @@ public interface ProductPaymentItemRepository extends JpaRepository<ProductPayme
             "GROUP BY p.product.pno " +
             "ORDER BY totalQty DESC")
     List<Object[]> findTopSellingProducts();
+
+    List<ProductPaymentItem> findByProductPayment(ProductPayment productPayment);
 }

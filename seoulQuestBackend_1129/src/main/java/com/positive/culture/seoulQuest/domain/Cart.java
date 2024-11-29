@@ -24,5 +24,4 @@ public class Cart {
     @JoinColumn(name = "member_owner")
     private Member owner;
 
-    private String status; //카트 상태 (pending, active, complete)
 }

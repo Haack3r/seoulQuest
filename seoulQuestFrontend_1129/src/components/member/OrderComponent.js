@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { getOrderAndPaymentInfo } from "../../api/myPageApi";
 
 const OrderComponent = () => {
-  const [orders, setOrders] = useState()
+  const [orders, setOrders] = useState([])
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
-    getOrderAndPaymentInfo.then((data)=>{
+    getOrderAndPaymentInfo().then((data)=>{
       console.log(data);
-      setOrders(data);
+      setOrders(data.map((item) => ({ ...item })));
     })
-  }, [orders])
+  }, [])
   
 
   // Open modal
@@ -32,9 +32,8 @@ const OrderComponent = () => {
 
       {/* Order List */}
       <div className="space-y-4">
-        {orders.map((order) => (
-          <div
-            key={order.id}
+        {orders.map((order,index) => (
+          <div key={index}
             className="p-4 bg-gray-100 rounded-lg shadow-sm flex flex-col gap-4"
           >
             {/* Top Section: Payment Date and Total */}
@@ -42,16 +41,20 @@ const OrderComponent = () => {
               {/* Payment Date */}
               <div className="flex-1">
                 <p className="text-sm text-gray-500">Payment Date</p>
-                <p className="text-base text-gray-800 font-medium">2024-11-28</p>
+                <p className="text-base text-gray-800 font-medium">{order.paymentDate}</p>
               </div>
                 {/* Middle Section: Payment Details */}
             <div className="flex-1 text-right">
               <p className="text-sm text-gray-500">Payment Details</p>
-              <div className="flex gap-4">
-                <p className="text-base text-gray-800 font-medium">pname</p>
-                <p className="text-base text-gray-800 font-medium">pqty</p>
-                <p className="text-base text-gray-800 font-medium">pprice</p>
-              </div>
+             
+              {order.paymentItems.map((item,index)=>(
+                  <div key={index} className="flex gap-4">
+                  <p className="text-base text-gray-800 font-medium">{item.pname}</p>
+                  <p className="text-base text-gray-800 font-medium">{item.pqty}</p>
+                  <p className="text-base text-gray-800 font-medium">{item.pprice}</p>
+                </div>
+              ))}
+             
             </div>
               {/* Payment Total */}
               <div className="flex-1 text-right">
@@ -63,10 +66,13 @@ const OrderComponent = () => {
                 <p className="text-sm text-gray-500">Payment method</p>
                 <p className="text-base text-gray-800 font-medium">card</p>
               </div>
-            
+                 {/* Coupon */}
+                 <div className="flex-1 text-right">
+                <p className="text-sm text-gray-500">Used Coupon</p>
+                <p className="text-base text-gray-800 font-medium">{order.usedCoupon? order.usedCoupon:'x'}</p>
+              </div>
             </div>
             
-
             {/* Bottom Section: View Shipping Info */}
             <div className="text-right">
               <button
@@ -77,7 +83,7 @@ const OrderComponent = () => {
               </button>
             </div>
           </div>
-        ))}
+        ))} 
       </div>
 
       {/* Modal */}
@@ -90,19 +96,20 @@ const OrderComponent = () => {
             <div className="mb-4">
               <p className="text-sm text-gray-500">Recipient Name</p>
               <p className="text-base text-gray-800 font-medium">
-                recipientfirstName + lastNAME
+                {selectedOrder.fullName}
               </p>
             </div>
             <div className="mb-4">
               <p className="text-sm text-gray-500">Recipient Contact</p>
               <p className="text-base text-gray-800 font-medium">
-                010-0000-00000
+                {selectedOrder.phoneNumber}
               </p>
             </div>
             <div className="mb-4">
               <p className="text-sm text-gray-500">Shipping Address</p>
               <p className="text-base text-gray-800 font-medium">
-                {selectedOrder.address}
+                {selectedOrder.country}, {selectedOrder.state}, {selectedOrder.city},
+                 {selectedOrder.street}, {selectedOrder.zipCode}
               </p>
             </div>
             

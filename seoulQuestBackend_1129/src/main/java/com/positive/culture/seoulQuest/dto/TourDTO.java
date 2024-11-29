@@ -26,11 +26,7 @@ public class TourDTO {
     private String tdesc;
     private int tprice;
     private int maxCapacity;
-    private String tlocation;
     private String taddress;
-
-//    @Builder.Default
-//    private List<TourDate> tDate = new ArrayList<>();
 
     @Builder.Default
     private List<String> tDate = new ArrayList<>();
