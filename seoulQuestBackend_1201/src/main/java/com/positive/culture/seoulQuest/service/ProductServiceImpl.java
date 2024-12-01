@@ -190,7 +190,6 @@ public class ProductServiceImpl implements ProductService {
 
         return productDTO;
     }
-
     // ---------------------------------------------------------------
 
     // 등록 --(관리자)
@@ -217,29 +216,52 @@ public class ProductServiceImpl implements ProductService {
         return result.getPno();
     }
 
-    // ----------------------------------------------------------------
+    // ---------------------------------------------------------------
+
     // 수정 --(관리자)
     @Override
+    @Transactional
     public void modify(ProductDTO productDTO) {
         Optional<Product> result = productRepository.findById(productDTO.getPno());
         Product product = result.orElseThrow();
-        Category category = product.getCategory();
 
-        // 기존 이미지 목록 초기화
-        product.clearList();
+        // 카테고리 찾기
+        Category category = categoryRepository
+                .findByCategoryNameAndCategoryType(productDTO.getCategoryName(), "product");
 
-        // 새로운 이미지 목록 설정
-        if (productDTO.getUploadFileNames() != null && !productDTO.getUploadFileNames().isEmpty()) {
-            productDTO.getUploadFileNames().forEach(product::addImageString);
+        if (category == null) {
+            category = Category.builder()
+                    .categoryName(productDTO.getCategoryName())
+                    .categoryType("product")
+                    .build();
+            category = categoryRepository.save(category);
         }
 
-        category.ChangeCategoryName(productDTO.getCategoryName());
-        category.ChangeCategoryType(productDTO.getCategoryType());
+        // 카테고리 변경
+        product.changeCategory(category);
+
+        // 나머지 필드 업데이트
         product.changeName(productDTO.getPname());
         product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPprice());
         product.changeQuantity(productDTO.getPqty());
         product.changeShippingFee(productDTO.getShippingFee());
+
+        // 이미지 처리
+        if (productDTO.getFiles() != null && !productDTO.getFiles().isEmpty()) {
+            // 기존 이미지 삭제
+            List<String> oldFiles = product.getProductImageList()
+                    .stream()
+                    .map(ProductImage::getFileName)
+                    .collect(Collectors.toList());
+
+            fileUtil.deleteFiles(oldFiles);
+            product.clearList();
+
+            // 새 이미지 추가
+            List<String> uploadFileNames = fileUtil.saveFiles(productDTO.getFiles());
+            uploadFileNames.forEach(product::addImageString);
+        }
 
         productRepository.save(product);
     }

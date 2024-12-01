@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "tbl_product")
 @Getter
-@ToString(exclude = "productImageList")
+@ToString(exclude = { "productImageList", "category" })
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +22,7 @@ public class Product {
     private Long pno;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     private String pname;
@@ -64,6 +64,10 @@ public class Product {
 
     public void changeShippingFee(int shippingFee) {
         this.shippingFee = shippingFee;
+    }
+
+    public void changeCategory(Category category) {
+        this.category = category;
     }
 
     @PrePersist

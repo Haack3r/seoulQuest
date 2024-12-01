@@ -116,7 +116,7 @@ export const AdminRoute = ({ children }) => {
 
 export const fetchOrders = async () => {
     try {
-        const res = await jwtAxios.get(`${host}/admin/order`)
+        const res = await jwtAxios.get(`${host}/admin/products/order`)
         console.log("주문 체크 응답", res)
         return res.data
     } catch (error) {

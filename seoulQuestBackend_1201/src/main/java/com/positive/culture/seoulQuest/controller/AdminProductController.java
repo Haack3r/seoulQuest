@@ -1,7 +1,6 @@
 package com.positive.culture.seoulQuest.controller;
 
 import com.positive.culture.seoulQuest.domain.Category;
-import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
@@ -9,36 +8,27 @@ import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import com.positive.culture.seoulQuest.repository.ProductRepository;
 import com.positive.culture.seoulQuest.service.ProductService;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @Log4j2
 @RequestMapping("/api")
-@CrossOrigin("http://localhost:3000")
 
-public class AdminController {
+public class AdminProductController {
     private final CustomFileUtil fileUtil;
     private final ProductService productService;
     private final ProductRepository productRepository;
@@ -99,60 +89,69 @@ public class AdminController {
             List<String> uploadFileNames = handleImageUpload(files);
             productDTO.setUploadFileNames(uploadFileNames);
 
-            // 카테고리 조회 및 생성 처리
-            Category category = categoryRepository
-                    .findAllCategoriesList(productDTO.getCategoryName(), "product")
-                    .orElseGet(() -> {
-                        Category newCategory = Category.builder()
-                                .categoryName(productDTO.getCategoryName())
-                                .categoryType("product")
-                                .build();
-                        log.info("새로운 카테고리 생성: " + newCategory.getCategoryName());
-                        return categoryRepository.save(newCategory);
-                    });
+            // 카테고리 처리
+            if (productDTO.getCategoryName() != null && !productDTO.getCategoryName().isEmpty()) {
+                Category category = Category.builder()
+                        .categoryName(productDTO.getCategoryName())
+                        .categoryType(productDTO.getCategoryType() != null ? productDTO.getCategoryType() : "product")
+                        .build();
 
-            // // 파일 처리
-            // List<MultipartFile> files = productDTO.getFiles();
-            // if (files != null && !files.isEmpty()) {
-            // List<String> uploadFileNames = fileUtil.saveFiles(files);
-            // productDTO.setUploadFileNames(uploadFileNames);
-            // log.info("Uploaded files: " + uploadFileNames);
-            // }
+                // 카테고리 조회 또는 생성
+                Category finalCategory = category; // final 변수로 새로 선언
+                category = categoryRepository
+                        .findAllCategoriesList(category.getCategoryName(), category.getCategoryType())
+                        .orElseGet(() -> {
+                            log.info("새로운 카테고리 생성: {}", finalCategory.getCategoryName());
+                            return categoryRepository.save(finalCategory);
+                        });
 
-            // // 카테고리가 없으면 예외 처리
-            // if (categoryRepository.findAll().isEmpty()) {
-            // selectedCategory = Category.builder()
-            // .categoryName(productDTO.getCategoryName())
-            // .build();
-            // selectedCategory = categoryRepository.save(selectedCategory);
-            // log.info("새로운 카테고리 생성: " + selectedCategory.getCategoryName());
-            // } else {
-            // selectedCategory = categoryRepository.findAll().get(0);
-            // }
-
-            // 이미지 파일명 설정
-            // uploadFileNames.forEach(productDTO::addImageString);
-
-            // // 이미지 파일명들 설정
-            // if (productDTO.getUploadFileNames() != null) {
-            // productDTO.getUploadFileNames().forEach(product::addImageString);
-            // }
-
-            // 저장
-            // Product savedProduct = productRepository.save(productDTO.toEntity());
-
-            // 카테고리 설정
-            productDTO.setCategoryName(category.getCategoryName());
-            productDTO.setCategoryType("product");
+                productDTO.setCategoryId(category.getCategoryId());
+                productDTO.setCategoryName(category.getCategoryName());
+                productDTO.setCategoryType(category.getCategoryType());
+            } else {
+                log.warn("카테고리 이름이 없습니다.");
+                throw new RuntimeException("카테고리 정보가 필요합니다.");
+            }
 
             Long pno = productService.register(productDTO);
-
             return Map.of("RESULT", pno);
 
         } catch (Exception e) {
-            log.error("상품 등록 중 에러 : " + e);
+            log.error("상품 등록 중 에러 : {}", e.getMessage());
             throw e;
         }
+
+        // // 파일 처리
+        // List<MultipartFile> files = productDTO.getFiles();
+        // if (files != null && !files.isEmpty()) {
+        // List<String> uploadFileNames = fileUtil.saveFiles(files);
+        // productDTO.setUploadFileNames(uploadFileNames);
+        // log.info("Uploaded files: " + uploadFileNames);
+        // }
+
+        // // 카테고리가 없으면 예외 처리
+        // if (categoryRepository.findAll().isEmpty()) {
+        // selectedCategory = Category.builder()
+        // .categoryName(productDTO.getCategoryName())
+        // .build();
+        // selectedCategory = categoryRepository.save(selectedCategory);
+        // log.info("새로운 카테고리 생성: " + selectedCategory.getCategoryName());
+        // } else {
+        // selectedCategory = categoryRepository.findAll().get(0);
+        // }
+
+        // 이미지 파일명 설정
+        // uploadFileNames.forEach(productDTO::addImageString);
+
+        // // 이미지 파일명들 설정
+        // if (productDTO.getUploadFileNames() != null) {
+        // productDTO.getUploadFileNames().forEach(product::addImageString);
+        // }
+
+        // 저장
+        // Product savedProduct = productRepository.save(productDTO.toEntity());
+
+        // 카테고리 설정
     }
 
     // 상품 수정
@@ -160,46 +159,81 @@ public class AdminController {
     @PutMapping("/admin/product/{pno}")
     @Transactional
     public Map<String, String> modify(@PathVariable("pno") Long pno, @ModelAttribute ProductDTO productDTO) {
+        log.info("ProductDTO: " + productDTO);
         productDTO.setPno(pno); // 값의 일관성을 보장하기 위해 pno를 다시 저장
         ProductDTO oldProductDTO = productService.get(pno); // pno로 기존 정보를 가져와서 저장
 
-        // 기존의 파일들( DB에 존재하는 파일들 - 수정과정에서 삭제되었을수 있음)
-        List<String> oldFileNames = oldProductDTO.getUploadFileNames();
+        try {
+            // 기존의 파일들(DB에 존재하는 파일들)
+            List<String> oldFileNames = oldProductDTO.getUploadFileNames();
 
-        // 새로 업로드 해야하는 파일들
-        List<MultipartFile> files = productDTO.getFiles();
+            // 새로 업로드 해야하는 파일들
+            List<MultipartFile> files = productDTO.getFiles();
+            List<String> currentUploadFileNames = fileUtil.saveFiles(files);
 
-        // 새로 업로드 되어서 만들어진 파일 이름들
-        List<String> currentUploadFileNames = fileUtil.saveFiles(files);
+            // 화면에서 유지된 파일들
+            List<String> uploadedFileNames = productDTO.getUploadFileNames() != null ? productDTO.getUploadFileNames()
+                    : new ArrayList<>();
 
-        // 화면에서 유지된 파일들 (없으면 새 ArrayList 생성)
-        List<String> uploadedFileNames = productDTO.getUploadFileNames() != null ? productDTO.getUploadFileNames()
-                : new ArrayList<>();
-
-        // 새로 업로드된 파일들 추가
-        if (currentUploadFileNames != null && !currentUploadFileNames.isEmpty()) {
-            uploadedFileNames.addAll(currentUploadFileNames);
-        }
-
-        // 기존 이미지 유지 처리
-        productDTO.setUploadFileNames(uploadedFileNames);
-
-        // 수정작업
-        productService.modify(productDTO);
-
-        // 삭제된 파일 처리
-        if (oldFileNames != null && !oldFileNames.isEmpty()) {
-            List<String> removedFiles = oldFileNames.stream()
-                    .filter(fileName -> !uploadedFileNames.contains(fileName))
-                    .collect(Collectors.toList());
-
-            // 실제 파일 삭제
-            if (!removedFiles.isEmpty()) {
-                fileUtil.deleteFiles(removedFiles);
+            // 새로 업로드된 파일들 추가
+            if (currentUploadFileNames != null && !currentUploadFileNames.isEmpty()) {
+                uploadedFileNames.addAll(currentUploadFileNames);
             }
-        }
 
-        return Map.of("RESULT", "SUCCESS");
+            // 카테고리 처리
+            if (productDTO.getCategoryName() != null && !productDTO.getCategoryName().isEmpty()) {
+                // 기존 카테고리 조회
+                Category category = categoryRepository
+                        .findAllCategoriesList(productDTO.getCategoryName(), "product")
+                        .orElseGet(() -> {
+                            log.info("새로운 카테고리 생성: {}", productDTO.getCategoryName());
+                            // 기존 카테고리가 없으면 새로 생성
+                            Category newCategory = Category.builder()
+                                    .categoryName(productDTO.getCategoryName())
+                                    .categoryType("product")
+                                    .build();
+                            return categoryRepository.save(newCategory);
+                        });
+                log.info("카테고리 정보: id={}, name={}, type={}",
+                        category.getCategoryId(),
+                        category.getCategoryName(),
+                        category.getCategoryType());
+
+                // Category 정보만 필요한 필드에 매핑
+                productDTO.setCategoryId(category.getCategoryId());
+                productDTO.setCategoryName(category.getCategoryName());
+                productDTO.setCategoryType(category.getCategoryType());
+            } else {
+                // 카테고리 정보가 없는 경우 기존 카테고리 정보 유지
+                ProductDTO oldProduct = productService.get(pno);
+                productDTO.setCategoryId(oldProduct.getCategoryId());
+                productDTO.setCategoryName(oldProduct.getCategoryName());
+                productDTO.setCategoryType(oldProduct.getCategoryType());
+            }
+
+            // 기존 이미지 유지 처리
+            productDTO.setUploadFileNames(uploadedFileNames);
+
+            // 수정작업
+            productService.modify(productDTO);
+
+            // 삭제된 파일 처리
+            if (oldFileNames != null && !oldFileNames.isEmpty()) {
+                List<String> removedFiles = oldFileNames.stream()
+                        .filter(fileName -> !uploadedFileNames.contains(fileName))
+                        .collect(Collectors.toList());
+
+                // 실제 파일 삭제
+                if (!removedFiles.isEmpty()) {
+                    fileUtil.deleteFiles(removedFiles);
+                }
+            }
+
+            return Map.of("RESULT", "SUCCESS");
+        } catch (Exception e) {
+            log.error("상품 수정 중 에러: {}", e.getMessage());
+            throw e;
+        }
     }
 
     // 이미지 업로드 처리 (상품 등록/수정 시)

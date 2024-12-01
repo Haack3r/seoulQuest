@@ -60,15 +60,23 @@ public class CustomFileUtil { // 파일의 입출력을 담당
 
         // 3. 업로드된 실제 파일들의 처리
         for (MultipartFile file : files) {
-            // 4. 파일명이 동일한 것을 업로드할 수 있도록 자바에서 제공하는 UUID를 이용하여 고유한 파일명을 생성
-            String savedName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-
-            // 5. 저장할 파일 경로를 지정
-            Path savePath = Paths.get(uploadPath, savedName);
-
             try {
-                // 6. multipartFile.getInputStream()을 통해 파일의 내용을 스트림 방식으로 읽어옴
-                // 7. Files.copy() 메소드를 사용하여 파일을 복사하여 서버에 저장
+                // 원본 파일명에서 확장자 추출
+                String originalName = file.getOriginalFilename();
+
+                if (originalName == null || originalName.isEmpty()) {
+                    throw new RuntimeException("파일 이름이 없습니다.");
+                }
+
+                // 확장자 추출
+                String ext = originalName.substring(originalName.lastIndexOf("."));
+
+                // 타임스탬프 8자리 + 3자리 랜덤값으로 간단한 파일명 생성
+                String timestamp = String.valueOf(System.currentTimeMillis()).substring(5, 13);
+                int random = (int) (Math.random() * 900) + 100; // 100-999 사이의 랜덤값
+                String savedName = String.format("img_%s_%d%s", timestamp, random, ext);
+
+                Path savePath = Paths.get(uploadPath, savedName);
                 Files.copy(file.getInputStream(), savePath);
 
                 // 8. 업로드된 파일의 타입을 문자열로 가져옴
@@ -87,6 +95,7 @@ public class CustomFileUtil { // 파일의 입출력을 담당
 
                 // 12. 파일의 이름들을 문자열로 리스트에 저장
                 uploadNames.add(savedName);
+
             } catch (IOException e) {
                 // 13. 예외 발생 시 RuntimeException으로 메시지를 전달하여 처리
                 throw new RuntimeException(e.getMessage());
