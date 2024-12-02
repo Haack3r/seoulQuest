@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b2434be-5756-4e82-8e7d-161d46e74438" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../.vscode/settings.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/MySql/data.sql" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
@@ -167,268 +166,9 @@
       <change afterPath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/TourRepositoryTests.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/service/ProductServiceTests.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/service/TourServiceTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/.idea/seoulQuestFrontend_1121.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/public/9ac9c5ca-5134-4274-ad69-6aef17b7efa5_Test1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/public/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/public/frontpage.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/public/index copy1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/public/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/public/logo192.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/public/logo512.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/public/manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/public/robots.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/About.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/App.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/App.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/App.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/Menu.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/Navbar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/Polaroid.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/Product.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/TourMap.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/AdminApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/ContactApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/PhotoGallery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/cartApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/couponApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/favTourApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/favoriteApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/kakaoApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/memberApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/myPageApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/nuProductApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/nuTourApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/productsApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/reservationApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/reviewApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/api/tourApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/CouponComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/PhotoGallery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/TodoList.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/TourMap copy 2.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/TourMap copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/TourMap.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/aboutPage/AboutSeoulCultureQuest.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/aboutPage/AnimatedPhotoGrid.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/Admin.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminCustomerComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminDeliveryComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminDeliveryCostComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminExchangeComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminInventoryComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminMainComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminOrderComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminProductComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminReservationComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminTourComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/menus/AdminBasicMenu.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/Graph.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/ListButtonTest.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/Notification.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/ProducInitState.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/ProductForm.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/SideBar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/SideBarTest.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/Styles.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/TourForm.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/VisbToggleButtonTest.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/Widget.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/theme.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/cartAndReservation/CartItemComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/cartAndReservation/ReservationItemComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/common/FetchingModal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/common/PageComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/common/ResultModal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/common/ScrollTopButton.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/favProductAndTour/FavProductComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/favProductAndTour/FavTourComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/EditProfileComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/EditProfileComponent가로디자인.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/FindEmailComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/FindPasswordComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/KakaoLoginComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/LoginComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/LogoutComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/ModifyComponents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/MyPageComponent copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/MyPageComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/MyPageComponentAntDesign.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/member/SignUpComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/menus/BasicMenu copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/menus/BasicMenu.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/menus/CartComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/menus/ProductComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/menus/ReservationComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/menus/TourComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/AboutProduct.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/AddComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/ListComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/ModifyComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/MostpopularProduct.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/NUListComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/NUReadComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/ReadComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryBeauty copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryBeauty.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryFashion copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryFashion.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryGourmet copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryGourmet.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryTea copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryTea.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/order/CartList.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/order/OrderComponent copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/order/OrderComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/order/PaymentDetails.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/order/PaymentMethodAndCoupon.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/products/order/ShippingInformation.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/review/ProductReviewComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/review/ReviewAddModal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/review/ReviewModal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/review/ReviewsSection.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/review/TourReviewComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/AboutToursComponent  copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/AboutToursComponent .js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/MostPopularTour.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/NUTourListComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/NUTourReadComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourAddComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourDetails.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourListComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourModifyComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourReadComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/BookingInformation.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/PaymentMethodAndCoupon.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/ReservationList.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/TourBookComponent copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/TourBookComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/TourPaymentDetails.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/ui/Avatar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/ui/Button.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/ui/Card.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/ui/Carousel.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/ui/Input.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/ui/KoreanComplete.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/components/ui/NavigationMenu.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/hooks/useAdminMovePages.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/hooks/useAuthorize.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomCart.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomFav.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomLogin copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomLogin.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomMove.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomReservation.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomTourFav.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/AdminLayout.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/BasicLayout.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/Footer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/ListImage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/MainImage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/MyPageLayout.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/ProcessSteps.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/ProductImage copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/ProductImage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/ProductSection.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/SearchBar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/TourImage copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/TourImage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/layouts/TourSection.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/lib/utils.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/AboutPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/AboutSCQ.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/Cart.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/ContactPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/EntryPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/Favorite.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/MainPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/Reservation.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/SeoulCultureQuest.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminCustomer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminDashBoard.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminDelivery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminDeliveryCost.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminExchange.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminIndexPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminInventory.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminOrder.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminOrderPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminProduct.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminReservation.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminTour.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/member/CouponPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/member/FindEmailPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/member/FindPasswordPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/member/KakaoRedirectPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/member/LoginPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/member/LogoutPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/member/ModifyPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/member/SignUpPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/mypage/EditProfilePage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/mypage/MyPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/mypage/ProductReviewPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/mypage/TourReviewPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/AboutProductPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/AddPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/IndexPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/ListPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/ModifyPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/NUIndexPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/NUListPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/NUReadPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/OrderPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/products/ReadPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/review/ProductReviewPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/review/ReviewIndexPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/review/TourReviewPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/AboutTourPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/NUTourIndexPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/NUTourListPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/NUTourReadPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourAddPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourBookPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourIndexPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourListPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourModifyPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourReadPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/reportWebVitals.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/admin/adminAuth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/admin/adminRouter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/memberRouter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/myPageRouter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/nuProductsRouter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/nuToursRouter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/productsRouter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/reviewRouter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/root.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/todoRouter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/router/toursRouter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/setupTests.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/slices/cartSlice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/slices/favSlice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/slices/favTourSlice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/slices/loginSlice copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/slices/loginSlice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/slices/reservationSlice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/slices/tourSlice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/store.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/util/cookieUtil copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/util/cookieUtil.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/util/jwtUtil copy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/src/util/jwtUtil.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../seoulfront/tailwind.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../data.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/upload/img_04257168_686.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/upload/s_img_04257168_686.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -485,35 +225,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Gradle.CategoryRepositoryTests.testProductCategoryDummy.executor": "Run",
-    "Gradle.CategoryRepositoryTests.testTourCategoryDummy.executor": "Run",
-    "Gradle.ContactRepositoryTests.saveTest.executor": "Run",
-    "Gradle.CouponRepositoryTests.insertDummyAmountCoupon.executor": "Run",
-    "Gradle.MemberRepositoryTests.testIns.executor": "Run",
-    "Gradle.OrderPaymentRepositoryTests.insertOrderPaymentAndItems.executor": "Run",
-    "Gradle.ProductRepositoryTests.testInsertSeoulProducts.executor": "Run",
-    "Gradle.ReviewRepositoryTests.insertDiverseProductReviews.executor": "Run",
-    "Gradle.TourRepositoryTests.testInsertMultipleTourDates.executor": "Run",
-    "Gradle.TourRepositoryTests.testInsertTours.executor": "Run",
-    "Gradle.seoulQuestBackend_1125_merge [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor": "Run",
-    "Gradle.seoulQuestBackend_1125_merge [compileJava].executor": "Run",
-    "Gradle.seoulQuestBackend_1126 [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor": "Run",
-    "Gradle.seoulback [:SeoulQuestApplication.main()].executor": "Run",
-    "Gradle.seoulback [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor": "Run",
-    "Gradle.seoulback [clean].executor": "Run",
-    "Gradle.seoulback 빌드.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "bogeun",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/hyeri/seoulQuestBackup/1126/merge1126/seoulQuestBackend_1126",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
-    "애플리케이션.SeoulQuestApplication.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Gradle.CategoryRepositoryTests.testProductCategoryDummy.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.CategoryRepositoryTests.testTourCategoryDummy.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ContactRepositoryTests.saveTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.CouponRepositoryTests.insertDummyAmountCoupon.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MemberRepositoryTests.testIns.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.OrderPaymentRepositoryTests.insertOrderPaymentAndItems.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ProductRepositoryTests.testInsertSeoulProducts.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ReviewRepositoryTests.insertDiverseProductReviews.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TourRepositoryTests.testInsertMultipleTourDates.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TourRepositoryTests.testInsertTours.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.seoulQuestBackend_1125_merge [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.seoulQuestBackend_1125_merge [compileJava].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.seoulQuestBackend_1126 [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.seoulback [:SeoulQuestApplication.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.seoulback [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.seoulback [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.seoulback 빌드.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;bogeun&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/hyeri/seoulQuestBackup/1126/merge1126/seoulQuestBackend_1126&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;애플리케이션.SeoulQuestApplication.executor&quot;: &quot;Run&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\hyeri\seoulQuestBackup\1126\merge\seoulQuestBackend_1125_merge\src\test\java\com\positive\culture\seoulQuest\seoulQuest\repository" />
