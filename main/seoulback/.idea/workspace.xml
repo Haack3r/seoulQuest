@@ -5,31 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b2434be-5756-4e82-8e7d-161d46e74438" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/upload/img_06879776_988.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/img_06879920_259.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/img_07051098_324.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/img_07051279_789.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/img_11015898_831.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/s_img_06879776_988.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/s_img_06879920_259.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/s_img_07051098_324.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/s_img_07051279_789.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/s_img_11015898_831.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../data.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/seoulback.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/AdminTourController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/AdminTourController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Tour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Tour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourDate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourDate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/TourDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/TourDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/TourRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/TourRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/TourRepositoryTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/TourRepositoryTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/AdminApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/../seoulfront/src/api/AdminApi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminProductComponents.js" beforeDir="false" afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminProductComponents.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminTourComponents.js" beforeDir="false" afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminTourComponents.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/TourForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/TourForm.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
