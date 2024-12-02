@@ -1,0 +1,1090 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6b2434be-5756-4e82-8e7d-161d46e74438" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../bogeun/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/MySql/data.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/back.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/SeoulQuestApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/ServletInitializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/advice/CustomControllerAdvice.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/config/CustomSecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/config/CustomSecurityConfigCopy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/config/RootConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/APIRefreshController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/AdminController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/CartController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/MyPageController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/NUProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/NUTourController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/ProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/ReservationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/SignUpController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/TourController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/controller/uploadController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/Address.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/Cart.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/CartItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/Category.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/Member.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/MemberRole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/Order.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/OrderItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/Product.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/ProductImage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/Reservation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/ReservationItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/Tour.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/TourDate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/domain/TourImage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/CartItemDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/CartItemListDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/CategoryDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/MemberDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/MemberModifyDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/OrderDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/PageRequestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/PageResponseDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/ProductDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/ReservationItemDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/ReservationItemListDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/TourDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/TourMapDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/dto/UserDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/formatter/LocalDateFormatter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/repository/CartItemRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/repository/CartRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/repository/CategoryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/repository/MemberRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/repository/ProductRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/repository/ReservationItemRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/repository/ReservationRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/repository/TourDateRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/repository/TourRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/security/CustomUserDetailsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/security/filter/JWTCheckFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/security/filter/JWTCheckFilter2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/security/handler/APILoginFailHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/security/handler/APILoginSuccessHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/security/handler/CustomAccessDeniedHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/CartService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/CartServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/CategoryService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/CategoryServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/MemberService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/MemberServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/ProductService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/ProductServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/ReservationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/ReservationServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/TourApiService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/TourService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/service/TourServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/util/CustomFileUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/util/CustomJWTException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/java/com/positive/culture/seoulQuest/util/JWTUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/SeoulQuestApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/CartRepositoryTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/CategoryRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/MemberRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/ProductRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/ReservationRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/SearchRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/TourRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/service/ProductServiceTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/src/test/java/com/positive/culture/seoulQuest/seoulQuest/service/TourServiceTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/upload/6186210f-3cd9-4488-92e1-e450e57a013d_oldtimer-1197800_1280.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/upload/67c4cdf8-f0f9-477a-92af-9ff896e4a745_1695563364.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/upload/ac1edf3e-40bc-4be3-b11f-7ac9f3127049_oldtimer-1197800_1280.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/upload/f673239f-332d-4950-ba43-8fed225fdf20_13128d12-1e0a-411b-a6a1-9dd5a589beb5_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/upload/s_6186210f-3cd9-4488-92e1-e450e57a013d_oldtimer-1197800_1280.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/upload/s_67c4cdf8-f0f9-477a-92af-9ff896e4a745_1695563364.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/upload/s_ac1edf3e-40bc-4be3-b11f-7ac9f3127049_oldtimer-1197800_1280.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/back/upload/s_f673239f-332d-4950-ba43-8fed225fdf20_13128d12-1e0a-411b-a6a1-9dd5a589beb5_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/front.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/public/9ac9c5ca-5134-4274-ad69-6aef17b7efa5_Test1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/public/frontpage.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/public/index copy1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/public/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/public/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/About.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/App.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/Menu.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/Navbar.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/Polaroid.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/Product.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/TourMap.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/AdminApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/PhotoGallery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/cartApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/kakaoApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/memberApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/myPageApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/nuProductApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/nuTourApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/productsApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/reservationApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/todoApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/api/tourApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/PhotoGallery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/TodoList.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/TourMap copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/TourMap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/Admin.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminCustomerComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminDeliveryComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminDeliveryFeeComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminExchangeComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminInventoryComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminMainComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminOrderComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminProductComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminReservationComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/AdminTourComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/menus/AdminBasicMenu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/Graph.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/ListButtonTest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/Notification.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/ProducInitState.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/ProductCard.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/ProductForm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/SideBar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/SideBarTest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/Styles.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/VisbToggleButtonTest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/Widget.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/admin/ui/theme.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/cartAndReservation/CartItemComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/cartAndReservation/ReservationItemComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/common/FetchingModal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/common/PageComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/common/ResultModal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/member/EditProfileComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/member/FindEmailComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/member/FindPasswordComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/member/KakaoLoginComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/member/LoginComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/member/LogoutComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/member/ModifyComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/member/MyPageComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/member/SignUpComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/menus/BasicMenu copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/menus/BasicMenu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/menus/CartComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/menus/ReservationComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/menus/search.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/products/AddComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/products/ListComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/products/ModifyComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/products/NUListComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/products/NUReadComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/products/OrderComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/products/ReadComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/tours/AboutToursComponent  copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/tours/AboutToursComponent .js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/tours/NUTourListComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/tours/NUTourReadComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/tours/TourAddComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/tours/TourDetails.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/tours/TourListComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/tours/TourModifyComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/tours/TourReadComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/ui/Avatar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/ui/Button.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/ui/Card.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/ui/Carousel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/ui/Input.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/ui/KoreanComplete.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/ui/NavigationMenu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/components/ui/SearchWithAutoComplete.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/hooks/useAdminMovePages.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/hooks/useCustomCart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/hooks/useCustomLogin copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/hooks/useCustomLogin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/hooks/useCustomMove.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/hooks/useCustomReservation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/AdminLayout.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/BasicLayout.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/Footer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/ListImage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/MainImage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/ProcessSteps.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/ProductImage copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/ProductImage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/ProductSection.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/SearchBar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/TourImage copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/TourImage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/layouts/TourSection.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/lib/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/AboutPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/Cart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/EntryPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/MainPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/Reservation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/SeoulCultureQuest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminCustomer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminDashBoard.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminDelivery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminDeliveryFee.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminExchange.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminIndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminInventory.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminOrder.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminProduct.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminReservation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/admin/AdminTour.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/member/EditProfilePage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/member/FindEmailPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/member/FindPasswordPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/member/KakaoRedirectPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/member/LoginPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/member/LogoutPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/member/ModifyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/member/MyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/member/SignUpPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/AboutProductPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/AddPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/IndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/ListPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/ModifyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/NUIndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/NUListPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/NUReadPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/OrderPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/products/ReadPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/todo/AddComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/todo/AddPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/todo/IndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/todo/ListComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/todo/ListPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/todo/ModifyComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/todo/ModifyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/todo/ReadComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/todo/ReadPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/tours/AboutTourPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/tours/NUTourIndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/tours/NUTourListPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/tours/NUTourReadPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/tours/TourAddPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/tours/TourIndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/tours/TourListPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/tours/TourModifyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/pages/tours/TourReadPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/reportWebVitals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/admin/adminAuth.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/admin/adminRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/memberRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/myPageRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/nuProductsRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/nuToursRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/productsRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/root.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/todoRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/router/toursRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/setupTests.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/slices/cartSlice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/slices/loginSlice copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/slices/loginSlice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/slices/reservationSlice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/store.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/util/cookieUtil copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/util/cookieUtil.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/util/jwtUtil copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/src/util/jwtUtil.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../bogeun/front/tailwind.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MySql/data.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/SeoulQuestApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/ServletInitializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/advice/CustomControllerAdvice.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/config/CustomSecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/config/CustomSecurityConfigCopy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/config/RootConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/APIRefreshController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/AdminContactController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/AdminController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/CartController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/ContactController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/CouponController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/FavoriteProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/FavoriteTourController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/MyPageController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/NUProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/NUTourController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/PaymentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/ProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/ReservationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/ReviewController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/SignUpController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/controller/TourController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Address.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Cart.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/CartItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Category.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Contact.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Coupon.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/FavoriteProduct.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/FavoriteTour.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Member.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/MemberRole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Product.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/ProductImage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/ProductOrder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/ProductOrderItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/ProductPayment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/ProductPaymentItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/ProductReview.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Reservation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/ReservationItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Tour.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourDate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourImage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourOrder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourOrderItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourPayment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourPaymentItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourReview.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/UserCoupon.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/CartItemDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/CartItemListDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/ContactRequestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/ContactResponseDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/CouponDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/FavoriteProductDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/FavoriteTourDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/MemberDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/MemberModifyDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/OrderDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/PageRequestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/PageResponseDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/PaymentDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/PaymentItemDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/ProductDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/ReservationItemDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/ReservationItemListDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/ReviewDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/ReviewInfoDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/TourDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/TourMapDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/UserDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/formatter/LocalDateFormatter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/CartItemRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/CartRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/CategoryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/ContactRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/CouponRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/FavoriteProductRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/FavoriteTourRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/MemberRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/ProductOrderItemRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/ProductOrderRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/ProductPaymentItemRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/ProductPaymentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/ProductRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/ProductReviewRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/ReservationItemRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/ReservationRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/TourDateRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/TourOrderItemRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/TourOrderRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/TourPaymentItemRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/TourPaymentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/TourRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/TourReviewRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/UserCouponRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/security/CustomUserDetailsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/security/filter/JWTCheckFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/security/filter/JWTCheckFilter2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/security/handler/APILoginFailHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/security/handler/APILoginSuccessHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/security/handler/CustomAccessDeniedHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/CartService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/CartServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ContactService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ContactServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/CouponService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/CouponServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/FavoriteProductService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/FavoriteProductServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/FavoriteTourService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/FavoriteTourServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/MemberService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/MemberServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ProductOrderService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ProductOrderServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ProductPaymentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ProductPaymentServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ProductService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ProductServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ReservationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ReservationServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ReviewService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ReviewServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourApiService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourOrderService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourOrderServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourPaymentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourPaymentServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/util/CustomFileUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/util/CustomJWTException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/util/JWTUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/SeoulQuestApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/CartRepositoryTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/CategoryRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/ContactRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/CouponRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/FavoriteTourRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/MemberRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/OrderPaymentRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/ProductRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/ReservationRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/ReviewRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/SearchRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/TourRepositoryTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/service/ProductServiceTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/positive/culture/seoulQuest/seoulQuest/service/TourServiceTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/00624132-eb56-415b-a327-6a2a6c706b17_korean-masks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/15aa5b3b-b0fd-4a2f-b810-800a518297ff_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/190b4f6f-f4b6-4743-a163-2ff686643c94_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/22eb26de-9cbe-4f38-95c8-6af32a22b00d_korean-masks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/24f94ed2-e67d-4b18-9292-b3ac2a30e279_사진.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/26fdc437-5ff8-4e6d-a826-1b1d1e5dde80_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/30fd7c9b-81a6-43ac-8a61-7c5c50b72e64_seoul-digital-nomads.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/3c24eac3-4173-4487-91c9-d78333620684_다운로드.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/401c5ad7-6d6c-481d-b15b-247cea4ad3fd_7ef98e3d-cee2-4bbb-8a0d-318a17498071_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/449f0058-5116-43f9-bd2b-10c6dcd365f0_다운로드.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/4a058933-3b8f-4abb-b230-f18534cac0d8_164ff511357135867.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/4db07fe5-d164-4c78-bb6a-b1f12ac5a059_다운로드.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/4dcf79ce-2726-496d-a8b3-c5503f57a944_다운로드.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/506a1017-53bd-4e88-b3c6-0525ed1d9017_korean-masks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/5252269f-fe8f-41e2-8171-cb3b5806e71f_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/53d01768-c727-4deb-9914-0e42d5c86a17_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/54529722-c725-41de-b2f7-0ba44a57dc88_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/596ba421-802c-489c-9e90-cb3bfd52c215_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/5e6895c3-7390-49ee-ad7d-8c652c99f17a_다운로드.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/6389ef61-a124-4abb-a769-3d19564d0a17_KakaoTalk_20241031_021041924_03.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/68ccb707-79a2-41e3-82ce-9bc4dc17c4fc_1920X1080.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/7700dd87-58fa-44e6-8f97-a0aa1c7c34a6_CSS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/7ce855da-a051-4f83-94fb-96d49637516d_사진.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/7ea0c1ab-1e00-4087-8f1f-451a1f335ba0_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/7ef98e3d-cee2-4bbb-8a0d-318a17498071_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/7f4996e3-89ed-48c4-a093-8392957ccf3e_KakaoTalk_20241031_020402277_04.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/858b6d3d-2803-45cd-9f8f-e9f4a29e2c16_jquery.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/8d3957a4-d9e0-4b03-b56f-11795f086202_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/8fed6f64-c8b9-4ac2-b3ca-6997fcd343eb_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/903d3f38-b80d-4874-9652-1d2d4c1da228_7ef98e3d-cee2-4bbb-8a0d-318a17498071_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/92d85f6e-15bf-437b-83d6-de3e28d17d30_34.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/93b0c792-fe03-4b12-bfa6-c7afcd318f9f_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/9a709aba-f4a9-484f-9bef-a87dd07ff968_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/9b88ab78-eb02-4ed3-877c-d81b0d737c95_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/9bde5b1d-539b-4318-9671-97906c6e58ff_사진.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/9e1f2e8e-85aa-4e84-8d16-a5bfb28e7237_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/a23fd41d-7454-420d-adb1-7131cf2b85c7_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/a4f9de46-70a4-4b34-ae4c-5f898cb94c2a_KakaoTalk_20241031_021041924_03.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/b5894bf4-1000-42c4-b443-c46eafea5d03_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/b5a06ddc-5095-40fe-9fd5-eb8bd1ba340f_사진.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/b6db71a5-0010-46d7-9b7c-ecdffb3f020c_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/b921a86f-0963-4708-9932-c8dbbc4f9bd2_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/b97283f9-efa2-4716-961e-fd901ef6c219_사진.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/bc14f287-4490-4c02-b8f2-55c868dc1990_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/c0398c81-cafb-4ef8-a516-b9665fee4c29_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/c64c3f5c-d6b7-47d0-9f6a-3041f96485e6_다운로드.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/cc5f461a-3254-4c65-a05b-3f7eaec10f41_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/cf4a7f3e-744f-4e3a-b8c0-389a382f744f_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/cfb95a6d-1009-4a02-bf6c-37ea982a9e3d_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/d467d973-0442-4c30-8973-ba471e192a35_사진.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/d6e8a7f5-a595-4880-be9f-4197b0c1122b_7ef98e3d-cee2-4bbb-8a0d-318a17498071_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/dcde9f13-dab7-4f63-ba46-2cac29cb5c6c_gyeongbokgung-hanbok-rental.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/dde9223f-df6c-42d1-b804-0cedc4e03889_다운로드.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/de207b05-20ab-4619-893a-bb41a35a50d6_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/default.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/e0228c77-264b-4b6a-9770-0cf25faaa8c6_JavaScript-Symbol-500x281.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/e34aa8c4-bc0d-446f-822b-8d03ae08b126_HTML5_logo_and_wordmark.svg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/e5269f90-9796-4b52-ab79-65b6805d1deb_java.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/e953b3ec-5429-4d0e-8b41-b81c35bf466a_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/e975191d-c6a1-4771-88cc-f23b5bcc8303_사진.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/ebd4b011-82b3-4c00-ae8c-bad822cd1438_CSS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/f3414028-c136-4c33-8eb4-57c8036fd6ee_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/f453c84b-8505-472b-9265-7e9b1a2a8681_korean-masks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/f88b0a0d-a2ba-4d03-9647-3d7f0ead37e6_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/f9ce6cc9-3dcb-4a45-a511-0d82c83000fe_C언어.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/fba0aeff-d9e8-472a-a91d-faf356db5796_C언어.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/fd85831a-0ab7-4383-9db7-f884bd44fcd0_HTML5_logo_and_wordmark.svg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/ffcb8e3d-0c43-4ec8-93aa-cbf6a1fb45da_사진.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_00624132-eb56-415b-a327-6a2a6c706b17_korean-masks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_15aa5b3b-b0fd-4a2f-b810-800a518297ff_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_190b4f6f-f4b6-4743-a163-2ff686643c94_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_22eb26de-9cbe-4f38-95c8-6af32a22b00d_korean-masks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_26fdc437-5ff8-4e6d-a826-1b1d1e5dde80_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_30fd7c9b-81a6-43ac-8a61-7c5c50b72e64_seoul-digital-nomads.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_401c5ad7-6d6c-481d-b15b-247cea4ad3fd_7ef98e3d-cee2-4bbb-8a0d-318a17498071_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_4a058933-3b8f-4abb-b230-f18534cac0d8_164ff511357135867.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_506a1017-53bd-4e88-b3c6-0525ed1d9017_korean-masks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_5252269f-fe8f-41e2-8171-cb3b5806e71f_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_53d01768-c727-4deb-9914-0e42d5c86a17_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_54529722-c725-41de-b2f7-0ba44a57dc88_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_596ba421-802c-489c-9e90-cb3bfd52c215_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_6389ef61-a124-4abb-a769-3d19564d0a17_KakaoTalk_20241031_021041924_03.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_68ccb707-79a2-41e3-82ce-9bc4dc17c4fc_1920X1080.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_7700dd87-58fa-44e6-8f97-a0aa1c7c34a6_CSS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_7ea0c1ab-1e00-4087-8f1f-451a1f335ba0_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_7ef98e3d-cee2-4bbb-8a0d-318a17498071_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_7f4996e3-89ed-48c4-a093-8392957ccf3e_KakaoTalk_20241031_020402277_04.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_8d3957a4-d9e0-4b03-b56f-11795f086202_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_8fed6f64-c8b9-4ac2-b3ca-6997fcd343eb_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_903d3f38-b80d-4874-9652-1d2d4c1da228_7ef98e3d-cee2-4bbb-8a0d-318a17498071_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_92d85f6e-15bf-437b-83d6-de3e28d17d30_34.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_93b0c792-fe03-4b12-bfa6-c7afcd318f9f_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_9a709aba-f4a9-484f-9bef-a87dd07ff968_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_9b88ab78-eb02-4ed3-877c-d81b0d737c95_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_9e1f2e8e-85aa-4e84-8d16-a5bfb28e7237_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_a23fd41d-7454-420d-adb1-7131cf2b85c7_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_a4f9de46-70a4-4b34-ae4c-5f898cb94c2a_KakaoTalk_20241031_021041924_03.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_b5894bf4-1000-42c4-b443-c46eafea5d03_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_b6db71a5-0010-46d7-9b7c-ecdffb3f020c_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_b921a86f-0963-4708-9932-c8dbbc4f9bd2_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_bc14f287-4490-4c02-b8f2-55c868dc1990_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_c0398c81-cafb-4ef8-a516-b9665fee4c29_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_cc5f461a-3254-4c65-a05b-3f7eaec10f41_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_cf4a7f3e-744f-4e3a-b8c0-389a382f744f_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_cfb95a6d-1009-4a02-bf6c-37ea982a9e3d_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_d6e8a7f5-a595-4880-be9f-4197b0c1122b_7ef98e3d-cee2-4bbb-8a0d-318a17498071_art-stuff.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_dcde9f13-dab7-4f63-ba46-2cac29cb5c6c_gyeongbokgung-hanbok-rental.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_de207b05-20ab-4619-893a-bb41a35a50d6_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_e0228c77-264b-4b6a-9770-0cf25faaa8c6_JavaScript-Symbol-500x281.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_e34aa8c4-bc0d-446f-822b-8d03ae08b126_HTML5_logo_and_wordmark.svg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_e5269f90-9796-4b52-ab79-65b6805d1deb_java.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_e953b3ec-5429-4d0e-8b41-b81c35bf466a_pottery-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_ebd4b011-82b3-4c00-ae8c-bad822cd1438_CSS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_f3414028-c136-4c33-8eb4-57c8036fd6ee_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_f453c84b-8505-472b-9265-7e9b1a2a8681_korean-masks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_f88b0a0d-a2ba-4d03-9647-3d7f0ead37e6_다운로드.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_f9ce6cc9-3dcb-4a45-a511-0d82c83000fe_C언어.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_fba0aeff-d9e8-472a-a91d-faf356db5796_C언어.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_fd85831a-0ab7-4383-9db7-f884bd44fcd0_HTML5_logo_and_wordmark.svg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/.idea/seoulQuestFrontend_1121.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/public/9ac9c5ca-5134-4274-ad69-6aef17b7efa5_Test1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/public/frontpage.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/public/index copy1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/public/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/public/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/About.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/App.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/Menu.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/Navbar.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/Polaroid.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/Product.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/TourMap.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/AdminApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/ContactApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/PhotoGallery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/cartApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/couponApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/favTourApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/favoriteApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/kakaoApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/memberApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/myPageApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/nuProductApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/nuTourApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/productsApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/reservationApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/reviewApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/api/tourApi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/CouponComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/PhotoGallery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/TodoList.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/TourMap copy 2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/TourMap copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/TourMap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/aboutPage/AboutSeoulCultureQuest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/aboutPage/AnimatedPhotoGrid.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/Admin.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminCustomerComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminDeliveryComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminDeliveryCostComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminExchangeComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminInventoryComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminMainComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminOrderComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminProductComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminReservationComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/AdminTourComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/menus/AdminBasicMenu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/Graph.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/ListButtonTest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/Notification.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/ProducInitState.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/ProductCard.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/ProductForm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/SideBar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/SideBarTest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/Styles.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/VisbToggleButtonTest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/Widget.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/theme.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/cartAndReservation/CartItemComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/cartAndReservation/ReservationItemComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/common/FetchingModal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/common/PageComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/common/ResultModal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/common/ScrollTopButton.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/favProductAndTour/FavProductComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/favProductAndTour/FavTourComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/EditProfileComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/EditProfileComponent가로디자인.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/FindEmailComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/FindPasswordComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/KakaoLoginComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/LoginComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/LogoutComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/ModifyComponents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/MyPageComponent copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/MyPageComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/MyPageComponentAntDesign.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/member/SignUpComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/menus/BasicMenu copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/menus/BasicMenu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/menus/CartComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/menus/ProductComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/menus/ReservationComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/menus/TourComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/AboutProduct.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/AddComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/ListComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/ModifyComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/MostpopularProduct.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/NUListComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/NUReadComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/ReadComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryBeauty copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryBeauty.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryFashion copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryFashion.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryGourmet copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryGourmet.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryTea copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/category/ProductCategoryTea.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/order/CartList.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/order/OrderComponent copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/order/OrderComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/order/PaymentDetails.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/order/PaymentMethodAndCoupon.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/products/order/ShippingInformation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/review/ProductReviewComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/review/ReviewAddModal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/review/ReviewModal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/review/ReviewsSection.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/review/TourReviewComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/AboutToursComponent  copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/AboutToursComponent .js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/MostPopularTour.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/NUTourListComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/NUTourReadComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourAddComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourDetails.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourListComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourModifyComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/TourReadComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/BookingInformation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/PaymentMethodAndCoupon.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/ReservationList.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/TourBookComponent copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/TourBookComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/tours/order/TourPaymentDetails.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/ui/Avatar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/ui/Button.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/ui/Card.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/ui/Carousel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/ui/Input.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/ui/KoreanComplete.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/ui/NavigationMenu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/hooks/useAdminMovePages.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/hooks/useAuthorize.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomCart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomFav.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomLogin copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomLogin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomMove.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomReservation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/hooks/useCustomTourFav.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/AdminLayout.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/BasicLayout.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/Footer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/ListImage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/MainImage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/MyPageLayout.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/ProcessSteps.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/ProductImage copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/ProductImage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/ProductSection.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/SearchBar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/TourImage copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/TourImage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/layouts/TourSection.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/lib/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/AboutPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/AboutSCQ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/Cart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/ContactPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/EntryPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/Favorite.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/MainPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/Reservation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/SeoulCultureQuest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminCustomer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminDashBoard.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminDelivery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminDeliveryCost.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminExchange.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminIndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminInventory.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminOrder.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminOrderPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminProduct.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminReservation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/admin/AdminTour.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/member/CouponPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/member/FindEmailPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/member/FindPasswordPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/member/KakaoRedirectPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/member/LoginPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/member/LogoutPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/member/ModifyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/member/SignUpPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/mypage/EditProfilePage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/mypage/MyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/mypage/ProductReviewPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/mypage/TourReviewPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/AboutProductPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/AddPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/IndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/ListPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/ModifyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/NUIndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/NUListPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/NUReadPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/OrderPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/products/ReadPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/review/ProductReviewPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/review/ReviewIndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/review/TourReviewPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/AboutTourPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/NUTourIndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/NUTourListPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/NUTourReadPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourAddPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourBookPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourIndexPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourListPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourModifyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/pages/tours/TourReadPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/reportWebVitals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/admin/adminAuth.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/admin/adminRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/memberRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/myPageRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/nuProductsRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/nuToursRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/productsRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/reviewRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/root.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/todoRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/router/toursRouter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/setupTests.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/slices/cartSlice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/slices/favSlice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/slices/favTourSlice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/slices/loginSlice copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/slices/loginSlice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/slices/reservationSlice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/slices/tourSlice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/store.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/util/cookieUtil copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/util/cookieUtil.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/util/jwtUtil copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/util/jwtUtil.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/tailwind.config.js" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="seoulQuest" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="seoulQuest" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="seoulQuest" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2pMriq5Ab2o4SDZa0gglQBMkK8u" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Gradle.CategoryRepositoryTests.testProductCategoryDummy.executor": "Run",
+    "Gradle.CategoryRepositoryTests.testTourCategoryDummy.executor": "Run",
+    "Gradle.ContactRepositoryTests.saveTest.executor": "Run",
+    "Gradle.CouponRepositoryTests.insertDummyAmountCoupon.executor": "Run",
+    "Gradle.MemberRepositoryTests.testIns.executor": "Run",
+    "Gradle.OrderPaymentRepositoryTests.insertOrderPaymentAndItems.executor": "Run",
+    "Gradle.ProductRepositoryTests.testInsertSeoulProducts.executor": "Run",
+    "Gradle.ReviewRepositoryTests.insertDiverseProductReviews.executor": "Run",
+    "Gradle.TourRepositoryTests.testInsertMultipleTourDates.executor": "Run",
+    "Gradle.TourRepositoryTests.testInsertTours.executor": "Run",
+    "Gradle.seoulQuestBackend_1125_merge [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor": "Run",
+    "Gradle.seoulQuestBackend_1125_merge [compileJava].executor": "Run",
+    "Gradle.seoulQuestBackend_1126 [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor": "Run",
+    "Gradle.seoulback [:SeoulQuestApplication.main()].executor": "Run",
+    "Gradle.seoulback [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor": "Run",
+    "Gradle.seoulback [clean].executor": "Run",
+    "Gradle.seoulback 빌드.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "bogeun",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/hyeri/seoulQuestBackup/1126/merge1126/seoulQuestBackend_1126",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "애플리케이션.SeoulQuestApplication.executor": "Run"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\hyeri\seoulQuestBackup\1126\merge\seoulQuestBackend_1125_merge\src\test\java\com\positive\culture\seoulQuest\seoulQuest\repository" />
+      <recent name="E:\hyeri\seoulQuestBackup\1126\merge\seoulQuestBackend_1125_merge\src\main\java\com\positive\culture\seoulQuest\dto" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\hyeri\seoulQuestBackup\1126\merge\seoulQuestBackend_1125_merge\src\main\java\com\positive\culture\seoulQuest\service" />
+      <recent name="E:\hyeri\seoulQuestBackup\1126\merge\seoulQuestBackend_1125_merge\src\main\java\com\positive\culture\seoulQuest\repository" />
+      <recent name="E:\hyeri\seoulQuestBackup\1126\merge\seoulQuestBackend_1125_merge\src\main\java\com\positive\culture\seoulQuest\domain" />
+      <recent name="E:\hyeri\seoulQuestBackup\1126\merge\seoulQuestBackend_1125_merge\src\main\java\com\positive\culture\seoulQuest\controller" />
+    </key>
+  </component>
+  <component name="RunManager" selected="애플리케이션.SeoulQuestApplication">
+    <configuration name="SeoulQuestApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.positive.culture.seoulQuest.SeoulQuestApplication" />
+      <module name="seoulQuest.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.positive.culture.seoulQuest.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CategoryRepositoryTests.testProductCategoryDummy" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.positive.culture.seoulQuest.seoulQuest.repository.CategoryRepositoryTests.testProductCategoryDummy&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="CouponRepositoryTests.insertDummyAmountCoupon" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.positive.culture.seoulQuest.seoulQuest.repository.CouponRepositoryTests.insertDummyAmountCoupon&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="MemberRepositoryTests.testIns" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.positive.culture.seoulQuest.seoulQuest.repository.MemberRepositoryTests.testIns&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="seoulback [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.MemberRepositoryTests.testIns" />
+        <item itemvalue="Gradle.seoulback [clean]" />
+        <item itemvalue="애플리케이션.SeoulQuestApplication" />
+        <item itemvalue="Gradle.CategoryRepositoryTests.testProductCategoryDummy" />
+        <item itemvalue="Gradle.CouponRepositoryTests.insertDummyAmountCoupon" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6b2434be-5756-4e82-8e7d-161d46e74438" name="Changes" comment="" />
+      <created>1732586916397</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1732586916397</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>
