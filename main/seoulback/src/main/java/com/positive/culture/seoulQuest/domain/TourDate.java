@@ -22,7 +22,7 @@ public class TourDate {
     private long tdid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tourNo", nullable = false)
+    @JoinColumn(name = "tour_no")
     @JsonBackReference
     private Tour tour;
 

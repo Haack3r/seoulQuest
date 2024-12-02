@@ -305,7 +305,7 @@ export const adminTourList = async ({ page, size, keyword = "", type = "t" }) =>
 
 export const getTour = async (tno) => {
     try {
-        const res = await jwtAxios.get(`${host}/api/tour/${tno}`)
+        const res = await jwtAxios.get(`${host}/admin/tour/${tno}`)
         return res.data
     } catch (err) {
         console.error('투어 정보 로드 실패 : ', err)

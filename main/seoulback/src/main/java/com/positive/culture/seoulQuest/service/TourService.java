@@ -49,17 +49,21 @@ public interface TourService {
                 .taddress(tourDTO.getTaddress())
                 .createAt(tourDTO.getCreateAt())
                 .updateAt(tourDTO.getUpdateAt())
+                .delFlag(tourDTO.isDelFlag())
                 .build();
         
         // TourDate 리스트를 따로 생성하고 설정
-        List<TourDate> tourDates = tourDTO.getTDate().stream()
-                .map(dateStr -> TourDate.builder()
-                        .tourDate(LocalDate.parse(dateStr))
-                        .tour(tour)
-                        .build())
-                .collect(Collectors.toList());
-        
-        tour.getTDate().addAll(tourDates);  // Tour 객체에 TourDate 리스트 추가
+        if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
+            List<TourDate> tourDates = tourDTO.getTDate().stream()
+                    .map(dateStr -> TourDate.builder()
+                            .tourDate(LocalDate.parse(dateStr))
+                            .tour(tour)
+                            .availableCapacity(tourDTO.getMaxCapacity())
+                            .build())
+                    .collect(Collectors.toList());
+            
+            tour.getTDate().addAll(tourDates);  // Tour 객체에 TourDate 리스트 추가
+        }
 
         // 이미지 처리
         List<String> uploadFileNames = tourDTO.getUploadFileNames();
@@ -79,9 +83,9 @@ public interface TourService {
     public TourDTO entityChangeDTO(Tour tour, Category category) {
         TourDTO tourDTO = TourDTO.builder()
                 .tno(tour.getTno())
-                .categoryId(tour.getCategory().getCategoryId())
-                .categoryName(tour.getCategory().getCategoryName())
-                .categoryType(tour.getCategory().getCategoryType())
+                .categoryId(category.getCategoryId())
+                .categoryName(category.getCategoryName())
+                .categoryType(category.getCategoryType())
                 .tname(tour.getTname())
                 .tdesc(tour.getTdesc())
                 .tprice(tour.getTprice())
@@ -106,7 +110,7 @@ public interface TourService {
     }
 
     // 서울 관광지 조회
-    List<TourDTO> getToursByLocation(String location);
+//    List<TourDTO> getToursByLocation(String location);
 
     //
     List<TourDTO> getToursByAddress(String taddress);

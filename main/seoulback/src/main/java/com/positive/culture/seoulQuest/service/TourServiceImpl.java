@@ -14,7 +14,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.positive.culture.seoulQuest.domain.QCategory.category;
 
 @Service
 @Log4j2
@@ -129,12 +130,20 @@ public class TourServiceImpl implements TourService {
         Tour tour = result.orElseThrow();
         TourDTO tourDTO = entityChangeDTO(tour, tour.getCategory());
 
+        // 투어 날짜 정보 처리
+        List<String> tourDates = tour.getTDate().stream()
+                .map(date -> date.getTourDate().toString())
+                .collect(Collectors.toList());
+        tourDTO.setTDate(tourDates);
+
+        // 이미지 처리
         List<TourImage> imageList = tour.getTourImageList();
         if (imageList == null || imageList.size() == 0)
             return tourDTO; // 이미지가 없는 상품인 경우
 
-        // 이미지가 있는 상품인 경우
-        List<String> fileNameList = imageList.stream().map(tourImage -> tourImage.getFileName()).toList();
+        List<String> fileNameList = imageList.stream()
+                .map(tourImage -> tourImage.getFileName())
+                .collect(Collectors.toList());
         tourDTO.setUploadFileNames(fileNameList);
 
         return tourDTO;
@@ -144,42 +153,24 @@ public class TourServiceImpl implements TourService {
 
     // 등록 --(관리자)
     @Override
+    @Transactional
     public Long register(TourDTO tourDTO) {
-        String categoryName = tourDTO.getCategoryName();
-        String categoryType = "tour";
-
         Category category = categoryRepository
-                .findByCategoryNameAndCategoryType(categoryName, categoryType);
+                .findByCategoryNameAndCategoryType(tourDTO.getCategoryName(), "tour");
 
         if (category == null) {
             category = Category.builder()
-                    .categoryName(categoryName)
-                    .categoryType(categoryType)
+                    .categoryName(tourDTO.getCategoryName())
+                    .categoryType("tour")
                     .build();
             category = categoryRepository.save(category);
         }
-
+        
         Tour tour = dtoToEntity(tourDTO, category);
-
-        // FormData로 받은 날짜 문자열을 TourDate 엔티티로 변환
-        if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
-            tourDTO.getTDate().forEach(dateStr -> {
-                try {
-                    TourDate tourDate = TourDate.builder()
-                            .tourDate(LocalDate.parse(dateStr)) // 이미 LocalDate 타입
-                            .tour(tour)
-                            .availableCapacity(tour.getMaxCapacity())
-                            .build();
-                    tour.getTDate().add(tourDate);
-                } catch (Exception e) {
-                    log.error("날짜 처리 오류: ", e);
-                    throw new RuntimeException("날짜 처리 중 오류가 발생했습니다");
-                }
-            });
-        }
-
-        Tour result = tourRepository.save(tour);
-        return result.getTno();
+        Tour savedTour = tourRepository.save(tour);
+        log.info("Saved tour: " + savedTour);
+        
+        return savedTour.getTno();
     }
 
     // ----------------------------------------------------------------
@@ -203,17 +194,30 @@ public class TourServiceImpl implements TourService {
             category = categoryRepository.save(category);
         }
 
-        // 2.change
+        // 2.change basic info
         tour.changeCategory(category);
 
         tour.changeName(tourDTO.getTname());
         tour.changeDesc(tourDTO.getTdesc());
         tour.changePrice(tourDTO.getTprice());
         tour.changeMaxCapacity(tourDTO.getMaxCapacity());
-        tour.changeLocation(tourDTO.getTlocation());
+        tour.changeAddress(tourDTO.getTaddress());
         tour.preUpdate();
 
-        // 이미지 처리
+        // 3.투어 날짜 정보 업데이트
+        tour.getTDate().clear(); // 기존 날짜 정보 삭제
+        if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
+            tourDTO.getTDate().forEach(dateStr -> {
+                TourDate tourDate = TourDate.builder()
+                        .tour(tour)
+                        .tourDate(LocalDate.parse(dateStr))
+                        .availableCapacity(tourDTO.getMaxCapacity())
+                        .build();
+                tour.getTDate().add(tourDate);
+            });
+        }
+
+        // 4.이미지 처리
         if (tourDTO.getFiles() != null && !tourDTO.getFiles().isEmpty()) {
             // 기존 이미지 삭제
             List<String> oldFiles = tour.getTourImageList()
@@ -250,14 +254,14 @@ public class TourServiceImpl implements TourService {
         }
     }
 
-    @Override
-    public List<TourDTO> getToursByLocation(String location) {
-        List<Tour> tours = tourRepository.findByTlocationContaining(location);
-        return tours.stream()
-                // .map(this::entityChangeDTO)
-                .map(tour -> entityChangeDTO(tour, tour.getCategory()))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<TourDTO> getToursByLocation(String location) {
+//        List<Tour> tours = tourRepository.findByTlocationContaining(location);
+//        return tours.stream()
+//                // .map(this::entityChangeDTO)
+//                .map(tour -> entityChangeDTO(tour, tour.getCategory()))
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public List<TourDTO> getToursByAddress(String taddress) {
@@ -329,13 +333,13 @@ public class TourServiceImpl implements TourService {
         // Add keyword-based filtering
         BooleanBuilder conditionBuilder = new BooleanBuilder();
         if (type.contains("t")) {
-            conditionBuilder.or(qTour.tname.containsIgnoreCase(keyword));
+            conditionBuilder.or(qTour.tname.contains(keyword));
         }
         if (type.contains("c")) {
-            conditionBuilder.or(qTour.category.categoryName.containsIgnoreCase(keyword));
+            conditionBuilder.or(qTour.category.categoryName.contains(keyword));
         }
         if (type.contains("w")) {
-            conditionBuilder.or(qTour.tlocation.containsIgnoreCase(keyword));
+            conditionBuilder.or(qTour.taddress.contains(keyword));
         }
         booleanBuilder.and(conditionBuilder);
 

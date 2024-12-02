@@ -29,7 +29,6 @@ public class TourDTO {
     private int tprice;
     private int maxCapacity;
 
-    private String tlocation;
     private String taddress;
 
     @Builder.Default

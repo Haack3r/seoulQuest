@@ -13,7 +13,7 @@ import {
     Button,
     IconButton,
 } from '@mui/material';
-
+import { layoutStyles, inputStyles } from "./ui/Styles";
 import {
     Add as AddIcon,   // // 'Add' 아이콘을 'AddIcon'이라는 이름으로 가져옴
     Edit as EditIcon,
@@ -22,6 +22,7 @@ import {
 import TourForm from './ui/TourForm';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { addTour, adminTourList, deleteTour, getTour, modifyTour } from '../../api/AdminApi';
+import { Search } from 'lucide-react';
 
 const initState = {
     dtoList: [],
@@ -61,7 +62,6 @@ const AdminTourComponents = () => {
         tdesc: '',
         tprice: '',
         maxCapacity: '',
-        tlocation: '',
         taddress: '',
         categoryName: '',
         tDate: [],
@@ -78,7 +78,7 @@ const AdminTourComponents = () => {
 
         adminTourList({ page, size, keyword, type })
             .then((data) => {
-                setTourForm(data);
+                setServerData(data);
             })
             .catch((err) => {
                 console.error("데이터 조회 실패:", err);
@@ -110,7 +110,7 @@ const AdminTourComponents = () => {
             setSelectedTour(null);
         } catch (error) {
             console.error("투어 등록 실패:", error);
-            exceptionHandle(error);
+            alert(error.message || "투어 등록에 실패했습니다.");
         }
     };
 
@@ -138,7 +138,6 @@ const AdminTourComponents = () => {
             })
             .catch((error) => {
                 console.error("Get tour error:", error);
-                exceptionHandle(error);
             });
     };
 
@@ -175,73 +174,110 @@ const AdminTourComponents = () => {
     }, [page, size, keyword, type]);
 
     return (
-        <Box sx={{ width: '100%', p: 3 }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-                <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
-                    <Tab label="진행중" />
-                    <Tab label="예정됨" />
-                    <Tab label="종료됨" />
-                </Tabs>
-            </Box>
+        <>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',  // 가운데 정렬
+                width: '100%',
+                marginTop: '2rem',
+                marginBottom: '1rem'
+            }}>
+                <div style={{
+                    display: 'flex',
+                    width: '50%',          // 검색창 너비
+                    gap: '1rem'            // 검색창과 버튼 사이 간격
+                }}>
+                    <input
+                        style={{
+                            flex: 1,
+                            padding: '0.5rem',
+                            borderRadius: '4px',
+                            border: '1px solid #ddd'
+                        }}
+                        placeholder="투어 이름 또는 카테고리 검색"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    />
+                    <Button
+                        variant="contained"
+                        onClick={fetchTourList}
+                        style={{ minWidth: '100px' }}
+                    >
+                        <Search size={16} style={{ marginRight: '0.5rem' }} />
+                        검색
+                    </Button>
+                </div>
+            </div>
 
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={() => {
-                        setOpenDialog(true);
-                        setDialogType('add');
-                        setIsEditing(false);
-                        setSelectedTour(null);
-                    }}
-                >
-                    새 투어 추가
-                </Button>
-            </Box>
+            <Box sx={{ width: '100%', p: 3 }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+                    <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
+                        <Tab label="진행중" />
+                        <Tab label="예정됨" />
+                        <Tab label="종료됨" />
+                    </Tabs>
+                </Box>
 
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>투어명</TableCell>
-                            <TableCell>날짜</TableCell>
-                            <TableCell>잔여석</TableCell>
-                            <TableCell>가격</TableCell>
-                            <TableCell>상태</TableCell>
-                            <TableCell>관리</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {serverData.dtoList?.map((tour) => (
-                            <TableRow key={tour.tno}>
-                                <TableCell>{tour.tname}</TableCell>
-                                <TableCell>{tour.tDate}</TableCell>
-                                <TableCell>{tour.maxCapacity}</TableCell>
-                                <TableCell>{tour.tprice?.toLocaleString()}원</TableCell>
-                                <TableCell>{tour.status}</TableCell>
-                                <TableCell>
-                                    <IconButton onClick={() => handleEdit(tour.tno)}>
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton onClick={() => handleDelete(tour.tno)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </TableCell>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={() => {
+                            setOpenDialog(true);
+                            setDialogType('add');
+                            setIsEditing(false);
+                            setSelectedTour(null);
+                        }}
+                    >
+                        새 투어 추가
+                    </Button>
+                </Box>
+
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>투어명</TableCell>
+                                <TableCell>날짜</TableCell>
+                                <TableCell>잔여석</TableCell>
+                                <TableCell>가격</TableCell>
+                                <TableCell>상태</TableCell>
+                                <TableCell>관리</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {serverData.dtoList?.map((tour) => (
+                                <TableRow key={tour.tno}>
+                                    <TableCell>{tour.tname}</TableCell>
+                                    <TableCell>{tour.tDate}</TableCell>
+                                    <TableCell>{tour.tprice?.toLocaleString()}원</TableCell>
+                                    <TableCell>{tour.maxCapacity}</TableCell>
+                                    <TableCell>{tour.taddress}</TableCell>
+                                    {/* <TableCell>{tour.status}</TableCell> */}
+                                    <TableCell>
+                                        <IconButton onClick={() => handleEdit(tour.tno)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton onClick={() => handleDelete(tour.tno)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
 
-            {openDialog && (
-                <TourForm
-                    isEditing={isEditing}
-                    initialData={selectedTour}
-                    onSubmit={handleFormSubmit}
-                    onClose={handleClose}
-                />
-            )}
-        </Box>
+                {openDialog && (
+                    <TourForm
+                        isEditing={isEditing}
+                        initialData={isEditing ? selectedTour : serverData}
+                        onSubmit={handleFormSubmit}
+                        onClose={handleClose}
+                    />
+                )}
+            </Box>
+        </>
     )
 }
 {/* <Dialog

@@ -87,7 +87,6 @@ public class AdminTourController {
                                 .categoryName(tourDTO.getCategoryName())
                                 .categoryType("tour")
                                 .build();
-                        log.info("새로운 카테고리 생성: " + newCategory.getCategoryName());
                         return categoryRepository.save(newCategory);
                     });
 
@@ -121,16 +120,24 @@ public class AdminTourController {
             // 저장
             // Product savedProduct = productRepository.save(productDTO.toEntity());
 
+            // tDate 데이터 로깅 추가
+            log.info("Received tDate: " + tourDTO.getTDate());
+
+            // tDate가 null이 아닌지 확인
+            if (tourDTO.getTDate() == null) {
+                tourDTO.setTDate(new ArrayList<>());
+            }
+
             // 카테고리 설정
             tourDTO.setCategoryName(category.getCategoryName());
             tourDTO.setCategoryType("tour");
 
             Long tno = tourService.register(tourDTO);
+            log.info("Registered tour with tno: " + tno);
 
             return Map.of("RESULT", tno);
-
         } catch (Exception e) {
-            log.error("상품 등록 중 에러 : " + e);
+            log.error("투어 등록 중 에러: ", e);
             throw e;
         }
     }
@@ -140,46 +147,58 @@ public class AdminTourController {
     @PutMapping("/admin/tour/{tno}")
     @Transactional
     public Map<String, String> modify(@PathVariable("tno") Long tno, @ModelAttribute TourDTO tourDTO) {
-        tourDTO.setTno(tno);
-        TourDTO oldTourDTO = tourService.get(tno);
-
-        // 기존의 파일들( DB에 존재하는 파일들 - 수정과정에서 삭제되었을수 있음)
-        List<String> oldFileNames = oldTourDTO.getUploadFileNames();
-
-        // 새로 업로드 해야하는 파일들
-        List<MultipartFile> files = tourDTO.getFiles();
-
-        // 새로 업로드 되어서 만들어진 파일 이름들
-        List<String> currentUploadFileNames = fileUtil.saveFiles(files);
-
-        // 화면에서 유지된 파일들 (없으면 새 ArrayList 생성)
-        List<String> uploadedFileNames = tourDTO.getUploadFileNames() != null ? tourDTO.getUploadFileNames()
-                : new ArrayList<>();
-
-        // 새로 업로드된 파일들 추가
-        if (currentUploadFileNames != null && !currentUploadFileNames.isEmpty()) {
-            uploadedFileNames.addAll(currentUploadFileNames);
-        }
-
-        // 기존 이미지 유지 처리
-        tourDTO.setUploadFileNames(uploadedFileNames);
-
-        // 수정작업
-        tourService.modify(tourDTO);
-
-        // 삭제된 파일 처리
-        if (oldFileNames != null && !oldFileNames.isEmpty()) {
-            List<String> removedFiles = oldFileNames.stream()
-                    .filter(fileName -> !uploadedFileNames.contains(fileName))
-                    .collect(Collectors.toList());
-
-            // 실제 파일 삭제
-            if (!removedFiles.isEmpty()) {
-                fileUtil.deleteFiles(removedFiles);
+        try {
+            tourDTO.setTno(tno);
+            
+            // tDate 데이터 로깅 추가
+            log.info("Modifying tour dates: " + tourDTO.getTDate());
+            
+            // tDate가 null이 아닌지 확인
+            if (tourDTO.getTDate() == null) {
+                tourDTO.setTDate(new ArrayList<>());
             }
-        }
 
-        return Map.of("RESULT", "SUCCESS");
+            // 기존의 파일들( DB에 존재하는 파일들 - 수정과정에서 삭제되었을수 있음)
+            List<String> oldFileNames = tourService.get(tno).getUploadFileNames();
+
+            // 새로 업로드 해야하는 파일들
+            List<MultipartFile> files = tourDTO.getFiles();
+
+            // 새로 업로드 되어서 만들어진 파일 이름들
+            List<String> currentUploadFileNames = fileUtil.saveFiles(files);
+
+            // 화면에서 유지된 파일들 (없으면 새 ArrayList 생성)
+            List<String> uploadedFileNames = tourDTO.getUploadFileNames() != null ? tourDTO.getUploadFileNames()
+                    : new ArrayList<>();
+
+            // 새로 업로드된 파일들 추가
+            if (currentUploadFileNames != null && !currentUploadFileNames.isEmpty()) {
+                uploadedFileNames.addAll(currentUploadFileNames);
+            }
+
+            // 기존 이미지 유지 처리
+            tourDTO.setUploadFileNames(uploadedFileNames);
+
+            // 수정작업
+            tourService.modify(tourDTO);
+
+            // 삭제된 파일 처리
+            if (oldFileNames != null && !oldFileNames.isEmpty()) {
+                List<String> removedFiles = oldFileNames.stream()
+                        .filter(fileName -> !uploadedFileNames.contains(fileName))
+                        .collect(Collectors.toList());
+
+                // 실제 파일 삭제
+                if (!removedFiles.isEmpty()) {
+                    fileUtil.deleteFiles(removedFiles);
+                }
+            }
+
+            return Map.of("RESULT", "SUCCESS");
+        } catch (Exception e) {
+            log.error("투어 수정 중 에러: ", e);
+            throw e;
+        }
     }
 
     // 이미지 업로드 처리 (상품 등록/수정 시)

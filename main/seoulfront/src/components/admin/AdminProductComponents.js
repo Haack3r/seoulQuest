@@ -103,11 +103,6 @@ const AdminProductComponents = () => {
       setSelectedProduct(null);
     } catch (error) {
       console.error("상품 등록 실패:", error);
-      if (error.response?.status === 401) {
-        alert("인증이 만료되었습니다. 다시 로그인해주세요.");
-        window.location.href = "/member/login";
-        return;
-      }
       alert(error.message || "상품 등록에 실패했습니다.");
     } finally {
       setFetching(false);

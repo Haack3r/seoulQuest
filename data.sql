@@ -21,6 +21,7 @@ select * from tbl_member;
 select * from tbl_product;
 select * from tbl_category;
 select * from tbl_tours;
+select * from tbl_tour_date;
 select * from product_product_image_list;
 
 select m.*,mrl.member_role_list as role from tbl_member m
@@ -35,6 +36,17 @@ SELECT *
 FROM tbl_member m
 LEFT JOIN member_member_role_list mr ON m.id = mr.member_id
 ORDER BY CAST(m.id AS SIGNED); /* 이게 진짜 member with role list 코드 */
+
+SELECT *
+FROM tbl_tours t
+LEFT JOIN tbl_tour_date td ON t.tno = td.tour_no
+LEFT JOIN tbl_category c ON t.category_id = c.category_id
+ORDER BY CAST(t.tno AS SIGNED);
+
+select *
+from tbl_product p
+left join tbl_category tc on p.category_id = tc.category_id
+order by cast(p.pno as signed);
 
 SELECT 
     m.member_id,

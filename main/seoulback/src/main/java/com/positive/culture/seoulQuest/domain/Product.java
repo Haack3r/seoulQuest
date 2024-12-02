@@ -27,7 +27,8 @@ public class Product {
 
     private String pname;
 
-    @Column(columnDefinition = "TEXT") // pdesc 타입을 text로 생성되도록 함
+//    @Column(columnDefinition = "TEXT") // pdesc 타입을 text로 생성되도록 함
+    @Lob
     private String pdesc;
 
     private int pprice;

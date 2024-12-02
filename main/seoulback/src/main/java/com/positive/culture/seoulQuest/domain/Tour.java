@@ -28,7 +28,8 @@ public class Tour {
 
     private String tname;
 
-    @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
+//    @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
+    @Lob
     private String tdesc;
 
     private int tprice;
@@ -71,10 +72,6 @@ public class Tour {
 
     public void changeMaxCapacity(int maxCapacity) {
         this.maxCapacity = maxCapacity;
-    }
-
-    public void changeLocation(String tlocation) {
-        this.tlocation = tlocation;
     }
 
     public void changeCategory(Category category) {
@@ -134,6 +131,23 @@ public class Tour {
             fileNames.stream()
                     .filter(fileName -> fileName != null && !fileName.trim().isEmpty())
                     .forEach(this::addImageString);
+        }
+    }
+
+    // TourDate 리스트 추가 메서드
+    public void addTourDate(String dateStr) {
+        TourDate tourDate = TourDate.builder()
+                .tour(this)
+                .tourDate(LocalDate.parse(dateStr))
+                .build();
+        this.tDate.add(tourDate);
+    }
+
+    // TourDate 리스트 설정 메서드
+    public void setTourDates(List<String> dates) {
+        this.tDate.clear(); // 기존 날짜 초기화
+        if (dates != null) {
+            dates.forEach(this::addTourDate);
         }
     }
 }

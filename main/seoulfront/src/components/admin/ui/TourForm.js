@@ -22,11 +22,11 @@ const initState = {
     tdesc: '',
     tprice: 0,
     maxCapacity: 0,
-    tlocation: '',
     taddress: '',
     categoryName: '',
     categoryType: 'tour',
     tDate: [],
+    availableCapacity: 0,
     files: []
 };
 
@@ -138,7 +138,6 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         formData.append("tdesc", tour.tdesc)
         formData.append("tprice", tour.tprice)
         formData.append("maxCapacity", tour.maxCapacity)
-        formData.append("tlocation", tour.tlocation)
         formData.append("taddress", tour.taddress)
         formData.append("categoryName", tour.categoryName)
         // formData.append("tDate", JSON.stringify(tour.tDate))
@@ -158,9 +157,11 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
 
         try {
             if (isEditing) {
+                console.log(formData);
                 await modifyTour(selectedTno, formData);
                 alert('투어가 수정되었습니다.');
             } else {
+                console.log(formData);
                 await addTour(formData);
                 alert('투어가 등록되었습니다.');
             }
