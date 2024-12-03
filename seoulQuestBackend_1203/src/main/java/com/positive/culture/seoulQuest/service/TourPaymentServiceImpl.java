@@ -30,7 +30,7 @@ public class TourPaymentServiceImpl implements TourPaymentService {
     private final TourPaymentItemRepository paymentItemRepository;
     private final ReservationRepository reservationRepository;
     private final ReservationItemRepository reservationItemRepository;
-    private final TourDateRepository tourDateRepository;
+//    private final TourDateRepository tourDateRepository;
     private final TourRepository tourRepository;
 
     //결제 정보를 저장하고, order엔티티의 status를 complete으로 변경함.
@@ -83,10 +83,17 @@ public class TourPaymentServiceImpl implements TourPaymentService {
 
             orderdto.getTorderItems().forEach(i -> {
                 System.out.println(i.getTdate());
+
+                Tour tour = tourRepository.findById(i.getTno()).orElseThrow();
+//                Optional<TourDate> tourDate = tour.getTourDateList().stream()
+                TourDate tourDate = tour.getTourDateList().stream()
+                        .filter( date -> date.getTourDate().equals(i.getTdate()))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("TourDate not found for date: " + i.getTdate()));
                 // TourDate 조회
-                TourDate tourDate = tourDateRepository.findByTourDateAndTourTno(i.getTdate(), i.getTno())
-                        .orElseThrow(() -> new IllegalArgumentException("TourDate not found for Tno=" + i.getTno() + ", Date=" + i.getTdate()));
-                System.out.println("tourDate"+tourDate);
+//                TourDate tourDate = tourDateRepository.findByTourDateAndTourTno(i.getTdate(), i.getTno())
+//                        .orElseThrow(() -> new IllegalArgumentException("TourDate not found for Tno=" + i.getTno() + ", Date=" + i.getTdate()));
+                System.out.println("tourDate"+i.getTdate());
 
                 // 수량 계산
                 int newCapacity = tourDate.getAvailableCapacity() - i.getTqty();
@@ -97,10 +104,11 @@ public class TourPaymentServiceImpl implements TourPaymentService {
                 System.out.println("Updating TourDate capacity: Old=" + tourDate.getAvailableCapacity() + ", New=" + newCapacity);
 
                 // 수량 변경 및 저장
-                tourDate.changeAvailableCapacity(newCapacity);
-                tourDateRepository.save(tourDate);
-
-                Tour tour = tourRepository.findById(i.getTno()).orElseThrow();
+//                tourDate.changeAvailableCapacity(newCapacity);
+                tour.updateAvailableCapacity(tourDate.getTourDate(),newCapacity);
+                tourRepository.save(tour);
+//
+//                Tour tour = tourRepository.findById(i.getTno()).orElseThrow();
 
                 // PaymentItem 저장
                 TourPaymentItem tourPaymentItem = TourPaymentItem.builder()

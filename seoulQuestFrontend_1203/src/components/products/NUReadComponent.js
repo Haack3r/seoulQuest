@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StarIcon, ShoppingCart } from 'lucide-react';import useCustomCart from '../../hooks/useCustomCart';
+import { API_SERVER_HOST, getProductItemReview } from '../../api/reviewApi';
+import ReviewsSection from '../review/ReviewsSection';
+import { ShoppingCart } from 'lucide-react';
+import {StarFilled, StarOutlined } from "@ant-design/icons";
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { getOneNU } from '../../api/nuProductApi';
-import { Link, useNavigate } from 'react-router-dom';
-import FetchingModal from '../common/FetchingModal';
-import ReviewsSection from '../review/ReviewsSection';
-import { API_SERVER_HOST, deleteProductOne, putProductOne, getProductItemReview } from '../../api/reviewApi';
+import { useNavigate } from 'react-router-dom';
 import ProductPolicy from './ProductPolicy';
-
 
 const initState = {
   pno: 0,
@@ -24,17 +23,27 @@ const NUReadComponent = ({ pno }) => {
   const [product, setProduct] = useState(initState);
   const [fetching, setFetching] = useState(false);
   const [currentImage, setCurrentImage] = useState(0)
-  const { changeCart, cartItems } = useCustomCart();
   const { loginState } = useCustomLogin();
   const [selectedQuantity, setSelectedQuantity] = useState(0);
-  const navigate = useNavigate();
+  const [reviewAvg, setReviewAvg] = useState(0)
+  const [reviews, setReviews] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false);
+  const navigate = useNavigate();
+
+  const calculateAverage = (reviews) => {
+    if (reviews.length === 0) return 0;
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return sum / reviews.length;
+  };
 
   const handleClickAddCart = () => {
-    window.alert("Please log in first to purchase the product.")
-    navigate('/member/login')
+    const answer = window.confirm("Please log in first to purchase the product.")
+    if(answer){
+      navigate('/member/login')
+    }
+    return
   }
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -43,7 +52,15 @@ const NUReadComponent = ({ pno }) => {
       setProduct(data);
       setFetching(false);
     });
-  }, [pno]);
+
+    // Review 데이터 가져오기
+    console.log(loginState.email);
+    getProductItemReview(pno).then((reviews) => {
+        console.log(reviews);
+        setReviews(reviews);
+        setReviewAvg(calculateAverage(reviews))
+    });
+  }, [pno,refresh]);
 
   return (
     <div className="min-h-screen py-12 px-6 lg:px-32 relative">
@@ -79,10 +96,18 @@ const NUReadComponent = ({ pno }) => {
         <div className="lg:w-1/2 space-y-6">
           <h1 className="text-4xl font-light text-gray-900">{product.pname}</h1>
           <div className="flex items-center space-x-2">
-            {[...Array(5)].map((_, i) => (
-              <StarIcon key={i} className="h-5 w-5 text-yellow-400" />
-            ))}
-            <span className="text-gray-600">(4.8) 24 reviews</span>
+           {[...Array(5)].map((_, star) => 
+            (
+            <span key={star}>
+              {reviewAvg >= star+1 ? (
+                        <StarFilled className="text-yellow-400 text-xl" />
+                    ) : (
+                        <StarOutlined className="text-gray-300 text-xl" />
+                    )}
+              </span>
+            )
+            )}
+            <span className="text-gray-600">({reviewAvg}) {reviews.length} reviews</span>
           </div>
           <p className="text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
           <p className="text-gray-700 mb-6">{product.pdesc}</p>
@@ -104,18 +129,18 @@ const NUReadComponent = ({ pno }) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex space-x-4 w-1/2">
+          <div className="flex space-x-4">
             <button
               onClick={handleClickAddCart}
-              className=" flex-1 bg-stone-400 hover:bg-stone-600 text-white py-3 rounded-lg flex items-center justify-center"
+              className="flex-1 bg-stone-400 hover:bg-stone-600 text-white py-3 rounded-lg flex items-center justify-center"
             >
               <ShoppingCart className="mr-2" />
               Add to Cart
             </button>
           </div>
 
-          {/* Product Details */}
-          <div className="mt-10 bg-gray-100 p-6 rounded-lg">
+           {/* Product Details */}
+           <div className="mt-10 bg-gray-100 p-6 rounded-lg">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold text-gray-900">
                 Product Policies
@@ -133,12 +158,13 @@ const NUReadComponent = ({ pno }) => {
       </div>
 
       {/* Reviews Section */}
-      {/* <div className="mt-5">
+      <div className="mt-5">
         <ReviewsSection
-          itemNo={pno}
-          getItemReview={getProductItemReview}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            reviews={reviews}
           />
-      </div> */}
+      </div>
     </div>
   )
 }

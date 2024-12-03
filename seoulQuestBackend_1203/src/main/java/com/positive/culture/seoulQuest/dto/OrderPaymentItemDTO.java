@@ -23,5 +23,4 @@ public class OrderPaymentItemDTO {
     private int tprice;
     private LocalDate tdate;
 
-
 }

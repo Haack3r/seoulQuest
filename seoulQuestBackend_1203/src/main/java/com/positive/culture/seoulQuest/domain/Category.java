@@ -21,11 +21,11 @@ public class Category {
     private String categoryName;
     private String categoryType; // product, tour 구분하기 위함
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category")
     @Builder.Default
     private List<Product> product = new ArrayList<>();
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category")
     @Builder.Default
     private List<Tour> tour = new ArrayList<>();
 

@@ -5,10 +5,6 @@ import com.positive.culture.seoulQuest.domain.Product;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
 import com.positive.culture.seoulQuest.dto.ProductDTO;
-import com.positive.culture.seoulQuest.dto.TourDTO;
-import com.positive.culture.seoulQuest.repository.CategoryRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -68,14 +64,15 @@ public interface ProductService {
     }
 
     // 엔티티를 DTO로 변환해주는 메서드 -> getList와 get에 사용
-    default public ProductDTO entityChangeDTO(Product product) {
+    default public ProductDTO entityChangeDTO(Product product, Category category) {
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
-                .categoryName(product.getCategory().getCategoryName())
+                .categoryId(category.getCategoryId())
+                .categoryName(category.getCategoryName())
+                .categoryType(category.getCategoryType())
                 .pname(product.getPname())
                 .pdesc(product.getPdesc())
                 .pprice(product.getPprice())
-                .shippingFee(product.getShippingFee())
                 .pqty(product.getPqty())
                 .shippingFee(product.getShippingFee())
                 .createAt(product.getCreateAt())
@@ -93,8 +90,7 @@ public interface ProductService {
         return productDTO;
     }
 
-     public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO
-     pageRequestDTO, String category);
+    public PageResponseDTO<ProductDTO> getListWithCategory(PageRequestDTO pageRequestDTO, String category);
 
     PageResponseDTO<ProductDTO> getProductsByCategory(PageRequestDTO pageRequestDTO, String category);
 

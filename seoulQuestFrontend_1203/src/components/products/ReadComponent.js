@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { ShoppingCart, HeartIcon } from 'lucide-react';
 import { Badge } from 'antd';
 import CartComponent from '../menus/CartComponent';
@@ -10,6 +9,7 @@ import ReviewsSection from '../review/ReviewsSection';
 import { API_SERVER_HOST, deleteProductOne, putProductOne, getProductItemReview } from '../../api/reviewApi';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import ProductPolicy from './ProductPolicy';
+import { useEffect, useState } from 'react';
 
 const initState = {
   pno: 0,
@@ -31,9 +31,9 @@ const ReadComponent = ({ pno }) => {
   const { changeCart, cartItems } = useCustomCart();
   const { loginState } = useCustomLogin();
   const { favItems, changeFav, refreshFav } = useCustomFav();
-  const [reviewAvg, setReviewAvg] = useState(0);
+  const [reviewAvg, setReviewAvg] = useState(0)
   const [reviews, setReviews] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(false)
   const [detailsVisible, setDetailsVisible] = useState(false);
 
   const calculateAverage = (reviews) => {
@@ -45,14 +45,18 @@ const ReadComponent = ({ pno }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setFetching(true);
+    // Product 데이터 가져오기
     getOne(pno).then((productData) => {
-      setProduct(productData);
-      setFetching(false);
+        setProduct(productData);
+        setFetching(false);
     });
-
+  
+    // Review 데이터 가져오기
+    console.log(loginState.email);
     getProductItemReview(pno).then((reviews) => {
-      setReviews(reviews);
-      setReviewAvg(calculateAverage(reviews));
+        console.log(reviews);
+        setReviews(reviews);
+        setReviewAvg(calculateAverage(reviews))
     });
   }, [pno, refresh]);
 
@@ -115,7 +119,8 @@ const ReadComponent = ({ pno }) => {
               <button
                 key={index}
                 onClick={() => setCurrentImage(index)}
-                className={`w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 overflow-hidden ${currentImage === index ? 'ring-2 ring-blue-500' : ''}`}
+                className={`w-20 h-20 overflow-hidden ${currentImage === index ? 'ring-2 ring-blue-500' : ''
+                  }`}
               >
                 <img
                   src={`${host}/api/products/view/${image}`}
@@ -131,20 +136,20 @@ const ReadComponent = ({ pno }) => {
         <div className="lg:w-1/2 space-y-6">
           <h1 className="text-2xl md:text-4xl font-light text-gray-900">{product.pname}</h1>
           <div className="flex items-center space-x-2">
-            {[...Array(5)].map((_, star) => (
-              <span key={star}>
-                {reviewAvg >= star + 1 ? (
-                  <StarFilled className="text-yellow-400 text-xl" />
-                ) : (
-                  <StarOutlined className="text-gray-300 text-xl" />
-                )}
+            {[...Array(5)].map((_, star) => 
+            (
+            <span key={star}>
+              {reviewAvg >= star+1 ? (
+                        <StarFilled className="text-yellow-400 text-xl" />
+                    ) : (
+                        <StarOutlined className="text-gray-300 text-xl" />
+                    )}
               </span>
-            ))}
-            <span className="text-gray-600">
-              ({reviewAvg}) {reviews.length} reviews
-            </span>
+            )
+            )}
+            <span className="text-gray-600">({reviewAvg}) {reviews.length} reviews</span>
           </div>
-          <p className="text-xl md:text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
+          <p className="text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
           <p className="text-gray-700 mb-6">{product.pdesc}</p>
 
           {/* Quantity Selector */}
@@ -181,8 +186,8 @@ const ReadComponent = ({ pno }) => {
             </button>
           </div>
 
-          {/* Product Details */}
-          <div className="mt-10 bg-gray-100 p-6 rounded-lg">
+           {/* Product Details */}
+           <div className="mt-10 bg-gray-100 p-6 rounded-lg">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold text-gray-900">
                 Product Policies
@@ -213,20 +218,19 @@ const ReadComponent = ({ pno }) => {
 
       {/* Cart Drawer */}
       <div
-        className={`fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${cartVisible ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300`}
+        className={`fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${cartVisible ? 'translate-x-0' : 'translate-x-full'
+          } transition-transform duration-300`}
       >
         <CartComponent />
       </div>
-
       {/* Reviews Section */}
       <div className="mt-5">
-        <ReviewsSection
-          refresh={refresh}
-          setRefresh={setRefresh}
-          reviews={reviews}
-          putOne={putProductOne}
-          deleteOne={deleteProductOne}
-        />
+        <ReviewsSection 
+            refresh={refresh}
+            setRefresh={setRefresh}
+            reviews={reviews}
+            putOne={putProductOne} 
+            deleteOne={deleteProductOne}/>
       </div>
     </div>
   );

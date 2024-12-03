@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  API_SERVER_HOST,
-  getTourItemReview,
-  putTourOne,
-  deleteTourOne,
-} from "../../api/reviewApi";
+import {API_SERVER_HOST, getTourItemReview, putTourOne, deleteTourOne,} from "../../api/reviewApi";
 import ReviewsSection from "../review/ReviewsSection";
 import { HeartIcon, ShoppingCart } from "lucide-react";
 import { Calendar, Popover, Badge } from "antd";
-import { UserOutlined, CalendarOutlined } from "@ant-design/icons";
+import { UserOutlined, CalendarOutlined,StarFilled, StarOutlined } from "@ant-design/icons";
 import ReservationComponent from "../menus/ReservationComponent";
 import useCustomReservation from "../../hooks/useCustomReservation";
 import useCustomLogin from "../../hooks/useCustomLogin";
-import { getOne } from "../../api/tourApi";
+import {getOne } from "../../api/tourApi";
 import TourDetails from "./TourDetails";
 import useCustomTourFav from "../../hooks/useCustomTourFav";
-import { StarFilled, StarOutlined } from '@ant-design/icons';
+import { getAvailableCapacity } from "../../api/nuTourApi";
 
 const initState = {
   tno: 0,
@@ -27,7 +22,7 @@ const initState = {
   uploadFileNames: [],
   tdate: [],
   maxCapacity: 0,
-  availableCapacity: 0,
+  // availableCapacity: 0,
 };
 
 const TourReadComponent = ({ tno }) => {
@@ -43,6 +38,7 @@ const TourReadComponent = ({ tno }) => {
   const [reviewAvg, setReviewAvg] = useState(0)
   const [reviews, setReviews] = useState([]);
   const [refresh, setRefresh] = useState(false)
+  const [availableCapacity, setAvailableCapacity] = useState(0);
   const { loginState } = useCustomLogin();
 
   const calculateAverage = (reviews) => {
@@ -72,6 +68,15 @@ const TourReadComponent = ({ tno }) => {
  
   }, [tno,refresh]);
 
+  useEffect(() => {
+    if (selectedDate) {
+      getAvailableCapacity(tno, selectedDate).then((data) => {
+        console.log(data)
+        setAvailableCapacity(data)
+      });
+    }
+  }, [selectedDate, tno]);  
+  
   const calendarContent = (
     <div style={{ width: 300 }}>
       <Calendar
@@ -202,7 +207,7 @@ const TourReadComponent = ({ tno }) => {
               <input
                 type="number"
                 min={1}
-                max={tour.maxCapacity}
+                max={availableCapacity}
                 value={selectedQuantity}
                 onChange={(e) => setSelectedQuantity(Number(e.target.value))}
                 className="w-full border rounded-lg p-3 text-center"
@@ -211,9 +216,38 @@ const TourReadComponent = ({ tno }) => {
             </div>
           </div>
 
-          <p className="text-sm text-gray-400 mt-2">
-            Max Participants: {tour.maxCapacity}
-          </p>
+            {/* 실제 예약 가능 인원 정보 */}
+          <div className="p-2 rounded-lg flex justify-end items-center space-x-3">
+            <div className="text-sm text-gray-600 flex items-center">
+              <span>Available</span>
+              <Badge
+                count={selectedDate? availableCapacity > 0
+                      ? availableCapacity
+                      : "Full"
+                    : "Select a Date"
+                }
+                style={{backgroundColor: !selectedDate
+                    ? "#d9d9d9"
+                    : availableCapacity > 0
+                    ? "#14b8a6" 
+                    : "#ef4444", 
+                  color: "white",
+                  marginLeft: "5px", 
+                }}
+              />
+            </div>
+            <div className="text-sm text-gray-600 flex items-center">
+              <span>Max</span>
+              <Badge
+                count={tour.maxCapacity}
+                style={{
+                  backgroundColor: "#3b82f6", 
+                  color: "white",
+                  marginLeft: "5px",
+                }}
+              />
+            </div>
+          </div>
 
           {/* Action Buttons */}
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-6">

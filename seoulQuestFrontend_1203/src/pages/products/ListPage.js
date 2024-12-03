@@ -117,6 +117,15 @@ const ListPage = () => {
             </li>
             <li>
               <button
+                onClick={() => scrollToRef(mostPopularRef)}
+                title="Most Popular Product"
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                <FontAwesomeIcon icon={faFire} />
+              </button>
+            </li>
+            <li>
+              <button
                 onClick={() => scrollToRef(beautyRef)}
                 title="K-Beauty"
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"

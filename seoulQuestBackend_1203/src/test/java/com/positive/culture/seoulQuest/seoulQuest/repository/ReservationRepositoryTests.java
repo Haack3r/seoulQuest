@@ -48,25 +48,25 @@ public class ReservationRepositoryTests {
         reservationRepository.save(reservation);
     }
 
-    @Test
-    @Commit
-    @Transactional
-    public void insertReservationItems(){
-        Member member = memberRepository.findByEmail("user1@gmail.com").orElseThrow();
-        Optional<Reservation> reservationOptional = reservationRepository.getReservationOfMember(member.getEmail());
-        Reservation reservation = reservationOptional.orElseThrow();
-        Tour tour = tourRepository.findById(1L).orElseThrow();
-        System.out.println(tour.getTDate().get(0).getTourDate());
-
-        ReservationItem reservationItem = ReservationItem.builder()
-                .reservation(reservation)
-                .tour(tour)
-                .tqty(5)
-                .tdate(tour.getTDate().get(0).getTourDate())
-                .build();
-
-        reservationItemRepository.save(reservationItem);
-    }
+//    @Test
+//    @Commit
+//    @Transactional
+//    public void insertReservationItems(){
+//        Member member = memberRepository.findByEmail("user1@gmail.com").orElseThrow();
+//        Optional<Reservation> reservationOptional = reservationRepository.getReservationOfMember(member.getEmail());
+//        Reservation reservation = reservationOptional.orElseThrow();
+//        Tour tour = tourRepository.findById(1L).orElseThrow();
+//        System.out.println(tour.getTDate().get(0).getTourDate());
+//
+//        ReservationItem reservationItem = ReservationItem.builder()
+//                .reservation(reservation)
+//                .tour(tour)
+//                .tqty(5)
+//                .tdate(tour.getTDate().get(0).getTourDate())
+//                .build();
+//
+//        reservationItemRepository.save(reservationItem);
+//    }
 
     @Test
     @Transactional

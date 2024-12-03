@@ -14,17 +14,19 @@ import java.util.Map;
 
 public class JWTUtil {
     // p323
+    // 보안 위험성 때문에 하드코딩 금지
     private static String key = "12345678901234567890123456789012345678901234567890";
+
     public static String generateToken(Map<String, Object> valueMap, int min) {
         SecretKey key = null;
 
-        try{
+        try {
             key = Keys.hmacShaKeyFor(JWTUtil.key.getBytes("UTF-8"));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         String str = Jwts.builder()
-                .setHeader(Map.of("typ","JWT"))
+                .setHeader(Map.of("typ", "JWT"))
                 .setClaims(valueMap)
                 .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(min).toInstant()))
@@ -32,6 +34,7 @@ public class JWTUtil {
                 .compact();
         return str;
     }
+
     public static Map<String, Object> validateToken(String token) {
         Map<String, Object> claims = null;
 
@@ -48,10 +51,10 @@ public class JWTUtil {
 
             List<String> roleName = (List<String>) claims.get("roleName");
 
-// Log the extracted value before using it
+            // Log the extracted value before using it
             log.info("Extracted role names: " + roleName);
 
-// Check for null before proceeding
+            // Check for null before proceeding
             if (roleName != null) {
                 roleName.forEach(role -> {
                     // Your logic here

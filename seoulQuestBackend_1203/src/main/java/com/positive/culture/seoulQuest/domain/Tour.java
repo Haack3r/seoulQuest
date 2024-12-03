@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "tbl_tours")
 @Getter
-@ToString(exclude = "tourImageList")
+@ToString(exclude = { "tourImageList", "category" })
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,7 +28,8 @@ public class Tour {
 
     private String tname;
 
-    @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
+    // @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
+    @Lob
     private String tdesc;
 
     private int tprice;
@@ -47,10 +48,17 @@ public class Tour {
     @Builder.Default
     private List<TourImage> tourImageList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL) // TourDate 엔티티의 tour 필드와 매핑
+    // @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL) // TourDate 엔티티의
+    // tour 필드와 매핑
+    // @Builder.Default
+    // @JsonManagedReference
+    // private List<TourDate> tDate = new ArrayList<>();
+    @ElementCollection
     @Builder.Default
-    @JsonManagedReference
-    private List<TourDate> tDate = new ArrayList<>();
+    @CollectionTable(name = "tbl_tour_date" // 원하는 테이블 이름
+    // joinColumns = @JoinColumn(name = "tour_no") // 외래 키 이름
+    )
+    private List<TourDate> tourDateList = new ArrayList<>();
 
     public void changeCategory(Category category) {
         this.category = category;
@@ -75,7 +83,6 @@ public class Tour {
     public void changeMaxCapacity(int maxCapacity) {
         this.maxCapacity = maxCapacity;
     }
-
 
     @PrePersist
     public void prePersist() {
@@ -132,4 +139,16 @@ public class Tour {
                     .forEach(this::addImageString);
         }
     }
+
+    public void updateAvailableCapacity(LocalDate targetDate, int newCapacity) {
+        for (int i = 0; i < tourDateList.size(); i++) {
+            TourDate date = tourDateList.get(i);
+            if (date.getTourDate().equals(targetDate)) {
+                date.changeAvailableCapacity(newCapacity);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("TourDate not found for date: " + targetDate);
+    }
+
 }

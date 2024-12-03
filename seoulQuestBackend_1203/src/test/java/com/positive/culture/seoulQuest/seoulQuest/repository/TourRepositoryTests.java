@@ -5,7 +5,7 @@ import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.domain.TourDate;
 import com.positive.culture.seoulQuest.formatter.LocalDateFormatter;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
-import com.positive.culture.seoulQuest.repository.TourDateRepository;
+//import com.positive.culture.seoulQuest.repository.TourDateRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
@@ -25,8 +25,8 @@ public class TourRepositoryTests {
     @Autowired
     TourRepository tourRepository;
 
-    @Autowired
-    TourDateRepository tourDateRepository;
+//    @Autowired
+//    TourDateRepository tourDateRepository;
 
     @Autowired
     CategoryRepository categoryRepository;
@@ -71,6 +71,15 @@ public class TourRepositoryTests {
                 continue; // Skip if category is not found
             }
 
+            List<TourDate> tourDateList = new ArrayList<>();
+            for(int j =1; j<=10 ; j++){
+                TourDate tourDate = TourDate.builder()
+                        .availableCapacity(20)
+                        .tourDate(LocalDate.now().plusDays(j))
+                        .build();
+                tourDateList.add(tourDate);
+            }
+
             Tour tour = Tour.builder()
                     .tname(tname)
                     .tdesc(tdesc)
@@ -78,6 +87,7 @@ public class TourRepositoryTests {
                     .maxCapacity(20)           // Set default max capacity
                     .taddress(taddress)
                     .category(category)        // Set retrieved category
+                    .tourDateList(tourDateList)
                     .build();
 
             // Adding two sample images for each tour
@@ -90,21 +100,21 @@ public class TourRepositoryTests {
     }
 
     //투어 날짜 저장
-    @Test
-    public void testInsertMultipleTourDates() {
-
-        for (int tourId = 1; tourId < 20; tourId++) {
-            // 오늘 날짜 이후로 10개의 날짜 생성
-            for (int dayOffset = 0; dayOffset < 10; dayOffset++) {
-                TourDate tourDate = TourDate.builder()
-                        .availableCapacity(20)
-                        .tour(tourRepository.selectOne((long) tourId).get())
-                        .tourDate(LocalDate.now().plusDays(dayOffset)) // 오늘 날짜 기준
-                        .build();
-                tourDateRepository.save(tourDate);
-            }
-        }
-    }
+//    @Test
+//    public void testInsertMultipleTourDates() {
+//
+//        for (int tourId = 1; tourId < 20; tourId++) {
+//            // 오늘 날짜 이후로 10개의 날짜 생성
+//            for (int dayOffset = 0; dayOffset < 10; dayOffset++) {
+//                TourDate tourDate = TourDate.builder()
+//                        .availableCapacity(20)
+//                        .tour(tourRepository.selectOne((long) tourId).get())
+//                        .tourDate(LocalDate.now().plusDays(dayOffset)) // 오늘 날짜 기준
+//                        .build();
+//                tourDateRepository.save(tourDate);
+//            }
+//        }
+//    }
 
 //    @Test
 //    public void testRead2(){
@@ -153,12 +163,12 @@ public class TourRepositoryTests {
 //        tourRepository.getTourBytDate(date,num);
 //    }
 
-    @Test
-    public void testDate(){
-        Long num = 1l;
-        List<TourDate> tourdate = tourDateRepository.selectDateList(num);
-        tourdate.forEach(System.out::println);
-    }
+//    @Test
+//    public void testDate(){
+//        Long num = 1l;
+//        List<TourDate> tourdate = tourDateRepository.selectDateList(num);
+//        tourdate.forEach(System.out::println);
+//    }
 
     @Transactional
     @Test

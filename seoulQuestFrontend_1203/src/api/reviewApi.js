@@ -88,12 +88,12 @@ export const getInfoforTour = async() =>{
 
 //해당 상품에 대한 리뷰 불러오기
 export const getProductItemReview = async(pno)=>{
-    const res = await jwtAxios.get(`${prefix}/products/list/${pno}`)
+    const res = await axios.get(`${prefix}/products/list/${pno}`)
     return res.data
 }
 
 //해당 투어에 대한 리뷰 불러오기
 export const getTourItemReview = async(tno)=>{
-    const res = await jwtAxios.get(`${prefix}/tours/list/${tno}`)
+    const res = await axios.get(`${prefix}/tours/list/${tno}`)
     return res.data
 }

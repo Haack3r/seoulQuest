@@ -2,11 +2,21 @@ import React, { useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import ReviewModal from './ReviewModal'; 
+import useCustomLogin from '../../hooks/useCustomLogin';
 
-const ReviewsSection = ({ reviews }) => {
+const ReviewsSection = ({ refresh,
+  setRefresh,
+  reviews,
+  putOne, 
+  deleteOne }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [selectedReview, setSelectedReview] = useState(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const { isLogin,loginState } = useCustomLogin();
+  
 
   // Update layout on window resize
   React.useEffect(() => {
@@ -16,6 +26,10 @@ const ReviewsSection = ({ reviews }) => {
   }, []);
 
   const reviewsPerSlide = windowWidth >= 1024 ? 2 : 1; // 2 reviews on large screens, 1 on small screens
+
+  const handleNavigation = () => {
+    navigate('/mypage/review'); 
+};
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -29,16 +43,28 @@ const ReviewsSection = ({ reviews }) => {
     );
   };
 
+  const openModal = (review) => {
+    setSelectedReview(review);
+    setIsModalOpen(true);
+};
+
+const closeModal = () => {
+    setSelectedReview(null);
+    setIsModalOpen(false);
+    setRefresh(!refresh)
+};
+
   return (
     <div className="mt-10 bg-gray-50 p-6 border border-gray-200 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold text-gray-800">What Customers Say About This Item</h2>
-        <button
-          className="px-4 py-2 text-gray-500 underline hover:text-gray-600"
-          onClick={() => navigate('/mypage/review')}
-        >
-          Go to Your Review List
-        </button>
+        {isLogin?
+            (<button
+                className="px-4 py-2 text-gray-500 underline hover:text-gray-600"
+                onClick={handleNavigation}
+            >
+                Go to Your Review List
+            </button>):''}
       </div>
 
       <div className="relative flex items-center">
@@ -50,7 +76,7 @@ const ReviewsSection = ({ reviews }) => {
         </button>
 
         <div className="flex space-x-4 overflow-hidden w-full">
-          {reviews.slice(currentIndex, currentIndex + reviewsPerSlide).map((review) => (
+          {reviews &&reviews.slice(currentIndex, currentIndex + reviewsPerSlide).map((review) => (
             <div
               key={review.id}
               className="relative bg-white rounded-lg shadow-md p-4 w-full lg:w-1/2 border border-gray-200"
@@ -64,6 +90,11 @@ const ReviewsSection = ({ reviews }) => {
                   <p className="text-xs text-gray-500">{review.dueDate}</p>
                 </div>
               </div>
+              {isLogin && review.email === loginState.email && (
+                                <div className="absolute top-5 right-5 px-3 py-1 text-sm font-semibold text-white bg-teal-500 rounded-lg shadow-md">
+                                My Review
+                                </div>
+                            )}
               <div className="flex items-center">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span key={star}>
@@ -88,6 +119,14 @@ const ReviewsSection = ({ reviews }) => {
           <ChevronRight className="h-5 w-5 text-gray-700" />
         </button>
       </div>
+      {isModalOpen && (
+                <ReviewModal
+                    selectedReview={selectedReview}
+                    closeEditModal={closeModal}
+                    putOne={putOne}
+                    deleteOne={deleteOne}
+                />
+            )}
     </div>
   );
 };

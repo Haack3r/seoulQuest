@@ -2,8 +2,9 @@ package com.positive.culture.seoulQuest.service;
 
 import com.positive.culture.seoulQuest.domain.*;
 import com.positive.culture.seoulQuest.dto.*;
+import com.positive.culture.seoulQuest.formatter.LocalDateFormatter;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
-import com.positive.culture.seoulQuest.repository.TourDateRepository;
+//import com.positive.culture.seoulQuest.repository.TourDateRepository;
 import com.positive.culture.seoulQuest.repository.TourPaymentItemRepository;
 import com.positive.culture.seoulQuest.repository.TourRepository;
 import com.positive.culture.seoulQuest.util.CustomFileUtil;
@@ -19,7 +20,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,13 +40,26 @@ public class TourServiceImpl implements TourService {
     private final TourPaymentItemRepository tourPaymentItemRepository;
 
     @Override
+    public int getAvailable(Long tno, String selectedDate) {
+
+        LocalDate targetDate = LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        Tour tour = tourRepository.findById(tno).orElseThrow();
+        TourDate tourDate = tour.getTourDateList().stream()
+                .filter(date -> date.getTourDate().equals(targetDate))
+                .findFirst().orElseThrow();
+
+        return tourDate.getAvailableCapacity();
+    }
+
+    @Override
     public List<TourDTO> getTopReservedTours(int limit) {
         return tourPaymentItemRepository.findTopReservedTours().stream()
                 .limit(limit) // Limit the results
                 .map(obj -> TourDTO.builder()
-                        .tno((Long) obj[0])        // Tour ID
-                        .tname((String) obj[1])    // Tour Name
-                        .tprice(((Number) obj[2]).intValue())  // Tour Price
+                        .tno((Long) obj[0]) // Tour ID
+                        .tname((String) obj[1]) // Tour Name
+                        .tprice(((Number) obj[2]).intValue()) // Tour Price
                         .build())
                 .collect(Collectors.toList());
     }
@@ -66,7 +84,7 @@ public class TourServiceImpl implements TourService {
 
         // Convert each Tour entity to a TourDTO
         List<TourDTO> dtoList = result.stream()
-                .map(this::entityChangeDTO)
+                .map(tour -> entityChangeDTO(tour, tour.getCategory()))
                 .collect(Collectors.toList());
 
         // Get the total number of items
@@ -100,7 +118,25 @@ public class TourServiceImpl implements TourService {
         Page<Tour> result = tourRepository.findAll(booleanBuilder, pageable);
 
         List<TourDTO> dtoList = result.stream()
-                .map(this::entityChangeDTO)
+                .map(tour -> {
+                    // 각 상품에 대해 이미지 정보를 포함한 상세 정보 조회
+                    Optional<Tour> tourWithImages = tourRepository.selectOne(tour.getTno());
+                    Tour fullTour = tourWithImages.orElse(tour);
+
+                    TourDTO dto = entityChangeDTO(fullTour, fullTour.getCategory());
+
+                    // 이미지 정보 처리
+                    List<TourImage> imageList = fullTour.getTourImageList();
+                    if (imageList != null && !imageList.isEmpty()) {
+                        List<String> fileNames = imageList.stream()
+                                .map(TourImage::getFileName)
+                                .collect(Collectors.toList());
+                        dto.setUploadFileNames(fileNames);
+                    } else {
+                        dto.setUploadFileNames(new ArrayList<>());
+                    }
+                    return dto;
+                })
                 .collect(Collectors.toList());
 
         long totalCount = result.getTotalElements();
@@ -117,14 +153,23 @@ public class TourServiceImpl implements TourService {
     public TourDTO get(Long tno) {
         Optional<Tour> result = tourRepository.selectOne(tno);
         Tour tour = result.orElseThrow();
-        TourDTO tourDTO = entityChangeDTO(tour);
+        TourDTO tourDTO = entityChangeDTO(tour, tour.getCategory());
+
+        // 투어 날짜 정보 처리
+        List<TourDate> tourDates = tour.getTourDateList();
+        tourDTO.setTDate(tourDates.stream()
+                .map(TourDate::getTourDate)
+                .map(LocalDate::toString)
+                .collect(Collectors.toList()));
 
         List<TourImage> imageList = tour.getTourImageList();
         if (imageList == null || imageList.size() == 0)
             return tourDTO; // 이미지가 없는 상품인 경우
 
         // 이미지가 있는 상품인 경우
-        List<String> fileNameList = imageList.stream().map(tourImage -> tourImage.getFileName()).toList();
+        List<String> fileNameList = imageList.stream()
+                .map(tourImage -> tourImage.getFileName())
+                .collect(Collectors.toList());
         tourDTO.setUploadFileNames(fileNameList);
 
         return tourDTO;
@@ -150,8 +195,20 @@ public class TourServiceImpl implements TourService {
         }
 
         Tour tour = dtoToEntity(tourDTO, category);
-        Tour result = tourRepository.save(tour);
-        return result.getTno();
+
+        tour.getTourDateList().clear();
+        if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
+            tourDTO.getTDate().forEach(dateStr -> {
+                TourDate tourDate = TourDate.builder()
+                        .tourDate(LocalDate.parse(dateStr))
+                        .availableCapacity(tourDTO.getMaxCapacity())
+                        .build();
+                tour.getTourDateList().add(tourDate);
+            });
+        }
+
+        tourRepository.save(tour);
+        return tour.getTno();
     }
 
     // ----------------------------------------------------------------
@@ -163,25 +220,55 @@ public class TourServiceImpl implements TourService {
         Optional<Tour> result = tourRepository.findById(tourDTO.getTno());
         Tour tour = result.orElseThrow();
 
+        // 카테고리 찾기
+        Category category = categoryRepository
+                .findByCategoryNameAndCategoryType(tourDTO.getCategoryName(), "tour");
+
+        if (category == null) {
+            category = Category.builder()
+                    .categoryName(tourDTO.getCategoryName())
+                    .categoryType("tour")
+                    .build();
+            category = categoryRepository.save(category);
+        }
+
         // 2.change
-        tour.changeCategory(tour.getCategory());
+        tour.changeCategory(category);
+
         tour.changeName(tourDTO.getTname());
         tour.changeDesc(tourDTO.getTdesc());
         tour.changePrice(tourDTO.getTprice());
         tour.changeMaxCapacity(tourDTO.getMaxCapacity());
+        tour.changeAddress(tourDTO.getTaddress());
         tour.preUpdate();
 
-        // 3. upload File -- clear first
-        tour.clearList(); // clearList()를 이용하여 이미지 리스트를 삭제
-
-        // 4. save
-        List<String> uploadFileNames = tourDTO.getUploadFileNames();
-
-        if (uploadFileNames != null && uploadFileNames.size() > 0) {
-            uploadFileNames.stream().forEach(uploadName -> {
-                tour.addImageString(uploadName);
+        tour.getTourDateList().clear(); // 기존 날짜 정보 삭제
+        if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
+            tourDTO.getTDate().forEach(dateStr -> {
+                TourDate tourDate = TourDate.builder()
+                        .tourDate(LocalDate.parse(dateStr))
+                        .availableCapacity(tourDTO.getMaxCapacity())
+                        .build();
+                tour.getTourDateList().add(tourDate);
             });
         }
+
+        // 4.이미지 처리
+        if (tourDTO.getFiles() != null && !tourDTO.getFiles().isEmpty()) {
+            // 기존 이미지 삭제
+            List<String> oldFiles = tour.getTourImageList()
+                    .stream()
+                    .map(TourImage::getFileName)
+                    .collect(Collectors.toList());
+
+            fileUtil.deleteFiles(oldFiles);
+            tour.clearList();
+
+            // 새 이미지 추가
+            List<String> uploadFileNames = fileUtil.saveFiles(tourDTO.getFiles());
+            uploadFileNames.forEach(tour::addImageString);
+        }
+
         tourRepository.save(tour);
     }
 
@@ -202,14 +289,11 @@ public class TourServiceImpl implements TourService {
         }
     }
 
-
-
     @Override
     public List<TourDTO> getToursByAddress(String taddress) {
         List<Tour> tours = tourRepository.findByTaddress(taddress);
         return tours.stream()
-                // .map(this::entityChangeDTO)
-                .map(tour -> entityChangeDTO(tour))
+                .map(tour -> entityChangeDTO(tour, tour.getCategory()))
                 .collect(Collectors.toList());
     }
 
@@ -244,7 +328,7 @@ public class TourServiceImpl implements TourService {
         // Map to DTOs
         List<TourDTO> dtoList = result.stream()
                 // .map(this::entityChangeDTO)
-                .map(tour -> entityChangeDTO(tour))
+                .map(tour -> entityChangeDTO(tour, tour.getCategory()))
                 .collect(Collectors.toList());
 
         // Build and return response
@@ -279,6 +363,9 @@ public class TourServiceImpl implements TourService {
         if (type.contains("c")) {
             conditionBuilder.or(qTour.category.categoryName.containsIgnoreCase(keyword));
         }
+        if (type.contains("w")) {
+            conditionBuilder.or(qTour.taddress.containsIgnoreCase(keyword));
+        }
 
         booleanBuilder.and(conditionBuilder);
 
@@ -286,4 +373,3 @@ public class TourServiceImpl implements TourService {
     }
 
 }
-

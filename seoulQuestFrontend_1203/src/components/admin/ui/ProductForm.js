@@ -88,19 +88,21 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
             return;
         }
 
-        // 파일 이름 길이 제한
-        const processedFiles = newFiles.map((file, index) => {
-            const ext = file.name.split('.').pop();
-            // UUID 대신 타임스탬프와 인덱스를 사용하여 더 짧은 파일명 생성
-            const timestamp = Date.now().toString().slice(-6); // 마지막 6자리만 사용
-            const newFileName = `img_${timestamp}_${index}.${ext}`;
 
-            return new File([file], newFileName, { type: file.type });
-        });
+        // // UUID -> Math.Random 으로 바꿔서 필요가 없어짐
+        // // 파일 이름 길이 제한
+        // const processedFiles = newFiles.map((file, index) => {
+        //     const ext = file.name.split('.').pop();
+        //     // UUID 대신 타임스탬프와 인덱스를 사용하여 더 짧은 파일명 생성
+        //     const timestamp = Date.now().toString().slice(-6); // 마지막 6자리만 사용
+        //     const newFileName = `img_${timestamp}_${index}.${ext}`;
+
+        //     return new File([file], newFileName, { type: file.type });
+        // });
 
         setProduct(prev => ({
             ...prev,
-            files: [...currentFiles, ...processedFiles]
+            files: [...currentFiles, ...newFiles]
         }));
     };
 
@@ -144,16 +146,16 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
         const formData = new FormData();
 
         // 기본 제품 정보 설정
-        const productData = {
-            pno: isEditing ? pno : product.pno,
-            pname: product.pname,
-            pdesc: product.pdesc,
-            pprice: product.pprice,
-            pqty: product.pqty,
-            shippingFee: product.shippingFee,
-            categoryName: product.categoryName,
-            categoryType: "product"
-        };
+        // const productData = {
+        //     pno: isEditing ? pno : product.pno,
+        //     pname: product.pname,
+        //     pdesc: product.pdesc,
+        //     pprice: product.pprice,
+        //     pqty: product.pqty,
+        //     shippingFee: product.shippingFee,
+        //     categoryName: product.categoryName,
+        //     categoryType: "product"
+        // };
 
         // 나머지 제품 정보 추가
         Object.entries(product).forEach(([key, value]) => {

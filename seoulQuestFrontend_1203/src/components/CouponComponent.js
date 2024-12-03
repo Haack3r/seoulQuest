@@ -23,7 +23,6 @@ const CouponComponent = () => {
     try {
       const userEmail = email; // Fetch user email from local storage or user object
       const coupons = await getAvailableCoupons(userEmail); // Pass email as parameter
-      console.log("Email passed to getAvailableCoupons:", userEmail);
       setAvailableCoupons(coupons);
     } catch (error) {
       console.error("Error fetching available coupons:", error);
