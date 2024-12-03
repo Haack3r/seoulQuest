@@ -361,3 +361,17 @@ export const saveTempReply = async (id, tempReply) => {
 };
 
 
+export const getCustomerList = async () => {
+    try {
+        console.log("고객 목록 조회 시작");
+        const res = await jwtAxios.get(`${host}/admin/customer/list`);
+        console.log("고객 목록 응답:", res.data);
+        return res.data;
+    } catch (error) {
+        console.error("고객 목록 조회 에러:", error.response?.data || error);
+        if (error.response?.status === 403) {
+            alert("관리자 권한이 필요합니다.");
+        }
+        throw error;
+    }
+};

@@ -1,4 +1,4 @@
-
+import React, { useState, useEffect } from 'react';
 import { ShoppingCart, HeartIcon } from 'lucide-react';
 import { Badge } from 'antd';
 import CartComponent from '../menus/CartComponent';
@@ -6,7 +6,6 @@ import useCustomCart from '../../hooks/useCustomCart';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { getOne } from '../../api/productsApi';
 import useCustomFav from '../../hooks/useCustomFav';
-import { useEffect, useState } from 'react';
 import ReviewsSection from '../review/ReviewsSection';
 import { API_SERVER_HOST, deleteProductOne, putProductOne, getProductItemReview } from '../../api/reviewApi';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
@@ -31,9 +30,9 @@ const ReadComponent = ({ pno }) => {
   const { changeCart, cartItems } = useCustomCart();
   const { loginState } = useCustomLogin();
   const { favItems, changeFav, refreshFav } = useCustomFav();
-  const [reviewAvg, setReviewAvg] = useState(0)
+  const [reviewAvg, setReviewAvg] = useState(0);
   const [reviews, setReviews] = useState([]);
-  const [refresh, setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
 
   const calculateAverage = (reviews) => {
     if (reviews.length === 0) return 0;
@@ -41,22 +40,17 @@ const ReadComponent = ({ pno }) => {
     return sum / reviews.length;
   };
 
-  // Fetch product details
   useEffect(() => {
     window.scrollTo(0, 0);
     setFetching(true);
-    // Product 데이터 가져오기
     getOne(pno).then((productData) => {
-        setProduct(productData);
-        setFetching(false);
+      setProduct(productData);
+      setFetching(false);
     });
-  
-    // Review 데이터 가져오기
-    console.log(loginState.email);
+
     getProductItemReview(pno).then((reviews) => {
-        console.log(reviews);
-        setReviews(reviews);
-        setReviewAvg(calculateAverage(reviews))
+      setReviews(reviews);
+      setReviewAvg(calculateAverage(reviews));
     });
   }, [pno, refresh]);
 
@@ -77,7 +71,7 @@ const ReadComponent = ({ pno }) => {
       pqty: selectedQuantity + (existingItem?.pqty || 0),
     });
 
-    setCartVisible(true); // Open cart automatically
+    setCartVisible(true);
   };
 
   const handleAddToFavorites = async () => {
@@ -106,8 +100,8 @@ const ReadComponent = ({ pno }) => {
     <div className="min-h-screen py-12 px-6 lg:px-32 relative">
       <div className="flex flex-col lg:flex-row lg:space-x-12">
         {/* Left Section: Image Gallery */}
-        <div className="w-[450px] flex flex-col items-center space-y-6">
-        <div className="w-full h-[650px]">
+        <div className="w-full lg:w-[450px] flex flex-col items-center space-y-6">
+          <div className="w-full h-64 md:h-[450px] lg:h-[650px]">
             <img
               src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
               alt={product.pname}
@@ -119,8 +113,7 @@ const ReadComponent = ({ pno }) => {
               <button
                 key={index}
                 onClick={() => setCurrentImage(index)}
-                className={`w-20 h-20 overflow-hidden ${currentImage === index ? 'ring-2 ring-blue-500' : ''
-                  }`}
+                className={`w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 overflow-hidden ${currentImage === index ? 'ring-2 ring-blue-500' : ''}`}
               >
                 <img
                   src={`${host}/api/products/view/${image}`}
@@ -134,23 +127,22 @@ const ReadComponent = ({ pno }) => {
 
         {/* Right Section: Product Details */}
         <div className="lg:w-1/2 space-y-6">
-          <h1 className="text-4xl font-light text-gray-900">{product.pname}</h1>
+          <h1 className="text-2xl md:text-4xl font-light text-gray-900">{product.pname}</h1>
           <div className="flex items-center space-x-2">
-            {[...Array(5)].map((_, star) => 
-            (
-            <span key={star}>
-              {reviewAvg >= star+1 ? (
-                        <StarFilled className="text-yellow-400 text-xl" />
-                    ) : (
-                        <StarOutlined className="text-gray-300 text-xl" />
-                    )}
+            {[...Array(5)].map((_, star) => (
+              <span key={star}>
+                {reviewAvg >= star + 1 ? (
+                  <StarFilled className="text-yellow-400 text-xl" />
+                ) : (
+                  <StarOutlined className="text-gray-300 text-xl" />
+                )}
               </span>
-            )
-            )}
-            <span className="text-gray-600">({reviewAvg}) {reviews.length} reviews</span>
+            ))}
+            <span className="text-gray-600">
+              ({reviewAvg}) {reviews.length} reviews
+            </span>
           </div>
-          <p className="text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
-          
+          <p className="text-xl md:text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
 
           {/* Quantity Selector */}
           <div className="flex items-center space-x-4">
@@ -190,7 +182,7 @@ const ReadComponent = ({ pno }) => {
           <div className="bg-gray-50 p-4 rounded-lg">
             <h2 className="text-lg font-semibold text-gray-900">Product Details</h2>
             <ul className="list-disc list-inside text-gray-700">
-            <li>{product.pdesc}</li>
+              <li>{product.pdesc}</li>
             </ul>
           </div>
         </div>
@@ -210,19 +202,20 @@ const ReadComponent = ({ pno }) => {
 
       {/* Cart Drawer */}
       <div
-        className={`fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${cartVisible ? 'translate-x-0' : 'translate-x-full'
-          } transition-transform duration-300`}
+        className={`fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${cartVisible ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300`}
       >
         <CartComponent />
       </div>
+
       {/* Reviews Section */}
       <div className="mt-5">
-        <ReviewsSection 
-            refresh={refresh}
-            setRefresh={setRefresh}
-            reviews={reviews}
-            putOne={putProductOne} 
-            deleteOne={deleteProductOne}/>
+        <ReviewsSection
+          refresh={refresh}
+          setRefresh={setRefresh}
+          reviews={reviews}
+          putOne={putProductOne}
+          deleteOne={deleteProductOne}
+        />
       </div>
     </div>
   );

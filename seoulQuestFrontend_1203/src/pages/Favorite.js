@@ -10,7 +10,7 @@ const Favorite = () => {
   // Detect screen size to adjust layout dynamically
   useEffect(() => {
     const updateColumnState = () => {
-      setIsSingleColumn(window.innerWidth < 640); // 'sm' breakpoint for Tailwind is 640px
+      setIsSingleColumn(window.innerWidth < 1024); // Transition to single-column at `lg` breakpoint (1024px)
     };
 
     updateColumnState(); // Check on component mount
@@ -29,14 +29,14 @@ const Favorite = () => {
           My Favorites
         </h1>
 
-        {/* Switch Buttons (only visible on small screens) */}
+        {/* Switch Buttons (only visible in single-column layout) */}
         {isSingleColumn && (
           <div className="mb-6 px-4">
             <div className="flex justify-center space-x-4">
               <button
                 className={`px-4 py-2 rounded-md transition ${
                   activeTab === 'products'
-                    ? 'bg-blue-500 text-white'
+                    ? 'bg-gray-500 text-white'
                     : 'bg-gray-300 text-gray-700'
                 }`}
                 onClick={() => setActiveTab('products')}
@@ -46,7 +46,7 @@ const Favorite = () => {
               <button
                 className={`px-4 py-2 rounded-md transition ${
                   activeTab === 'tours'
-                    ? 'bg-blue-500 text-white'
+                    ? 'bg-gray-500 text-white'
                     : 'bg-gray-300 text-gray-700'
                 }`}
                 onClick={() => setActiveTab('tours')}
@@ -57,24 +57,24 @@ const Favorite = () => {
           </div>
         )}
 
-        {/* Responsive Content Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 px-4 sm:px-10 lg:px-20">
+        {/* Layout Section */}
+        <div
+          className={`${
+            isSingleColumn
+              ? 'grid grid-cols-1 gap-6'
+              : 'flex justify-center items-start space-x-4'
+          } px-4 sm:px-10 lg:px-20`}
+        >
           {/* Product Component */}
           {(activeTab === 'products' || !isSingleColumn) && (
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">
-                Favorite Products
-              </h2>
+            <div className={isSingleColumn ? '' : 'w-1/2 max-w-md'}>
               <ProductComponent />
             </div>
           )}
 
           {/* Tour Component */}
           {(activeTab === 'tours' || !isSingleColumn) && (
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">
-                Favorite Tours
-              </h2>
+            <div className={isSingleColumn ? '' : 'w-1/2 max-w-md'}>
               <TourComponent />
             </div>
           )}

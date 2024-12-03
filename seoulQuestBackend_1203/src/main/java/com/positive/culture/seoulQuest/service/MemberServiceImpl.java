@@ -2,6 +2,7 @@ package com.positive.culture.seoulQuest.service;
 import com.positive.culture.seoulQuest.domain.Address;
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.MemberRole;
+import com.positive.culture.seoulQuest.dto.CustomerListDTO;
 import com.positive.culture.seoulQuest.dto.MemberDTO;
 import com.positive.culture.seoulQuest.dto.MemberModifyDTO;
 import com.positive.culture.seoulQuest.dto.UserDTO;
@@ -24,7 +25,9 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -241,6 +244,24 @@ public class MemberServiceImpl implements MemberService{
 
         member.addRole(MemberRole.USER);
         return member;
+    }
+
+    @Override
+    public List<MemberDTO> getAllMembers() {
+        // Fetch all members from the repository
+        List<Member> members = memberRepository.findAll();
+
+        // Convert the list of Member entities to MemberDTOs
+        return members.stream()
+                .map(this::entityToDTO)  // Using the entityToDTO method to convert each member
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CustomerListDTO> getAllCustomers() {
+        return memberRepository.findAll().stream()
+                .map(this::memberToCustomerDTO)
+                .collect(Collectors.toList());
     }
 
 }

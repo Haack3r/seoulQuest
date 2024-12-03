@@ -12,7 +12,7 @@ const TourImage = ({ onScrollToAbout, onScrollToTourMap, onScrollToTourList }) =
           autoPlay
         />
         <div className="absolute inset-0 bg-black opacity-30" />
-        <div className="relative z-10 flex flex-col items-center text-white font-bold text-3xl uppercase tracking-widest lg:text-4xl">
+        <div className="relative text-center z-10 flex flex-col items-center text-white font-bold text-3xl uppercase tracking-widest lg:text-4xl">
           Tours & Experiences
           <button
             onClick={onScrollToTourList} // Scroll to TourListComponent
