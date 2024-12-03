@@ -101,6 +101,17 @@ public class Tour {
     }
 
     // ------------------------------------------------------
+
+    // 날짜 정보 추가
+    public void addTourDate(TourDate tourDate) {
+        tourDateList.add(tourDate);
+    }
+
+    // 날짜 정보 초기화
+    public void tourDateClearList() {
+        this.tourDateList.clear();
+    }
+
     // 이미지 정보 추가
     public void addImage(TourImage tourImage) {
         tourImage.setOrd(this.tourImageList.size());
@@ -116,7 +127,7 @@ public class Tour {
     }
 
     // productImage 리스트를 삭제
-    public void clearList() {
+    public void imgClearList() {
         this.tourImageList.clear();
     }
 
@@ -133,7 +144,7 @@ public class Tour {
 
     // uploadFileNames setter 메서드
     public void setUploadFileNames(List<String> fileNames) {
-        clearList(); // 기존 리스트 초기화
+        imgClearList(); // 기존 리스트 초기화
         if (fileNames != null) {
             fileNames.stream()
                     .filter(fileName -> fileName != null && !fileName.trim().isEmpty())

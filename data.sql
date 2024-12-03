@@ -39,7 +39,7 @@ ORDER BY CAST(m.id AS SIGNED); /* 이게 진짜 member with role list 코드 */
 
 SELECT *
 FROM tbl_tours t
-LEFT JOIN tbl_tour_date td ON t.tno = td.tour_no
+LEFT JOIN tbl_tour_date td ON t.tno = td.tour_tno
 LEFT JOIN tbl_category c ON t.category_id = c.category_id
 ORDER BY CAST(t.tno AS SIGNED);
 

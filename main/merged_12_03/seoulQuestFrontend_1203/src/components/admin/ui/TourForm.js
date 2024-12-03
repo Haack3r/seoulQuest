@@ -25,18 +25,12 @@ const initState = {
     taddress: '',
     categoryName: '',
     categoryType: 'tour',
-    // tDate: [],
+    tourDate: [],
     files: []
-};
-
-const TourDate = {
-    tourDateId: 0,
-    tourDate: ''
 };
 
 const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
     const [tour, setTour] = useState(isEditing ? initialData : { ...initState });
-    const [tDate, setTDate] = useState(isEditing ? initialData.tDate : []);
     const [uploadQueue, setUploadQueue] = useState([]);
 
     useEffect(() => {
@@ -45,6 +39,30 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
             categoryType: "tour"
         }));
     }, [isEditing]);
+
+    const handleDateChange = (dates) => {
+        if (!dates) {
+            setTour(prev => ({
+                ...prev,
+                tourDate: []
+            }));
+            return;
+        }
+
+        const [startDate, endDate] = dates;
+        const dateArray = [];
+        let currentDate = startDate;
+
+        while (currentDate <= endDate) {
+            dateArray.push(currentDate.format('YYYY-MM-DD'));
+            currentDate = currentDate.add(1, 'day');
+        }
+
+        setTour(prev => ({
+            ...prev,
+            tourDate: dateArray
+        }));
+    };
 
     const handleChangeTour = (e) => {
         const { name, value, type } = e.target;
@@ -138,7 +156,6 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         }
 
         const formData = new FormData();
-        const tDate = new Array();
 
         formData.append("tname", tour.tname)
         formData.append("tdesc", tour.tdesc)
@@ -146,12 +163,12 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         formData.append("maxCapacity", tour.maxCapacity)
         formData.append("taddress", tour.taddress)
         formData.append("categoryName", tour.categoryName)
-        // formData.append("tDate", JSON.stringify(tour.tDate))
-        // formData.append("tDate[]", tour.tDate)
+        // formData.append("tourDate", JSON.stringify(tour.tourDate))
+        // formData.append("tourDate[]", tour.tourDate)
 
-        tDate.forEach(date => {
-            tDate.append("tDate", date);
-            console.log("tDate added:", date);
+        tour.tourDate.forEach(date => {
+            formData.append("tourDate", date);
+            console.log("tourDate added:", date);
         });
 
         if (tour.files?.length > 0) {
@@ -205,30 +222,6 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
             loadInitialImages();
         }
     }, [isEditing, initialData]);
-
-    const handleDateChange = (dates) => {
-        if (!dates) {
-            setTour(prev => ({
-                ...prev,
-                tDate: []
-            }));
-            return;
-        }
-
-        const [startDate, endDate] = dates;
-        const dateArray = [];
-        let currentDate = startDate;
-
-        while (currentDate <= endDate) {
-            dateArray.push(currentDate.format('YYYY-MM-DD'));
-            currentDate = currentDate.add(1, 'day');
-        }
-
-        setTour(prev => ({
-            ...prev,
-            tDate: dateArray
-        }));
-    };
 
     return (
         <Dialog open={true} onClose={onClose} maxWidth="md" fullWidth>
@@ -290,9 +283,9 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
                                 width: '100%',
                                 zIndex: 9999
                             }}
-                            value={tDate[0] && tDate[1] ? [
-                                dayjs(tDate[0]),
-                                dayjs(tDate[1])
+                            value={tour.tourDate[0] && tour.tourDate[1] ? [
+                                dayjs(tour.tourDate[0]),
+                                dayjs(tour.tourDate[1])
                             ] : null}
                             onChange={handleDateChange}
                             format="YYYY-MM-DD"

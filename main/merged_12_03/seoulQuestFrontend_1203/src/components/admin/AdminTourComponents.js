@@ -249,7 +249,28 @@ const AdminTourComponents = () => {
                             {serverData.dtoList?.map((tour) => (
                                 <TableRow key={tour.tno}>
                                     <TableCell>{tour.tname}</TableCell>
-                                    <TableCell>{tour.tDate}</TableCell>
+                                    <TableCell>
+                                        {Array.isArray(tour.tourDate) ? (
+                                            tour.tourDate.map(date => {
+                                                try {
+                                                    // 날짜 문자열이 유효한지 확인
+                                                    const dateObj = new Date(date);
+                                                    if (isNaN(dateObj.getTime())) {
+                                                        return "날짜 형식 오류";
+                                                    }
+                                                    return dateObj.toLocaleDateString('ko-KR', {
+                                                        year: 'numeric',
+                                                        month: '2-digit',
+                                                        day: '2-digit'
+                                                    });
+                                                } catch {
+                                                    return "날짜 형식 오류";
+                                                }
+                                            }).join(', ')
+                                        ) : (
+                                            "날짜 정보 없음"
+                                        )}
+                                    </TableCell>
                                     <TableCell>{tour.tprice?.toLocaleString()}원</TableCell>
                                     <TableCell>{tour.maxCapacity}</TableCell>
                                     <TableCell>{tour.taddress}</TableCell>

@@ -63,7 +63,13 @@ public class AdminTourController {
 
     @GetMapping("/admin/tour/{tno}")
     public TourDTO getOne(@PathVariable("tno") Long tno) {
-        return tourService.get(tno);
+        try {
+            TourDTO tourDTO = tourService.get(tno);
+            return ResponseEntity.ok(tourDTO);
+        } catch (Exception e) {
+            log.error("투어 조회 중 에러: ", e);
+            throw e;
+        }
     }
 
     // 상품 등록
@@ -121,11 +127,11 @@ public class AdminTourController {
             // Product savedProduct = productRepository.save(productDTO.toEntity());
 
             // tDate 데이터 로깅 추가
-            log.info("Received tDate: " + tourDTO.getTDate());
+            log.info("Received tourDate: " + tourDTO.getTourDate());
 
-            // tDate가 null이 아닌지 확인
-            if (tourDTO.getTDate() == null) {
-                tourDTO.setTDate(new ArrayList<>());
+            // tourDate가 null이 아닌지 확인
+            if (tourDTO.getTourDate() == null) {
+                tourDTO.setTourDate(new ArrayList<>());
             }
 
             // 카테고리 설정
@@ -149,13 +155,13 @@ public class AdminTourController {
     public Map<String, String> modify(@PathVariable("tno") Long tno, @ModelAttribute TourDTO tourDTO) {
         try {
             tourDTO.setTno(tno);
-            
+
             // tDate 데이터 로깅 추가
-            log.info("Modifying tour dates: " + tourDTO.getTDate());
-            
+            log.info("Modifying tour dates: " + tourDTO.getTourDate());
+
             // tDate가 null이 아닌지 확인
-            if (tourDTO.getTDate() == null) {
-                tourDTO.setTDate(new ArrayList<>());
+            if (tourDTO.getTourDate() == null) {
+                tourDTO.setTourDate(new ArrayList<>());
             }
 
             // 기존의 파일들( DB에 존재하는 파일들 - 수정과정에서 삭제되었을수 있음)
