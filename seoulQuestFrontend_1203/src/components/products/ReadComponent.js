@@ -9,6 +9,7 @@ import ReviewsSection from '../review/ReviewsSection';
 import { API_SERVER_HOST, deleteProductOne, putProductOne, getProductItemReview } from '../../api/reviewApi';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import ProductPolicy from './ProductPolicy';
+import { useEffect, useState } from 'react';
 
 const initState = {
   pno: 0,
