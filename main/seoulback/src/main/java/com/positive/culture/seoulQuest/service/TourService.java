@@ -51,19 +51,6 @@ public interface TourService {
                 .updateAt(tourDTO.getUpdateAt())
                 .delFlag(tourDTO.isDelFlag())
                 .build();
-        
-        // TourDate 리스트를 따로 생성하고 설정
-        if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
-            List<TourDate> tourDates = tourDTO.getTDate().stream()
-                    .map(dateStr -> TourDate.builder()
-                            .tourDate(LocalDate.parse(dateStr))
-                            .tour(tour)
-                            .availableCapacity(tourDTO.getMaxCapacity())
-                            .build())
-                    .collect(Collectors.toList());
-            
-            tour.getTDate().addAll(tourDates);  // Tour 객체에 TourDate 리스트 추가
-        }
 
         // 이미지 처리
         List<String> uploadFileNames = tourDTO.getUploadFileNames();
@@ -91,9 +78,6 @@ public interface TourService {
                 .tprice(tour.getTprice())
                 .maxCapacity(tour.getMaxCapacity())
                 .taddress(tour.getTaddress())
-                .tDate(tour.getTDate().stream()
-                    .map(i -> i.getTourDate().toString())
-                    .collect(Collectors.toList()))
                 .createAt(tour.getCreateAt())
                 .updateAt(tour.getUpdateAt())
                 .delFlag(tour.isDelFlag())
@@ -110,7 +94,7 @@ public interface TourService {
     }
 
     // 서울 관광지 조회
-//    List<TourDTO> getToursByLocation(String location);
+    // List<TourDTO> getToursByLocation(String location);
 
     //
     List<TourDTO> getToursByAddress(String taddress);

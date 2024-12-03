@@ -5,8 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b2434be-5756-4e82-8e7d-161d46e74438" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/seoulback.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Tour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/Tour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourDate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/domain/TourDate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/TourDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/dto/TourDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/repository/MemberRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/MemberServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/MemberServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/ProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/service/TourServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/util/JWTUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/positive/culture/seoulQuest/util/JWTUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/img_04257168_686.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/img_06879776_988.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/img_06879920_259.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/img_07051098_324.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/img_07051279_789.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/img_13569505_248.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_img_04257168_686.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_img_06879776_988.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_img_06879920_259.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_img_07051098_324.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_img_07051279_789.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/s_img_13569505_248.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/TourForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/../seoulfront/src/components/admin/ui/TourForm.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,35 +84,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Gradle.CategoryRepositoryTests.testProductCategoryDummy.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.CategoryRepositoryTests.testTourCategoryDummy.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ContactRepositoryTests.saveTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.CouponRepositoryTests.insertDummyAmountCoupon.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.MemberRepositoryTests.testIns.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.OrderPaymentRepositoryTests.insertOrderPaymentAndItems.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ProductRepositoryTests.testInsertSeoulProducts.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ReviewRepositoryTests.insertDiverseProductReviews.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TourRepositoryTests.testInsertMultipleTourDates.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TourRepositoryTests.testInsertTours.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seoulQuestBackend_1125_merge [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seoulQuestBackend_1125_merge [compileJava].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seoulQuestBackend_1126 [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seoulback [:SeoulQuestApplication.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seoulback [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seoulback [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seoulback 빌드.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;bogeun&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/hyeri/seoulQuestBackup/1126/merge1126/seoulQuestBackend_1126&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;애플리케이션.SeoulQuestApplication.executor&quot;: &quot;Run&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Gradle.CategoryRepositoryTests.testProductCategoryDummy.executor": "Run",
+    "Gradle.CategoryRepositoryTests.testTourCategoryDummy.executor": "Run",
+    "Gradle.ContactRepositoryTests.saveTest.executor": "Run",
+    "Gradle.CouponRepositoryTests.insertDummyAmountCoupon.executor": "Run",
+    "Gradle.MemberRepositoryTests.testIns.executor": "Run",
+    "Gradle.OrderPaymentRepositoryTests.insertOrderPaymentAndItems.executor": "Run",
+    "Gradle.ProductRepositoryTests.testInsertSeoulProducts.executor": "Run",
+    "Gradle.ReviewRepositoryTests.insertDiverseProductReviews.executor": "Run",
+    "Gradle.TourRepositoryTests.testInsertMultipleTourDates.executor": "Run",
+    "Gradle.TourRepositoryTests.testInsertTours.executor": "Run",
+    "Gradle.seoulQuestBackend_1125_merge [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor": "Run",
+    "Gradle.seoulQuestBackend_1125_merge [compileJava].executor": "Run",
+    "Gradle.seoulQuestBackend_1126 [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor": "Run",
+    "Gradle.seoulback [:SeoulQuestApplication.main()].executor": "Run",
+    "Gradle.seoulback [:com.positive.culture.seoulQuest.SeoulQuestApplication.main()].executor": "Run",
+    "Gradle.seoulback [clean].executor": "Run",
+    "Gradle.seoulback 빌드.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "bogeun",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/pbg/seoulQuest/main/merged_12_03/seoulQuestBackend_1203",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "애플리케이션.SeoulQuestApplication.executor": "Run"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\hyeri\seoulQuestBackup\1126\merge\seoulQuestBackend_1125_merge\src\test\java\com\positive\culture\seoulQuest\seoulQuest\repository" />

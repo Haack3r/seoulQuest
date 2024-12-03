@@ -219,6 +219,7 @@ public class ProductServiceImpl implements ProductService {
         product.changePrice(productDTO.getPprice());
         product.changeQuantity(productDTO.getPqty());
         product.changeShippingFee(productDTO.getShippingFee());
+        product.preUpdate();
 
         // 이미지 처리
         if (productDTO.getFiles() != null && !productDTO.getFiles().isEmpty()) {

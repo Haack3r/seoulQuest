@@ -109,7 +109,6 @@ public class TourServiceImpl implements TourService {
                     } else {
                         dto.setUploadFileNames(new ArrayList<>());
                     }
-
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -131,10 +130,11 @@ public class TourServiceImpl implements TourService {
         TourDTO tourDTO = entityChangeDTO(tour, tour.getCategory());
 
         // 투어 날짜 정보 처리
-        List<String> tourDates = tour.getTDate().stream()
-                .map(date -> date.getTourDate().toString())
-                .collect(Collectors.toList());
-        tourDTO.setTDate(tourDates);
+        List<TourDate> tourDates = tour.getTourDateList();
+        tourDTO.setTDate(tourDates.stream()
+                .map(TourDate::getTourDate)
+                .map(LocalDate::toString)
+                .collect(Collectors.toList()));
 
         // 이미지 처리
         List<TourImage> imageList = tour.getTourImageList();
@@ -155,6 +155,8 @@ public class TourServiceImpl implements TourService {
     @Override
     @Transactional
     public Long register(TourDTO tourDTO) {
+        log.info("TourDTO: " + tourDTO);
+
         Category category = categoryRepository
                 .findByCategoryNameAndCategoryType(tourDTO.getCategoryName(), "tour");
 
@@ -165,11 +167,24 @@ public class TourServiceImpl implements TourService {
                     .build();
             category = categoryRepository.save(category);
         }
-        
+
+        // Tour 엔티티 생성 - 카테고리 정보 포함
         Tour tour = dtoToEntity(tourDTO, category);
+
+        if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
+            tourDTO.getTDate().forEach(dateStr -> {
+                TourDate tourDate = TourDate.builder()
+                        .tourDate(LocalDate.parse(dateStr))
+                        .availableCapacity(tourDTO.getMaxCapacity())
+                        .build();
+                tour.getTourDateList().add(tourDate);
+            });
+        }
+
+        // Tour 엔티티 저장
         Tour savedTour = tourRepository.save(tour);
         log.info("Saved tour: " + savedTour);
-        
+
         return savedTour.getTno();
     }
 
@@ -205,15 +220,14 @@ public class TourServiceImpl implements TourService {
         tour.preUpdate();
 
         // 3.투어 날짜 정보 업데이트
-        tour.getTDate().clear(); // 기존 날짜 정보 삭제
+        tour.getTourDateList().clear(); // 기존 날짜 정보 삭제
         if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
             tourDTO.getTDate().forEach(dateStr -> {
                 TourDate tourDate = TourDate.builder()
-                        .tour(tour)
                         .tourDate(LocalDate.parse(dateStr))
                         .availableCapacity(tourDTO.getMaxCapacity())
                         .build();
-                tour.getTDate().add(tourDate);
+                tour.getTourDateList().add(tourDate);
             });
         }
 
@@ -254,14 +268,14 @@ public class TourServiceImpl implements TourService {
         }
     }
 
-//    @Override
-//    public List<TourDTO> getToursByLocation(String location) {
-//        List<Tour> tours = tourRepository.findByTlocationContaining(location);
-//        return tours.stream()
-//                // .map(this::entityChangeDTO)
-//                .map(tour -> entityChangeDTO(tour, tour.getCategory()))
-//                .collect(Collectors.toList());
-//    }
+    // @Override
+    // public List<TourDTO> getToursByLocation(String location) {
+    // List<Tour> tours = tourRepository.findByTlocationContaining(location);
+    // return tours.stream()
+    // // .map(this::entityChangeDTO)
+    // .map(tour -> entityChangeDTO(tour, tour.getCategory()))
+    // .collect(Collectors.toList());
+    // }
 
     @Override
     public List<TourDTO> getToursByAddress(String taddress) {

@@ -1,6 +1,5 @@
 package com.positive.culture.seoulQuest.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "tbl_tours")
 @Getter
-@ToString(exclude = { "tourImageList", "category" })
+@ToString(exclude = { "tourImageList", "category", "tDate" })
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,13 +27,13 @@ public class Tour {
 
     private String tname;
 
-//    @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
+    // @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
     @Lob
     private String tdesc;
 
     private int tprice;
     private int maxCapacity;
-    
+
     private String taddress;
 
     // 통계를 내거나 정보를 확인할 때 사용
@@ -49,10 +48,11 @@ public class Tour {
     @Builder.Default
     private List<TourImage> tourImageList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "tour") // TourDate 엔티티의 tour 필드와 매핑
+    // @OneToMany(mappedBy = "tour") // TourDate 엔티티의 tour 필드와 매핑
+    @ElementCollection
     @Builder.Default
-    @JsonManagedReference
-    private List<TourDate> tDate = new ArrayList<>();
+    @CollectionTable(name = "tbl_tour_date")
+    private List<TourDate> tourDateList = new ArrayList<>();
 
     public void changeName(String tname) {
         this.tname = tname;
@@ -134,20 +134,14 @@ public class Tour {
         }
     }
 
-    // TourDate 리스트 추가 메서드
-    public void addTourDate(String dateStr) {
-        TourDate tourDate = TourDate.builder()
-                .tour(this)
-                .tourDate(LocalDate.parse(dateStr))
-                .build();
-        this.tDate.add(tourDate);
-    }
-
-    // TourDate 리스트 설정 메서드
-    public void setTourDates(List<String> dates) {
-        this.tDate.clear(); // 기존 날짜 초기화
-        if (dates != null) {
-            dates.forEach(this::addTourDate);
+    public void updateAvailableCapacity(LocalDate targetDate, int newCapacity) {
+        for (int i = 0; i < tourDateList.size(); i++) {
+            TourDate date = tourDateList.get(i);
+            if (date.getTourDate().equals(targetDate)) {
+                date.changeAvailableCapacity(newCapacity);
+                return;
+            }
         }
+        throw new IllegalArgumentException("TourDate not found for date: " + targetDate);
     }
 }

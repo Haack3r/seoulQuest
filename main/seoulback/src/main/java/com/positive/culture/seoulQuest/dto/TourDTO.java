@@ -27,6 +27,7 @@ public class TourDTO {
     private String tdesc;
 
     private int tprice;
+    private int availableCapacity;
     private int maxCapacity;
 
     private String taddress;
