@@ -49,3 +49,10 @@ export const getOneTNU = async (tno) => {
     const res = await axios.get(`${host}/${tno}`)
     return res.data;
 }
+
+export const getAvailableCapacity = async (tno,selectedDate) => {
+  console.log(tno)
+  console.log(selectedDate)
+  const res = await axios.get(`${host}/available`,{ params: { tno, selectedDate } });
+  return res.data;
+};

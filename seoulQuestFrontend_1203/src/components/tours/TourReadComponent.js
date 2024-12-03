@@ -7,9 +7,10 @@ import { UserOutlined, CalendarOutlined,StarFilled, StarOutlined } from "@ant-de
 import ReservationComponent from "../menus/ReservationComponent";
 import useCustomReservation from "../../hooks/useCustomReservation";
 import useCustomLogin from "../../hooks/useCustomLogin";
-import { getAvailableCapacity, getOne } from "../../api/tourApi";
+import {getOne } from "../../api/tourApi";
 import TourDetails from "./TourDetails";
 import useCustomTourFav from "../../hooks/useCustomTourFav";
+import { getAvailableCapacity } from "../../api/nuTourApi";
 
 const initState = {
   tno: 0,

@@ -16,7 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Log4j2
 @RequestMapping("/api/review")
-@PreAuthorize("hasAnyRole('ROLE_USER')")
+//@PreAuthorize("hasAnyRole('ROLE_USER')")
 public class ReviewController {
 
     private final ReviewService reviewService;

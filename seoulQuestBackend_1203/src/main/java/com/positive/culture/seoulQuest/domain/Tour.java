@@ -54,10 +54,7 @@ public class Tour {
 //    private List<TourDate> tDate = new ArrayList<>();
     @ElementCollection
     @Builder.Default
-    @CollectionTable(
-            name = "tbl_tour_date", // 원하는 테이블 이름
-            joinColumns = @JoinColumn(name = "tour_no") // 외래 키 이름
-    )
+    @CollectionTable(name = "tbl_tour_date")
     private List<TourDate> tourDateList =new ArrayList<>();
 
     public void changeCategory(Category category) {

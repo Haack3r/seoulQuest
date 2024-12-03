@@ -21,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 @Configuration
 @Log4j2
@@ -89,7 +90,10 @@ public class CustomSecurityConfig {
                                                 "/api/admin/product/image/**",
                                                 "/api/admin/tour/image/**",
                                                 "/api/product/image/**",
-                                                "/api/tour/image/**"
+                                                "/api/tour/image/**",
+                                                "/api/tours/available",
+                                                "/api/review/products/list/{pno}",
+                                                "/api/review/tours/list/{tno}"
                                                  )
                                 .permitAll()// Allow unauthenticated access
                                 .requestMatchers(

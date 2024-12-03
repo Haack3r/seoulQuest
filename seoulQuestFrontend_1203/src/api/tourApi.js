@@ -108,7 +108,3 @@ export const postPayInfo = async (orderInfoWithOrderId, impUid) => {
   }
 };
 
-export const getAvailableCapacity = async (tno,selectedDate) => {
-  const res = await jwtAxios.get(`${host}/available`,{ params: { tno, selectedDate } });
-  return res.data;
-};

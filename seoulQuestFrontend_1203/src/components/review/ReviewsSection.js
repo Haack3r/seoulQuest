@@ -14,7 +14,7 @@ const ReviewsSection = ({
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedReview, setSelectedReview] = useState(null); 
     const [isModalOpen, setIsModalOpen] = useState(false); 
-    const { loginState } = useCustomLogin();
+    const { isLogin,loginState } = useCustomLogin();
     const navigate = useNavigate();
 
     // console.log(reviews)
@@ -50,12 +50,13 @@ const ReviewsSection = ({
         <div className="mt-10 bg-gray-50 p-6 border border-gray-200 rounded-lg shadow-lg">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-gray-800">What Customers Say About This Item</h2>
-                <button
-                    className="px-4 py-2 text-gray-500 underline hover:text-gray-600"
-                    onClick={handleNavigation}
-                >
-                    Go to Your Review List
-                </button>
+                {isLogin?
+                    (<button
+                        className="px-4 py-2 text-gray-500 underline hover:text-gray-600"
+                        onClick={handleNavigation}
+                    >
+                        Go to Your Review List
+                    </button>):''}
             </div>
 
             <div className="relative flex items-center">
@@ -82,7 +83,7 @@ const ReviewsSection = ({
                                     <p className="text-xs text-gray-500">{review.dueDate}</p>
                                 </div>
                             </div>
-                            {review.email === loginState.email && (
+                            {isLogin && review.email === loginState.email && (
                                 <div className="absolute top-5 right-5 px-3 py-1 text-sm font-semibold text-white bg-teal-500 rounded-lg shadow-md">
                                 My Review
                                 </div>

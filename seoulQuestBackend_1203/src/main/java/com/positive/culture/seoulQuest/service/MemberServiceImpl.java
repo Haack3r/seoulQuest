@@ -40,7 +40,7 @@ public class MemberServiceImpl implements MemberService{
     public MemberDTO getKakaoMember(String accessToken) {
         String email = getEmailFromKakaoAccessToken(accessToken);
         log.info("email: " + email);
-        Optional<Member> result = memberRepository.findById(email);
+        Optional<Member> result = memberRepository.findByEmail(email);
 
         if(result.isPresent()) {
             MemberDTO memberDTO = entityToDTO(result.get());
@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public void modifyMember(MemberModifyDTO memberModifyDTO) {
-        Optional<Member> result = memberRepository.findById(memberModifyDTO.getEmail());
+        Optional<Member> result = memberRepository.findByEmail(memberModifyDTO.getEmail());
         Member member = result.orElseThrow();
         member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
         member.changeSocial(false);
