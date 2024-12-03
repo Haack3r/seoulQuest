@@ -80,7 +80,7 @@ const ProductReviewComponent = () => {
   }, [page, size, refresh]);
 
   return (
-    <div className="max-w-6xl min-w-[320px] md:min-w-[768px] mt-5 mx-auto mb-20">
+    <div className="max-w-6xl min-w-[320px] md:min-w-max mt-5 mx-auto mb-20">
       <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-8 mb-10">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">

@@ -9,6 +9,7 @@ import useCustomFav from '../../hooks/useCustomFav';
 import ReviewsSection from '../review/ReviewsSection';
 import { API_SERVER_HOST, deleteProductOne, putProductOne, getProductItemReview } from '../../api/reviewApi';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
+import ProductPolicy from './ProductPolicy';
 
 const initState = {
   pno: 0,
@@ -33,6 +34,7 @@ const ReadComponent = ({ pno }) => {
   const [reviewAvg, setReviewAvg] = useState(0);
   const [reviews, setReviews] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [detailsVisible, setDetailsVisible] = useState(false);
 
   const calculateAverage = (reviews) => {
     if (reviews.length === 0) return 0;
@@ -143,6 +145,7 @@ const ReadComponent = ({ pno }) => {
             </span>
           </div>
           <p className="text-xl md:text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
+          <p className="text-gray-700 mb-6">{product.pdesc}</p>
 
           {/* Quantity Selector */}
           <div className="flex items-center space-x-4">
@@ -171,19 +174,27 @@ const ReadComponent = ({ pno }) => {
             </button>
             <button
               onClick={handleAddToFavorites}
-              className="flex-1 border text-gray-700 py-3 rounded-lg flex items-center justify-center hover:bg-gray-100"
+              className="flex-1 border text-gray-700 p-1 rounded-lg flex items-center justify-center hover:bg-gray-100"
             >
-              <HeartIcon className="mr-2 text-red-500" />
+              <HeartIcon className=" text-red-500" />
               Add to Favorites
             </button>
           </div>
 
           {/* Product Details */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-900">Product Details</h2>
-            <ul className="list-disc list-inside text-gray-700">
-              <li>{product.pdesc}</li>
-            </ul>
+          <div className="mt-10 bg-gray-100 p-6 rounded-lg">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Product Policies
+              </h2>
+              <button
+                onClick={() => setDetailsVisible(!detailsVisible)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                {detailsVisible ? "-" : "+"}
+              </button>
+            </div>
+            {detailsVisible && <ProductPolicy />}
           </div>
         </div>
       </div>

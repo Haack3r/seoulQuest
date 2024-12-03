@@ -30,7 +30,6 @@ const ReservationItemComponent = ({ rino, tname, tprice, tdate, tno, tqty, tfile
                     onClick={() => handleClickQty(-1 * tqty)}
                 >
                     <DeleteOutlined className="text-lg" />
-                    <span className="text-xs font-medium">Delete</span>
                 </button>
             </div>
 
