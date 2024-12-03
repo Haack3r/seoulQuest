@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "../ui/Button";
 import { registerMember, checkEmail, checkNickname } from "../../api/memberApi";
+import { useNavigate } from "react-router-dom"; 
 
 const initState = {
   firstname: "",
@@ -21,12 +22,13 @@ const initState = {
 };
 
 const SignUpComponent = () => {
+  const navigate = useNavigate(); 
   const [signUpParam, setSignUpParam] = useState({ ...initState });
   const [isEmailAvailable, setIsEmailAvailable] = useState(false);
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [isCheckingNickname, setIsCheckingNickname] = useState(false);
   const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // New loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setSignUpParam({ ...signUpParam, [e.target.name]: e.target.value });
@@ -38,16 +40,17 @@ const SignUpComponent = () => {
       alert("Passwords do not match.");
       return;
     }
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
     try {
       await registerMember(signUpParam);
       alert("Registration successful!");
       setSignUpParam({ ...initState });
+      navigate("/member/login");
     } catch (error) {
       console.error("Error during sign-up:", error);
       alert("Registration failed: " + error.message);
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
@@ -55,7 +58,7 @@ const SignUpComponent = () => {
     setIsCheckingEmail(true);
     try {
       const response = await checkEmail(signUpParam.email);
-      setIsEmailAvailable(response.includes("가입가능")); // Update based on response
+      setIsEmailAvailable(response.includes("가입가능"));
       alert(response);
     } catch (error) {
       console.error("Error checking email availability:", error);
@@ -70,7 +73,7 @@ const SignUpComponent = () => {
     setIsCheckingNickname(true);
     try {
       const response = await checkNickname(signUpParam.nickName);
-      setIsNicknameAvailable(response.includes("Available Nickname")); // Update based on response
+      setIsNicknameAvailable(response.includes("Available Nickname"));
       alert(response);
     } catch (error) {
       console.error("Error checking nickname availability:", error);
@@ -82,17 +85,14 @@ const SignUpComponent = () => {
   };
 
   return (
-    <div className="min-h-screen flex ">
-      <div className="hidden lg:flex lg:w-1/2 relative">
-        <div
-          className="absolute inset-0"
-          style={{ backgroundColor: "#E0DCD0" }}
-        ></div>
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-20">
-          <h1 className="text-4xl font-bold text-white tracking-wide mb-4">
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      {/* Left Section */}
+      <div className="hidden lg:flex lg:w-1/2 bg-[#E0DCD0] text-gray-800">
+        <div className="flex flex-col items-center justify-center text-center p-8">
+          <h1 className="text-2xl font-bold mb-4">
             Experience Seoul, Beyond Sightseeing
           </h1>
-          <p className="text-lg font-light text-white">
+          <p className="text-sm leading-6">
             Seoul isn’t just a city—it’s a feeling. Join our curated tours and
             shop exclusive gifts, crafted to capture the spirit of Korea.
             Explore, enjoy, and bring home a piece of Seoul.
@@ -100,14 +100,16 @@ const SignUpComponent = () => {
         </div>
       </div>
 
-      <div className="w-full mt-8 p-8 sm:p-10 md:p-8 lg:p-20 lg:w-1/2">
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
+      {/* Right Section */}
+      <div className="w-full p-6 lg:w-1/2 bg-white mt-20 lg:px-20">
+        <h2 className="text-xl font-bold text-center text-gray-700 mb-4">
           Sign Up
         </h2>
-        <form className="space-y-4" onSubmit={handleClickSignUp}>
+        <form className="space-y-3" onSubmit={handleClickSignUp}>
+          {/* Name Inputs */}
           <div className="grid grid-cols-2 gap-2">
             <input
-              className="p-3 border border-gray-300 rounded shadow-sm"
+              className="p-2 border border-gray-300 rounded text-sm"
               name="firstname"
               type="text"
               value={signUpParam.firstname}
@@ -116,7 +118,7 @@ const SignUpComponent = () => {
               required
             />
             <input
-              className="p-3 border border-gray-300 rounded shadow-sm"
+              className="p-2 border border-gray-300 rounded text-sm"
               name="lastname"
               type="text"
               value={signUpParam.lastname}
@@ -125,9 +127,11 @@ const SignUpComponent = () => {
               required
             />
           </div>
+
+          {/* Nickname Input */}
           <div className="flex space-x-2">
             <input
-              className="flex-1 p-3 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="flex-1 p-2 border border-gray-300 rounded text-sm"
               name="nickName"
               type="text"
               value={signUpParam.nickName}
@@ -139,15 +143,16 @@ const SignUpComponent = () => {
               type="button"
               onClick={checkNicknameAvailability}
               disabled={isCheckingNickname}
-              className="w-1/3 p-3 md:w-1/5 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+              className="p-2 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
             >
               {isCheckingNickname ? "Checking..." : "Check"}
             </button>
           </div>
 
+          {/* Email Input */}
           <div className="flex space-x-2">
             <input
-              className="flex-1 p-3 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="flex-1 p-2 border border-gray-300 rounded text-sm"
               name="email"
               type="email"
               value={signUpParam.email}
@@ -159,62 +164,49 @@ const SignUpComponent = () => {
               type="button"
               onClick={checkEmailAvailability}
               disabled={isCheckingEmail}
-              className="w-1/3 p-3 md:w-1/5 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+              className="p-2 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
             >
               {isCheckingEmail ? "Checking..." : "Check"}
             </button>
           </div>
 
+          {/* Phone Number Input */}
           <div className="flex space-x-2">
             <input
-              className="w-1/3 p-3 border border-gray-300 rounded shadow-sm"
+              className="w-1/3 p-2 border border-gray-300 rounded text-sm"
               name="phoneNumber1"
               type="tel"
               value={signUpParam.phoneNumber1}
               onChange={handleChange}
               placeholder="010"
               required
-              minLength={3} // Minimum digits
-              maxLength={3} // Maximum digits
             />
-            <span className="text-lg font-bold mt-2">-</span>
+            <span className="text-sm font-bold">-</span>
             <input
-              className="w-1/3 p-3 border border-gray-300 rounded shadow-sm"
+              className="w-1/3 p-2 border border-gray-300 rounded text-sm"
               name="phoneNumber2"
               type="tel"
               value={signUpParam.phoneNumber2}
               onChange={handleChange}
               placeholder="0000"
               required
-              minLength={4} // Minimum digits
-              maxLength={4} // Maximum digits
             />
-            <span className="text-lg font-bold mt-2">-</span>
+            <span className="text-sm font-bold">-</span>
             <input
-              className="w-1/3 p-3 border border-gray-300 rounded shadow-sm"
+              className="w-1/3 p-2 border border-gray-300 rounded text-sm"
               name="phoneNumber3"
               type="tel"
               value={signUpParam.phoneNumber3}
               onChange={handleChange}
               placeholder="0000"
               required
-              minLength={4} // Minimum digits
-              maxLength={4} // Maximum digits
             />
           </div>
 
-          <input
-            className="w-full p-3 border border-gray-300 rounded shadow-sm"
-            name="birthday"
-            type="date"
-            value={signUpParam.birthday}
-            onChange={handleChange}
-            required
-          />
-
+          {/* Address Inputs */}
           <div className="grid grid-cols-2 gap-2">
             <input
-              className="p-3 border border-gray-300 rounded shadow-sm"
+              className="p-2 border border-gray-300 rounded text-sm"
               name="country"
               type="text"
               value={signUpParam.country}
@@ -223,7 +215,7 @@ const SignUpComponent = () => {
               required
             />
             <input
-              className="p-3 border border-gray-300 rounded shadow-sm "
+              className="p-2 border border-gray-300 rounded text-sm"
               name="zipcode"
               type="text"
               value={signUpParam.zipcode}
@@ -232,7 +224,7 @@ const SignUpComponent = () => {
               required
             />
             <input
-              className="p-3 border border-gray-300 rounded shadow-sm"
+              className="p-2 border border-gray-300 rounded text-sm"
               name="state"
               type="text"
               value={signUpParam.state}
@@ -241,7 +233,7 @@ const SignUpComponent = () => {
               required
             />
             <input
-              className="p-3 border border-gray-300 rounded shadow-sm"
+              className="p-2 border border-gray-300 rounded text-sm"
               name="city"
               type="text"
               value={signUpParam.city}
@@ -250,7 +242,7 @@ const SignUpComponent = () => {
               required
             />
             <input
-              className="p-3 border border-gray-300 rounded shadow-sm col-span-2"
+              className="col-span-2 p-2 border border-gray-300 rounded text-sm"
               name="street"
               type="text"
               value={signUpParam.street}
@@ -260,8 +252,9 @@ const SignUpComponent = () => {
             />
           </div>
 
+          {/* Password Inputs */}
           <input
-            className="w-full p-3 border border-gray-300 rounded shadow-sm"
+            className="w-full p-2 border border-gray-300 rounded text-sm"
             name="password"
             type="password"
             value={signUpParam.password}
@@ -270,7 +263,7 @@ const SignUpComponent = () => {
             required
           />
           <input
-            className="w-full p-3 border border-gray-300 rounded shadow-sm"
+            className="w-full p-2 border border-gray-300 rounded text-sm"
             name="confirmPassword"
             type="password"
             value={signUpParam.confirmPassword}
@@ -279,16 +272,17 @@ const SignUpComponent = () => {
             required
           />
 
+          {/* Submit Button */}
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 mt-4 bg-gray-700 text-white font-bold rounded"
+            className="w-full py-2 bg-gray-700 text-white rounded text-sm hover:bg-gray-800"
             onClick={handleClickSignUp}
           >
             {isLoading ? "Signing Up..." : "Sign Up"}
           </Button>
 
-          <div className="text-center text-gray-500 mt-4">
+          <div className="text-center text-sm text-gray-500 mt-2">
             Already have an account?{" "}
             <a className="font-semibold underline" href="/member/login/">
               Log In

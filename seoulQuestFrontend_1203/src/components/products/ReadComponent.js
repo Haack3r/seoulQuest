@@ -1,4 +1,3 @@
-
 import { ShoppingCart, HeartIcon } from 'lucide-react';
 import { Badge } from 'antd';
 import CartComponent from '../menus/CartComponent';
@@ -6,7 +5,6 @@ import useCustomCart from '../../hooks/useCustomCart';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { getOne } from '../../api/productsApi';
 import useCustomFav from '../../hooks/useCustomFav';
-import { useEffect, useState } from 'react';
 import ReviewsSection from '../review/ReviewsSection';
 import { API_SERVER_HOST, deleteProductOne, putProductOne, getProductItemReview } from '../../api/reviewApi';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
@@ -41,7 +39,6 @@ const ReadComponent = ({ pno }) => {
     return sum / reviews.length;
   };
 
-  // Fetch product details
   useEffect(() => {
     window.scrollTo(0, 0);
     setFetching(true);
@@ -77,7 +74,7 @@ const ReadComponent = ({ pno }) => {
       pqty: selectedQuantity + (existingItem?.pqty || 0),
     });
 
-    setCartVisible(true); // Open cart automatically
+    setCartVisible(true);
   };
 
   const handleAddToFavorites = async () => {
@@ -106,8 +103,8 @@ const ReadComponent = ({ pno }) => {
     <div className="min-h-screen py-12 px-6 lg:px-32 relative">
       <div className="flex flex-col lg:flex-row lg:space-x-12">
         {/* Left Section: Image Gallery */}
-        <div className="lg:w-1/3 flex flex-col items-center space-y-6">
-          <div className="w-full h-[650px]">
+        <div className="w-full lg:w-[450px] flex flex-col items-center space-y-6">
+          <div className="w-full h-64 md:h-[450px] lg:h-[650px]">
             <img
               src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
               alt={product.pname}
@@ -134,7 +131,7 @@ const ReadComponent = ({ pno }) => {
 
         {/* Right Section: Product Details */}
         <div className="lg:w-1/2 space-y-6">
-          <h1 className="text-4xl font-light text-gray-900">{product.pname}</h1>
+          <h1 className="text-2xl md:text-4xl font-light text-gray-900">{product.pname}</h1>
           <div className="flex items-center space-x-2">
             {[...Array(5)].map((_, star) => 
             (
@@ -179,9 +176,9 @@ const ReadComponent = ({ pno }) => {
             </button>
             <button
               onClick={handleAddToFavorites}
-              className="flex-1 border text-gray-700 py-3 rounded-lg flex items-center justify-center hover:bg-gray-100"
+              className="flex-1 border text-gray-700 p-1 rounded-lg flex items-center justify-center hover:bg-gray-100"
             >
-              <HeartIcon className="mr-2 text-red-500" />
+              <HeartIcon className=" text-red-500" />
               Add to Favorites
             </button>
           </div>

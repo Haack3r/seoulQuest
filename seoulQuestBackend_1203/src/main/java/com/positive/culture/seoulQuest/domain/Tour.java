@@ -34,7 +34,6 @@ public class Tour {
 
     private int tprice;
     private int maxCapacity;
-
     private String taddress;
 
     // 통계를 내거나 정보를 확인할 때 사용

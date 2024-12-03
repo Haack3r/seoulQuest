@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapPin, faPerson } from "@fortawesome/free-solid-svg-icons";
+import { faMapPin, faPerson, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { createRoot } from "react-dom/client";
 import "../TourMap.css";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ const TourMap = () => {
   const [isLoading, setIsLoading] = useState(true);
   const geoapifyApiKey = "c65e86bb88864eb4b9658fe2c9b1048e";
   const loginState = useSelector((state) => state.loginSlice);
-  const overlaysRef = useRef([]); // Store overlays to manage them across renders
+  const overlaysRef = useRef([]);
 
   const MarkerIcon = ({ isSelected }) => (
     <div
@@ -30,7 +30,6 @@ const TourMap = () => {
   );
 
   useEffect(() => {
-    // Initialize map and load tourist spots
     const initMapAndFetchData = async () => {
       if (window.kakao && window.kakao.maps) {
         window.kakao.maps.load(() => {
@@ -97,8 +96,8 @@ const TourMap = () => {
   useEffect(() => {
     if (!map || touristSpots.length === 0) return;
 
-    overlays.forEach((overlay) => overlay.setMap(null)); // Clear previous overlays
-    overlaysRef.current = []; // Clear refs
+    overlays.forEach((overlay) => overlay.setMap(null));
+    overlaysRef.current = [];
 
     touristSpots.forEach((spot) => {
       const { coordinates } = spot;
@@ -126,7 +125,7 @@ const TourMap = () => {
       overlaysRef.current.push(customOverlay);
     });
 
-    setOverlays(overlaysRef.current); // Update state with new overlays
+    setOverlays(overlaysRef.current);
   }, [map, touristSpots, selectedSpot]);
 
   return (
@@ -134,12 +133,11 @@ const TourMap = () => {
       <h2 className="-mb-10 text-3xl font-bold uppercase text-center text-gray-800 tracking-widest">
         Explore On Map
       </h2>
-      <div className="flex items-center justify-center mt-16">
-        <div className="relative w-3/4 h-600px">
+      <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-center mt-16 space-y-4 lg:space-y-0 lg:space-x-4">
+        <div className="relative w-full lg:w-3/4 h-72 lg:h-[600px]">
           <div
             id="map"
-            style={{ width: "100%", height: "600px" }}
-            className="rounded-lg border border-gray-300 shadow-lg relative"
+            className="w-full h-full rounded-lg border border-gray-300 shadow-lg"
           ></div>
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
@@ -149,51 +147,47 @@ const TourMap = () => {
         </div>
 
         {selectedSpot && (
-          <div className="top-16 right-4 h-[600px] w-1/4 bg-white shadow-lg rounded-lg border border-gray-300 flex flex-col overflow-hidden">
-            <button
-              className="absolute right-7 lg:right-80 text-right p-2"
-              onClick={() => setSelectedSpot(null)}
-            >
-              ✖
-            </button>
-            {selectedSpot.uploadFileNames && selectedSpot.uploadFileNames.length > 0 ? (
-              <img
-                className="h-1/3 w-full object-cover opacity-80"
-                src={`/api/user/tours/view/${selectedSpot.uploadFileNames[0]}`}
-                alt="Tour Spot"
-              />
-            ) : (
-              <p className="text-center p-4">No image available</p>
-            )}
-            <div className="p-4 flex-grow flex flex-col justify-start">
-              <h2 className="text-xl font-bold mb-2">{selectedSpot.tname}</h2>
-              <p className="small-text text-sm mb-2 text-gray-700">
-                Address: {selectedSpot.taddress}
-              </p>
-              <p className="truncated-description text-sm text-gray-600 mb-4">
-                {selectedSpot.tdesc}
-              </p>
-              <p className="text-sm font-semibold">
-                Price: ₩{selectedSpot.tprice} per person
-              </p>
-              {!loginState.email ? (
-                <Link
-                  to={`/tours/read/${selectedSpot.tno}?page=1&size=10`}
-                  className="text-sm mt-4 px-6 py-3 bg-orange-800 text-white rounded-lg inline-block text-center transform transition-all hover:scale-105"
-                >
-                  Reserve Now
-                </Link>
-              ) : (
-                <Link
-                  to={`/user/tours/read/${selectedSpot.tno}?page=1&size=10`}
-                  className="text-sm mt-4 px-6 py-3 bg-orange-800 text-white rounded-lg inline-block text-center transform transition-all hover:scale-105"
-                >
-                  Reserve Now
-                </Link>
-              )}
-            </div>
-          </div>
-        )}
+  <div className="flex flex-row lg:flex-col items-start bg-white shadow-md rounded-lg border border-gray-300 overflow-hidden w-full lg:w-1/4 relative">
+    {/* Spot Image */}
+    {selectedSpot.uploadFileNames && selectedSpot.uploadFileNames.length > 0 ? (
+      <img
+        className="w-1/3 lg:w-full h-40 lg:h-auto object-cover"
+        src={`/api/user/tours/view/${selectedSpot.uploadFileNames[0]}`}
+        alt="Tour Spot"
+      />
+    ) : (
+      <div className="w-1/3 lg:w-full h-40 lg:h-auto flex items-center justify-center bg-gray-200">
+        <p>No Image</p>
+      </div>
+    )}
+
+    {/* Spot Details */}
+    <div className="flex flex-col p-4 w-2/3 lg:w-full">
+      <button
+        className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+        onClick={() => setSelectedSpot(null)}
+      >
+        <FontAwesomeIcon icon={faTimes} />
+      </button>
+      <h2 className="text-lg font-bold mb-2">{selectedSpot.tname}</h2>
+      <p className="text-sm text-gray-700">Address: {selectedSpot.taddress}</p>
+      <p className="text-sm font-semibold mb-4">
+        Price: ₩{selectedSpot.tprice} per person
+      </p>
+      <Link
+        to={
+          loginState.email
+            ? `/user/tours/read/${selectedSpot.tno}?page=1&size=10`
+            : `/tours/read/${selectedSpot.tno}?page=1&size=10`
+        }
+        className="block text-center bg-orange-800 text-white py-2 px-4 rounded-lg hover:bg-orange-700"
+      >
+        Reserve Now
+      </Link>
+    </div>
+  </div>
+)}
+
       </div>
     </section>
   );

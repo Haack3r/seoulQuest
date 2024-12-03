@@ -1,6 +1,7 @@
 import React from 'react';
 import { API_SERVER_HOST } from '../../api/reviewApi';
 import { UserOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Link } from 'react-router-dom';
 
 const host = API_SERVER_HOST;
 
@@ -29,15 +30,14 @@ const ReservationItemComponent = ({ rino, tname, tprice, tdate, tno, tqty, tfile
                     onClick={() => handleClickQty(-1 * tqty)}
                 >
                     <DeleteOutlined className="text-lg" />
-                    <span className="text-xs font-medium">Delete</span>
                 </button>
             </div>
 
             {/* Image and Date Side-by-Side */}
             <div className="flex items-start space-x-4 mb-4">
-    <div className="overflow-hidden rounded-md shadow-sm flex-1">
+    <Link to={`/user/tours/read/${tno}?page=1&size=10`} className="overflow-hidden rounded-md shadow-sm flex-1">
         <img className="w-full h-20 object-cover rounded-md" src={`${host}/api/tours/view/s_${tfiles}`} alt={tname} />
-    </div>
+    </Link>
     <div className="flex flex-col justify-center flex-1">
         <span className="text-sm text-gray-600 font-semibold mb-1">📅 Date</span>
         <span className="text-gray-900 text-md font-bold bg-gray-100 p-2 rounded-md text-center">{tdate}</span>

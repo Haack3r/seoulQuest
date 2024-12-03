@@ -45,5 +45,4 @@ public interface TourRepository extends JpaRepository<Tour, Long>, QuerydslPredi
     @Modifying
     @Query("delete from Tour t join t.tourImageList ti where t.tno = :tno and ti.fileName = :fileName")
     void deleteTourImage(@Param("tno") Long tno, @Param("fileName") String fileName);
-
 }

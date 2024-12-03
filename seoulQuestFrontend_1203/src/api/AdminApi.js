@@ -117,7 +117,7 @@ export const AdminRoute = ({ children }) => {
 
 export const fetchOrders = async () => {
     try {
-        const res = await jwtAxios.get(`${host}/admin/order`)
+        const res = await jwtAxios.get(`${host}/admin/products/order`)
         console.log("주문 체크 응답", res)
         return res.data
     } catch (error) {
@@ -378,15 +378,14 @@ export const modifyTour = async (tno, formData) => {
 
 export const fetchReservations = async () => {
     try {
-        const res = await jwtAxios.get(`${host}/admin/reservation`)
-        console.log("상품 체크 응답", res)
-        return res.data
+        const response = await jwtAxios.get(`${host}/admin/reservation/list`);
+        console.log("Fetched Reservations:", response.data);
+        return response.data; // Return the reservations data
     } catch (error) {
-        console.log("상품 체크 오류", error)
-        throw error
+        console.error("Error fetching reservations:", error);
+        throw error; // Handle the error appropriately in the UI
     }
 }
-
 /*---------------------------관리자 고객 문의-----------------------------*/
 
 // 문의사항 목록 조회
@@ -444,6 +443,22 @@ export const saveTempReply = async (id, tempReply) => {
         return response.data;
     } catch (error) {
         console.error('Error saving temp reply:', error.response?.data || error);
+        throw error;
+    }
+};
+
+
+export const getCustomerList = async () => {
+    try {
+        console.log("고객 목록 조회 시작");
+        const res = await jwtAxios.get(`${host}/admin/customer/list`);
+        console.log("고객 목록 응답:", res.data);
+        return res.data;
+    } catch (error) {
+        console.error("고객 목록 조회 에러:", error.response?.data || error);
+        if (error.response?.status === 403) {
+            alert("관리자 권한이 필요합니다.");
+        }
         throw error;
     }
 };
