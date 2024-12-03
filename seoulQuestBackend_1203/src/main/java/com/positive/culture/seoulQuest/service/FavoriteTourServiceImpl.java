@@ -71,7 +71,7 @@ public class FavoriteTourServiceImpl implements FavoriteTourService {
                 .email(favoriteTour.getMember().getEmail())
                 .tno(favoriteTour.getTour().getTno())
                 .tname(favoriteTour.getTour().getTname())
-                .tdesc(favoriteTour.getTour().getTdesc())
+//                .tdesc(favoriteTour.getTour().getTdesc())
                 .tprice(favoriteTour.getTour().getTprice())
                 .uploadFileNames(favoriteTour.getTour().getTourImageList()
                         .stream()

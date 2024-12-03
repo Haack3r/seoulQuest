@@ -38,7 +38,6 @@ public class ProductServiceImpl implements ProductService {
     private final CustomFileUtil fileUtil;
     private final ProductPaymentItemRepository productPaymentItemRepository;
 
-
     @Override
     public List<ProductDTO> getTopSellingProducts(int limit) {
         List<Object[]> topProducts = productPaymentItemRepository.findTopSellingProducts();
@@ -53,14 +52,13 @@ public class ProductServiceImpl implements ProductService {
                     Product product = productRepository.findById(pno).orElseThrow();
 
                     // Convert to ProductDTO
-                    ProductDTO productDTO = entityChangeDTO(product);
+                    ProductDTO productDTO = entityChangeDTO(product, product.getCategory());
                     productDTO.setPqty(totalQty); // Include total sales quantity
 
                     return productDTO;
                 })
                 .collect(Collectors.toList());
     }
-
 
     // 전체 조회----(유저)
     @Override
@@ -82,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
 
         // Convert each Tour entity to a TourDTO
         List<ProductDTO> dtoList = result.stream()
-                .map(this::entityChangeDTO)
+                .map(product -> entityChangeDTO(product, product.getCategory()))
                 .collect(Collectors.toList());
 
         long totalCount = result.getTotalElements();
@@ -149,7 +147,7 @@ public class ProductServiceImpl implements ProductService {
                     Optional<Product> productWithImages = productRepository.selectOne(product.getPno());
                     Product fullProduct = productWithImages.orElse(product);
 
-                    ProductDTO dto = entityChangeDTO(fullProduct);
+                    ProductDTO dto = entityChangeDTO(fullProduct, fullProduct.getCategory());
 
                     // 이미지 정보 처리
                     List<ProductImage> imageList = fullProduct.getProductImageList();
@@ -178,7 +176,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO get(Long pno) {
         Optional<Product> result = productRepository.selectOne(pno);
         Product product = result.orElseThrow();
-        ProductDTO productDTO = entityChangeDTO(product);
+        ProductDTO productDTO = entityChangeDTO(product, product.getCategory());
 
         List<ProductImage> imageList = product.getProductImageList();
         if (imageList == null || imageList.size() == 0)
@@ -190,7 +188,6 @@ public class ProductServiceImpl implements ProductService {
 
         return productDTO;
     }
-
     // ---------------------------------------------------------------
 
     // 등록 --(관리자)
@@ -223,23 +220,43 @@ public class ProductServiceImpl implements ProductService {
     public void modify(ProductDTO productDTO) {
         Optional<Product> result = productRepository.findById(productDTO.getPno());
         Product product = result.orElseThrow();
-        Category category = product.getCategory();
 
-        // 기존 이미지 목록 초기화
-        product.clearList();
+        Category category = categoryRepository
+                .findByCategoryNameAndCategoryType(productDTO.getCategoryName(), "product");
 
-        // 새로운 이미지 목록 설정
-        if (productDTO.getUploadFileNames() != null && !productDTO.getUploadFileNames().isEmpty()) {
-            productDTO.getUploadFileNames().forEach(product::addImageString);
+        if (category == null) {
+            category = Category.builder()
+                    .categoryName(productDTO.getCategoryName())
+                    .categoryType("product")
+                    .build();
         }
 
-        category.ChangeCategoryName(productDTO.getCategoryName());
-        category.ChangeCategoryType(productDTO.getCategoryType());
+        // 카테고리 변경
+        product.changeCategory(category);
+
+        // 상품 정보 변경
         product.changeName(productDTO.getPname());
         product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPprice());
         product.changeQuantity(productDTO.getPqty());
         product.changeShippingFee(productDTO.getShippingFee());
+        product.preUpdate();
+
+        // 이미지 처리
+        if (productDTO.getFiles() != null && !productDTO.getFiles().isEmpty()) {
+            // 기존 이미지 삭제
+            List<String> oldFiles = product.getProductImageList()
+                    .stream()
+                    .map(ProductImage::getFileName)
+                    .collect(Collectors.toList());
+
+            fileUtil.deleteFiles(oldFiles);
+            product.clearList();
+
+            // 새 이미지 추가
+            List<String> uploadFileNames = fileUtil.saveFiles(productDTO.getFiles());
+            uploadFileNames.forEach(product::addImageString);
+        }
 
         productRepository.save(product);
     }
@@ -270,8 +287,7 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
-                Sort.by("pno").descending()
-        );
+                Sort.by("pno").descending());
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QProduct qProduct = QProduct.product;
@@ -293,7 +309,7 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> result = productRepository.findAll(booleanBuilder, pageable);
 
         List<ProductDTO> dtoList = result.stream()
-                .map(this::entityChangeDTO)
+                .map(product -> entityChangeDTO(product, product.getCategory()))
                 .collect(Collectors.toList());
 
         return PageResponseDTO.<ProductDTO>withAll()
@@ -302,9 +318,6 @@ public class ProductServiceImpl implements ProductService {
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
-
-
-
 
     private BooleanBuilder getSearch(PageRequestDTO requestDTO) {
         String type = requestDTO.getType();
@@ -353,7 +366,7 @@ public class ProductServiceImpl implements ProductService {
 
         // Map to DTO
         List<ProductDTO> dtoList = result.stream()
-                .map(this::entityChangeDTO)
+                .map(product -> entityChangeDTO(product, product.getCategory()))
                 .collect(Collectors.toList());
 
         // Build response
@@ -363,7 +376,5 @@ public class ProductServiceImpl implements ProductService {
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
-
-
 
 }

@@ -66,9 +66,8 @@ public class CouponRepositoryTests {
             // Coupon 객체를 생성하고 빌더 패턴을 사용하여 필요한 데이터를 설정합니다.
             Coupon coupon = Coupon.builder()
                     .couponName(coupons[i][0]) // 쿠폰 이름 설정
-//                    .couponCode("seoulQuest" + (int) (Math.random() * 12345)) // 랜덤 쿠폰 코드 생성
                     .discount(Integer.parseInt(coupons[i][1])) // 할인 금액을 정수로 변환하여 설정
-                    .expireDate(LocalDate.of(2024, 12,  30))
+                    .expireDate(LocalDate.of(2025, 11,  30))
                     .isActive(Math.random() < 0.5) // 50% 확률로 true 또는 false 설정
                     .build();
 

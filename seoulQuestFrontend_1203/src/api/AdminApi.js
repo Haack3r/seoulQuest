@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { Loader2 } from "lucide-react"
 import { getCookie } from "../util/cookieUtil"
 import axios from "axios"
+import { transform } from "framer-motion"
 
 const host = `http://localhost:8080/api`
 
@@ -116,7 +117,7 @@ export const AdminRoute = ({ children }) => {
 
 export const fetchOrders = async () => {
     try {
-        const res = await jwtAxios.get(`${host}/admin/order`)
+        const res = await jwtAxios.get(`${host}/admin/products/order`)
         console.log("주문 체크 응답", res)
         return res.data
     } catch (error) {
@@ -188,29 +189,30 @@ export const getProduct = async (pno) => {
 
 // 이미지 URL을 생성하는 함수 추가
 // URL 로 저장하기 때문에 upload 폴더에 저장되지 않고 바로 접근 가능 (서로 장단점이 있음)
-export const getImage = async (fileName) => {
-    if (!fileName) return null;
-    try {
-        console.log("이미지 접근 시작:", `${host}/product/image/${fileName}`);
-        const response = await jwtAxios.get(`${host}/product/image/${fileName}`);
-        return response
-    } catch (error) {
-        console.error('이미지 접근 권한 없음:', error);
-        return null;
-    }
-};
 
-export const deleteImage = async (fileName) => {
-    try {
-        const response = await jwtAxios.delete(
-            `${host}/admin/product/image/${fileName}`
-        )
-        return response;
-    } catch (err) {
-        console.error('이미지 삭제 실패 : ', err)
-        throw err
-    }
-}
+// export const getProductImage = async (fileName) => {
+//     if (!fileName) return null;
+//     try {
+//         console.log("이미지 접근 시작:", `${host}/product/image/${fileName}`);
+//         const response = await jwtAxios.get(`${host}/product/image/${fileName}`);
+//         return response
+//     } catch (error) {
+//         console.error('이미지 접근 권한 없음:', error);
+//         return null;
+//     }
+// };
+
+// export const deleteProductImage = async (fileName) => {
+//     try {
+//         const response = await jwtAxios.delete(
+//             `${host}/admin/product/image/${fileName}`
+//         )
+//         return response;
+//     } catch (err) {
+//         console.error('이미지 삭제 실패 : ', err)
+//         throw err
+//     }
+// }
 
 export const addProduct = async (formData) => {
     try {
@@ -287,16 +289,101 @@ export const modifyProduct = async (pno, formData) => {
     }
 };
 
+/* -------------------------- TOUR ------------------------------*/
+
+export const adminTourList = async ({ page, size, keyword = "", type = "t" }) => {
+    try {
+        const res = await jwtAxios.get(`${host}/admin/tour`, {
+            params: { page, size, keyword, type }
+        })
+        return res.data
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+export const getTour = async (tno) => {
+    try {
+        const res = await jwtAxios.get(`${host}/admin/tour/${tno}`)
+        return res.data
+    } catch (err) {
+        console.error('투어 정보 로드 실패 : ', err)
+        throw err
+    }
+}
+
+export const addTour = async (formData) => {
+    try {
+        const res = await jwtAxios.post(
+            `${host}/admin/tour`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }
+        )
+        return res.data
+    } catch (err) {
+        console.error('투어 등록 실패 : ', err)
+        throw err;
+    }
+}
+
+export const deleteTour = async (tno) => {
+    try {
+        const res = await jwtAxios.delete(`${host}/admin/tour/${tno}`)
+        return res.data
+    } catch (err) {
+        console.error('투어 삭제 실패 : ', err)
+        throw err
+    }
+}
+
+export const modifyTour = async (tno, formData) => {
+    try {
+        console.log('- FormData check -')
+        let isEmpty = true
+        for (let pair of formData.entries()) {
+            console.log((`${pair[0]}:${pair[1]}`))
+            isEmpty = false
+        }
+
+        if (isEmpty) {
+            console.warn('Tour FormData is Empty')
+        }
+
+        const res = await jwtAxios.put(
+            `${host}/admin/tour/${tno}`, formData,
+            {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                transformRequest: [(data) => {
+                    console.log('전송되는 데이터 : ', {
+                        type: typeof data,
+                        isFormData: data instanceof FormData,
+                        entries: Array.from(data.entries())
+                    })
+                    return data
+                }]
+            }
+        )
+
+        console.log('수정 응답:', res.data);
+        return res.data;
+    } catch (error) {
+        console.error('상품 수정 오류:', {
+            message: error.message,
+            response: error.response?.data
+        });
+        throw error;
+    }
+}
+
 /* -------------------------- RESERVATION ------------------------------*/
 
 export const fetchReservations = async () => {
     try {
-        const res = await jwtAxios.get(`${host}/admin/reservation`)
-        console.log("상품 체크 응답", res)
-        return res.data
+        const response = await jwtAxios.get(`${host}/admin/reservation/list`);
+        console.log("Fetched Reservations:", response.data);
+        return response.data; // Return the reservations data
     } catch (error) {
-        console.log("상품 체크 오류", error)
-        throw error
+        console.error("Error fetching reservations:", error);
+        throw error; // Handle the error appropriately in the UI
     }
 }
 /*---------------------------관리자 고객 문의-----------------------------*/
@@ -361,3 +448,17 @@ export const saveTempReply = async (id, tempReply) => {
 };
 
 
+export const getCustomerList = async () => {
+    try {
+        console.log("고객 목록 조회 시작");
+        const res = await jwtAxios.get(`${host}/admin/customer/list`);
+        console.log("고객 목록 응답:", res.data);
+        return res.data;
+    } catch (error) {
+        console.error("고객 목록 조회 에러:", error.response?.data || error);
+        if (error.response?.status === 403) {
+            alert("관리자 권한이 필요합니다.");
+        }
+        throw error;
+    }
+};

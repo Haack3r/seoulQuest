@@ -19,15 +19,18 @@ import java.util.List;
 public class TourDTO {
     private Long tno;
 
+    private Long categoryId;
     private String categoryName;
     private String categoryType;
 
     private String tname;
     private String tdesc;
+
     private int tprice;
     private int maxCapacity;
-    private String taddress;
     private int availableCapacity;
+
+    private String taddress;
 
     @Builder.Default
     private List<String> tDate = new ArrayList<>();

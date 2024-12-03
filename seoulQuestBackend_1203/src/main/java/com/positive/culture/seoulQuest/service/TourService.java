@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Transactional
 public interface TourService {
 
-    //신청 가능한 실제 인원 조회
+    // 신청 가능한 실제 인원 조회
     int getAvailable(Long tno, String selectedDate);
 
     // 전체 조회
@@ -48,9 +48,11 @@ public interface TourService {
                 .tdesc(tourDTO.getTdesc())
                 .tprice(tourDTO.getTprice())
                 .maxCapacity(tourDTO.getMaxCapacity())
+                .taddress(tourDTO.getTaddress())
                 .createAt(tourDTO.getCreateAt())
                 .updateAt(tourDTO.getUpdateAt())
-//                .tDate(tourDTO.getTDate())
+                .delFlag(tourDTO.isDelFlag())
+                // .tDate(tourDTO.getTDate())
                 .build();
 
         // 업로드 처리가 끝난 파일들의 이름 리스트
@@ -68,10 +70,12 @@ public interface TourService {
     }
 
     default // 엔티티를 DTO로 변환해주는 메서드 -> getList와 get에 사용
-    public TourDTO entityChangeDTO(Tour tour) {
+    public TourDTO entityChangeDTO(Tour tour, Category category) {
         TourDTO tourDTO = TourDTO.builder()
                 .tno(tour.getTno())
-                .categoryName(tour.getCategory().getCategoryName())
+                .categoryId(category.getCategoryId())
+                .categoryName(category.getCategoryName())
+                .categoryType(category.getCategoryType())
                 .tname(tour.getTname())
                 .tdesc(tour.getTdesc())
                 .tprice(tour.getTprice())
@@ -94,7 +98,6 @@ public interface TourService {
 
         return tourDTO;
     }
-
 
     //
     List<TourDTO> getToursByAddress(String taddress);

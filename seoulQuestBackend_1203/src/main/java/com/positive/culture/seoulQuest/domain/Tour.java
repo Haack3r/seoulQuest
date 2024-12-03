@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "tbl_tours")
 @Getter
-@ToString(exclude = "tourImageList")
+@ToString(exclude = { "tourImageList", "category" })
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,8 +28,8 @@ public class Tour {
 
     private String tname;
 
-//    @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
-    @Lob
+    @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
+//    @Lob // Tour는 @Lob 사용시 CLOB 으로 매핑되어 검색이 불가능해지므로 @Column(columnDefinition = "TEXT")사용
     private String tdesc;
 
     private int tprice;
@@ -48,14 +48,17 @@ public class Tour {
     @Builder.Default
     private List<TourImage> tourImageList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL) // TourDate 엔티티의 tour 필드와 매핑
-//    @Builder.Default
-//    @JsonManagedReference
-//    private List<TourDate> tDate = new ArrayList<>();
+    // @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL) // TourDate 엔티티의
+    // tour 필드와 매핑
+    // @Builder.Default
+    // @JsonManagedReference
+    // private List<TourDate> tDate = new ArrayList<>();
     @ElementCollection
     @Builder.Default
-    @CollectionTable(name = "tbl_tour_date")
-    private List<TourDate> tourDateList =new ArrayList<>();
+    @CollectionTable(name = "tbl_tour_date" // 원하는 테이블 이름
+    // joinColumns = @JoinColumn(name = "tour_no") // 외래 키 이름
+    )
+    private List<TourDate> tourDateList = new ArrayList<>();
 
     public void changeCategory(Category category) {
         this.category = category;
@@ -80,7 +83,6 @@ public class Tour {
     public void changeMaxCapacity(int maxCapacity) {
         this.maxCapacity = maxCapacity;
     }
-
 
     @PrePersist
     public void prePersist() {

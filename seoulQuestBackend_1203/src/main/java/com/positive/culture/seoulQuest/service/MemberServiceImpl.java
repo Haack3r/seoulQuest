@@ -1,7 +1,9 @@
 package com.positive.culture.seoulQuest.service;
+
 import com.positive.culture.seoulQuest.domain.Address;
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.MemberRole;
+import com.positive.culture.seoulQuest.dto.CustomerListDTO;
 import com.positive.culture.seoulQuest.dto.MemberDTO;
 import com.positive.culture.seoulQuest.dto.MemberModifyDTO;
 import com.positive.culture.seoulQuest.dto.UserDTO;
@@ -24,13 +26,14 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -42,7 +45,7 @@ public class MemberServiceImpl implements MemberService{
         log.info("email: " + email);
         Optional<Member> result = memberRepository.findByEmail(email);
 
-        if(result.isPresent()) {
+        if (result.isPresent()) {
             MemberDTO memberDTO = entityToDTO(result.get());
             return memberDTO;
         }
@@ -65,14 +68,14 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Optional<Member> findByEmail(String email) {
-        System.out.println("서비스  email:" +email);
+        System.out.println("서비스  email:" + email);
 
         return memberRepository.findByEmail(email);
     }
 
     @Override
     public Optional<Member> findByNickname(String nickName) {
-        System.out.println("서비스  nickname:" +nickName);
+        System.out.println("서비스  nickname:" + nickName);
         return memberRepository.findByNickName(nickName);
     }
 
@@ -83,8 +86,7 @@ public class MemberServiceImpl implements MemberService{
         String phoneNumber = String.join("-",
                 dto.getPhoneNumber1(),
                 dto.getPhoneNumber2(),
-                dto.getPhoneNumber3()
-        );
+                dto.getPhoneNumber3());
 
         // Create a new Member instance
         Member member = Member.builder()
@@ -93,14 +95,13 @@ public class MemberServiceImpl implements MemberService{
                 .nickName(dto.getNickName())
                 .email(dto.getEmail())
                 .phoneNumber(phoneNumber.trim())
-                .birthday(dto.getBirthday())  // Default to today if missing
+                .birthday(dto.getBirthday()) // Default to today if missing
                 .address(new Address(
                         dto.getStreet(),
                         dto.getCity(),
-                        dto.getState() ,
+                        dto.getState(),
                         dto.getZipcode(),
-                        dto.getCountry()
-                ))
+                        dto.getCountry()))
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .build();
 
@@ -109,7 +110,7 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.save(member);
     }
 
-    //userDTO받아서 member(entity)로 변환하고 repository저장
+    // userDTO받아서 member(entity)로 변환하고 repository저장
     @Override
     public void modifyInfo(UserDTO dto) {
 
@@ -119,18 +120,16 @@ public class MemberServiceImpl implements MemberService{
         String phoneNumber = String.join("-",
                 dto.getPhoneNumber1(),
                 dto.getPhoneNumber2(),
-                dto.getPhoneNumber3()
-        );
+                dto.getPhoneNumber3());
 
         member.changeNick(dto.getNickName());
         member.changePhone(phoneNumber);
         member.changeAddress(new Address(
                 dto.getStreet(),
                 dto.getCity(),
-                dto.getState() ,
+                dto.getState(),
                 dto.getZipcode(),
-                dto.getCountry()
-        ));
+                dto.getCountry()));
         member.changePw(passwordEncoder.encode(dto.getPassword()));
 
         memberRepository.save(member);
@@ -158,7 +157,8 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Member findEmail(String firstname, String lastname, String phonenumber) {
-        Member member = memberRepository.findByFirstnameAndLastnameAndPhoneNumber(firstname,lastname,phonenumber).orElseThrow();
+        Member member = memberRepository.findByFirstnameAndLastnameAndPhoneNumber(firstname, lastname, phonenumber)
+                .orElseThrow();
         log.info(member);
 
         return member;
@@ -171,7 +171,9 @@ public class MemberServiceImpl implements MemberService{
 
             helper.setTo(toEmail);
             helper.setSubject("Your Temporary Password");
-            helper.setText("Hello,\n\nYour temporary password is: " + tempPassword + "\n\nPlease change it after logging in.", true);
+            helper.setText(
+                    "Hello,\n\nYour temporary password is: " + tempPassword + "\n\nPlease change it after logging in.",
+                    true);
 
             mailSender.send(message);
             log.info("Temporary password email sent to: " + toEmail);
@@ -181,49 +183,46 @@ public class MemberServiceImpl implements MemberService{
         }
     }
 
-    //임시 비밀번호 발급시 사용함.
+    // 임시 비밀번호 발급시 사용함.
     private String makeTempPassword() {
         StringBuffer buffer = new StringBuffer();
 
-        for(int i = 0; i < 10; i++) {
-            buffer.append((char)((int)(Math.random()*55)+65));
+        for (int i = 0; i < 10; i++) {
+            buffer.append((char) ((int) (Math.random() * 55) + 65));
         }
         return buffer.toString();
     }
 
-
     private String getEmailFromKakaoAccessToken(String accessToken) {
         String KakaoGetUserURL = "https://kapi.kakao.com/v2/user/me";
 
-        if(accessToken == null) {
+        if (accessToken == null) {
             throw new RuntimeException("Access token is null");
         }
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " +accessToken);
+        headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-Type", "application/x-www-form-urlencoded");
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         UriComponents uriBuilder = UriComponentsBuilder.fromHttpUrl(KakaoGetUserURL).build();
 
-        ResponseEntity<LinkedHashMap> response =
-                restTemplate.exchange(
-                        uriBuilder.toString(),
-                        HttpMethod.GET,
-                        entity,
-                        LinkedHashMap.class
-                );
+        ResponseEntity<LinkedHashMap> response = restTemplate.exchange(
+                uriBuilder.toString(),
+                HttpMethod.GET,
+                entity,
+                LinkedHashMap.class);
         log.info(response);
 
-        LinkedHashMap <String, LinkedHashMap> bodyMap = response.getBody();
+        LinkedHashMap<String, LinkedHashMap> bodyMap = response.getBody();
 
         log.info("---------------------");
         log.info(bodyMap);
 
         LinkedHashMap<String, String> kakaoAccount = bodyMap.get("kakao_account");
 
-        log.info("KakaoAccount: "+kakaoAccount);
+        log.info("KakaoAccount: " + kakaoAccount);
         return kakaoAccount.get("email");
 
     }
@@ -241,6 +240,24 @@ public class MemberServiceImpl implements MemberService{
 
         member.addRole(MemberRole.USER);
         return member;
+    }
+
+    @Override
+    public List<MemberDTO> getAllMembers() {
+        // Fetch all members from the repository
+        List<Member> members = memberRepository.findAll();
+
+        // Convert the list of Member entities to MemberDTOs
+        return members.stream()
+                .map(this::entityToDTO)  // Using the entityToDTO method to convert each member
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CustomerListDTO> getAllCustomers() {
+        return memberRepository.findAll().stream()
+                .map(this::memberToCustomerDTO)
+                .collect(Collectors.toList());
     }
 
 }

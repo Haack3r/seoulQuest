@@ -243,7 +243,7 @@ const EditProfileComponent = () => {
             className="w-full py-3 bg-stone-400 text-white rounded-lg"
             onClick={handleClickEditProfile}
           >
-            Save Changes
+            Save
           </Button>
           <Button
             className="w-full py-3 bg-gray-500 text-white rounded-lg"

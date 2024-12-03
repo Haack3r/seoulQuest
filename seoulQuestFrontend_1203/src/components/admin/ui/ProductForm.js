@@ -1,32 +1,71 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { addProduct, modifyProduct } from '../../../api/AdminApi';
+import axios from 'axios';
 
 const host = `http://localhost:8080/api`;
 const MAX_IMAGES = 10;
 
+// 카테고리 목록 상수 추가
+const CATEGORIES = [
+    { value: "K-Beauty", label: "K-Beauty" },
+    { value: "Fashion", label: "Fashion" },
+    { value: "Gourmet", label: "Gourmet" },
+    { value: "Exotic Tea", label: "Exotic Tea" }
+];
+
+const SHIPPING_FEES = [0, 3000];
+
 const initState = {
+    pno: 0,
     pname: '',
     pdesc: '',
     pprice: 0,
     pqty: 0,
+    shippingFee: 0,
     categoryName: '',
+    categoryType: 'product',
     files: []
 };
 
 const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
+    console.log('isEditing:', isEditing);
+    console.log('selectedPno:', selectedPno);
+    console.log('initialData:', initialData);
+
     const [product, setProduct] = useState(isEditing ? initialData : { ...initState });
     const [uploadQueue, setUploadQueue] = useState([]);
     // const uploadRef = useRef();
 
-    // 기본 입력 필드 핸들러
-    const handleChangeProduct = (e) => {
-        const { name, value, type } = e.target;
-        const newValue = type === 'number' ? parseInt(value) || 0 : value;
-
+    // 수정된 useEffect - API 호출 제거
+    useEffect(() => {
+        // 항상 미리 정의된 카테고리 사용
         setProduct(prev => ({
             ...prev,
-            [name]: newValue
+            categoryType: "product"
         }));
+    }, [isEditing]);
+
+    // 기본 입력 필드 핸들러
+    const handleChangeProduct = (e) => {
+        const { name, value } = e.target;
+
+        if (name === 'categoryName') {
+            setProduct({
+                ...product,
+                categoryName: value,
+                categoryType: "product"
+            });
+        } else if (name === 'shippingFee' || name === 'pprice' || name === 'pqty') {
+            setProduct({
+                ...product,
+                [name]: Number(value)
+            });
+        } else {
+            setProduct({
+                ...product,
+                [name]: value
+            });
+        }
     };
 
     // 파일 변경 핸들러
@@ -48,6 +87,18 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
             alert('이미지 파일만 업로드 가능합니다.');
             return;
         }
+
+
+        // // UUID -> Math.Random 으로 바꿔서 필요가 없어짐
+        // // 파일 이름 길이 제한
+        // const processedFiles = newFiles.map((file, index) => {
+        //     const ext = file.name.split('.').pop();
+        //     // UUID 대신 타임스탬프와 인덱스를 사용하여 더 짧은 파일명 생성
+        //     const timestamp = Date.now().toString().slice(-6); // 마지막 6자리만 사용
+        //     const newFileName = `img_${timestamp}_${index}.${ext}`;
+
+        //     return new File([file], newFileName, { type: file.type });
+        // });
 
         setProduct(prev => ({
             ...prev,
@@ -84,25 +135,53 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
     const handleClickSubmit = async (e) => {
         e.preventDefault();
 
+        // selectedPno가 없을 경우 initialData.pno 사용
+        const pno = selectedPno || initialData?.pno;
+
+        if (isEditing && !pno) {
+            alert('상품 번호가 유효하지 않습니다.');
+            return;
+        }
+
         const formData = new FormData();
 
-        // 기본 정보 추가
-        formData.append("pname", product.pname);
-        formData.append("pdesc", product.pdesc);
-        formData.append("pprice", product.pprice);
-        formData.append("pqty", product.pqty);
-        formData.append("categoryName", product.categoryName);
+        // 기본 제품 정보 설정
+        // const productData = {
+        //     pno: isEditing ? pno : product.pno,
+        //     pname: product.pname,
+        //     pdesc: product.pdesc,
+        //     pprice: product.pprice,
+        //     pqty: product.pqty,
+        //     shippingFee: product.shippingFee,
+        //     categoryName: product.categoryName,
+        //     categoryType: "product"
+        // };
 
-        // 파일 추가
+        // 나머지 제품 정보 추가
+        Object.entries(product).forEach(([key, value]) => {
+            if (key !== 'category' && value !== null && value !== undefined) {
+                formData.append(key, value);
+            }
+        });
+
+        // 파일 추가 - 새로운 파일이 있으면 추가, 없으면 기존 파일 유지
         if (product.files?.length > 0) {
             product.files.forEach(file => {
-                formData.append("files", file);
+                if (file instanceof File) {
+                    formData.append("files", file);
+                }
             });
         }
 
         try {
+            // FormData 내용 확인
+            console.log("전송할 FormData 내용:");
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
             if (isEditing) {
-                await modifyProduct(selectedPno, formData);
+                await modifyProduct(pno, formData);
                 alert('제품이 수정되었습니다.');
             } else {
                 await addProduct(formData);
@@ -128,10 +207,10 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
                             return new File([blob], fileName, { type: blob.type });
                         });
                         const files = await Promise.all(filePromises);
-                        setProduct(prev => ({
+                        setProduct({
                             ...initialData,
                             files: files
-                        }));
+                        });
                     } catch (error) {
                         console.error('이미지 로드 실패:', error);
                     }
@@ -168,13 +247,20 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
 
                     <div className="flex flex-col">
                         <label className="font-bold mb-1">카테고리</label>
-                        <input
+                        <select
                             className="border rounded p-2"
                             name="categoryName"
                             value={product.categoryName}
                             onChange={handleChangeProduct}
                             required
-                        />
+                        >
+                            <option value="">카테고리 선택</option>
+                            {CATEGORIES.map(category => (
+                                <option key={category.value} value={category.value}>
+                                    {category.label}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="flex flex-col">
@@ -198,7 +284,33 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
                                 onChange={handleChangeProduct}
                                 required
                             />
+                            <label className="font-bold mt-2 mb-1">배송료</label>
+                            <select
+                                className="border rounded p-2"
+                                name="shippingFee"
+                                value={product.shippingFee}
+                                onChange={handleChangeProduct}
+                                required
+                            >
+                                <option value="">배송료 선택</option>
+                                {SHIPPING_FEES.map((shippingFee) => (
+                                    <option key={shippingFee} value={shippingFee}>
+                                        {`${shippingFee.toLocaleString()}원`}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
+                        {/* <div className="flex flex-col">
+                            <label className="font-bold mb-1">배송료</label>
+                            <input
+                                className="border rounded p-2"
+                                type="number"
+                                name="shippingFee"
+                                value={product.shippingFee}
+                                onChange={handleChangeProduct}
+                                required
+                            />
+                        </div> */}
                         <div className="flex flex-col">
                             <label className="font-bold mb-1">재고</label>
                             <input

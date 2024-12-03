@@ -237,5 +237,4 @@ public class TourController {
 
         return payment;
     }
-
 }

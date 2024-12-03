@@ -70,81 +70,95 @@ export default function SideBar() {
         },
         {
             key: 'sub2',
-            // icon: (<SettingOutlined style={{ color: isSelect ? '#f97316' : '' }} />),
-            icon: <SettingOutlined />,
-            label: 'Order Management',
-            children: [
-                {
-                    key: '2',
-                    label: <Link to="/admin/order">주문 조회 및 관리</Link>,
-                }
-            ]
-        },
-        {
-            key: 'sub3',
             icon: <SettingOutlined />,
             label: 'Product Management',
             children: [
                 {
-                    key: '3',
+                    key: '1',
                     label: <Link to="/admin/product">상품 목록 및 관리</Link>,
                 },
                 {
-                    key: '4',
+                    key: '2',
                     label: <Link to="/admin/inventory">재고 통계</Link>,
                 }
 
             ]
         },
         {
+            key: 'sub3',
+            icon: <SettingOutlined />,
+            label: 'Tour Management',
+            children: [
+                {
+                    key: '3',
+                    label: <Link to="/admin/tour">투어 목록 및 관리</Link>,
+                },
+                {
+                    key: '4',
+                    label: <Link to="/admin/reservation">고객 예약 관리</Link>,
+                }
+            ]
+        },
+        {
             key: 'sub4',
+            // icon: (<SettingOutlined style={{ color: isSelect ? '#f97316' : '' }} />),
+            icon: <SettingOutlined />,
+            label: 'Order Management',
+            children: [
+                {
+                    key: '5',
+                    label: <Link to="/admin/order">주문 조회 및 관리</Link>,
+                }
+            ]
+        },
+        
+        {
+            key: 'sub5',
+            icon: <SettingOutlined />,
+            label: 'Reservation Management',
+            children: [
+                {
+                    key: '6',
+                    label: <Link to="/admin/reservation">예약 조회 및 관리</Link>,
+                },
+
+            ]
+        },
+        {
+            key: 'sub6',
             label: 'Delivery Management',
             icon: <SettingOutlined />,
             children: [
                 {
-                    key: '5',
+                    key: '7',
                     label: <Link to="/admin/delivery">배송 관리</Link>,
                 },
                 {
-                    key: '6',
+                    key: '8',
                     label: <Link to="/admin/exchange">반품 및 교환</Link>,
                 },
                 {
-                    key: '7',
+                    key: '9',
                     label: <Link to="/admin/cost">배송 비용 관리</Link>,
                 }
             ]
         },
         {
-            key: 'sub5',
+            key: 'sub7',
             icon: <SettingOutlined />,
             label: 'Customer Management',
             children: [
                 {
-                    key: '8',
+                    key: '10',
                     label: <Link to="/admin/customer">고객 정보 및 관리</Link>,
                 },
                 {
-                    key: '9',
+                    key: '11',
                     label: <Link to="/admin/contact">고객 문의 관리</Link>,
                 }
             ]
         },
-        {
-            key: 'sub6',
-            icon: <SettingOutlined />,
-            label: 'Tour Management',
-            children: [
-                {
-                    key: '10',
-                    label: <Link to="/admin/tour">투어 목록 및 관리</Link>,
-                },
-                {
-                    key: '11',
-                    label: <Link to="/admin/reservation">고객 예약 관리</Link>,
-                }
-            ]
-        },
+        
     ]
 
     return (

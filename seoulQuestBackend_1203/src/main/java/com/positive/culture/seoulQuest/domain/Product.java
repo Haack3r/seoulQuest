@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "tbl_product")
 @Getter
-@ToString(exclude = "productImageList")
+@ToString(exclude = { "productImageList", "category" })
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +27,7 @@ public class Product {
 
     private String pname;
 
-//    @Column(columnDefinition = "TEXT") // pdesc 타입을 text로 생성되도록 함
+    // @Column(columnDefinition = "TEXT") // pdesc 타입을 text로 생성되도록 함
     @Lob
     private String pdesc;
     private int pprice;
@@ -65,6 +65,10 @@ public class Product {
 
     public void changeShippingFee(int shippingFee) {
         this.shippingFee = shippingFee;
+    }
+
+    public void changeCategory(Category category) {
+        this.category = category;
     }
 
     @PrePersist

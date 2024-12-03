@@ -16,13 +16,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Log4j2
 @RequestMapping("/api/review")
-//@PreAuthorize("hasAnyRole('ROLE_USER')")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
     //리뷰 등록시 고객 닉네임과 주문한 item 조회 => product
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/products/info")
     public ReviewInfoDTO getInfoProduct(Principal principal){
         String email = principal.getName();
@@ -32,7 +30,6 @@ public class ReviewController {
     }
 
     //리뷰 등록시 고객 닉네임과 주문한 item 조회 => tour
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/tours/info")
     public ReviewInfoDTO getInfoTour(Principal principal){
         String email = principal.getName();

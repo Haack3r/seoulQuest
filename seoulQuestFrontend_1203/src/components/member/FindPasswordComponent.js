@@ -25,6 +25,7 @@ const FindPasswordComponent = () => {
 
                 if (data !== "No value present") {
                     setUserInfo(data);
+                    console.log(data)
                     setIsModalOpen(true);
                 } else {
                     alert("check your details.");

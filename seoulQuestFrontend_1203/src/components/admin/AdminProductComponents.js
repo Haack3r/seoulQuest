@@ -4,7 +4,6 @@ import {
   addProduct,
   adminProductList,
   deleteProduct,
-  getImage,
   getProduct,
   modifyProduct,
 } from "../../api/AdminApi";
@@ -19,20 +18,18 @@ const AdminProductComponents = () => {
   const [serverData, setServerData] = useState(initState);
   const [isEditing, setIsEditing] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [selectedPno, setSelectedPno] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [showProductDetail, setShowProductDetail] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(9);
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("t");
 
   const [fetching, setFetching] = useState(false);
 
   const { exceptionHandle } = useCustomLogin();
-
-  const [page, setPage] = useState(1);
-  const [size] = useState(9);
 
   const fetchProductList = () => {
     console.log("상품 목록 요청:", {
@@ -104,14 +101,8 @@ const AdminProductComponents = () => {
       setShowAddForm(false);
       setIsEditing(false);
       setSelectedProduct(null);
-      setSelectedPno(null);
     } catch (error) {
       console.error("상품 등록 실패:", error);
-      if (error.response?.status === 401) {
-        alert("인증이 만료되었습니다. 다시 로그인해주세요.");
-        window.location.href = "/login";
-        return;
-      }
       alert(error.message || "상품 등록에 실패했습니다.");
     } finally {
       setFetching(false);
@@ -127,14 +118,15 @@ const AdminProductComponents = () => {
 
   // 제품 수정
   const handleModifyProduct = (formData) => {
-    if (!selectedPno) return;
+    if (!selectedProduct) return;
+    console.log('formData:', formData)
     setFetching(true);
-    modifyProduct(selectedPno, formData)
+    modifyProduct(selectedProduct.pno, formData)
       .then(() => {
         fetchProductList();
         setShowAddForm(false);
         setIsEditing(false);
-        setSelectedPno(null);
+        setSelectedProduct(null);
       })
       .catch((error) => {
         console.error("Modify or fetch error:", error);
@@ -147,14 +139,13 @@ const AdminProductComponents = () => {
   const handleEdit = (pno) => {
     getProduct(pno)
       .then((data) => {
+        console.log("수정할 제품 데이터:", data);
         setShowAddForm(true);
         setIsEditing(true);
-        setSelectedPno(pno);
         setSelectedProduct(data);
       })
       .catch((error) => {
-        console.error("Get product error:", error);
-        exceptionHandle(error);
+        console.error("제품 정보 조회 실패:", error);
       });
   };
 
@@ -195,7 +186,6 @@ const AdminProductComponents = () => {
   const handleClose = () => {
     setShowAddForm(false);
     setIsEditing(false);
-    setSelectedPno(null);
     setSelectedProduct(null);
     fetchProductList();
   };
@@ -228,12 +218,12 @@ const AdminProductComponents = () => {
 
   // 초기 로딩 및 검색
   useEffect(() => {
-    console.log("useEffect 실행:", {
-      페이지: page,
-      사이즈: size,
-      검색어: keyword,
-      타입: type,
-    });
+    // console.log("useEffect 실행:", {
+    //   페이지: page,
+    //   사이즈: size,
+    //   검색어: keyword,
+    //   타입: type,
+    // });
     fetchProductList();
   }, [page, size, keyword, type]);
 
@@ -294,8 +284,8 @@ const AdminProductComponents = () => {
                 <div className="relative">
                   <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg">
                     {product.uploadFileNames &&
-                    Array.isArray(product.uploadFileNames) &&
-                    product.uploadFileNames.length > 0 ? (
+                      Array.isArray(product.uploadFileNames) &&
+                      product.uploadFileNames.length > 0 ? (
                       <img
                         src={`${host}/product/image/${product.uploadFileNames[0]}`}
                         alt={product.pname}
@@ -427,7 +417,7 @@ const AdminProductComponents = () => {
                   <div>
                     <h3 className="text-lg font-semibold">가격</h3>
                     <p className="text-rose-500 text-xl font-medium">
-                      ₩{selectedProduct.pprice.toLocaleString()}
+                      {selectedProduct.pprice.toLocaleString()}원
                     </p>
                   </div>
 
@@ -486,7 +476,6 @@ const AdminProductComponents = () => {
               initialData={isEditing ? selectedProduct : serverData}
               onSubmit={handleFormSubmit}
               onClose={handleClose}
-              selectedPno={selectedPno}
             />
           </div>
         )}

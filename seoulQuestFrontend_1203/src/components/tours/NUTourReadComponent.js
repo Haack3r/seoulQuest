@@ -158,6 +158,7 @@ const NUTourReadComponent = ({ tno }) => {
             <p className="text-xl md:text-2xl font-light text-gray-900 mb-6">
               ₩{tour.tprice.toLocaleString()}
             </p>
+            <p className="text-gray-700 mb-2"><strong>Tour Address:</strong> {tour.taddress}</p>
             <p className="text-gray-700 mb-6">{tour.tdesc}</p>
   
             {/* Date and Quantity Selection */}
@@ -239,7 +240,7 @@ const NUTourReadComponent = ({ tno }) => {
             <div className="mt-10 bg-gray-100 p-6 rounded-lg">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg font-semibold text-gray-900">
-                  Tour Details
+                  Tour Policies
                 </h2>
                 <button
                   onClick={() => setDetailsVisible(!detailsVisible)}

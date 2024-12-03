@@ -19,7 +19,7 @@ public class TourDate {
     // @Id
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     // @Column(name = "tour_date_id")
-//    private long tourDate_id;
+    // private long tourDate_id;
 
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "tour_no")

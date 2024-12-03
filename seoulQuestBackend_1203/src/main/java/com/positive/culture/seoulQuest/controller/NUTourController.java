@@ -71,12 +71,10 @@ public class NUTourController {
         return tourService.get(tno);
     }
 
-
     @GetMapping("/available")
     public int checkAvailable(@RequestParam("tno") Long tno , @RequestParam("selectedDate") String selectedDate){
         int capacity = tourService.getAvailable(tno,selectedDate);
         System.out.println("-----------------예약가능 명수 ---------"+ capacity);
         return capacity;
     }
-
 }
