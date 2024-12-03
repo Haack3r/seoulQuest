@@ -6,7 +6,7 @@ import {StarFilled, StarOutlined } from "@ant-design/icons";
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { getOneNU } from '../../api/nuProductApi';
 import { useNavigate } from 'react-router-dom';
-
+import ProductPolicy from './ProductPolicy';
 
 const initState = {
   pno: 0,
@@ -27,7 +27,8 @@ const NUReadComponent = ({ pno }) => {
   const [selectedQuantity, setSelectedQuantity] = useState(0);
   const [reviewAvg, setReviewAvg] = useState(0)
   const [reviews, setReviews] = useState([]);
-  const [refresh, setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
+  const [detailsVisible, setDetailsVisible] = useState(false);
   const navigate = useNavigate();
 
   const calculateAverage = (reviews) => {
@@ -65,8 +66,8 @@ const NUReadComponent = ({ pno }) => {
     <div className="min-h-screen py-12 px-6 lg:px-32 relative">
       <div className="flex flex-col lg:flex-row lg:space-x-12">
         {/* Left Section: Image Gallery */}
-        <div className="lg:w-1/3 flex flex-col items-center space-y-6">
-          <div className="w-full h-[650px]">
+        <div className="w-full lg:w-[450px] flex flex-col items-center space-y-6">
+          <div className="w-full h-64 md:h-[450px] lg:h-[650px]">
             <img
               src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
               alt={product.pname}
@@ -109,6 +110,7 @@ const NUReadComponent = ({ pno }) => {
             <span className="text-gray-600">({reviewAvg}) {reviews.length} reviews</span>
           </div>
           <p className="text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
+          <p className="text-gray-700 mb-6">{product.pdesc}</p>
 
           {/* Quantity Selector */}
           <div className="flex items-center space-x-4">
@@ -137,12 +139,20 @@ const NUReadComponent = ({ pno }) => {
             </button>
           </div>
 
-          {/* Product Details */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-900">Product Details</h2>
-            <ul className="list-disc list-inside text-gray-700">
-              <li>{product.pdesc}</li>
-            </ul>
+           {/* Product Details */}
+           <div className="mt-10 bg-gray-100 p-6 rounded-lg">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Product Policies
+              </h2>
+              <button
+                onClick={() => setDetailsVisible(!detailsVisible)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                {detailsVisible ? "-" : "+"}
+              </button>
+            </div>
+            {detailsVisible && <ProductPolicy />}
           </div>
         </div>
       </div>
