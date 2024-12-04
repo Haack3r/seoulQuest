@@ -75,7 +75,7 @@ public class CustomSecurityConfig {
                                                 "/api/member/check",
                                                 "/api/member/checknickname",
                                                 "/api/member/login",
-                                               "/api/member/refresh",
+                                                "/api/member/refresh",
                                                 "/api/mypage/**",
                                                 "/api/user/tours/view/**",
                                                 "/api/user/products/view/**",

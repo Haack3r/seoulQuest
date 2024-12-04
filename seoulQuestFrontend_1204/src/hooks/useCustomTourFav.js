@@ -6,15 +6,16 @@ import {
   deleteTourFavItemAsync,
   deleteBulkTourFavItemAsync,
 } from "../slices/favTourSlice";
-import useCustomLogin from "../hooks/useCustomLogin";
 
-const useCustomTourFav = () => {
-  const { loginState } = useCustomLogin();
-  const email = loginState.email; 
+const useCustomTourFav = (email) => {
   const favItems = useSelector((state) => state.favTour.items || []);
   const dispatch = useDispatch();
 
   const refreshFav = useCallback(() => {
+    if (!email) {
+      console.error("Cannot refresh favorites without email.");
+      return;
+    }
     dispatch(getFavTourItemsAsync(email)); // Pass email when refreshing favorites
   }, [dispatch, email]);
 

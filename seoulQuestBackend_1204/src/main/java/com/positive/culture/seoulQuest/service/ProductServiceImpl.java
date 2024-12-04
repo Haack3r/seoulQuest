@@ -183,11 +183,14 @@ public class ProductServiceImpl implements ProductService {
             return productDTO; // 이미지가 없는 상품인 경우
 
         // 이미지가 있는 상품인 경우
-        List<String> fileNameList = imageList.stream().map(productImage -> productImage.getFileName()).toList();
+        List<String> fileNameList = imageList.stream()
+                .map(productImage -> productImage.getFileName())
+                .toList();
         productDTO.setUploadFileNames(fileNameList);
 
         return productDTO;
     }
+
     // ---------------------------------------------------------------
 
     // 등록 --(관리자)

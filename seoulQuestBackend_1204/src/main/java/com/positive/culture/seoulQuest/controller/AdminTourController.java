@@ -3,7 +3,7 @@ package com.positive.culture.seoulQuest.controller;
 import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.dto.PageRequestDTO;
 import com.positive.culture.seoulQuest.dto.PageResponseDTO;
-
+import com.positive.culture.seoulQuest.dto.ProductDTO;
 import com.positive.culture.seoulQuest.dto.TourDTO;
 import com.positive.culture.seoulQuest.repository.CategoryRepository;
 import com.positive.culture.seoulQuest.service.TourService;
@@ -33,7 +33,7 @@ public class AdminTourController {
     private final TourService tourService;
     private final CategoryRepository categoryRepository;
 
-    // @GetMapping("/")
+    // @GetMapping("/admin/tour/check")
     // public Map<String, Object> checkAdminAccess() {
     // log.info("admin access check...");
     // return Map.of("role", "ADMIN", "success", true);
@@ -80,15 +80,45 @@ public class AdminTourController {
             tourDTO.setUploadFileNames(uploadFileNames);
 
             // 카테고리 조회 및 생성 처리
-            Category category = categoryRepository
-                    .findAllCategoriesList(tourDTO.getCategoryName(), "tour")
-                    .orElseGet(() -> {
-                        Category newCategory = Category.builder()
-                                .categoryName(tourDTO.getCategoryName())
-                                .categoryType("tour")
-                                .build();
-                        return categoryRepository.save(newCategory);
-                    });
+            if (tourDTO.getCategoryName() != null && !tourDTO.getCategoryName().isEmpty()) {
+                Category category = categoryRepository
+                        .findAllCategoriesList(tourDTO.getCategoryName(), "tour")
+                        .orElseGet(() -> {
+                            Category newCategory = Category.builder()
+                                    .categoryName(tourDTO.getCategoryName())
+                                    .categoryType("tour")
+                                    .build();
+                            return categoryRepository.save(newCategory);
+                        });
+
+                tourDTO.setCategoryId(category.getCategoryId());
+                tourDTO.setCategoryName(category.getCategoryName());
+                tourDTO.setCategoryType(category.getCategoryType());
+            }
+
+            // 카테고리 처리
+            if (tourDTO.getCategoryName() != null && !tourDTO.getCategoryName().isEmpty()) {
+                Category category = Category.builder()
+                        .categoryName(tourDTO.getCategoryName())
+                        .categoryType(tourDTO.getCategoryType() != null ? tourDTO.getCategoryType() : "tour")
+                        .build();
+
+                // 카테고리 조회 또는 생성
+                Category finalCategory = category; // final 변수로 새로 선언
+                category = categoryRepository
+                        .findAllCategoriesList(category.getCategoryName(), category.getCategoryType())
+                        .orElseGet(() -> {
+                            log.info("새로운 카테고리 생성: {}", finalCategory.getCategoryName());
+                            return categoryRepository.save(finalCategory);
+                        });
+
+                tourDTO.setCategoryId(category.getCategoryId());
+                tourDTO.setCategoryName(category.getCategoryName());
+                tourDTO.setCategoryType(category.getCategoryType());
+            } else {
+                log.warn("카테고리 이름이 없습니다.");
+                throw new RuntimeException("카테고리 정보가 필요합니다.");
+            }
 
             // // 파일 처리
             // List<MultipartFile> files = productDTO.getFiles();
@@ -121,16 +151,12 @@ public class AdminTourController {
             // Product savedProduct = productRepository.save(productDTO.toEntity());
 
             // tDate 데이터 로깅 추가
-            log.info("Received tDate: " + tourDTO.getTDate());
+            log.info("Received tourDate: " + tourDTO.getTourDate());
 
-            // tDate가 null이 아닌지 확인
-            if (tourDTO.getTDate() == null) {
-                tourDTO.setTDate(new ArrayList<>());
+            // tourDate가 null이 아닌지 확인
+            if (tourDTO.getTourDate() == null) {
+                tourDTO.setTourDate(new ArrayList<>());
             }
-
-            // 카테고리 설정
-            tourDTO.setCategoryName(category.getCategoryName());
-            tourDTO.setCategoryType("tour");
 
             Long tno = tourService.register(tourDTO);
             log.info("Registered tour with tno: " + tno);
@@ -149,17 +175,19 @@ public class AdminTourController {
     public Map<String, String> modify(@PathVariable("tno") Long tno, @ModelAttribute TourDTO tourDTO) {
         try {
             tourDTO.setTno(tno);
-            
+
             // tDate 데이터 로깅 추가
-            log.info("Modifying tour dates: " + tourDTO.getTDate());
-            
+            log.info("Modifying tour dates: " + tourDTO.getTourDate());
+
             // tDate가 null이 아닌지 확인
-            if (tourDTO.getTDate() == null) {
-                tourDTO.setTDate(new ArrayList<>());
+            if (tourDTO.getTourDate() == null) {
+                tourDTO.setTourDate(new ArrayList<>());
             }
 
+            TourDTO oldTourDTO = tourService.get(tno);
+
             // 기존의 파일들( DB에 존재하는 파일들 - 수정과정에서 삭제되었을수 있음)
-            List<String> oldFileNames = tourService.get(tno).getUploadFileNames();
+            List<String> oldFileNames = oldTourDTO.getUploadFileNames();
 
             // 새로 업로드 해야하는 파일들
             List<MultipartFile> files = tourDTO.getFiles();
@@ -174,6 +202,37 @@ public class AdminTourController {
             // 새로 업로드된 파일들 추가
             if (currentUploadFileNames != null && !currentUploadFileNames.isEmpty()) {
                 uploadedFileNames.addAll(currentUploadFileNames);
+            }
+
+            // 카테고리 처리
+            if (tourDTO.getCategoryName() != null && !tourDTO.getCategoryName().isEmpty()) {
+                // 기존 카테고리 조회
+                Category category = categoryRepository
+                        .findAllCategoriesList(tourDTO.getCategoryName(), "tour")
+                        .orElseGet(() -> {
+                            log.info("새로운 카테고리 생성: {}", tourDTO.getCategoryName());
+                            // 기존 카테고리가 없으면 새로 생성
+                            Category newCategory = Category.builder()
+                                    .categoryName(tourDTO.getCategoryName())
+                                    .categoryType("tour")
+                                    .build();
+                            return categoryRepository.save(newCategory);
+                        });
+                log.info("카테고리 정보: id={}, name={}, type={}",
+                        category.getCategoryId(),
+                        category.getCategoryName(),
+                        category.getCategoryType());
+
+                // Category 정보만 필요한 필드에 매핑
+                tourDTO.setCategoryId(category.getCategoryId());
+                tourDTO.setCategoryName(category.getCategoryName());
+                tourDTO.setCategoryType(category.getCategoryType());
+            } else {
+                // 카테고리 정보가 없는 경우 기존 카테고리 정보 유지
+                TourDTO oldTour = tourService.get(tno);
+                tourDTO.setCategoryId(oldTour.getCategoryId());
+                tourDTO.setCategoryName(oldTour.getCategoryName());
+                tourDTO.setCategoryType(oldTour.getCategoryType());
             }
 
             // 기존 이미지 유지 처리

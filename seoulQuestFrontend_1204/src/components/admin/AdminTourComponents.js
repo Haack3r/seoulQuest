@@ -12,8 +12,8 @@ import {
     Paper,
     Button,
     IconButton,
+    Typography,
 } from '@mui/material';
-import { layoutStyles, inputStyles } from "./ui/Styles";
 import {
     Add as AddIcon,   // // 'Add' 아이콘을 'AddIcon'이라는 이름으로 가져옴
     Edit as EditIcon,
@@ -23,6 +23,8 @@ import TourForm from './ui/TourForm';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { addTour, adminTourList, deleteTour, getTour, modifyTour } from '../../api/AdminApi';
 import { Search } from 'lucide-react';
+
+const host = `http://localhost:8080/api`;
 
 const initState = {
     dtoList: [],
@@ -41,9 +43,10 @@ const AdminTourComponents = () => {
     const [serverData, setServerData] = useState(initState)
     const [isEditing, setIsEditing] = useState(false)
     const [tabValue, setTabValue] = useState(0);  // tabValue: 현재 선택된 탭을 나타내며, 기본값은 0
-    const [tours, setTours] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);  // 대화상자 (모달창)가 열려있는지 여부를 저장하는 상태
     const [dialogType, setDialogType] = useState('');
+
+    const [showTourDetail, setShowTourDetail] = useState(false);
 
     const [selectedTno, setSelectedTno] = useState(null)
     const [selectedTour, setSelectedTour] = useState(null);  // 이미지 미리보기 URL 목록을 저장하는 상태
@@ -56,17 +59,6 @@ const AdminTourComponents = () => {
     const [type, setType] = useState("t");
 
     const { exceptionHandle } = useCustomLogin();
-
-    const [tourForm, setTourForm] = useState({
-        tname: '',
-        tdesc: '',
-        tprice: '',
-        maxCapacity: '',
-        taddress: '',
-        categoryName: '',
-        tDate: [],
-        uploadFileNames: []
-    });
 
     const fetchTourList = () => {
         console.log("투어 목록 요청:", {
@@ -152,6 +144,14 @@ const AdminTourComponents = () => {
             console.error("Delete error:", error);
             exceptionHandle(error);
         }
+    };
+
+    const handleGetTour = (tno) => {
+        getTour(tno)
+            .then((data) => {
+                setSelectedTour(data);
+                setShowTourDetail(true);
+            })
     };
 
     const handleClose = () => {
@@ -241,32 +241,153 @@ const AdminTourComponents = () => {
                                 <TableCell>날짜</TableCell>
                                 <TableCell>잔여석</TableCell>
                                 <TableCell>가격</TableCell>
-                                <TableCell>상태</TableCell>
+                                <TableCell>위치</TableCell>
                                 <TableCell>관리</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {serverData.dtoList?.map((tour) => (
-                                <TableRow key={tour.tno}>
-                                    <TableCell>{tour.tname}</TableCell>
-                                    <TableCell>{tour.tDate}</TableCell>
-                                    <TableCell>{tour.tprice?.toLocaleString()}원</TableCell>
-                                    <TableCell>{tour.maxCapacity}</TableCell>
-                                    <TableCell>{tour.taddress}</TableCell>
-                                    {/* <TableCell>{tour.status}</TableCell> */}
-                                    <TableCell>
-                                        <IconButton onClick={() => handleEdit(tour.tno)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                        <IconButton onClick={() => handleDelete(tour.tno)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                            {serverData.dtoList?.map((tour) => {
+                                // tourDate JSON 파싱
+                                const tourDates = tour.tourDate?.map(dateStr => {
+                                    try {
+                                        return JSON.parse(dateStr);
+                                    } catch (e) {
+                                        console.error('날짜 파싱 오류:', e);
+                                        return null;
+                                    }
+                                }).filter(date => date !== null);
+
+                                // 시작일과 종료일 계산
+                                const startDate = tourDates?.[0]?.tourDate;
+                                const endDate = tourDates?.[tourDates.length - 1]?.tourDate;
+
+                                return (
+                                    <TableRow key={tour.tno}>
+                                        <TableCell>{tour.tname}</TableCell>
+                                        <TableCell>
+                                            <Box sx={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '8px'
+                                            }}>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    '& .date-label': {
+                                                        minWidth: '60px',
+                                                        color: 'primary.main',
+                                                        fontWeight: 'bold'
+                                                    }
+                                                }}>
+                                                    <span className="date-label">시작일:</span>
+                                                    <Box sx={{
+                                                        ml: 1,
+                                                        padding: '4px 8px',
+                                                        borderRadius: '4px',
+                                                    }}>
+                                                        {startDate || '날짜 없음'}
+                                                    </Box>
+                                                </Box>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    '& .date-label': {
+                                                        minWidth: '60px',
+                                                        color: 'error.main',
+                                                        fontWeight: 'bold'
+                                                    }
+                                                }}>
+                                                    <span className="date-label">종료일:</span>
+                                                    <Box sx={{
+                                                        ml: 1,
+                                                        padding: '4px 8px',
+                                                        borderRadius: '4px',
+                                                    }}>
+                                                        {endDate || '날짜 없음'}
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Box sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '4px'
+                                            }}>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                    bgcolor: 'background.paper',
+                                                    border: 1,
+                                                    borderColor: 'primary.main',
+                                                    borderRadius: '8px',
+                                                    padding: '4px 12px'
+                                                }}>
+                                                    <Typography variant="caption" color="text.secondary">
+                                                        잔여/전체
+                                                    </Typography>
+                                                    <Typography variant="body1" fontWeight="bold" color="primary.main">
+                                                        {tourDates[0].availableCapacity}/{tour.maxCapacity}
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="body1" fontWeight="medium">
+                                                {tour.tprice?.toLocaleString()}
+                                                <Typography component="span" color="text.secondary" ml={0.5}>
+                                                    원
+                                                </Typography>
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>{tour.taddress}</TableCell>
+                                        <TableCell>
+                                            <IconButton
+                                                onClick={() => handleEdit(tour.tno)}
+                                                sx={{ color: 'primary.main' }}
+                                            >
+                                                <EditIcon />
+                                            </IconButton>
+                                            <IconButton
+                                                onClick={() => handleDelete(tour.tno)}
+                                                sx={{ color: 'error.main' }}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+                <div className="flex justify-center gap-2 mt-4">
+                    <Button
+                        variant="outlined"
+                        onClick={() => handlePageChange(serverData.prev ? page - 1 : page)}
+                        disabled={!serverData.prev}
+                    >
+                        이전
+                    </Button>
+                    {serverData.pageNumList?.map((pageNum) => (
+                        <Button
+                            key={pageNum}
+                            variant={page === pageNum ? "contained" : "outlined"}
+                            onClick={() => handlePageChange(pageNum)}
+                        >
+                            {pageNum}
+                        </Button>
+                    ))}
+                    <Button
+                        variant="outlined"
+                        onClick={() => handlePageChange(serverData.next ? page + 1 : page)}
+                        disabled={!serverData.next}
+                    >
+                        다음
+                    </Button>
+                </div>
 
                 {openDialog && (
                     <TourForm

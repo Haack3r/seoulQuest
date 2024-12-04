@@ -139,12 +139,10 @@ public class TourServiceImpl implements TourService {
                 })
                 .collect(Collectors.toList());
 
-        long totalCount = result.getTotalElements();
-
         return PageResponseDTO.<TourDTO>withAll()
                 .dtoList(dtoList)
-                .totalCount(totalCount)
                 .pageRequestDTO(pageRequestDTO)
+                .totalCount(result.getTotalElements())
                 .build();
     }
 
@@ -157,7 +155,7 @@ public class TourServiceImpl implements TourService {
 
         // 투어 날짜 정보 처리
         List<TourDate> tourDates = tour.getTourDateList();
-        tourDTO.setTDate(tourDates.stream()
+        tourDTO.setTourDate(tourDates.stream()
                 .map(TourDate::getTourDate)
                 .map(LocalDate::toString)
                 .collect(Collectors.toList()));
@@ -169,7 +167,7 @@ public class TourServiceImpl implements TourService {
         // 이미지가 있는 상품인 경우
         List<String> fileNameList = imageList.stream()
                 .map(tourImage -> tourImage.getFileName())
-                .collect(Collectors.toList());
+                .toList();
         tourDTO.setUploadFileNames(fileNameList);
 
         return tourDTO;
@@ -194,6 +192,7 @@ public class TourServiceImpl implements TourService {
             category = categoryRepository.save(category);
         }
 
+        // dtoToEntity로 날짜 처리 로직 이관
         Tour tour = dtoToEntity(tourDTO, category);
 
         tour.getTourDateList().clear();
@@ -229,7 +228,6 @@ public class TourServiceImpl implements TourService {
                     .categoryName(tourDTO.getCategoryName())
                     .categoryType("tour")
                     .build();
-            category = categoryRepository.save(category);
         }
 
         // 2.change
@@ -242,18 +240,12 @@ public class TourServiceImpl implements TourService {
         tour.changeAddress(tourDTO.getTaddress());
         tour.preUpdate();
 
-        tour.getTourDateList().clear(); // 기존 날짜 정보 삭제
-        if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
-            tourDTO.getTDate().forEach(dateStr -> {
-                TourDate tourDate = TourDate.builder()
-                        .tourDate(LocalDate.parse(dateStr))
-                        .availableCapacity(tourDTO.getMaxCapacity())
-                        .build();
-                tour.getTourDateList().add(tourDate);
-            });
-        }
+        // 날짜 정보 업데이트 - dtoToEntity의 날짜 처리 로직 활용
+        tour.getTourDateList().clear();
+        Tour updatedTour = dtoToEntity(tourDTO, category);
+        tour.getTourDateList().addAll(updatedTour.getTourDateList());
 
-        // 4.이미지 처리
+        // 이미지 처리
         if (tourDTO.getFiles() != null && !tourDTO.getFiles().isEmpty()) {
             // 기존 이미지 삭제
             List<String> oldFiles = tour.getTourImageList()
@@ -262,7 +254,7 @@ public class TourServiceImpl implements TourService {
                     .collect(Collectors.toList());
 
             fileUtil.deleteFiles(oldFiles);
-            tour.clearList();
+            tour.imgClearList();
 
             // 새 이미지 추가
             List<String> uploadFileNames = fileUtil.saveFiles(tourDTO.getFiles());

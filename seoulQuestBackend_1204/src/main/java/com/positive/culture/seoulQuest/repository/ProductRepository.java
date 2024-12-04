@@ -47,7 +47,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
 
     // 특정 상품의 이미지 삭제
     @Modifying
-    @Query("delete from Product p join p.productImageList pi where p.pno = :pno and pi.fileName = :fileName")
+    @Query(value = "delete pil from product_image_list pil " +
+            "where pil.product_pno = :pno and pil.file_name = :fileName", nativeQuery = true)
     void deleteProductImage(@Param("pno") Long pno, @Param("fileName") String fileName);
 
 

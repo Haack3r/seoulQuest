@@ -6,13 +6,7 @@ import useCustomLogin from "../../hooks/useCustomLogin";
 import ReviewModal from "./ReviewModal";
 import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import ReviewAddModal from "./ReviewAddModal";
-import {
-  getProductList,
-  getInfoforProduct,
-  postProductAdd,
-  deleteProductOne,
-  putProductOne,
-} from "../../api/reviewApi";
+import { getProductList, getInfoforProduct, postProductAdd, deleteProductOne, putProductOne } from "../../api/reviewApi";
 
 const initState = {
   dtoList: [],
@@ -80,11 +74,13 @@ const ProductReviewComponent = () => {
   }, [page, size, refresh]);
 
   return (
-    <div className="max-w-6xl min-w-[320px] md:min-w-max mt-5 mx-auto mb-20">
+    <div className="max-w-6xl min-w-[320px] md:min-w-[768px] mt-5 mx-auto mb-20">
       <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-8 mb-10">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-xl font-extrabold text-gray-900">My Reviews</h2>
+          <h2 className="text-xl font-extrabold text-gray-900 ">
+            My Reviews
+          </h2>
           <button
             className="text-gray-500 underline hover:text-blue-600 hover:underline font-semibold py-2 px-4 transition duration-200"
             onClick={OpenAddModal}
@@ -98,30 +94,28 @@ const ProductReviewComponent = () => {
           serverData.dtoList.map((review) => (
             <div
               key={review.prid}
-              className="flex flex-wrap mb-5 items-center bg-gray-50 hover:bg-gray-100 rounded-lg shadow transition-shadow p-3 cursor-pointer"
+              className="flex flex-row gap-4 mb-5 items-center bg-gray-50 hover:bg-gray-100 rounded-lg shadow transition-shadow p-3 cursor-pointer"
               onClick={() => openEditModal(review)}
             >
-              <div className="text-xs text-gray-500 w-full md:w-1/6 text-center">
+              <div className="text-sm text-gray-500 w-1/6 text-center">
                 {review.dueDate}
               </div>
-              <div className="text-sm font-semibold text-gray-600 w-full md:w-1/6 truncate text-center">
-                {review.itemName}
-              </div>
-              <div className="text-l  text-gray-800 w-full md:w-2/6 truncate text-center">
+              <div className="text-l font-semibold text-gray-800 w-2/6 truncate">
                 {review.title}
               </div>
-              <div className="flex items-center justify-center w-full md:w-1/6">
-                <div className="flex space-x-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <span key={star}>
-                      {review.rating >= star ? (
-                        <StarFilled className="text-yellow-400 text-base md:text-xl" />
-                      ) : (
-                        <StarOutlined className="text-gray-300 text-base md:text-xl" />
-                      )}
-                    </span>
-                  ))}
-                </div>
+              <div className="text-sm text-gray-600 w-1/6 truncate">
+                {review.itemName}
+              </div>
+              <div className="flex items-center justify-center w-1/6">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span key={star}>
+                    {review.rating >= star ? (
+                      <StarFilled className="text-yellow-400 text-xl" />
+                    ) : (
+                      <StarOutlined className="text-gray-300 text-xl" />
+                    )}
+                  </span>
+                ))}
               </div>
             </div>
           ))

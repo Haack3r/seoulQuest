@@ -1,7 +1,6 @@
 package com.positive.culture.seoulQuest.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.positive.culture.seoulQuest.domain.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,11 +20,12 @@ public class ProductDTO {
     private Long pno;
 
     private Long categoryId;
-    private String categoryName; // 카테고리 이름을 직접 받기 위한 필드
-    private String categoryType; // 카테고리 타입을 직접 받기 위한 필드
+    private String categoryName;
+    private String categoryType;
 
     private String pname;
     private String pdesc; // 상품설명
+
     private int pprice;
     private int pqty; // 상품갯수
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { addTour, modifyTour } from '../../../api/AdminApi';
+import { addTour, modifyTour, deleteTourImage } from '../../../api/AdminApi';
 import { Box, Dialog, DialogTitle, DialogContent, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { Upload as UploadIcon } from '@mui/icons-material';
 import { DatePicker } from 'antd';
@@ -18,6 +18,7 @@ const CATEGORIES = [
 ];
 
 const initState = {
+    tno: 0,
     tname: '',
     tdesc: '',
     tprice: 0,
@@ -25,19 +26,14 @@ const initState = {
     taddress: '',
     categoryName: '',
     categoryType: 'tour',
-    // tDate: [],
+    tourDate: [],
     files: []
-};
-
-const TourDate = {
-    tourDateId: 0,
-    tourDate: ''
 };
 
 const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
     const [tour, setTour] = useState(isEditing ? initialData : { ...initState });
-    const [tDate, setTDate] = useState(isEditing ? initialData.tDate : []);
     const [uploadQueue, setUploadQueue] = useState([]);
+    const [removedImages, setRemovedImages] = useState([]);
 
     useEffect(() => {
         setTour(prev => ({
@@ -46,17 +42,32 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         }));
     }, [isEditing]);
 
-    const handleChangeTour = (e) => {
-        const { name, value, type } = e.target;
-
-        if (name === 'taddress') {
-            // 입력은 자유롭게 허용하고, 제출할 때만 검증
+    const handleDateChange = (dates) => {
+        if (!dates) {
             setTour(prev => ({
                 ...prev,
-                taddress: value
+                tourDate: []
             }));
             return;
         }
+
+        const [startDate, endDate] = dates;
+        const dateArray = [];
+        let currentDate = startDate;
+
+        while (currentDate <= endDate) {
+            dateArray.push(currentDate.format('YYYY-MM-DD'));
+            currentDate = currentDate.add(1, 'day');
+        }
+
+        setTour(prev => ({
+            ...prev,
+            tourDate: dateArray
+        }));
+    };
+
+    const handleChangeTour = (e) => {
+        const { name, value } = e.target;
 
         if (name === 'categoryName') {
             setTour({
@@ -64,14 +75,18 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
                 categoryName: value,
                 categoryType: "tour"
             });
+        } else if (name === 'taddress') {
+            // 입력은 자유롭게 허용하고, 제출할 때만 검증
+            setTour({
+                ...tour,
+                taddress: value
+            });
+        } else {
+            setTour({
+                ...tour,
+                [name]: value
+            });
         }
-
-        const newValue = type === 'number' ? parseInt(value) || 0 : value;
-
-        setTour(prev => ({
-            ...prev,
-            [name]: newValue
-        }));
     };
 
     const handleFileChange = (e) => {
@@ -98,9 +113,17 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
     };
 
     const removeFile = (index) => {
+        if (isEditing && tour.uploadFileNames && tour.uploadFileNames[index]) {
+            const fileName = tour.uploadFileNames[index];
+            setRemovedImages(prev => [...prev, { fileName, tno: tour.tno }]);
+        }
+
         setTour(prev => ({
             ...prev,
-            files: prev.files.filter((_, i) => i !== index)
+            files: prev.files.filter((_, i) => i !== index),
+            uploadFileNames: prev.uploadFileNames ?
+                prev.uploadFileNames.filter((_, i) => i !== index) :
+                []
         }));
     };
 
@@ -130,15 +153,14 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         }
 
         // selectedPno가 없을 경우 initialData.pno 사용
-        const tno = selectedTno || initialData?.tno;
+        const tno = isEditing ? selectedTno : initialData?.tno || tour.tno;
 
-        if (isEditing && !tno) {
+        if (isEditing && !tour.tno) {
             alert('투어 번호가 유효하지 않습니다.');
             return;
         }
 
         const formData = new FormData();
-        const tDate = new Array();
 
         formData.append("tname", tour.tname)
         formData.append("tdesc", tour.tdesc)
@@ -146,12 +168,12 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         formData.append("maxCapacity", tour.maxCapacity)
         formData.append("taddress", tour.taddress)
         formData.append("categoryName", tour.categoryName)
-        // formData.append("tDate", JSON.stringify(tour.tDate))
-        // formData.append("tDate[]", tour.tDate)
+        // formData.append("tourDate", JSON.stringify(tour.tourDate))
+        // formData.append("tourDate[]", tour.tourDate)
 
-        tDate.forEach(date => {
-            tDate.append("tDate", date);
-            console.log("tDate added:", date);
+        tour.tourDate.forEach(date => {
+            formData.append("tourDate", date);
+            console.log("tourDate added:", date);
         });
 
         if (tour.files?.length > 0) {
@@ -167,7 +189,12 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         }
         try {
             if (isEditing) {
-                await modifyTour(selectedTno, formData);
+                if (removedImages.length > 0) {
+                    for (const image of removedImages) {
+                        await deleteTourImage(image.tno, image.fileName);
+                    }
+                }
+                await modifyTour(tour.tno, formData);
                 alert('투어가 수정되었습니다.');
             } else {
                 await addTour(formData);
@@ -206,29 +233,27 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         }
     }, [isEditing, initialData]);
 
-    const handleDateChange = (dates) => {
-        if (!dates) {
-            setTour(prev => ({
-                ...prev,
-                tDate: []
-            }));
-            return;
+    useEffect(() => {
+        if (isEditing && initialData && initialData.tourDate) {
+            // 문자열로 된 tourDate를 파싱
+            let dates;
+            try {
+                dates = typeof initialData.tourDate === 'string'
+                    ? JSON.parse(initialData.tourDate)
+                    : initialData.tourDate;
+            } catch (e) {
+                dates = initialData.tourDate;
+            }
+
+            // 날짜 배열이 있으면 설정
+            if (Array.isArray(dates) && dates.length > 0) {
+                setTour(prev => ({
+                    ...prev,
+                    tourDate: dates
+                }));
+            }
         }
-
-        const [startDate, endDate] = dates;
-        const dateArray = [];
-        let currentDate = startDate;
-
-        while (currentDate <= endDate) {
-            dateArray.push(currentDate.format('YYYY-MM-DD'));
-            currentDate = currentDate.add(1, 'day');
-        }
-
-        setTour(prev => ({
-            ...prev,
-            tDate: dateArray
-        }));
-    };
+    }, [isEditing, initialData]);
 
     return (
         <Dialog open={true} onClose={onClose} maxWidth="md" fullWidth>
@@ -290,9 +315,9 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
                                 width: '100%',
                                 zIndex: 9999
                             }}
-                            value={tDate[0] && tDate[1] ? [
-                                dayjs(tDate[0]),
-                                dayjs(tDate[1])
+                            value={tour.tourDate && tour.tourDate.length >= 2 ? [
+                                dayjs(tour.tourDate[0]),
+                                dayjs(tour.tourDate[tour.tourDate.length - 1])
                             ] : null}
                             onChange={handleDateChange}
                             format="YYYY-MM-DD"

@@ -34,6 +34,7 @@ public class Tour {
 
     private int tprice;
     private int maxCapacity;
+
     private String taddress;
 
     // 통계를 내거나 정보를 확인할 때 사용
@@ -45,6 +46,9 @@ public class Tour {
     // 실행시 , 자동으로 product_image_list table이 생성됨.
     // 하나의 엔티티가 여러개의 VO(값타입 객체)를 담을때 사용, 자동으로 이에 해당하는 테이블이 생성됨
     @ElementCollection
+    @CollectionTable(name = "tour_image_list", // 테이블 이름을 더 간단하게 변경
+            joinColumns = @JoinColumn(name = "tour_tno") // 외래 키 컬럼명 지정
+    )
     @Builder.Default
     private List<TourImage> tourImageList = new ArrayList<>();
 
@@ -55,8 +59,8 @@ public class Tour {
     // private List<TourDate> tDate = new ArrayList<>();
     @ElementCollection
     @Builder.Default
-    @CollectionTable(name = "tbl_tour_date" // 원하는 테이블 이름
-    // joinColumns = @JoinColumn(name = "tour_no") // 외래 키 이름
+    @CollectionTable(name = "tbl_tour_date", // 원하는 테이블 이름
+            joinColumns = @JoinColumn(name = "tour_tno") // 외래 키 이름
     )
     private List<TourDate> tourDateList = new ArrayList<>();
 
@@ -100,6 +104,17 @@ public class Tour {
     }
 
     // ------------------------------------------------------
+
+    // 날짜 정보 추가
+    public void addTourDate(TourDate tourDate) {
+        tourDateList.add(tourDate);
+    }
+
+    // 날짜 정보 초기화
+    public void tourDateClearList() {
+        this.tourDateList.clear();
+    }
+
     // 이미지 정보 추가
     public void addImage(TourImage tourImage) {
         tourImage.setOrd(this.tourImageList.size());
@@ -115,7 +130,7 @@ public class Tour {
     }
 
     // productImage 리스트를 삭제
-    public void clearList() {
+    public void imgClearList() {
         this.tourImageList.clear();
     }
 
@@ -132,7 +147,7 @@ public class Tour {
 
     // uploadFileNames setter 메서드
     public void setUploadFileNames(List<String> fileNames) {
-        clearList(); // 기존 리스트 초기화
+        imgClearList(); // 기존 리스트 초기화
         if (fileNames != null) {
             fileNames.stream()
                     .filter(fileName -> fileName != null && !fileName.trim().isEmpty())

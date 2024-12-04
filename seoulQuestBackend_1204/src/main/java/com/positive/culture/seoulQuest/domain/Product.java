@@ -30,6 +30,7 @@ public class Product {
     // @Column(columnDefinition = "TEXT") // pdesc 타입을 text로 생성되도록 함
     @Lob
     private String pdesc;
+
     private int pprice;
     private int pqty;
 
@@ -44,6 +45,9 @@ public class Product {
     // 실행시 , 자동으로 product_image_list table이 생성됨.
     // 하나의 엔티티가 여러개의 VO(값타입 객체)를 담을때 사용, 자동으로 이에 해당하는 테이블이 생성됨
     @ElementCollection
+    @CollectionTable(name = "product_image_list", // 테이블 이름을 더 간단하게 변경
+            joinColumns = @JoinColumn(name = "product_pno") // 외래 키 컬럼명 지정
+    )
     @Builder.Default
     private List<ProductImage> productImageList = new ArrayList<>();
 

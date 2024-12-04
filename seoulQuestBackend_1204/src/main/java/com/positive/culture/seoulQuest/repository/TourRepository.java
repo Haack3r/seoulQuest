@@ -30,7 +30,6 @@ public interface TourRepository extends JpaRepository<Tour, Long>, QuerydslPredi
     @Query("update Tour t set t.delFlag = :flag where t.tno = :tno")
     void updateToDelete(@Param("tno") Long tno, @Param("flag") boolean flag);
 
-
     List<Tour> findByTaddress(String taddress);
 
     Page<Tour> findByCategory_CategoryName(Pageable pageable, String categoryName);
@@ -43,6 +42,8 @@ public interface TourRepository extends JpaRepository<Tour, Long>, QuerydslPredi
     Page<Tour> AdminTourList(Pageable pageable, @Param("keyword") String keyword);
 
     @Modifying
-    @Query("delete from Tour t join t.tourImageList ti where t.tno = :tno and ti.fileName = :fileName")
+    @Query(value = "delete til from tour_image_list til " +
+            "where til.tour_tno = :tno and til.file_name = :fileName", nativeQuery = true)
     void deleteTourImage(@Param("tno") Long tno, @Param("fileName") String fileName);
+
 }

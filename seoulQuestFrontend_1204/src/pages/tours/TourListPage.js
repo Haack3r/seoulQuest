@@ -89,7 +89,7 @@ const TourListPage = () => {
 
       {/* Right-Side Navigation */}
       {showNav && (
-        <nav className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50 p-4">
+        <nav className="fixed top-1/2 right-4 transform -translate-y-1/2  p-4">
           <ul className="space-y-4">
             <li>
               <button

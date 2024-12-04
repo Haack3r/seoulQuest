@@ -66,7 +66,7 @@ const CouponComponent = () => {
 
   return (
     <div className="min-h-screen p-6 flex flex-col items-center bg-gray-100 mt-16 mb-10">
-      <h1 className="text-2xl font-bold text-gray-800 text-center mb-10">Coupons</h1>
+      <h1 className="text-xl font-bold text-gray-800 mb-6">Coupons</h1>
 
       {/* New Offers Section */}
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-4 mb-8">

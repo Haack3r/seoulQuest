@@ -3,14 +3,12 @@ package com.positive.culture.seoulQuest.service;
 import com.positive.culture.seoulQuest.domain.Address;
 import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.MemberRole;
-import com.positive.culture.seoulQuest.dto.CustomerListDTO;
 import com.positive.culture.seoulQuest.dto.MemberDTO;
 import com.positive.culture.seoulQuest.dto.MemberModifyDTO;
 import com.positive.culture.seoulQuest.dto.UserDTO;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -60,26 +58,6 @@ public interface MemberService {
                 .build();
 
         return userDTO;
-    }
-    List<MemberDTO> getAllMembers();
-
-    List<CustomerListDTO> getAllCustomers();
-
-    default CustomerListDTO memberToCustomerDTO(Member member) {
-        return CustomerListDTO.builder()
-                .id(member.getId())
-                .firstname(member.getFirstname())
-                .lastname(member.getLastname())
-                .nickName(member.getNickName())
-                .email(member.getEmail())
-                .phoneNumber(member.getPhoneNumber())
-                .birthday(member.getBirthday())
-                .country(member.getAddress().getCountry())
-                .state(member.getAddress().getState())
-                .city(member.getAddress().getCity())
-                .street(member.getAddress().getStreet())
-                .zipCode(member.getAddress().getZipCode())
-                .build();
     }
 
 }

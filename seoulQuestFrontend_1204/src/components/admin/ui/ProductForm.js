@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { addProduct, modifyProduct } from '../../../api/AdminApi';
+import { addProduct, modifyProduct, deleteProductImage } from '../../../api/AdminApi';
 import axios from 'axios';
 
 const host = `http://localhost:8080/api`;
@@ -34,6 +34,7 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
 
     const [product, setProduct] = useState(isEditing ? initialData : { ...initState });
     const [uploadQueue, setUploadQueue] = useState([]);
+    const [removedImages, setRemovedImages] = useState([]);
     // const uploadRef = useRef();
 
     // 수정된 useEffect - API 호출 제거
@@ -106,11 +107,19 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
         }));
     };
 
-    // 이미지 제거
+    // 이미지 제거 - 실제 삭제하지 않고 임시 저장
     const removeFile = (index) => {
+        if (isEditing && product.uploadFileNames && product.uploadFileNames[index]) {
+            const fileName = product.uploadFileNames[index];
+            setRemovedImages(prev => [...prev, { fileName, pno: product.pno }]);
+        }
+
         setProduct(prev => ({
             ...prev,
-            files: prev.files.filter((_, i) => i !== index)
+            files: prev.files.filter((_, i) => i !== index),
+            uploadFileNames: prev.uploadFileNames ?
+                prev.uploadFileNames.filter((_, i) => i !== index) :
+                []
         }));
     };
 
@@ -135,58 +144,55 @@ const ProductForm = ({ isEditing, initialData, onClose, selectedPno }) => {
     const handleClickSubmit = async (e) => {
         e.preventDefault();
 
-        // selectedPno가 없을 경우 initialData.pno 사용
-        const pno = selectedPno || initialData?.pno;
+        try {
+            const formData = new FormData();
 
-        if (isEditing && !pno) {
-            alert('상품 번호가 유효하지 않습니다.');
-            return;
-        }
+            // 기본 제품 정보 설정 - 새 제품 등록 시에는 pno 제외
+            const productData = {
+                ...(isEditing && { pno: product.pno }), // 수정 시에만 pno 포함
+                pname: product.pname,
+                pdesc: product.pdesc,
+                pprice: product.pprice,
+                pqty: product.pqty,
+                shippingFee: product.shippingFee,
+                categoryName: product.categoryName,
+                categoryType: "product"
+            };
 
-        const formData = new FormData();
-
-        // 기본 제품 정보 설정
-        // const productData = {
-        //     pno: isEditing ? pno : product.pno,
-        //     pname: product.pname,
-        //     pdesc: product.pdesc,
-        //     pprice: product.pprice,
-        //     pqty: product.pqty,
-        //     shippingFee: product.shippingFee,
-        //     categoryName: product.categoryName,
-        //     categoryType: "product"
-        // };
-
-        // 나머지 제품 정보 추가
-        Object.entries(product).forEach(([key, value]) => {
-            if (key !== 'category' && value !== null && value !== undefined) {
-                formData.append(key, value);
-            }
-        });
-
-        // 파일 추가 - 새로운 파일이 있으면 추가, 없으면 기존 파일 유지
-        if (product.files?.length > 0) {
-            product.files.forEach(file => {
-                if (file instanceof File) {
-                    formData.append("files", file);
+            // FormData에 제품 정보 추가
+            Object.entries(productData).forEach(([key, value]) => {
+                if (value !== undefined) {  // undefined 값은 제외
+                    formData.append(key, String(value));
                 }
             });
-        }
 
-        try {
-            // FormData 내용 확인
-            console.log("전송할 FormData 내용:");
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
+            // 파일 추가
+            if (product.files?.length > 0) {
+                product.files.forEach(file => {
+                    if (file instanceof File) {
+                        formData.append("files", file);
+                    }
+                });
             }
 
             if (isEditing) {
-                await modifyProduct(pno, formData);
+                // 삭제할 이미지들 처리
+                if (removedImages.length > 0) {
+                    for (const image of removedImages) {
+                        try {
+                            await deleteProductImage(image.pno, image.fileName);
+                        } catch (error) {
+                            console.error('이미지 삭제 실패:', error);
+                        }
+                    }
+                }
+                await modifyProduct(product.pno, formData);
                 alert('제품이 수정되었습니다.');
             } else {
                 await addProduct(formData);
                 alert('제품이 등록되었습니다.');
             }
+
             onClose();
             window.location.reload();
         } catch (error) {

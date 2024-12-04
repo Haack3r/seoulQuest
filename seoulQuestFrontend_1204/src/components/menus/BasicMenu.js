@@ -140,25 +140,25 @@ const BasicMenu = () => {
                         to="/mypage"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
-                        <User title="My Page" className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                        <User className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
                         to="/favorite/"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
-                        <Heart title="My Favorites" className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                        <Heart className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
                         to="/cart/"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
-                        <ShoppingBagIcon title="My Cart" className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                        <ShoppingBagIcon className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
                         to="/coupon/"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
-                        <Tickets title="Coupons" className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                        <Tickets className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
                         to="/member/logout/"
@@ -272,25 +272,25 @@ const BasicMenu = () => {
                         to={"/mypage"}
                         className="flex items-center space-x-2 menu-animation-color"
                       >
-                        <User title="My Page" className="h-5 w-5 menu-animation-color" />
+                        <User className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
                         to="/favorite/"
                         className="flex items-center space-x-2 menu-animation-color"
                       >
-                        <Heart title="My Favorites" className="h-5 w-5 menu-animation-color" />
+                        <Heart className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
                         to={"/cart/"}
                         className="flex items-center space-x-2 menu-animation-color"
                       >
-                        <ShoppingBagIcon title="My Cart" className="h-5 w-5 menu-animation-color" />
+                        <ShoppingBagIcon className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
                         to={"/coupon"}
                         className="flex items-center space-x-2 menu-animation-color"
                       >
-                        <Tickets title="Coupons" className="h-5 w-5 menu-animation-color" />
+                        <Tickets className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
                         to={"/member/logout/"}

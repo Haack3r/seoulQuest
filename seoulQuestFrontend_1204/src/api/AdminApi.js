@@ -117,7 +117,7 @@ export const AdminRoute = ({ children }) => {
 
 export const fetchOrders = async () => {
     try {
-        const res = await jwtAxios.get(`${host}/admin/products/order`)
+        const res = await jwtAxios.get(`${host}/admin/order`)
         console.log("주문 체크 응답", res)
         return res.data
     } catch (error) {
@@ -202,17 +202,18 @@ export const getProduct = async (pno) => {
 //     }
 // };
 
-// export const deleteProductImage = async (fileName) => {
-//     try {
-//         const response = await jwtAxios.delete(
-//             `${host}/admin/product/image/${fileName}`
-//         )
-//         return response;
-//     } catch (err) {
-//         console.error('이미지 삭제 실패 : ', err)
-//         throw err
-//     }
-// }
+// 이미지 삭제 API
+export const deleteProductImage = async (pno, fileName) => {
+    try {
+        const response = await jwtAxios.delete(
+            `${host}/admin/product/${pno}/image/${fileName}`
+        );
+        return response.data;
+    } catch (error) {
+        console.error('이미지 삭제 실패:', error);
+        throw error;
+    }
+};
 
 export const addProduct = async (formData) => {
     try {
@@ -248,35 +249,102 @@ export const deleteProduct = async (pno) => {
 
 export const modifyProduct = async (pno, formData) => {
     try {
-        // FormData 내용 검증 및 로깅
-        console.log('=== FormData 전송 전 확인 ===');
-        let isEmpty = true;
-        for (let pair of formData.entries()) {
-            console.log(`${pair[0]}: ${pair[1]}`);
-            isEmpty = false;
-        }
+        console.log('수정 요청 데이터:', {
+            pno,
+            formDataEntries: Array.from(formData.entries())
+        });
 
-        if (isEmpty) {
-            console.warn('Warning: FormData is empty!');
-        }
-
-        const res = await jwtAxios.put(
-            `${host}/admin/product/${pno}`,
+        const response = await jwtAxios.put(
+            `${host}/admin/product/${pno}`,  // URL에 pno 추가
             formData,
             {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                },
+                headers: { 'Content-Type': 'multipart/form-data' }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('제품 수정 실패:', error);
+        throw error;
+    }
+};
+
+/* -------------------------- TOUR ------------------------------*/
+
+export const adminTourList = async ({ page, size, keyword = "", type = "t" }) => {
+    try {
+        const res = await jwtAxios.get(`${host}/admin/tour`, {
+            params: { page, size, keyword, type }
+        })
+        return res.data
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+export const getTour = async (tno) => {
+    try {
+        const res = await jwtAxios.get(`${host}/admin/tour/${tno}`)
+        return res.data
+    } catch (err) {
+        console.error('투어 정보 로드 실패 : ', err)
+        throw err
+    }
+}
+
+// 이미지 삭제 API
+export const deleteTourImage = async (tno, fileName) => {
+    try {
+        const response = await jwtAxios.delete(
+            `${host}/admin/tour/${tno}/image/${fileName}`
+        );
+        return response.data;
+    } catch (error) {
+        console.error('이미지 삭제 실패:', error);
+        throw error;
+    }
+};
+
+export const addTour = async (formData) => {
+    try {
+        const res = await jwtAxios.post(
+            `${host}/admin/tour`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }
+        )
+        return res.data
+    } catch (err) {
+        console.error('투어 등록 실패 : ', err)
+        throw err;
+    }
+}
+
+export const deleteTour = async (tno) => {
+    try {
+        const res = await jwtAxios.delete(`${host}/admin/tour/${tno}`)
+        return res.data
+    } catch (err) {
+        console.error('투어 삭제 실패 : ', err)
+        throw err
+    }
+}
+
+export const modifyTour = async (tno, formData) => {
+    try {
+        console.log('- FormData check -')
+
+        const res = await jwtAxios.put(
+            `${host}/admin/tour/${tno}`, formData,
+            {
+                headers: { 'Content-Type': 'multipart/form-data' },
                 transformRequest: [(data) => {
-                    console.log('전송되는 데이터:', {
+                    console.log('전송되는 데이터 : ', {
                         type: typeof data,
                         isFormData: data instanceof FormData,
                         entries: Array.from(data.entries())
-                    });
-                    return data;
+                    })
+                    return data
                 }]
             }
-        );
+        )
 
         console.log('수정 응답:', res.data);
         return res.data;
@@ -287,7 +355,7 @@ export const modifyProduct = async (pno, formData) => {
         });
         throw error;
     }
-};
+}
 
 /* -------------------------- TOUR ------------------------------*/
 
@@ -378,14 +446,15 @@ export const modifyTour = async (tno, formData) => {
 
 export const fetchReservations = async () => {
     try {
-        const response = await jwtAxios.get(`${host}/admin/reservation/list`);
-        console.log("Fetched Reservations:", response.data);
-        return response.data; // Return the reservations data
+        const res = await jwtAxios.get(`${host}/admin/reservation`)
+        console.log("상품 체크 응답", res)
+        return res.data
     } catch (error) {
-        console.error("Error fetching reservations:", error);
-        throw error; // Handle the error appropriately in the UI
+        console.log("상품 체크 오류", error)
+        throw error
     }
 }
+
 /*---------------------------관리자 고객 문의-----------------------------*/
 
 // 문의사항 목록 조회

@@ -1,7 +1,6 @@
 package com.positive.culture.seoulQuest.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.positive.culture.seoulQuest.domain.TourDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TourDTO {
+
     private Long tno;
 
     private Long categoryId;
@@ -33,7 +33,7 @@ public class TourDTO {
     private String taddress;
 
     @Builder.Default
-    private List<String> tDate = new ArrayList<>();
+    private List<String> tourDate = new ArrayList<>();
 
     // 통계를 내거나 정보를 확인할 때 사용
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

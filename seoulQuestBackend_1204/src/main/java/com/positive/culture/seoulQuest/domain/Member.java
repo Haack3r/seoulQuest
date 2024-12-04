@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-//@ToString
+// @ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +34,11 @@ public class Member {
     @Embedded
     private Address address;
 
-
     @ElementCollection
     @Builder.Default
+    @CollectionTable(name = "member_role_list", // 원하는 테이블 이름
+            joinColumns = @JoinColumn(name = "member_id") // 외래 키 이름
+    )
     @Enumerated(EnumType.STRING)
     private List<MemberRole> memberRoleList = new ArrayList<>();
 
@@ -60,7 +62,9 @@ public class Member {
         this.password = password;
     }
 
-    public void changeSocial(boolean social) {this.social = social;}
+    public void changeSocial(boolean social) {
+        this.social = social;
+    }
 
     public void changePhone(String phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -70,7 +74,9 @@ public class Member {
         this.address = address;
     }
 
-    public void changeBirth(LocalDate birthday) { this.birthday = birthday; }
+    public void changeBirth(LocalDate birthday) {
+        this.birthday = birthday;
+    }
 
     @Override
     public String toString() {
