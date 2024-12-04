@@ -149,6 +149,12 @@ const BasicMenu = () => {
                         <Heart title="My Favorites" className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
+                        to="/favorite/"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                      >
+                        <Heart className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                      </Link>
+                      <Link
                         to="/cart/"
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
@@ -159,6 +165,12 @@ const BasicMenu = () => {
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                       >
                         <Tickets title="Coupons" className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                      </Link>
+                      <Link
+                        to="/coupon/"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                      >
+                        <Tickets className="h-5 w-5 text-gray-600 hover:text-gray-900" />
                       </Link>
                       <Link
                         to="/member/logout/"
@@ -281,6 +293,12 @@ const BasicMenu = () => {
                         <Heart title="My Favorites" className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
+                        to="/favorite/"
+                        className="flex items-center space-x-2 menu-animation-color"
+                      >
+                        <Heart className="h-5 w-5 menu-animation-color" />
+                      </Link>
+                      <Link
                         to={"/cart/"}
                         className="flex items-center space-x-2 menu-animation-color"
                       >
@@ -291,6 +309,12 @@ const BasicMenu = () => {
                         className="flex items-center space-x-2 menu-animation-color"
                       >
                         <Tickets title="Coupons" className="h-5 w-5 menu-animation-color" />
+                      </Link>
+                      <Link
+                        to={"/coupon"}
+                        className="flex items-center space-x-2 menu-animation-color"
+                      >
+                        <Tickets className="h-5 w-5 menu-animation-color" />
                       </Link>
                       <Link
                         to={"/member/logout/"}

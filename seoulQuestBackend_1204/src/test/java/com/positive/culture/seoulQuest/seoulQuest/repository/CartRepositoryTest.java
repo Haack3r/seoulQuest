@@ -35,6 +35,10 @@ public class CartRepositoryTest {
         // Create a new Cart and associate it with the fetched member
         Cart cart = Cart.builder()
                 .owner(member)  // Assign the fetched Member object to the owner
+<<<<<<<< HEAD:seoulQuestBackend_1204/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/CartRepositoryTest.java
+========
+//                .status("active")  // Set the cart status
+>>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulback/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/CartRepositoryTest.java
                 .build();
 
         // Save the cart to the database

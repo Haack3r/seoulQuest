@@ -64,8 +64,11 @@ export const getOrderAndPaymentInfo = async () =>{
   return res.data;
 }
 
+<<<<<<<< HEAD:seoulQuestFrontend_1204/src/api/myPageApi.js
 export const getTourAndPaymentInfo = async () =>{
   const res = await jwtAxios.get(`${host}/tours/tourPaymentInfo`);
   console.log("res:",res)
   return res.data;
 }
+========
+>>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulfront/src/api/myPageApi.js

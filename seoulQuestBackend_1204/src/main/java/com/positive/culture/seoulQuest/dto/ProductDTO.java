@@ -21,11 +21,20 @@ public class ProductDTO {
     private Long pno;
 
     private Long categoryId;
+<<<<<<<< HEAD:seoulQuestBackend_1204/src/main/java/com/positive/culture/seoulQuest/dto/ProductDTO.java
     private String categoryName; // 카테고리 이름을 직접 받기 위한 필드
     private String categoryType; // 카테고리 타입을 직접 받기 위한 필드
 
     private String pname;
     private String pdesc; // 상품설명
+========
+    private String categoryName;
+    private String categoryType;
+
+    private String pname;
+    private String pdesc; // 상품설명
+
+>>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulback/src/main/java/com/positive/culture/seoulQuest/dto/ProductDTO.java
     private int pprice;
     private int pqty; // 상품갯수
 
