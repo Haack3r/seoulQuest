@@ -14,7 +14,7 @@ drop table tbl_cart_item;
 drop table tbl_category;
 drop table tbl_tours;
 drop table tbl_reservation_item;
-drop table product_product_image_list;
+drop table product_image_list;
 
 select * from member_member_role_list;
 select * from tbl_member;
@@ -22,7 +22,8 @@ select * from tbl_product;
 select * from tbl_category;
 select * from tbl_tours;
 select * from tbl_tour_date;
-select * from product_product_image_list;
+select * from product_image_list;
+select * from tour_image_list;
 
 select m.*,mrl.member_role_list as role from tbl_member m
 left join member_member_role_list mrl on m.member_id = mrl.member_id
