@@ -194,21 +194,10 @@ public class TourServiceImpl implements TourService {
 
         // dtoToEntity로 날짜 처리 로직 이관
         Tour tour = dtoToEntity(tourDTO, category);
-
-        tour.getTourDateList().clear();
-        if (tourDTO.getTDate() != null && !tourDTO.getTDate().isEmpty()) {
-            tourDTO.getTDate().forEach(dateStr -> {
-                TourDate tourDate = TourDate.builder()
-                        .tourDate(LocalDate.parse(dateStr))
-                        .availableCapacity(tourDTO.getMaxCapacity())
-                        .build();
-                tour.getTourDateList().add(tourDate);
-            });
-        }
-
-        tourRepository.save(tour);
-        return tour.getTno();
+        Tour result = tourRepository.save(tour);
+        return result.getTno();
     }
+
 
     // ----------------------------------------------------------------
     // 수정 --(관리자)

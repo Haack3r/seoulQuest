@@ -1,5 +1,7 @@
 package com.positive.culture.seoulQuest.repository;
 
+import com.positive.culture.seoulQuest.domain.ProductPayment;
+import com.positive.culture.seoulQuest.domain.ProductPaymentItem;
 import com.positive.culture.seoulQuest.domain.TourPayment;
 import com.positive.culture.seoulQuest.domain.TourPaymentItem;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +19,6 @@ public interface TourPaymentItemRepository extends JpaRepository<TourPaymentItem
             "GROUP BY t.tour.tno, t.tour.tname, t.tprice " +
             "ORDER BY totalReservations DESC")
     List<Object[]> findTopReservedTours();
+    List<TourPaymentItem> findByTourPayment(TourPayment tourPayment);
 
 }

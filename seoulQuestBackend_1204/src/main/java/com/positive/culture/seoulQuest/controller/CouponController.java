@@ -20,9 +20,12 @@ public class CouponController {
 
     @GetMapping("/available")
     public List<CouponDTO> getAvailableCoupons(@RequestParam String email) {
-        // Pass the email to getAvailableCoupons to filter out used coupons
-        return couponService.getAvailableCoupons(email);
+        System.out.println("Email received: " + email);
+        List<CouponDTO> availableCoupons = couponService.getAvailableCoupons(email);
+        System.out.println("Available Coupons: " + availableCoupons);
+        return availableCoupons;
     }
+
 
     @PostMapping("/add/{email}")
     public void addCouponToUser(@PathVariable String email, @RequestParam Long couponId) {

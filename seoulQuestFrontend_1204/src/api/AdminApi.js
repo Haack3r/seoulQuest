@@ -357,91 +357,6 @@ export const modifyTour = async (tno, formData) => {
     }
 }
 
-/* -------------------------- TOUR ------------------------------*/
-
-export const adminTourList = async ({ page, size, keyword = "", type = "t" }) => {
-    try {
-        const res = await jwtAxios.get(`${host}/admin/tour`, {
-            params: { page, size, keyword, type }
-        })
-        return res.data
-    } catch (err) {
-        console.error(err)
-        throw err
-    }
-}
-
-export const getTour = async (tno) => {
-    try {
-        const res = await jwtAxios.get(`${host}/admin/tour/${tno}`)
-        return res.data
-    } catch (err) {
-        console.error('투어 정보 로드 실패 : ', err)
-        throw err
-    }
-}
-
-export const addTour = async (formData) => {
-    try {
-        const res = await jwtAxios.post(
-            `${host}/admin/tour`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }
-        )
-        return res.data
-    } catch (err) {
-        console.error('투어 등록 실패 : ', err)
-        throw err;
-    }
-}
-
-export const deleteTour = async (tno) => {
-    try {
-        const res = await jwtAxios.delete(`${host}/admin/tour/${tno}`)
-        return res.data
-    } catch (err) {
-        console.error('투어 삭제 실패 : ', err)
-        throw err
-    }
-}
-
-export const modifyTour = async (tno, formData) => {
-    try {
-        console.log('- FormData check -')
-        let isEmpty = true
-        for (let pair of formData.entries()) {
-            console.log((`${pair[0]}:${pair[1]}`))
-            isEmpty = false
-        }
-
-        if (isEmpty) {
-            console.warn('Tour FormData is Empty')
-        }
-
-        const res = await jwtAxios.put(
-            `${host}/admin/tour/${tno}`, formData,
-            {
-                headers: { 'Content-Type': 'multipart/form-data' },
-                transformRequest: [(data) => {
-                    console.log('전송되는 데이터 : ', {
-                        type: typeof data,
-                        isFormData: data instanceof FormData,
-                        entries: Array.from(data.entries())
-                    })
-                    return data
-                }]
-            }
-        )
-
-        console.log('수정 응답:', res.data);
-        return res.data;
-    } catch (error) {
-        console.error('상품 수정 오류:', {
-            message: error.message,
-            response: error.response?.data
-        });
-        throw error;
-    }
-}
-
 /* -------------------------- RESERVATION ------------------------------*/
 
 export const fetchReservations = async () => {
@@ -516,22 +431,6 @@ export const saveTempReply = async (id, tempReply) => {
     }
 };
 
-
-export const getCustomerList = async () => {
-    try {
-        console.log("고객 목록 조회 시작");
-        const res = await jwtAxios.get(`${host}/admin/customer/list`);
-        console.log("고객 목록 응답:", res.data);
-        return res.data;
-    } catch (error) {
-        console.error("고객 목록 조회 에러:", error.response?.data || error);
-        if (error.response?.status === 403) {
-            alert("관리자 권한이 필요합니다.");
-        }
-        throw error;
-    }
-};
-
 /* -------------------------- Coupon ------------------------------*/
 
 export const fetchCoupons = async () => {
@@ -542,6 +441,21 @@ export const fetchCoupons = async () => {
         return res.data;
     } catch (error) {
         console.error("쿠폰 목록 조회 에러:", error.response?.data || error);
+        if (error.response?.status === 403) {
+            alert("관리자 권한이 필요합니다.");
+        }
+        throw error;
+    }
+};
+
+export const getCustomerList = async () => {
+    try {
+        console.log("고객 목록 조회 시작");
+        const res = await jwtAxios.get(`${host}/admin/customer/list`);
+        console.log("고객 목록 응답:", res.data);
+        return res.data;
+    } catch (error) {
+        console.error("고객 목록 조회 에러:", error.response?.data || error);
         if (error.response?.status === 403) {
             alert("관리자 권한이 필요합니다.");
         }

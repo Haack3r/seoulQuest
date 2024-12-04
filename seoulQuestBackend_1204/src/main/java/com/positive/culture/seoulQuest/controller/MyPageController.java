@@ -6,6 +6,7 @@ import com.positive.culture.seoulQuest.dto.OrderPaymentDTO;
 import com.positive.culture.seoulQuest.dto.UserDTO;
 import com.positive.culture.seoulQuest.service.MemberService;
 import com.positive.culture.seoulQuest.service.ProductPaymentService;
+import com.positive.culture.seoulQuest.service.TourPaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class MyPageController {
 
     private final MemberService memberService;
     private final ProductPaymentService productPaymentService;
+    private final TourPaymentService tourPaymentService;
 
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/editprofile")
@@ -92,5 +94,16 @@ public class MyPageController {
         List<OrderPaymentDTO> orderPaymentDTOs = productPaymentService.getOrderPaymentInfo(member);
         System.out.println(orderPaymentDTOs);
         return orderPaymentDTOs;
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping("/tours/tourPaymentInfo")
+    public List<OrderPaymentDTO> getTourPaymentList(Principal principal){
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email).orElseThrow();
+        System.out.println("member: " + member);
+        List<OrderPaymentDTO> tourPaymentDTOs = tourPaymentService.getTourPaymentInfo(member);
+        System.out.println(tourPaymentDTOs);
+        return tourPaymentDTOs;
     }
 }

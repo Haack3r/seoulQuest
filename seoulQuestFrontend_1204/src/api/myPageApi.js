@@ -64,3 +64,8 @@ export const getOrderAndPaymentInfo = async () =>{
   return res.data;
 }
 
+export const getTourAndPaymentInfo = async () =>{
+  const res = await jwtAxios.get(`${host}/tours/tourPaymentInfo`);
+  console.log("res:",res)
+  return res.data;
+}

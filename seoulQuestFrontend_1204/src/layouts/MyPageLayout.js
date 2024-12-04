@@ -27,7 +27,7 @@ const MyPageLayout = () => {
       description: "Update your personal information",
       icon: <EditOutlined />,
       path: ["/mypage/editprofile"],
-      customStyle: "", // No adjustment for other icons
+      customStyle: "",
     },
     {
       id: "orders",
@@ -56,7 +56,7 @@ const MyPageLayout = () => {
   ];
 
   return (
-    <div className="lg:flex lg:flex-col">
+    <div className="lg:flex lg:flex-col w-full">
       <ul className="flex lg:flex-col justify-around lg:items-start items-center space-y-4 lg:space-y-0 lg:space-x-0 px-4 lg:px-8 lg:py-9 lg:bg-white rounded-lg lg:mt-6">
         {menuItems.map((item) => (
           <li
@@ -66,14 +66,14 @@ const MyPageLayout = () => {
           >
             {/* Icon Container */}
             <div
-              className={`flex items-center justify-center h-12 w-12 rounded-full transition-colors ${item.customStyle} ${
+              className={`flex items-center justify-center h-9 w-9 rounded-full transition-colors ${item.customStyle} ${
                 location.pathname.includes(item.path[0])
                   ? "bg-stone-500 text-white"
                   : "bg-gray-100 text-gray-600"
               }`}
               style={{
-                fontSize: "24px", // Normalize font size for all icons
-                lineHeight: "1", // Remove baseline alignment issues
+                fontSize: "24px",
+                lineHeight: "1",
                 verticalAlign: "middle",
               }}
             >

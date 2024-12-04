@@ -23,7 +23,7 @@ const ReviewPage = () => {
           </div>
 
           {/* Horizontal Menu for Small Screens */}
-          <div className="lg:hidden fixed top-16 left-0 w-full">
+          <div className="lg:hidden absolute top-16 left-0 w-full">
             <MyPageLayout />
           </div>
 

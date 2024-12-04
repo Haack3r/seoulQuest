@@ -28,7 +28,7 @@ public class Tour {
 
     private String tname;
 
-//    @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
+    // @Column(columnDefinition = "TEXT") // tdesc 타입을 text로 생성되도록 함
     @Lob
     private String tdesc;
 
@@ -59,9 +59,9 @@ public class Tour {
     // private List<TourDate> tDate = new ArrayList<>();
     @ElementCollection
     @Builder.Default
-    @CollectionTable(name = "tbl_tour_date", // 원하는 테이블 이름
-            joinColumns = @JoinColumn(name = "tour_tno") // 외래 키 이름
-    )
+//    @CollectionTable(name = "tbl_tour_date", // 원하는 테이블 이름
+//            joinColumns = @JoinColumn(name = "tour_tno") // 외래 키 이름
+//    )
     private List<TourDate> tourDateList = new ArrayList<>();
 
     public void changeCategory(Category category) {

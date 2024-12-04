@@ -1,6 +1,7 @@
 package com.positive.culture.seoulQuest.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.positive.culture.seoulQuest.domain.TourDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TourDTO {
-
     private Long tno;
 
     private Long categoryId;

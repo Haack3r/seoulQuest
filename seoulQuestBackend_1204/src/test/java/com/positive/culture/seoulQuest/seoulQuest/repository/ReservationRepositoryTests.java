@@ -43,7 +43,6 @@ public class ReservationRepositoryTests {
         Member member = memberRepository.findByEmail("user1@gmail.com").orElseThrow();
         Reservation reservation = Reservation.builder()
                 .owner(member)
-//                .status("pending")
                 .build();
 
         reservationRepository.save(reservation);

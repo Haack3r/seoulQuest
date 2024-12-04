@@ -256,7 +256,7 @@ const EditProfileComponent = () => {
             type="submit"
             onClick={() => navigate("/mypage")}
           >
-            Save Changes
+            Save
           </Button>
         </div>
         </form>
