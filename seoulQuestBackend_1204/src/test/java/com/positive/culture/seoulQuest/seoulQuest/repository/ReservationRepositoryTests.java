@@ -43,10 +43,6 @@ public class ReservationRepositoryTests {
         Member member = memberRepository.findByEmail("user1@gmail.com").orElseThrow();
         Reservation reservation = Reservation.builder()
                 .owner(member)
-<<<<<<<< HEAD:seoulQuestBackend_1204/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/ReservationRepositoryTests.java
-========
-//                .status("pending")
->>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulback/src/test/java/com/positive/culture/seoulQuest/seoulQuest/repository/ReservationRepositoryTests.java
                 .build();
 
         reservationRepository.save(reservation);

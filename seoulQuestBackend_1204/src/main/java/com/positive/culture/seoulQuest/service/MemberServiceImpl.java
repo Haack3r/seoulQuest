@@ -28,10 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
-<<<<<<<< HEAD:seoulQuestBackend_1204/src/main/java/com/positive/culture/seoulQuest/service/MemberServiceImpl.java
 import java.util.stream.Collectors;
-========
->>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulback/src/main/java/com/positive/culture/seoulQuest/service/MemberServiceImpl.java
 
 @Service
 @RequiredArgsConstructor
@@ -245,7 +242,6 @@ public class MemberServiceImpl implements MemberService {
         return member;
     }
 
-<<<<<<<< HEAD:seoulQuestBackend_1204/src/main/java/com/positive/culture/seoulQuest/service/MemberServiceImpl.java
     @Override
     public List<MemberDTO> getAllMembers() {
         // Fetch all members from the repository
@@ -264,6 +260,4 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList());
     }
 
-========
->>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulback/src/main/java/com/positive/culture/seoulQuest/service/MemberServiceImpl.java
 }

@@ -6,10 +6,7 @@ import com.positive.culture.seoulQuest.dto.OrderPaymentDTO;
 import com.positive.culture.seoulQuest.dto.UserDTO;
 import com.positive.culture.seoulQuest.service.MemberService;
 import com.positive.culture.seoulQuest.service.ProductPaymentService;
-<<<<<<<< HEAD:seoulQuestBackend_1204/src/main/java/com/positive/culture/seoulQuest/controller/MyPageController.java
 import com.positive.culture.seoulQuest.service.TourPaymentService;
-========
->>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulback/src/main/java/com/positive/culture/seoulQuest/controller/MyPageController.java
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -28,10 +25,7 @@ public class MyPageController {
 
     private final MemberService memberService;
     private final ProductPaymentService productPaymentService;
-<<<<<<<< HEAD:seoulQuestBackend_1204/src/main/java/com/positive/culture/seoulQuest/controller/MyPageController.java
     private final TourPaymentService tourPaymentService;
-========
->>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulback/src/main/java/com/positive/culture/seoulQuest/controller/MyPageController.java
 
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/editprofile")
@@ -101,7 +95,6 @@ public class MyPageController {
         System.out.println(orderPaymentDTOs);
         return orderPaymentDTOs;
     }
-<<<<<<<< HEAD:seoulQuestBackend_1204/src/main/java/com/positive/culture/seoulQuest/controller/MyPageController.java
 
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/tours/tourPaymentInfo")
@@ -113,6 +106,4 @@ public class MyPageController {
         System.out.println(tourPaymentDTOs);
         return tourPaymentDTOs;
     }
-========
->>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulback/src/main/java/com/positive/culture/seoulQuest/controller/MyPageController.java
 }

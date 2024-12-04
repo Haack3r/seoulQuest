@@ -237,14 +237,4 @@ public class TourController {
 
         return payment;
     }
-<<<<<<<< HEAD:seoulQuestBackend_1204/src/main/java/com/positive/culture/seoulQuest/controller/TourController.java
-========
-
-    @GetMapping("/available")
-    public int checkAvailable(@RequestParam("tno") Long tno , @RequestParam("selectedDate") String selectedDate){
-     int capacity = tourService.getAvailable(tno,selectedDate);
-        System.out.println("-----------------예약가능 명수 ---------"+ capacity);
-     return capacity;
-    }
->>>>>>>> 9a8d7082fbe27a3ecbe23c910a511149de75f013:main/bogeun/seoulback/src/main/java/com/positive/culture/seoulQuest/controller/TourController.java
 }
