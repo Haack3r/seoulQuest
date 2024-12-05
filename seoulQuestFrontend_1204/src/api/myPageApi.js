@@ -44,7 +44,7 @@ export const findEmail = async (obj) => {
   }
 };
 
-
+//마이페이지에서 회원정보 수정시 사용
 export const postUserInfoforEdit = async (obj) => {
   console.log("obj:", obj);
   const headers = { "Content-Type": "application/json" };
@@ -64,3 +64,8 @@ export const getOrderAndPaymentInfo = async () =>{
   return res.data;
 }
 
+export const getTourAndPaymentInfo = async () =>{
+  const res = await jwtAxios.get(`${host}/tours/tourPaymentInfo`);
+  console.log("res:",res)
+  return res.data;
+}

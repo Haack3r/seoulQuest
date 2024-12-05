@@ -17,6 +17,7 @@ import {
   faCircleInfo,
   faGift,
   faMagnifyingGlass,
+  faFire,
 } from "@fortawesome/free-solid-svg-icons";
 
 const NUListPage = () => {
@@ -94,8 +95,17 @@ const NUListPage = () => {
 
       {/* Floating Navbar */}
       {showNav && (
-        <nav className="fixed top-1/2 right-4 transform -translate-y-1/2 p-4">
+        <nav className="z-50 fixed top-1/2 right-4 transform -translate-y-1/2 p-4">
           <ul className="space-y-4">
+          <li>
+              <button
+                onClick={() => scrollToRef(mostPopularRef)}
+                title="Most Popular Product"
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                <FontAwesomeIcon icon={faFire} />
+              </button>
+            </li>
             <li>
               <button
                 onClick={() => scrollToRef(aboutRef)}

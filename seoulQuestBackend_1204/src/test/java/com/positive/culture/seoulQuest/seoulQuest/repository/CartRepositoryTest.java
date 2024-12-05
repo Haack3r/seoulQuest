@@ -35,7 +35,6 @@ public class CartRepositoryTest {
         // Create a new Cart and associate it with the fetched member
         Cart cart = Cart.builder()
                 .owner(member)  // Assign the fetched Member object to the owner
-//                .status("active")  // Set the cart status
                 .build();
 
         // Save the cart to the database

@@ -15,9 +15,9 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product> {
 
-     //전체 조회
-     @Query("select p, pi from Product p left join p.productImageList pi where pi.ord = 0 and p.delFlag=false")
-     Page<Object[]> selectList(Pageable pageable);
+    //전체 조회
+    @Query("select p, pi from Product p left join p.productImageList pi where pi.ord = 0 and p.delFlag=false")
+    Page<Object[]> selectList(Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE p.category.categoryName = :category AND p.delFlag = false")
     Page<Product> findByCategory(@Param("category") String category, Pageable pageable);
@@ -47,7 +47,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
 
     // 특정 상품의 이미지 삭제
     @Modifying
-    @Query(value = "delete pil from product_image_list pil " +
+    @Query(value = "delete pil from product_product_image_list pil " +
             "where pil.product_pno = :pno and pil.file_name = :fileName", nativeQuery = true)
     void deleteProductImage(@Param("pno") Long pno, @Param("fileName") String fileName);
 

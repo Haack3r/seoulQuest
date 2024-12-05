@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StarIcon, HeartIcon } from 'lucide-react'
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { getOneTNU } from '../../api/nuTourApi';
-import { Calendar, Popover } from "antd";
-import { UserOutlined, CalendarOutlined } from '@ant-design/icons';
-import FetchingModal from "../common/FetchingModal";
-import TourDetails from './TourDetails';
+import {API_SERVER_HOST,getTourItemReview,} from "../../api/reviewApi";
 import ReviewsSection from '../review/ReviewsSection';
-import {
-    API_SERVER_HOST,
-    getTourItemReview,
-  } from "../../api/reviewApi";
+import { Calendar, Popover, Badge } from "antd";
+import { UserOutlined, CalendarOutlined,StarFilled, StarOutlined } from "@ant-design/icons";
+import { useNavigate } from 'react-router-dom';
+import { getAvailableCapacity, getOneTNU } from '../../api/nuTourApi';
+
+import TourDetails from './TourDetails';
 
 const initState = {
     tno: 0,
@@ -20,9 +16,9 @@ const initState = {
     tprice: 0,
     tlocation: '',
     uploadFileNames: [],
-    tDate: [],
+    tdate: [],
     maxCapacity: 0,
-    availableCapacity:0
+    // availableCapacity:0
 };
 const host = API_SERVER_HOST;
 
@@ -30,122 +26,82 @@ const NUTourReadComponent = ({ tno }) => {
     // const { moveToList, moveToModify, page, size } = useCustomMove();
     const [tour, setTour] = useState(initState);
     const [fetching, setFetching] = useState(false);
-    const [currentImage, setCurrentImage] = useState(0)
-    const [value, setValue] = useState(0);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedQuantity, setSelectedQuantity] = useState(0);
-    const [quantity, setQuantity] = useState(1);
-    const [calendarMode, setCalendarMode] = useState('month'); // 초기 모드는 월
-    const [dateInfo, setDateInfo] = useState()
-    const [visible, setVisible] = useState(false); // 팝업 표시 여부
-    const navigate = useNavigate();
+    const [currentImage, setCurrentImage] = useState(0)
     const [detailsVisible, setDetailsVisible] = useState(false); // For toggling tour details
- 
+    const [reviewAvg, setReviewAvg] = useState(0)
+    const [reviews, setReviews] = useState([]);
+    const [refresh, setRefresh] = useState(false)
+    const [availableCapacity, setAvailableCapacity] = useState(0);
+    const navigate = useNavigate();
 
-    const handleClickAddReservation = () => {
-        window.alert("Please log in first to book the tour.")
-        return navigate('/member/login')
-      };
-
-    // 팝업을 보여주고 닫는 핸들러
-    const handleVisibleChange = (visible) => {
-        setVisible(visible);
+    const calculateAverage = (reviews) => {
+      if (reviews.length === 0) return 0;
+      const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+      return sum / reviews.length;
     };
-
-    const onchangeQty = (e) => {
-
-        // 날짜가 선택되지 않은 경우 경고창을 띄우고 수량을 업데이트하지 않음
-        if (!selectedDate) {
-            window.alert("Please select a reservation date.");
-            return;
-        }
-
-        // 날짜가 선택된 경우에만 수량을 업데이트
-        setSelectedQuantity(e.target.value);
-    };
-
-
-    // //날짜 클릭시 날짜에 해당하는 예약 가능 인원 출력하는 함수 -> 클릭한 날짜를 서버로 보내는 것도 처리해야함.
-    const onSelect = (e) => {
-        setVisible(false); // 날짜 선택 후 팝업 닫기
-
-        console.log("클릭된 날짜 포맷 :" + e.format('YYYY-MM-DD'));
-
-        const formattedDate = e.format('YYYY-MM-DD');
-        // 예약 가능한 날짜 찾기
-        const selectedDate = tour.tDate.find(i => i.tourDate === formattedDate).tourDate;
-
-
-        if (selectedDate) {
-            console.log("예약할 날짜: ", selectedDate)
-
-            setSelectedDate(selectedDate)
-        } else {
-            console.log("예약 불가"); // 예약 불가능한 경우
-        }
-
-    };
-
-
-    //예약가능한 날짜만 선택할수 있게 하는 함수 
-    const disabledDate = (current) => {
-
-        if (calendarMode === 'year') {
-            return false; //  년도 뷰에서는 활성화
-        }
-
-        // 날짜 뷰일 때만 예약된 날짜가 아닌 날짜를 비활성화
-        const formattedDate = current.format('YYYY-MM-DD');
-        return !tour.tDate.some(date => date.tourDate === formattedDate);
-    };
-
-    const onPanelChange = (value, mode) => {
-        setCalendarMode(mode); // 현재 모드를 업데이트
-        console.log(value.format('YYYY-MM-DD'), mode);
-    };
-
-    //예약가능한 날짜만 밑줄 생기는 함수 
-    const dateCellRender = (value) => {
-        const formattedDate = value.format('YYYY-MM-DD');
-        const checkDate = tour.tDate.find(date => date.tourDate === formattedDate); //서버에서 받아온 날짜와 일치하는 날짜를 체크 
-
-        return (
-            <div className={`${checkDate ? 'border-b-2 border-blue-500' : ''}`}></div>  //예약 가능한 날짜에만 밑줄, 클릭가능 
-        );
-    };
+  
+    useEffect(() => {
+      // Fetch tour data
+      window.scrollTo(0, 0);
+      setFetching(true);
+      getOneTNU(tno).then((data) => {
+        setTour(data);
+        setFetching(false);
+      });
+  
+      console.log(tour)
+  
+      // Review 데이터 가져오기
+      getTourItemReview(tno).then((reviews) => {
+          console.log(reviews);
+          setReviews(reviews);
+          setReviewAvg(calculateAverage(reviews))
+      });
+   
+    }, [tno,refresh]);
 
     useEffect(() => {
-      window.scrollTo(0, 0);
-        setFetching(true);
-
-        getOneTNU(tno).then(data => {
-            setTour({
-                ...initState, // 초기 상태를 유지하면서
-                ...data, // data의 속성들로 덮어씀
-                tDate: data.tdate // tDate만 다시 설정
-            });
-            setFetching(false);
-            console.log(data.tdate);
+      console.log(selectedDate)
+      if (selectedDate) {
+        getAvailableCapacity(tno, selectedDate).then((data) => {
+          console.log(data)
+          setAvailableCapacity(data)
         });
-    }, [tno]);
+      }
+    }, [selectedDate, tno]);  
 
-    // --------------------------Calendar-------------------------------
 
-    // 팝업 내에 표시할 내용(달력 컴포넌트)
+    const handleClickAddReservation = () => {
+      
+        const answer = window.confirm("Please log in first to book the tour.")
+        if(answer){
+          navigate('/member/login')
+        }
+        return
+      };
+
+    // // 팝업을 보여주고 닫는 핸들러
+    // const handleVisibleChange = (visible) => {
+    //     setVisible(visible);
+    // };
+
     const calendarContent = (
-        <div style={{ width: 300 }}>
-            <Calendar
-                fullscreen={false}
-                onPanelChange={onPanelChange}
-                cellRender={dateCellRender}
-                onSelect={onSelect}
-                disabledDate={disabledDate}
-
-            />
-            <div style={{ textAlign: "center", marginTop: "10px", color: "#888" }}>
-                Only available dates can be selected
-            </div>
+      <div style={{ width: 300 }}>
+        <Calendar
+          fullscreen={false}
+          onSelect={(e) => setSelectedDate(e.format("YYYY-MM-DD"))} //문자열로 포맷
+          disabledDate={(current) =>
+            !tour.tdate.some(
+              (date) => date === current.format("YYYY-MM-DD") 
+            )
+          }
+        />
+        <div style={{ textAlign: "center", marginTop: 10, color: "#888" }}>
+          Only available dates can be selected
         </div>
+      </div>
     );
 
 
@@ -186,14 +142,23 @@ const NUTourReadComponent = ({ tno }) => {
               {tour.tname}
             </h1>
             <div className="flex items-center mb-4">
-              {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className="h-5 w-5 text-yellow-400" />
-              ))}
-              <span className="ml-2 text-gray-600">(4.8) 24 reviews</span>
+            {[...Array(5)].map((_, star) => 
+            (
+            <span key={star}>
+              {reviewAvg >= star+1 ? (
+                        <StarFilled className="text-yellow-400 text-xl" />
+                    ) : (
+                        <StarOutlined className="text-gray-300 text-xl" />
+                    )}
+              </span>
+            )
+            )}
+               <span className="ml-2 text-gray-600">({reviewAvg}) {reviews.length}  reviews</span>
             </div>
             <p className="text-xl md:text-2xl font-light text-gray-900 mb-6">
               ₩{tour.tprice.toLocaleString()}
             </p>
+            <p className="text-gray-700 mb-2"><strong>Tour Address:</strong> {tour.taddress}</p>
             <p className="text-gray-700 mb-6">{tour.tdesc}</p>
   
             {/* Date and Quantity Selection */}
@@ -217,7 +182,7 @@ const NUTourReadComponent = ({ tno }) => {
                 <input
                   type="number"
                   min={1}
-                  max={tour.maxCapacity}
+                  max={availableCapacity}
                   value={selectedQuantity}
                   onChange={(e) => setSelectedQuantity(Number(e.target.value))}
                   className="w-full border rounded-lg p-3 text-center"
@@ -226,10 +191,39 @@ const NUTourReadComponent = ({ tno }) => {
               </div>
             </div>
   
-            <p className="text-sm text-gray-400 mt-2">
-              Max Participants: {tour.maxCapacity}
-            </p>
-  
+           {/* 실제 예약 가능 인원 정보 */}
+          <div className="p-2 rounded-lg flex justify-end items-center space-x-3">
+            <div className="text-sm text-gray-600 flex items-center">
+              <span>Available</span>
+              <Badge
+                count={selectedDate? availableCapacity > 0
+                      ? availableCapacity
+                      : "Full"
+                    : "Select a Date"
+                }
+                style={{backgroundColor: !selectedDate
+                    ? "#d9d9d9"
+                    : availableCapacity > 0
+                    ? "#14b8a6" 
+                    : "#ef4444", 
+                  color: "white",
+                  marginLeft: "5px", 
+                }}
+              />
+            </div>
+            <div className="text-sm text-gray-600 flex items-center">
+              <span>Max</span>
+              <Badge
+                count={tour.maxCapacity}
+                style={{
+                  backgroundColor: "#3b82f6", 
+                  color: "white",
+                  marginLeft: "5px",
+                }}
+              />
+            </div>
+          </div>
+
             {/* Action Buttons */}
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-6">
               <button
@@ -246,7 +240,7 @@ const NUTourReadComponent = ({ tno }) => {
             <div className="mt-10 bg-gray-100 p-6 rounded-lg">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg font-semibold text-gray-900">
-                  Tour Details
+                  Tour Policies
                 </h2>
                 <button
                   onClick={() => setDetailsVisible(!detailsVisible)}
@@ -261,12 +255,13 @@ const NUTourReadComponent = ({ tno }) => {
         </div>
   
         {/* Reviews Section */}
-        {/* <div className="mt-5">
+        <div className="mt-5">
           <ReviewsSection
-            itemNo={tno}
-            getItemReview={getTourItemReview}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            reviews={reviews}
           />
-        </div> */}
+        </div>
       </div>
     )
 }

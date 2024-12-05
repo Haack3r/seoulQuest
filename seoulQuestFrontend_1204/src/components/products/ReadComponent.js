@@ -1,4 +1,3 @@
-
 import { ShoppingCart, HeartIcon } from 'lucide-react';
 import { Badge } from 'antd';
 import CartComponent from '../menus/CartComponent';
@@ -6,10 +5,11 @@ import useCustomCart from '../../hooks/useCustomCart';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { getOne } from '../../api/productsApi';
 import useCustomFav from '../../hooks/useCustomFav';
-import { useEffect, useState } from 'react';
 import ReviewsSection from '../review/ReviewsSection';
 import { API_SERVER_HOST, deleteProductOne, putProductOne, getProductItemReview } from '../../api/reviewApi';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
+import ProductPolicy from './ProductPolicy';
+import { useEffect, useState } from 'react';
 
 const initState = {
   pno: 0,
@@ -17,6 +17,7 @@ const initState = {
   pdesc: '',
   pprice: 0,
   pqty: 0,
+  shippingFee:0,
   uploadFileNames: [],
 };
 
@@ -34,6 +35,7 @@ const ReadComponent = ({ pno }) => {
   const [reviewAvg, setReviewAvg] = useState(0)
   const [reviews, setReviews] = useState([]);
   const [refresh, setRefresh] = useState(false)
+  const [detailsVisible, setDetailsVisible] = useState(false);
 
   const calculateAverage = (reviews) => {
     if (reviews.length === 0) return 0;
@@ -41,7 +43,6 @@ const ReadComponent = ({ pno }) => {
     return sum / reviews.length;
   };
 
-  // Fetch product details
   useEffect(() => {
     window.scrollTo(0, 0);
     setFetching(true);
@@ -50,7 +51,7 @@ const ReadComponent = ({ pno }) => {
         setProduct(productData);
         setFetching(false);
     });
-  
+    console.log(product)
     // Review 데이터 가져오기
     console.log(loginState.email);
     getProductItemReview(pno).then((reviews) => {
@@ -77,7 +78,7 @@ const ReadComponent = ({ pno }) => {
       pqty: selectedQuantity + (existingItem?.pqty || 0),
     });
 
-    setCartVisible(true); // Open cart automatically
+    setCartVisible(true);
   };
 
   const handleAddToFavorites = async () => {
@@ -106,8 +107,8 @@ const ReadComponent = ({ pno }) => {
     <div className="min-h-screen py-12 px-6 lg:px-32 relative">
       <div className="flex flex-col lg:flex-row lg:space-x-12">
         {/* Left Section: Image Gallery */}
-        <div className="lg:w-1/3 flex flex-col items-center space-y-6">
-          <div className="w-full h-[650px]">
+        <div className="w-full lg:w-[450px] flex flex-col items-center space-y-6">
+          <div className="w-full h-64 md:h-[450px] lg:h-[650px]">
             <img
               src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
               alt={product.pname}
@@ -134,7 +135,7 @@ const ReadComponent = ({ pno }) => {
 
         {/* Right Section: Product Details */}
         <div className="lg:w-1/2 space-y-6">
-          <h1 className="text-4xl font-light text-gray-900">{product.pname}</h1>
+          <h1 className="text-2xl md:text-4xl font-light text-gray-900">{product.pname}</h1>
           <div className="flex items-center space-x-2">
             {[...Array(5)].map((_, star) => 
             (
@@ -150,7 +151,16 @@ const ReadComponent = ({ pno }) => {
             <span className="text-gray-600">({reviewAvg}) {reviews.length} reviews</span>
           </div>
           <p className="text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
-          
+          <Badge
+            count={product.shippingFee ? `Shipping Fee ₩${product.shippingFee}` : "Free Shipping"}
+            style={{
+              backgroundColor: product.shippingFee ? "#718C5A" : "#0097A7", // 유료 배송과 무료 배송에 따라 색상 변경
+              color: "#fff",
+              padding: "0 10px",
+              borderRadius: "5px",
+            }}
+          />
+          <p className="text-gray-700 mb-6">{product.pdesc}</p>
 
           {/* Quantity Selector */}
           <div className="flex items-center space-x-4">
@@ -179,19 +189,27 @@ const ReadComponent = ({ pno }) => {
             </button>
             <button
               onClick={handleAddToFavorites}
-              className="flex-1 border text-gray-700 py-3 rounded-lg flex items-center justify-center hover:bg-gray-100"
+              className="flex-1 border text-gray-700 p-1 rounded-lg flex items-center justify-center hover:bg-gray-100"
             >
-              <HeartIcon className="mr-2 text-red-500" />
+              <HeartIcon className=" text-red-500" />
               Add to Favorites
             </button>
           </div>
 
-          {/* Product Details */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-900">Product Details</h2>
-            <ul className="list-disc list-inside text-gray-700">
-            <li>{product.pdesc}</li>
-            </ul>
+           {/* Product Details */}
+           <div className="mt-10 bg-gray-100 p-6 rounded-lg">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Product Policies
+              </h2>
+              <button
+                onClick={() => setDetailsVisible(!detailsVisible)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                {detailsVisible ? "-" : "+"}
+              </button>
+            </div>
+            {detailsVisible && <ProductPolicy />}
           </div>
         </div>
       </div>

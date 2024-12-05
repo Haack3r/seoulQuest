@@ -46,7 +46,7 @@ public class TourServiceImpl implements TourService {
 
         Tour tour = tourRepository.findById(tno).orElseThrow();
         TourDate tourDate = tour.getTourDateList().stream()
-                .filter(date -> date.getTourDate().equals(targetDate))
+                .filter(date -> date.getTdate().equals(targetDate))
                 .findFirst().orElseThrow();
 
         return tourDate.getAvailableCapacity();
@@ -155,8 +155,8 @@ public class TourServiceImpl implements TourService {
 
         // 투어 날짜 정보 처리
         List<TourDate> tourDates = tour.getTourDateList();
-        tourDTO.setTourDate(tourDates.stream()
-                .map(TourDate::getTourDate)
+        tourDTO.setTdate(tourDates.stream()
+                .map(TourDate::getTdate)
                 .map(LocalDate::toString)
                 .collect(Collectors.toList()));
 
@@ -197,6 +197,7 @@ public class TourServiceImpl implements TourService {
         Tour result = tourRepository.save(tour);
         return result.getTno();
     }
+
 
     // ----------------------------------------------------------------
     // 수정 --(관리자)
@@ -283,6 +284,7 @@ public class TourServiceImpl implements TourService {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QTour qTour = QTour.tour;
+        booleanBuilder.and(qTour.delFlag.eq(false));
 
         // Base condition
         BooleanExpression expression = qTour.tno.gt(0L);
@@ -298,7 +300,7 @@ public class TourServiceImpl implements TourService {
             String keyword = pageRequestDTO.getKeyword();
             BooleanBuilder keywordBuilder = new BooleanBuilder();
             keywordBuilder.or(qTour.tname.containsIgnoreCase(keyword)); // Match name
-            keywordBuilder.or(qTour.tdesc.containsIgnoreCase(keyword)); // Match description
+//            keywordBuilder.or(qTour.tdesc.containsIgnoreCase(keyword)); // Match description
             booleanBuilder.and(keywordBuilder);
         }
 
@@ -310,6 +312,8 @@ public class TourServiceImpl implements TourService {
                 // .map(this::entityChangeDTO)
                 .map(tour -> entityChangeDTO(tour, tour.getCategory()))
                 .collect(Collectors.toList());
+
+        System.out.println(dtoList);
 
         // Build and return response
         return PageResponseDTO.<TourDTO>withAll()

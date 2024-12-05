@@ -7,9 +7,10 @@ import { UserOutlined, CalendarOutlined,StarFilled, StarOutlined } from "@ant-de
 import ReservationComponent from "../menus/ReservationComponent";
 import useCustomReservation from "../../hooks/useCustomReservation";
 import useCustomLogin from "../../hooks/useCustomLogin";
-import { getAvailableCapacity, getOne } from "../../api/tourApi";
+import {getOne } from "../../api/tourApi";
 import TourDetails from "./TourDetails";
 import useCustomTourFav from "../../hooks/useCustomTourFav";
+import { getAvailableCapacity } from "../../api/nuTourApi";
 
 const initState = {
   tno: 0,
@@ -270,7 +271,7 @@ const TourReadComponent = ({ tno }) => {
           <div className="mt-10 bg-gray-100 p-6 rounded-lg">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold text-gray-900">
-                Tour Details
+                Tour Policies
               </h2>
               <button
                 onClick={() => setDetailsVisible(!detailsVisible)}
@@ -302,7 +303,7 @@ const TourReadComponent = ({ tno }) => {
           cartVisible ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300`}
       >
-        <ReservationComponent maxCapacity={tour.maxCapacity} />
+        <ReservationComponent availableCapacity={availableCapacity} />
       </div>
       {/* Reviews Section */}
       <div className="mt-5">

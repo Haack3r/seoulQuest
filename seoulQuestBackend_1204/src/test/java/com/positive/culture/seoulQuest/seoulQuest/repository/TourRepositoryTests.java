@@ -75,7 +75,7 @@ public class TourRepositoryTests {
             for(int j =1; j<=10 ; j++){
                 TourDate tourDate = TourDate.builder()
                         .availableCapacity(20)
-                        .tourDate(LocalDate.now().plusDays(j))
+                        .tdate(LocalDate.now().plusDays(j))
                         .build();
                 tourDateList.add(tourDate);
             }

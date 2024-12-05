@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component // 자바에서 관리하는 bean객체
 @Log4j2
@@ -102,6 +103,7 @@ public class CustomFileUtil { // 파일의 입출력을 담당
 
                 // 12. 파일의 이름들을 문자열로 리스트에 저장
                 uploadNames.add(savedName);
+
             } catch (IOException e) {
                 // 13. 예외 발생 시 RuntimeException으로 메시지를 전달하여 처리
                 throw new RuntimeException(e.getMessage());

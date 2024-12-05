@@ -59,9 +59,9 @@ public class Tour {
     // private List<TourDate> tDate = new ArrayList<>();
     @ElementCollection
     @Builder.Default
-    @CollectionTable(name = "tbl_tour_date", // 원하는 테이블 이름
-            joinColumns = @JoinColumn(name = "tour_tno") // 외래 키 이름
-    )
+//    @CollectionTable(name = "tbl_tour_date", // 원하는 테이블 이름
+//            joinColumns = @JoinColumn(name = "tour_tno") // 외래 키 이름
+//    )
     private List<TourDate> tourDateList = new ArrayList<>();
 
     public void changeCategory(Category category) {
@@ -158,7 +158,7 @@ public class Tour {
     public void updateAvailableCapacity(LocalDate targetDate, int newCapacity) {
         for (int i = 0; i < tourDateList.size(); i++) {
             TourDate date = tourDateList.get(i);
-            if (date.getTourDate().equals(targetDate)) {
+            if (date.getTdate().equals(targetDate)) {
                 date.changeAvailableCapacity(newCapacity);
                 return;
             }

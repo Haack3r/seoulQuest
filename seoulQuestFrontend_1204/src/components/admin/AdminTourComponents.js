@@ -13,11 +13,18 @@ import {
     Button,
     IconButton,
     Typography,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    TextField,
+    Collapse,
 } from '@mui/material';
 import {
     Add as AddIcon,   // // 'Add' 아이콘을 'AddIcon'이라는 이름으로 가져옴
     Edit as EditIcon,
     Delete as DeleteIcon,
+    Close as CloseIcon,
+    ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material';
 import TourForm from './ui/TourForm';
 import useCustomLogin from '../../hooks/useCustomLogin';
@@ -59,6 +66,10 @@ const AdminTourComponents = () => {
     const [type, setType] = useState("t");
 
     const { exceptionHandle } = useCustomLogin();
+
+    const [openCapacityDialog, setOpenCapacityDialog] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [newCapacity, setNewCapacity] = useState('');
 
     const fetchTourList = () => {
         console.log("투어 목록 요청:", {
@@ -248,7 +259,7 @@ const AdminTourComponents = () => {
                         <TableBody>
                             {serverData.dtoList?.map((tour) => {
                                 // tourDate JSON 파싱
-                                const tourDates = tour.tourDate?.map(dateStr => {
+                                const tourDates = tour.tdate?.map(dateStr => {
                                     try {
                                         return JSON.parse(dateStr);
                                     } catch (e) {
@@ -258,9 +269,10 @@ const AdminTourComponents = () => {
                                 }).filter(date => date !== null);
 
                                 // 시작일과 종료일 계산
-                                const startDate = tourDates?.[0]?.tourDate;
-                                const endDate = tourDates?.[tourDates.length - 1]?.tourDate;
+                                const startDate = tourDates?.[0]?.tdate;
+                                const endDate = tourDates?.[tourDates.length - 1]?.tdate;
 
+                                console.log("투어 날짜 : ", tourDates);
                                 return (
                                     <TableRow key={tour.tno}>
                                         <TableCell>{tour.tname}</TableCell>
@@ -309,29 +321,90 @@ const AdminTourComponents = () => {
                                             </Box>
                                         </TableCell>
                                         <TableCell>
-                                            <Box sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '4px'
-                                            }}>
+                                            <Button
+                                                onClick={() => setSelectedTno(selectedTno === tour.tno ? null : tour.tno)}
+                                                sx={{
+                                                    textTransform: 'none',
+                                                    color: 'primary.main',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: 1
+                                                }}
+                                            >
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    잔여석 보기 ({tourDates?.length}일정)
+                                                </Typography>
+                                                <ExpandMoreIcon
+                                                    sx={{
+                                                        transform: selectedTno === tour.tno ? 'rotate(180deg)' : 'rotate(0deg)',
+                                                        transition: 'transform 0.3s'
+                                                    }}
+                                                />
+                                            </Button>
+                                            <Collapse in={selectedTno === tour.tno}>
                                                 <Box sx={{
                                                     display: 'flex',
                                                     flexDirection: 'column',
-                                                    alignItems: 'center',
-                                                    bgcolor: 'background.paper',
-                                                    border: 1,
-                                                    borderColor: 'primary.main',
-                                                    borderRadius: '8px',
-                                                    padding: '4px 12px'
+                                                    gap: '8px',
+                                                    mt: 1,
+                                                    maxHeight: '200px',
+                                                    overflowY: 'auto',
+                                                    '&::-webkit-scrollbar': {
+                                                        width: '4px'
+                                                    },
+                                                    '&::-webkit-scrollbar-thumb': {
+                                                        backgroundColor: 'rgba(0,0,0,0.2)',
+                                                        borderRadius: '4px'
+                                                    }
                                                 }}>
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        잔여/전체
-                                                    </Typography>
-                                                    <Typography variant="body1" fontWeight="bold" color="primary.main">
-                                                        {tourDates[0].availableCapacity}/{tour.maxCapacity}
-                                                    </Typography>
+                                                    {tourDates?.map((dateInfo) => (
+                                                        <Box key={dateInfo.tdate} sx={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'space-between',
+                                                            bgcolor: 'white',
+                                                            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                                                            borderRadius: '8px',
+                                                            padding: '8px 16px',
+                                                        }}>
+                                                            <Typography variant="body2" sx={{ color: '#1a237e' }}>
+                                                                {new Date(dateInfo.tdate).toLocaleDateString('ko-KR', {
+                                                                    month: 'short',
+                                                                    day: 'numeric',
+                                                                    weekday: 'short'
+                                                                })}
+                                                            </Typography>
+                                                            <Box sx={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '4px',
+                                                                bgcolor: dateInfo.availableCapacity === 0 ? '#fff4f4' : '#f0f7ff',
+                                                                border: `1px solid ${dateInfo.availableCapacity === 0 ? '#ffcdd2' : '#90caf9'}`,
+                                                                borderRadius: '20px',
+                                                                padding: '6px 12px',
+                                                            }}>
+                                                                <Typography sx={{
+                                                                    fontSize: '0.9rem',
+                                                                    fontWeight: 600,
+                                                                    color: dateInfo.availableCapacity === 0 ? '#d32f2f' : '#1976d2',
+                                                                }}>
+                                                                    {dateInfo.availableCapacity} / {tour.maxCapacity}
+                                                                </Typography>
+                                                                <Typography
+                                                                    variant="caption"
+                                                                    sx={{
+                                                                        ml: 1,
+                                                                        color: dateInfo.availableCapacity === 0 ? '#ef5350' : '#66bb6a',
+                                                                        fontWeight: 500
+                                                                    }}
+                                                                >
+                                                                    {dateInfo.availableCapacity === 0 ? '마감' : '예약가능'}
+                                                                </Typography>
+                                                            </Box>
+                                                        </Box>
+                                                    ))}
                                                 </Box>
-                                            </Box>
+                                            </Collapse>
                                         </TableCell>
                                         <TableCell>
                                             <Typography variant="body1" fontWeight="medium">
@@ -398,137 +471,163 @@ const AdminTourComponents = () => {
                     />
                 )}
             </Box>
+
+            <Dialog
+                open={openCapacityDialog}
+                onClose={() => setOpenCapacityDialog(false)}
+                maxWidth="xs"
+                fullWidth
+                PaperProps={{
+                    elevation: 0,
+                    sx: {
+                        borderRadius: '16px',
+                        boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+                        overflow: 'hidden'
+                    }
+                }}
+            >
+                <Box sx={{
+                    position: 'relative',
+                    bgcolor: '#fff',
+                    pb: 2
+                }}>
+                    <Box sx={{
+                        p: 3,
+                        background: 'linear-gradient(135deg, #1976d2, #64b5f6)',
+                        color: 'white',
+                        textAlign: 'center',
+                        position: 'relative'
+                    }}>
+                        <IconButton
+                            onClick={() => setOpenCapacityDialog(false)}
+                            sx={{
+                                position: 'absolute',
+                                right: 8,
+                                top: 8,
+                                color: 'white'
+                            }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                            잔여석 수정
+                        </Typography>
+                        <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                            {selectedDate?.tdate && new Date(selectedDate.tdate).toLocaleDateString('ko-KR', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                weekday: 'long'
+                            })}
+                        </Typography>
+                    </Box>
+
+                    <Box sx={{ p: 3 }}>
+                        <Box sx={{
+                            mb: 4,
+                            p: 2,
+                            bgcolor: '#f8fafc',
+                            borderRadius: '12px',
+                            textAlign: 'center'
+                        }}>
+                            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                                현재 잔여석
+                            </Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 1 }}>
+                                <Typography variant="h3" color="primary" sx={{ fontWeight: 700 }}>
+                                    {selectedDate?.availableCapacity}
+                                </Typography>
+                                <Typography variant="h6" color="text.secondary">
+                                    / {selectedDate?.maxCapacity}
+                                </Typography>
+                            </Box>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                                수정할 잔여석
+                            </Typography>
+                            <TextField
+                                fullWidth
+                                type="number"
+                                variant="outlined"
+                                value={newCapacity}
+                                onChange={(e) => {
+                                    const value = Math.max(0, Math.min(selectedDate?.maxCapacity || 0, parseInt(e.target.value) || 0));
+                                    setNewCapacity(value.toString());
+                                }}
+                                inputProps={{
+                                    min: 0,
+                                    max: selectedDate?.maxCapacity || 0,
+                                    style: { fontSize: '1.2em', textAlign: 'center' }
+                                }}
+                                sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        borderRadius: '12px'
+                                    }
+                                }}
+                            />
+                            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block', textAlign: 'center' }}>
+                                최대 {selectedDate?.maxCapacity || 0}명까지 설정 가능합니다
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box sx={{
+                        px: 3,
+                        mt: 2,
+                        display: 'flex',
+                        gap: 2
+                    }}>
+                        <Button
+                            fullWidth
+                            onClick={() => setOpenCapacityDialog(false)}
+                            sx={{
+                                py: 1.5,
+                                borderRadius: '10px',
+                                color: 'text.secondary',
+                                bgcolor: '#f5f5f5',
+                                '&:hover': {
+                                    bgcolor: '#eeeeee'
+                                }
+                            }}
+                        >
+                            취소
+                        </Button>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            onClick={async () => {
+                                try {
+                                    console.log('Update capacity:', {
+                                        tno: selectedDate?.tno,
+                                        date: selectedDate?.tdate,
+                                        newCapacity: parseInt(newCapacity)
+                                    });
+                                    setOpenCapacityDialog(false);
+                                    await fetchTourList();
+                                } catch (error) {
+                                    console.error('잔여석 수정 실패:', error);
+                                    alert('잔여석 수정에 실패했습니다.');
+                                }
+                            }}
+                            sx={{
+                                py: 1.5,
+                                borderRadius: '10px',
+                                boxShadow: 'none',
+                                '&:hover': {
+                                    boxShadow: 'none',
+                                    bgcolor: 'primary.dark'
+                                }
+                            }}
+                        >
+                            저장하기
+                        </Button>
+                    </Box>
+                </Box>
+            </Dialog>
         </>
     )
 }
-{/* <Dialog
-                    open={openDialog}
-                    onClose={resetForm}
-                    maxWidth="md" // 다이얼로그의 최대 너비를 'md'로 설정
-                    fullWidth     // 화면 너비에 맞게 전체적으로 확장되도록 설정
-                >
-                    <DialogTitle>
-                        {dialogType === 'add' ? '새 투어 추가' : '투어 수정'}
-                    </DialogTitle>
-
-                    <DialogContent>
-                        <Box component="form" onSubmit={handleTourSubmit} sx={{ mt: 2 }}>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                <Box sx={{ width: '100%' }}>
-                                    <TextField
-                                        fullWidth
-                                        required
-                                        label="투어명"
-                                        value={tourForm.name}
-                                        onChange={(e) => setTourForm({ ...tourForm, name: e.target.value })}
-                                    />
-                                </Box>
-
-                                <Box sx={{ display: 'flex', gap: 2 }}>
-                                    <Box sx={{ flex: 1 }}>
-                                        <TextField
-                                            fullWidth
-                                            required
-                                            type="datetime-local"
-                                            label="일정"
-                                            value={tourForm.date}
-                                            onChange={(e) => setTourForm({ ...tourForm, date: e.target.value })}
-                                            slotProps={{ inputLabel: { shrink: true } }}
-                                        />
-                                    </Box>
-                                    <Box sx={{ flex: 1 }}>
-                                        <TextField
-                                            fullWidth
-                                            required
-                                            type="number"
-                                            label="최대 참가 인원"
-                                            value={tourForm.maxParticipants}
-                                            onChange={(e) => setTourForm({ ...tourForm, maxParticipants: e.target.value })}
-                                        />
-                                    </Box>
-                                </Box>
-
-                                <Box sx={{ width: '100%' }}>
-                                    <TextField
-                                        fullWidth
-                                        required
-                                        type="number"
-                                        label="가격"
-                                        value={tourForm.price}
-                                        onChange={(e) => setTourForm({ ...tourForm, price: e.target.value })}
-                                    />
-                                </Box>
-
-                                <Box sx={{ width: '100%' }}>
-                                    <TextField
-                                        fullWidth
-                                        required
-                                        multiline
-                                        rows={4}
-                                        label="투어 설명"
-                                        value={tourForm.description}
-                                        onChange={(e) => setTourForm({ ...tourForm, description: e.target.value })}
-                                    />
-                                </Box>
-
-                                <Box sx={{ width: '100%' }}>
-                                    <Button
-                                        variant="contained" // 버튼 스타일을 기본형으로 설정
-                                        component="label"
-                                        startIcon={<UploadIcon />}
-                                    >
-                                        이미지 업로드
-                                        <input
-                                            type="file"
-                                            hidden    // 실제 <input>은 화면에 보이지 않도록 설정
-                                            multiple  // 여러 파일을 선택할 수 있도록 설정
-                                            accept="image/*"  // 이미지 파일만 선택 가능하도록 설정
-                                            onChange={handleImageUpload}
-                                        />
-                                    </Button>
-                                </Box>
-
-                                <Box sx={{ width: '100%' }}>
-                                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                                        {imagePreview.map((image, index) => (
-                                            <Card key={index} sx={{ width: 150 }}>
-                                                <CardMedia
-                                                    component="img"
-                                                    height="100"
-                                                    image={image}
-                                                    alt={`미리보기 ${index + 1}`}
-                                                />
-                                                <CardContent>
-                                                    <IconButton
-                                                        onClick={() => {
-                                                            setImagePreview(prev => prev.filter((_, i) => i !== index));
-                                                            setTourForm(prev => ({
-                                                                ...prev, images: prev.images.filter((_, i) => i !== index)
-                                                            }));
-                                                        }}
-                                                    >
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                </CardContent>
-                                            </Card>
-                                        ))}
-                                    </Box>
-                                </Box>
-
-                                <Box sx={{ width: '100%' }}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained" // contained는 배경색이 채워진 버튼을 나타냄
-                                        fullWidth
-                                        disabled={!tourForm.name || !tourForm.date || !tourForm.maxParticipants || !tourForm.price}
-                                    >
-                                        {dialogType === 'add' ? '투어 추가' : '투어 수정'}
-                                    </Button>
-                                </Box>
-                            </Box>
-                        </Box>
-                    </DialogContent>
-
-                </Dialog> */}
 
 export default AdminTourComponents;

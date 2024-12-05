@@ -1,6 +1,7 @@
 import React from "react";
 
 const AboutSeoulCultureQuest = () => {
+  window.scrollTo(0, 0);
   return (
     <div className="flex flex-col h-auto w-full overflow-hidden box-border mt-12">
       {/* Top Section: Introduction */}

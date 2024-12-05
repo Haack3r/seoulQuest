@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class TourDateDTO {
-    private String tourDate;
+    private String tdate;
     private int availableCapacity;
 }

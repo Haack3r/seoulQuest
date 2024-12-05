@@ -26,7 +26,7 @@ const initState = {
     taddress: '',
     categoryName: '',
     categoryType: 'tour',
-    tourDate: [],
+    tdate: [],
     files: []
 };
 
@@ -46,7 +46,7 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         if (!dates) {
             setTour(prev => ({
                 ...prev,
-                tourDate: []
+                tdate: []
             }));
             return;
         }
@@ -62,7 +62,7 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
 
         setTour(prev => ({
             ...prev,
-            tourDate: dateArray
+            tdate: dateArray
         }));
     };
 
@@ -87,6 +87,7 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
                 [name]: value
             });
         }
+        console.log("투어 데이터 : ", tour);
     };
 
     const handleFileChange = (e) => {
@@ -171,9 +172,9 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
         // formData.append("tourDate", JSON.stringify(tour.tourDate))
         // formData.append("tourDate[]", tour.tourDate)
 
-        tour.tourDate.forEach(date => {
-            formData.append("tourDate", date);
-            console.log("tourDate added:", date);
+        tour.tdate.forEach(date => {
+            formData.append("tdate", date);
+            console.log("tdate added:", date);
         });
 
         if (tour.files?.length > 0) {
@@ -234,22 +235,22 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
     }, [isEditing, initialData]);
 
     useEffect(() => {
-        if (isEditing && initialData && initialData.tourDate) {
+        if (isEditing && initialData && initialData.tdate) {
             // 문자열로 된 tourDate를 파싱
             let dates;
             try {
-                dates = typeof initialData.tourDate === 'string'
-                    ? JSON.parse(initialData.tourDate)
-                    : initialData.tourDate;
+                dates = typeof initialData.tdate === 'string'
+                    ? JSON.parse(initialData.tdate)
+                    : initialData.tdate;
             } catch (e) {
-                dates = initialData.tourDate;
+                dates = initialData.tdate;
             }
 
             // 날짜 배열이 있으면 설정
             if (Array.isArray(dates) && dates.length > 0) {
                 setTour(prev => ({
                     ...prev,
-                    tourDate: dates
+                    tdate: dates
                 }));
             }
         }
@@ -315,9 +316,9 @@ const TourForm = ({ isEditing, initialData, onClose, selectedTno }) => {
                                 width: '100%',
                                 zIndex: 9999
                             }}
-                            value={tour.tourDate && tour.tourDate.length >= 2 ? [
-                                dayjs(tour.tourDate[0]),
-                                dayjs(tour.tourDate[tour.tourDate.length - 1])
+                            value={tour.tdate && tour.tdate.length >= 2 ? [
+                                dayjs(tour.tdate[0]),
+                                dayjs(tour.tdate[tour.tdate.length - 1])
                             ] : null}
                             onChange={handleDateChange}
                             format="YYYY-MM-DD"

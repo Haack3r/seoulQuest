@@ -151,11 +151,11 @@ public class AdminTourController {
             // Product savedProduct = productRepository.save(productDTO.toEntity());
 
             // tDate 데이터 로깅 추가
-            log.info("Received tourDate: " + tourDTO.getTourDate());
+            log.info("Received tourDate: " + tourDTO.getTdate());
 
             // tourDate가 null이 아닌지 확인
-            if (tourDTO.getTourDate() == null) {
-                tourDTO.setTourDate(new ArrayList<>());
+            if (tourDTO.getTdate() == null) {
+                tourDTO.setTdate(new ArrayList<>());
             }
 
             Long tno = tourService.register(tourDTO);
@@ -177,11 +177,11 @@ public class AdminTourController {
             tourDTO.setTno(tno);
 
             // tDate 데이터 로깅 추가
-            log.info("Modifying tour dates: " + tourDTO.getTourDate());
+            log.info("Modifying tour dates: " + tourDTO.getTdate());
 
             // tDate가 null이 아닌지 확인
-            if (tourDTO.getTourDate() == null) {
-                tourDTO.setTourDate(new ArrayList<>());
+            if (tourDTO.getTdate() == null) {
+                tourDTO.setTdate(new ArrayList<>());
             }
 
             TourDTO oldTourDTO = tourService.get(tno);

@@ -155,6 +155,7 @@ public class OrderPaymentRepositoryTests {
 
 //    @Test
 //    @Transactional
+//    @Rollback(false)
 //    public void testInsertOrderPaymentItemsForAllMembers() {
 //        // Step 1: Fetch all members and tours
 //        List<Member> members = memberRepository.findAll();
@@ -167,64 +168,86 @@ public class OrderPaymentRepositoryTests {
 //
 //        // Step 2: Loop through each member
 //        members.forEach(member -> {
-//            // Create 1 order per member
+//            int totalPrice = 0; // Initialize total price accumulator
+//            Set<String> usedTours = new HashSet<>(); // Prevent duplicate tours
+//
+//            // Step 2-1: Create a new TourOrder for the member
 //            TourOrder tourOrder = TourOrder.builder()
 //                    .tOrderMember(member)
-//                    .totalPrice(0) // Initialize with 0; total will be calculated later
+//                    .totalPrice(0) // Initialize with 0
 //                    .firstName(member.getFirstname())
 //                    .lastName(member.getLastname())
 //                    .phoneNumber(member.getPhoneNumber())
 //                    .country("USA")
 //                    .paymentStatus("paid")
+//                    .orderDate(LocalDateTime.now())
 //                    .build();
 //            tourOrderRepository.save(tourOrder);
 //
-//            // Initialize totalPrice accumulator
-//            int totalPaymentPrice = 0;
-//
-//            // Create a payment for the order
+//            // Step 2-2: Create a new TourPayment for the order
 //            TourPayment tourPayment = TourPayment.builder()
 //                    .tPaymentMember(member)
 //                    .tourOrder(tourOrder)
-//                    .totalPrice(0) // Initialize with 0; total will be updated later
+//                    .totalPrice(0) // Initialize with 0
 //                    .paymentMethod("Card")
 //                    .paymentDate(new Date())
 //                    .build();
 //            tourPaymentRepository.save(tourPayment);
 //
-//            // Add payment items for the member
-//            for (int i = 0; i < 3; i++) { // Example: 3 payment items per member
-//                Tour tour = tours.get((int) (Math.random() * tours.size())); // Random tour
+//            // Step 3: Add payment items
+//            for (int i = 0; i < 3; i++) { // Create 3 payment items
+//                Tour tour;
+//                do {
+//                    tour = tours.get((int) (Math.random() * tours.size())); // Select a random tour
+//                } while (usedTours.contains(tour.getTname())); // Ensure no duplicate tours for the same member
 //
-//                int quantity = 1 + (int) (Math.random() * 3); // Random quantity (1~3)
-//                int itemTotalPrice = tour.getTprice() * quantity; // Calculate total price for this item
+//                usedTours.add(tour.getTname()); // Mark tour as used
 //
-//                // Update the total payment price
-//                totalPaymentPrice += itemTotalPrice;
+//                // Check if the tour has associated TourDates
+//                if (tour.getTDate().isEmpty()) {
+//                    log.warn("No TourDate found for Tour: " + tour.getTname());
+//                    continue;
+//                }
 //
-//                // Create the payment item
+//                // Select a random TourDate and convert to LocalDateTime
+//                LocalDateTime tourDateTime = tour.getTDate()
+//                        .get((int) (Math.random() * tour.getTDate().size()))
+//                        .getTourDate()
+//                        .atStartOfDay();
+//                LocalDate localDate = tourDateTime.toLocalDate();
+//
+//                int quantity = 1 + (int) (Math.random() * 3); // Random quantity (1 to 3)
+//                int itemPrice = tour.getTprice() * quantity; // Calculate total price for this item
+//
+//                // Update total price accumulator
+//                totalPrice += itemPrice;
+//
+//                // Create and save TourPaymentItem
 //                TourPaymentItem paymentItem = TourPaymentItem.builder()
 //                        .tourPayment(tourPayment)
 //                        .tour(tour)
 //                        .tname(tour.getTname())
 //                        .tprice(tour.getTprice())
-//                        .tdate(tour.getTDate().get(1).getTourDate()) // Random reservation date
+//                        .tdate(localDate) // Use LocalDateTime
 //                        .tPaymentQty(quantity) // Set quantity
 //                        .build();
 //                tourPaymentItemRepository.save(paymentItem);
 //            }
 //
-//            // Update total price for TourPayment
-//            tourPayment.changeTotalPrice(totalPaymentPrice);
+//            // Step 4: Update total price for TourPayment and TourOrder
+//            tourPayment.changeTotalPrice(totalPrice);
 //            tourPaymentRepository.save(tourPayment);
 //
-//            tourOrder.changeTotalPrice(totalPaymentPrice);
+//            tourOrder.changeTotalPrice(totalPrice);
 //            tourOrderRepository.save(tourOrder);
 //
 //            // Log the results
 //            log.info("Inserted TourOrder for Member: " + member.getEmail());
-//            log.info("Inserted TourPayment for Member: " + member.getEmail() + ", Total Price: " + totalPaymentPrice);
+//            log.info("Inserted TourPayment for Member: " + member.getEmail() + ", Total Price: " + totalPrice);
 //        });
 //    }
+
+
+
 
 }

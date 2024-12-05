@@ -5,11 +5,10 @@ import com.positive.culture.seoulQuest.domain.Category;
 import com.positive.culture.seoulQuest.domain.Tour;
 import com.positive.culture.seoulQuest.domain.TourDate;
 import com.positive.culture.seoulQuest.dto.*;
-import com.positive.culture.seoulQuest.formatter.LocalDateFormatter;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -43,7 +42,8 @@ public interface TourService {
     void removeTourImage(Long tno, String fileName);
 
     // 등록시 카테고리 부분 추가 수정 필요함
-    default public Tour dtoToEntity(TourDTO tourDTO, Category category) {
+    default // DTO를 엔티티로 변환해주는 메서드 -> register에 사용
+    public Tour dtoToEntity(TourDTO tourDTO, Category category) {
         Tour tour = Tour.builder()
                 .tno(tourDTO.getTno())
                 .category(category)
@@ -55,17 +55,18 @@ public interface TourService {
                 .createAt(tourDTO.getCreateAt())
                 .updateAt(tourDTO.getUpdateAt())
                 .delFlag(tourDTO.isDelFlag())
+                // .tDate(tourDTO.getTDate())
                 .build();
 
         // 업로드 처리가 끝난 파일들의 이름 리스트
         // List<String> uploadFileNames = tourDTO.getUploadFileNames();
-        List<String> tourDateList = tourDTO.getTourDate();
+        List<String> tourDateList = tourDTO.getTdate();
 
         if (tourDateList != null && !tourDateList.isEmpty()) {
-            tourDTO.getTourDate().forEach(dateStr -> {
+            tourDTO.getTdate().forEach(dateStr -> {
                 try {
                     tour.addTourDate(TourDate.builder()
-                            .tourDate(LocalDate.parse(dateStr))
+                            .tdate(LocalDate.parse(dateStr))
                             .availableCapacity(tourDTO.getMaxCapacity())
                             .build());
                 } catch (Exception e) {
@@ -80,7 +81,6 @@ public interface TourService {
         if (uploadFileNames == null) {
             return tour;
         }
-
         uploadFileNames.stream().forEach(uploadNames -> {
             tour.addImageString(uploadNames);
         });
@@ -100,13 +100,13 @@ public interface TourService {
                 .tprice(tour.getTprice())
                 .maxCapacity(tour.getMaxCapacity())
                 .taddress(tour.getTaddress())
-                .tourDate(tour.getTourDateList()
+                .tdate(tour.getTourDateList()
                         .stream()
                         .map(tourDate -> {
                             try {
                                 ObjectMapper mapper = new ObjectMapper();
                                 TourDateDTO dateDTO = TourDateDTO.builder()
-                                        .tourDate(tourDate.getTourDate().toString())
+                                        .tdate(tourDate.getTdate().toString())
                                         .availableCapacity(tourDate.getAvailableCapacity())
                                         .build();
                                 return mapper.writeValueAsString(dateDTO);
@@ -118,6 +118,7 @@ public interface TourService {
                 .createAt(tour.getCreateAt())
                 .updateAt(tour.getUpdateAt())
                 .build();
+
 
         // 이미지 정보 처리 - null 체크 추가 필요
         if (tour.getUploadFileNames() != null && !tour.getUploadFileNames().isEmpty()) {

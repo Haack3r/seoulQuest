@@ -6,14 +6,14 @@ import ReservationItemComponent from "../cartAndReservation/ReservationItemCompo
 import { useNavigate } from "react-router-dom";
 
 
-const ReservationComponent = ({maxCapacity}) => {
+const ReservationComponent = ({availableCapacity}) => {
     const { isLogin, loginState } = useCustomLogin();
     const { refreshReservation, reservationItems, changeReservation } = useCustomReservation();
     const navigate = useNavigate();
 
     const total = useMemo(() => {
         let total = 0;
-        if (reservationItems.length === 0 || reservationItems.error === "ERROR_ACCESS_TOKEN") {
+        if (reservationItems.length === 0) { //토큰 에러 조건 제외
             return total;
         } else {
             for (const titem of reservationItems) {
@@ -55,7 +55,7 @@ const ReservationComponent = ({maxCapacity}) => {
                         {reservationItems.length > 0 ? (
                             reservationItems.map((titem) => (
                                 <ReservationItemComponent
-                                    maxCapacity={maxCapacity}
+                                    availableCapacity={availableCapacity}
                                     email={loginState.email}
                                     {...titem}
                                     key={titem.rino}

@@ -15,7 +15,7 @@ const CartComponent = () => {
     const total = useMemo(() => {
         let total = 0;
         if (cartItems.length !== 0) {
-            if (cartItems.error === 'ERROR_ACCESS_TOKEN') return;
+            // if (cartItems.error === 'ERROR_ACCESS_TOKEN') return;
             for (const item of cartItems) {
                 total += item.pprice * item.pqty;
             }

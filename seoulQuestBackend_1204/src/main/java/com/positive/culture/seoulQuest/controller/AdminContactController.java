@@ -16,8 +16,6 @@ import java.util.List;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminContactController {
 
-
-
     private final ContactService contactService;
 
     @GetMapping("/list")

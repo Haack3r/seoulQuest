@@ -19,6 +19,7 @@ const adminRouter = () => {
     const AdminDeliveryCostPage = lazy(() => import("../../pages/admin/AdminDeliveryCost"))
     const AdminCustomerPage = lazy(() => import("../../pages/admin/AdminCustomer"))
     const AdminCustomerContactPage = lazy(() => import("../../pages/admin/AdminCustomerContact"))
+    const AdminCouponPage = lazy(() => import("../../pages/admin/AdminCouponPage"))
 
     return [
         {
@@ -76,6 +77,10 @@ const adminRouter = () => {
                         {
                             path: "contact",
                             element: <Suspense fallback={Loading}><AdminCustomerContactPage /></Suspense>
+                        },
+                        {
+                            path: "coupon",
+                            element: <Suspense fallback={Loading}><AdminCouponPage /></Suspense>
                         },
                     ]
                 }

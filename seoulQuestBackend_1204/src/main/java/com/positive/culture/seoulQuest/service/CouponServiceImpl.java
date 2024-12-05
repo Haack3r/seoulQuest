@@ -156,7 +156,11 @@ public class CouponServiceImpl implements CouponService {
         log.info("Coupon marked as used. Use Date: {}", userCoupon.getUseDate());
     }
 
-
+    @Override
+    public List<CouponDTO> getCouponList() {
+        List<Coupon> coupons = couponRepository.findAll();
+        return coupons.stream().map(this::convertToDTO).toList();
+    }
 
 
     private CouponDTO convertToDTO(Coupon coupon) {
@@ -165,6 +169,7 @@ public class CouponServiceImpl implements CouponService {
                 .couponName(coupon.getCouponName())
                 .discount(coupon.getDiscount())
                 .expirationDate(coupon.getExpireDate())
+                .isActive(coupon.isActive())
                 .build();
     }
 

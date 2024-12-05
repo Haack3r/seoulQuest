@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class OrderDTO {
     private String zipcode;
     private String phoneNumber;
     private int totalPrice;
+    private LocalDateTime paymentDate;
 
     //삭제고려, paymentResponse에 저장되어 있음
 //    private String paymentMethod;

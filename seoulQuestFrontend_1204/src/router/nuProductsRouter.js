@@ -1,5 +1,28 @@
 import React, { lazy, Suspense } from 'react'
 import { Navigate } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion';
+
+// Animation wrapper for routes requiring transitions
+const pageVariants = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -10 },
+};
+
+const MotionWrapper = ({ children }) => (
+  <AnimatePresence mode="wait">
+    <motion.div
+      style={{ position: "relative", width: "100%" }}
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={{ duration: 0.5 }}
+    >
+      {children}
+    </motion.div>
+  </AnimatePresence>
+);
 
 const nuProductsRouter = () => {
 
@@ -11,7 +34,13 @@ const nuProductsRouter = () => {
   return [
     {
       path: "list",
-      element: <Suspense fallback={Loading}><NUProductsList /></Suspense>
+      element: (
+        <MotionWrapper>
+          <Suspense fallback={Loading}>
+            <NUProductsList />
+          </Suspense>
+        </MotionWrapper>
+      ),
     },
     {
       path: "",

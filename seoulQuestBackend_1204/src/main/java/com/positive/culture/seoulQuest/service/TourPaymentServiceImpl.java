@@ -2,6 +2,9 @@ package com.positive.culture.seoulQuest.service;
 
 import com.positive.culture.seoulQuest.domain.*;
 import com.positive.culture.seoulQuest.dto.OrderDTO;
+import com.positive.culture.seoulQuest.dto.OrderPaymentDTO;
+import com.positive.culture.seoulQuest.dto.OrderPaymentItemDTO;
+import com.positive.culture.seoulQuest.dto.ReservationItemListDTO;
 import com.positive.culture.seoulQuest.repository.*;
 import com.siot.IamportRestClient.response.Payment;
 import jdk.swing.interop.SwingInterOpUtils;
@@ -9,15 +12,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TourPaymentServiceImpl implements TourPaymentService {
 
     private final MemberRepository memberRepository;
-    private final TourPaymentRepository paymentRepository;
+    private final TourPaymentRepository tourPaymentRepository;
+    private final TourPaymentItemRepository tourPaymentItemRepository;
     private final TourOrderRepository tourOrderRepository;
     private final UserCouponRepository userCouponRepository;
     private final TourPaymentItemRepository paymentItemRepository;
@@ -65,7 +72,7 @@ public class TourPaymentServiceImpl implements TourPaymentService {
                     .tourOrder(tourOrder)
                     .usedCoupon(usedCoupon)
                     .build();
-            paymentRepository.save(payment);
+            tourPaymentRepository.save(payment);
 
             //3. 해당 유저의 reservation를 조회하여, reservation에 들어있는 item들 중 결제 완료된 item들은 삭제
             Reservation reservation = reservationRepository.getReservationOfMember(paymentEmail).orElseThrow();
@@ -80,7 +87,7 @@ public class TourPaymentServiceImpl implements TourPaymentService {
                 Tour tour = tourRepository.findById(i.getTno()).orElseThrow();
 //                Optional<TourDate> tourDate = tour.getTourDateList().stream()
                 TourDate tourDate = tour.getTourDateList().stream()
-                        .filter( date -> date.getTourDate().equals(i.getTdate()))
+                        .filter( date -> date.getTdate().equals(i.getTdate()))
                         .findFirst()
                         .orElseThrow(() -> new IllegalArgumentException("TourDate not found for date: " + i.getTdate()));
                 // TourDate 조회
@@ -98,7 +105,7 @@ public class TourPaymentServiceImpl implements TourPaymentService {
 
                 // 수량 변경 및 저장
 //                tourDate.changeAvailableCapacity(newCapacity);
-                tour.updateAvailableCapacity(tourDate.getTourDate(),newCapacity);
+                tour.updateAvailableCapacity(tourDate.getTdate(),newCapacity);
                 tourRepository.save(tour);
 //
 //                Tour tour = tourRepository.findById(i.getTno()).orElseThrow();
@@ -141,5 +148,96 @@ public class TourPaymentServiceImpl implements TourPaymentService {
         tourOrderRepository.save(tourOrder);
 
     }
+
+    @Override
+    public List<OrderPaymentDTO> getTourPaymentInfo(Member member) {
+        // 1. 회원의 모든 상품 결제 내역 가져오기
+        List<TourPayment> tourPayments = tourPaymentRepository.findBytPaymentMember(member);
+
+        // 2. OrderPaymentDTO 리스트 생성
+        List<OrderPaymentDTO> tourPaymentDTOList = tourPayments.stream()
+                .map(tourPayment -> {
+                    // 3. 결제 내역에서 Order 엔티티 관련 정보 가져오기
+                    TourOrder tourOrder = tourPayment.getTourOrder();
+                    if (tourOrder == null) {
+                        throw new IllegalArgumentException("ProductOrder not found for payment ID: " + tourOrder.getTOrderId());
+                    }
+
+                    // 4. OrderPaymentDTO 빌드
+                    OrderPaymentDTO orderPaymentDTO = OrderPaymentDTO.builder()
+                            .country(tourOrder.getCountry())
+                            .paymentMethod(tourPayment.getPaymentMethod())
+                            .fullName(tourOrder.getLastName()+" "+tourOrder.getFirstName())
+                            .phoneNumber(tourOrder.getPhoneNumber())
+                            .paymentDate(tourPayment.getPaymentDate().toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDateTime()
+                                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                            .totalPrice(tourPayment.getTotalPrice())
+                            .usedCoupon(Optional.ofNullable(tourPayment.getUsedCoupon())
+                                    .map(usedCoupon -> usedCoupon.getCoupon().getCouponName())
+                                    .orElse(null))
+                            .build();
+
+                    // 5. 결제 항목(ProductPaymentItem)을 OrderPaymentItemDTO로 매핑
+                    List<OrderPaymentItemDTO> paymentItems = tourPaymentItemRepository.findByTourPayment(tourPayment)
+                            .stream()
+                            .map(tourPaymentItem -> OrderPaymentItemDTO.builder()
+                                    .tname(tourPaymentItem.getTname())
+                                    .tqty(tourPaymentItem.getTPaymentQty())
+                                    .tprice(tourPaymentItem.getTprice())
+                                    .tdate((tourPaymentItem.getTdate()))
+                                    .build()
+                            )
+                            .toList();
+
+                    // 6. OrderPaymentDTO에 결제 항목 리스트 설정
+                    orderPaymentDTO.setPaymentItems(paymentItems);
+
+                    return orderPaymentDTO;
+                })
+                .toList();
+
+        // 7. 완성된 OrderPaymentDTO 리스트 반환
+        return tourPaymentDTOList;
+    }
+    @Override
+    public List<OrderDTO> getAllReservations() {
+        System.out.println("Fetching all reservations for admin");
+
+        // Fetch all tour orders
+        List<TourOrder> tourOrders = tourOrderRepository.findAll();
+
+        return tourOrders.stream().map(order -> {
+            // Fetch corresponding payment for the order
+            TourPayment payment = tourPaymentRepository.findByTourOrder(order);
+
+            // Fetch payment items
+            List<ReservationItemListDTO> reservationItems = tourPaymentItemRepository.findByTourPayment(payment)
+                    .stream()
+                    .map(item -> ReservationItemListDTO.builder()
+                            .tno(item.getTour().getTno())
+                            .tname(item.getTname())
+                            .tprice(item.getTprice())
+                            .tqty(item.getTPaymentQty())
+                            .tdate(item.getTdate())
+                            .build())
+                    .collect(Collectors.toList());
+
+            // Build the DTO
+            return OrderDTO.builder()
+                    .orderId(order.getTOrderId())
+                    .firstname(order.getFirstName())
+                    .lastname(order.getLastName())
+                    .phoneNumber(order.getPhoneNumber())
+                    .country(order.getCountry())
+                    .totalPrice(order.getTotalPrice())
+                    .paymentDate(payment != null ? payment.getPaymentDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime() : null) // Include paymentDate
+                    .torderItems(reservationItems)
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
+
 
 }

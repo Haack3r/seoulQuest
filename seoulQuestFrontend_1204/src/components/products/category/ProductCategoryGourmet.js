@@ -92,14 +92,6 @@ const ProductCategoryGourmet = () => {
 
   return (
     <div className="flex flex-wrap lg:flex-nowrap gap-8 max-w-6xl mx-auto mt-10">
-      {/* Left Side Large Photo */}
-      <div className="w-full lg:w-1/2">
-        <img
-          src="https://images.unsplash.com/photo-1720499035742-9d2398ac5eac?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Category Banner"
-          className="w-full h-[calc(2*15rem+7rem)] object-cover hidden lg:block opacity-80"
-        />
-      </div>
 
       {/* Right Side Products Section */}
       <div className="w-full lg:w-1/2 relative">
@@ -188,6 +180,14 @@ const ProductCategoryGourmet = () => {
             </>
           )}
         </div>
+      </div>
+      {/* Left Side Large Photo */}
+      <div className="w-full lg:w-1/2">
+        <img
+          src="https://images.unsplash.com/photo-1720499035742-9d2398ac5eac?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Category Banner"
+          className="w-full h-[calc(2*15rem+7rem)] object-cover hidden lg:block opacity-80"
+        />
       </div>
     </div>
   );

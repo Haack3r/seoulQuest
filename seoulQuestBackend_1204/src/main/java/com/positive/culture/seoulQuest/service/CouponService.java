@@ -15,7 +15,7 @@ public interface CouponService {
     void addCouponToUser(String email, Long couponId);
     List<CouponDTO> getUserCoupons(String email);
     public void markCouponAsUsed(Long userCouponId);
-
+    List<CouponDTO> getCouponList();
 
 
 }

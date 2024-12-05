@@ -19,8 +19,7 @@ const initState = {
   street: "",
   zipcode: "",
   password: "",
-  newPassword: "",
-  confirmPassword: "",
+  matchingPassword: "",
 };
 
 const EditProfileComponent = () => {
@@ -32,8 +31,8 @@ const EditProfileComponent = () => {
 
   useEffect(() => {
     getUserInfo().then((data) => {
-      setUserInfo(data);
-    });
+      setUserInfo({...data, password:'', matchingPassword:''});
+    }); 
   }, [isLoading]);
 
   const handleChange = (e) => {
@@ -42,11 +41,11 @@ const EditProfileComponent = () => {
 
   const handleClickEditProfile = async (e) => {
     e.preventDefault();
-    if (!userInfo.newPassword || !userInfo.confirmPassword) {
+    if (!userInfo.password || !userInfo.matchingPassword) {
       alert("Please enter both the new password and the confirmation password.");
       return;
     }
-    if (userInfo.newPassword !== userInfo.confirmPassword) {
+    if (userInfo.password !== userInfo.matchingPassword) {
       alert("The new password and confirmation password do not match.");
       return;
     }
@@ -56,6 +55,7 @@ const EditProfileComponent = () => {
       await postUserInfoforEdit(userInfo);
       alert("Profile edited successfully!");
       setUserInfo({ ...initState });
+      navigate("/mypage");
     } catch (error) {
       console.error("Error occurred during profile editing:", error);
       alert("Failed to edit profile: " + error.message);
@@ -85,6 +85,12 @@ const EditProfileComponent = () => {
         <h2 className="text-xl font-bold text-center text-gray-700">
           Edit Profile
         </h2>
+
+         {/* 폼 추가 */}
+      <form
+        onSubmit={handleClickEditProfile} // 폼 제출 이벤트로 변경
+        className="space-y-8"
+      >
 
         {/* Personal Information Section */}
         <section className="space-y-6">
@@ -145,6 +151,7 @@ const EditProfileComponent = () => {
               type="text"
               value={userInfo.nickName}
               onChange={handleChange}
+              required
             />
             <Button
               className="p-3 bg-stone-400 text-white rounded-lg"
@@ -167,6 +174,7 @@ const EditProfileComponent = () => {
                 type="text"
                 value={userInfo.country}
                 onChange={handleChange}
+                required
               />
             </div>
             <div>
@@ -177,6 +185,7 @@ const EditProfileComponent = () => {
                 type="text"
                 value={userInfo.state}
                 onChange={handleChange}
+                required
               />
             </div>
             <div>
@@ -187,6 +196,7 @@ const EditProfileComponent = () => {
                 type="text"
                 value={userInfo.city}
                 onChange={handleChange}
+                required
               />
             </div>
             <div>
@@ -197,6 +207,7 @@ const EditProfileComponent = () => {
                 type="text"
                 value={userInfo.street}
                 onChange={handleChange}
+                required
               />
             </div>
             <div>
@@ -207,6 +218,8 @@ const EditProfileComponent = () => {
                 type="text"
                 value={userInfo.zipcode}
                 onChange={handleChange}
+                autoComplete="postal-code"
+                required
               />
             </div>
           </div>
@@ -214,25 +227,31 @@ const EditProfileComponent = () => {
 
         {/* Password Section */}
         <section className="space-y-4">
-          <h3 className="text-l font-semibold text-gray-800">Change Password</h3>
+          <h3 className="text-l font-semibold text-gray-800">Password</h3>
           <div>
-            <label className="block text-gray-600 mb-1">New Password</label>
+            <label className="block text-gray-600 mb-1">New Password / Current Password</label>
             <input
               className="w-full p-3 border border-gray-300 rounded"
-              name="newPassword"
+              name="password"
               type="password"
-              value={userInfo.newPassword}
+              value={userInfo.password}
               onChange={handleChange}
+              autoComplete="new-password"
+              placeholder="Enter Your New Password or Current Password"
+              required
             />
           </div>
           <div>
-            <label className="block text-gray-600 mb-1">Confirm New Password</label>
+            <label className="block text-gray-600 mb-1">Confirm Password</label>
             <input
               className="w-full p-3 border border-gray-300 rounded"
-              name="confirmPassword"
+              name="matchingPassword"
               type="password"
-              value={userInfo.confirmPassword}
+              value={userInfo.matchingPassword}
               onChange={handleChange}
+              autoComplete="new-password"
+              placeholder="Re-enter Your New Password or Current Password"
+              required
             />
           </div>
         </section>
@@ -241,17 +260,13 @@ const EditProfileComponent = () => {
         <div className="flex items-center gap-4">
           <Button
             className="w-full py-3 bg-stone-400 text-white rounded-lg"
-            onClick={handleClickEditProfile}
+            type="submit"
+            // onClick={() => navigate("/mypage")}
           >
-            Save Changes
-          </Button>
-          <Button
-            className="w-full py-3 bg-gray-500 text-white rounded-lg"
-            onClick={() => navigate("/mypage")}
-          >
-            Cancel
+            Save
           </Button>
         </div>
+        </form>
       </div>
     </div>
   );

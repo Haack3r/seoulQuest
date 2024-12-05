@@ -16,4 +16,5 @@ public class CouponDTO {
     private String couponName;
     private int discount;
     private LocalDate expirationDate;
+    private Boolean isActive;
 }

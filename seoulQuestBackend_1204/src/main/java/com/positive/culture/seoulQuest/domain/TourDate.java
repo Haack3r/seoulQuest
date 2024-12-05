@@ -26,11 +26,11 @@ public class TourDate {
     // @JsonBackReference
     // private Tour tour;
 
-    private LocalDate tourDate;
+    private LocalDate tdate;
     private int availableCapacity;
 
-    public void changeTourDate(LocalDate tourDate) {
-        this.tourDate = tourDate;
+    public void changeTourDate(LocalDate tdate) {
+        this.tdate = tdate;
     }
 
     public void changeAvailableCapacity(int availableCapacity) {

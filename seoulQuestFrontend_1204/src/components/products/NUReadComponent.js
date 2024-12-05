@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StarIcon, ShoppingCart } from 'lucide-react';import useCustomCart from '../../hooks/useCustomCart';
+import { API_SERVER_HOST, getProductItemReview } from '../../api/reviewApi';
+import ReviewsSection from '../review/ReviewsSection';
+import { ShoppingCart } from 'lucide-react';
+import {StarFilled, StarOutlined } from "@ant-design/icons";
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { getOneNU } from '../../api/nuProductApi';
-import { Link, useNavigate } from 'react-router-dom';
-import FetchingModal from '../common/FetchingModal';
-import ReviewsSection from '../review/ReviewsSection';
-import { API_SERVER_HOST, deleteProductOne, putProductOne, getProductItemReview } from '../../api/reviewApi';
-
+import { useNavigate } from 'react-router-dom';
+import ProductPolicy from './ProductPolicy';
+import { Badge } from 'antd';
 
 const initState = {
   pno: 0,
@@ -14,6 +15,7 @@ const initState = {
   pdesc: '',
   pprice: 0,
   pqty: 0,
+  shippingFee:0,
   uploadFileNames: []
 };
 const host = API_SERVER_HOST;
@@ -23,16 +25,27 @@ const NUReadComponent = ({ pno }) => {
   const [product, setProduct] = useState(initState);
   const [fetching, setFetching] = useState(false);
   const [currentImage, setCurrentImage] = useState(0)
-  const { changeCart, cartItems } = useCustomCart();
   const { loginState } = useCustomLogin();
   const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const [reviewAvg, setReviewAvg] = useState(0)
+  const [reviews, setReviews] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [detailsVisible, setDetailsVisible] = useState(false);
   const navigate = useNavigate();
 
-  const handleClickAddCart = () => {
-    window.alert("Please log in first to purchase the product.")
-    navigate('/member/login')
-  }
+  const calculateAverage = (reviews) => {
+    if (reviews.length === 0) return 0;
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return sum / reviews.length;
+  };
 
+  const handleClickAddCart = () => {
+    const answer = window.confirm("Please log in first to purchase the product.")
+    if(answer){
+      navigate('/member/login')
+    }
+    return
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,14 +54,22 @@ const NUReadComponent = ({ pno }) => {
       setProduct(data);
       setFetching(false);
     });
-  }, [pno]);
+
+    // Review 데이터 가져오기
+    console.log(loginState.email);
+    getProductItemReview(pno).then((reviews) => {
+        console.log(reviews);
+        setReviews(reviews);
+        setReviewAvg(calculateAverage(reviews))
+    });
+  }, [pno,refresh]);
 
   return (
     <div className="min-h-screen py-12 px-6 lg:px-32 relative">
       <div className="flex flex-col lg:flex-row lg:space-x-12">
         {/* Left Section: Image Gallery */}
-        <div className="lg:w-1/3 flex flex-col items-center space-y-6">
-          <div className="w-full h-[650px]">
+        <div className="w-full lg:w-[450px] flex flex-col items-center space-y-6">
+          <div className="w-full h-64 md:h-[450px] lg:h-[650px]">
             <img
               src={`${host}/api/products/view/${product.uploadFileNames[currentImage]}`}
               alt={product.pname}
@@ -77,12 +98,30 @@ const NUReadComponent = ({ pno }) => {
         <div className="lg:w-1/2 space-y-6">
           <h1 className="text-4xl font-light text-gray-900">{product.pname}</h1>
           <div className="flex items-center space-x-2">
-            {[...Array(5)].map((_, i) => (
-              <StarIcon key={i} className="h-5 w-5 text-yellow-400" />
-            ))}
-            <span className="text-gray-600">(4.8) 24 reviews</span>
+           {[...Array(5)].map((_, star) => 
+            (
+            <span key={star}>
+              {reviewAvg >= star+1 ? (
+                        <StarFilled className="text-yellow-400 text-xl" />
+                    ) : (
+                        <StarOutlined className="text-gray-300 text-xl" />
+                    )}
+              </span>
+            )
+            )}
+            <span className="text-gray-600">({reviewAvg}) {reviews.length} reviews</span>
           </div>
           <p className="text-2xl text-gray-900">₩{product.pprice.toLocaleString()}</p>
+          <Badge
+            count={product.shippingFee ? `Shipping Fee ₩${product.shippingFee}` : "Free Shipping"}
+            style={{
+              backgroundColor: product.shippingFee ? "#718C5A" : "#0097A7", // 유료 배송과 무료 배송에 따라 색상 변경
+              color: "#fff",
+              padding: "0 10px",
+              borderRadius: "5px",
+            }}
+          />
+          <p className="text-gray-700 mb-6">{product.pdesc}</p>
 
           {/* Quantity Selector */}
           <div className="flex items-center space-x-4">
@@ -111,23 +150,32 @@ const NUReadComponent = ({ pno }) => {
             </button>
           </div>
 
-          {/* Product Details */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-900">Product Details</h2>
-            <ul className="list-disc list-inside text-gray-700">
-              <li>{product.pdesc}</li>
-            </ul>
+           {/* Product Details */}
+           <div className="mt-10 bg-gray-100 p-6 rounded-lg">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Product Policies
+              </h2>
+              <button
+                onClick={() => setDetailsVisible(!detailsVisible)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                {detailsVisible ? "-" : "+"}
+              </button>
+            </div>
+            {detailsVisible && <ProductPolicy />}
           </div>
         </div>
       </div>
 
       {/* Reviews Section */}
-      {/* <div className="mt-5">
+      <div className="mt-5">
         <ReviewsSection
-          itemNo={pno}
-          getItemReview={getProductItemReview}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            reviews={reviews}
           />
-      </div> */}
+      </div>
     </div>
   )
 }
