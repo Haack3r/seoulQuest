@@ -22,7 +22,7 @@ const initState = {
   uploadFileNames: [],
   tdate: [],
   maxCapacity: 0,
-  // availableCapacity: 0,
+  availableCapacity: 0,
 };
 
 const TourReadComponent = ({ tno }) => {
@@ -95,6 +95,7 @@ const TourReadComponent = ({ tno }) => {
   );
 
   const handleAddToCart = () => {
+    console.log("카트" , availableCapacity)
     if (!selectedDate || selectedQuantity <= 0) {
       window.alert("Please select a valid date and quantity.");
       return;

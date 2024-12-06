@@ -18,6 +18,6 @@ public interface CouponService {
 
 
     //여기 하는 중
-//    List<CouponDTO> getCouponList();
+    List<CouponDTO> getCouponList();
 
 }

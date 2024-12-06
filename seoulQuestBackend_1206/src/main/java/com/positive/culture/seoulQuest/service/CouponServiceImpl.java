@@ -27,7 +27,6 @@ public class CouponServiceImpl implements CouponService {
     private final UserCouponRepository userCouponRepository;
     private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
-    private final ModelMapper modelMapper;
 
     @Override
     public OrderDTO getUserCouponAndUserInfo(String email) {
@@ -82,6 +81,7 @@ public class CouponServiceImpl implements CouponService {
                 .filter(coupon ->
                         // Filter out coupons that are expired
                         LocalDate.now().isBefore(coupon.getExpireDate()) &&
+                                coupon.isActive() &&
                                 // Exclude coupons that are already used by this user
                                 !usedCouponIds.contains(coupon.getCouponId())
                 )
@@ -159,22 +159,31 @@ public class CouponServiceImpl implements CouponService {
         log.info("Coupon marked as used. Use Date: {}", userCoupon.getUseDate());
     }
 
-//    @Override
-//    public List<CouponDTO> getCouponList() {
-//        List<Coupon> coupons = couponRepository.findAll();
-//
-//        List<CouponDTO> couponDTOList = coupons.stream().map(coupon->{
-//            CouponDTO couponDTO = convertToDTO(coupon);
-//
-//            List<UserCoupon> userCoupons = userCouponRepository.findByCoupon(coupon);
-//            userCoupons.stream().map(userCoupon->{
-//                modelMapper.map(UserCouponDTO,userCoupon.class);
-//            })
-//            couponDTO.setUserCouponList(userCoupons);
-//        }).toList();
-//
-//        return
-//    }
+    @Override
+    public List<CouponDTO> getCouponList() {
+        List<Coupon> coupons = couponRepository.findAll();
+
+        List<CouponDTO> couponDTOList = coupons.stream().map(coupon->{
+            CouponDTO couponDTO = convertToDTO(coupon);
+
+            List<UserCoupon> userCoupons = userCouponRepository.findByCoupon(coupon);
+
+            List<UserCouponDTO> userCouponDTOs = userCoupons.stream()
+                    .map(userCoupon-> {
+//                        UserCouponDTO userCouponDTO =
+                         return  UserCouponDTO.builder()
+                                .email(userCoupon.getCouponOwner().getEmail())
+                                .userName(userCoupon.getCouponOwner().getFirstname()+" "+userCoupon.getCouponOwner().getLastname())
+                                .useDate(userCoupon.getUseDate())
+                                .build();
+                    }).toList();
+
+            couponDTO.setUserCouponList(userCouponDTOs);
+            return couponDTO;
+        }).toList();
+
+        return couponDTOList;
+    }
 
 
     private CouponDTO convertToDTO(Coupon coupon) {
