@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { getCookie } from "../../util/cookieUtil";
 
+
+
 const BasicMenu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const loginState = useSelector((state) => state.loginSlice);
@@ -60,15 +62,15 @@ const BasicMenu = () => {
 
           {/* Centered Logo */}
           <div className="flex-grow flex justify-center lg:justify-start">
-            <Link
-              to={"/"}
-              className="text-2xl font-semibold tracking-wide text-gray-900"
-            >
-              Seoul
-              <span className="text-red-800">Culture</span>
-              <span className="text-blue-900">Quest</span>
-            </Link>
-          </div>
+  <Link to={"/"} className="flex items-center">
+    <img
+      src={require("../../images/Seoulhwa.png")} // Adjust the path if necessary
+      alt="logo"
+      className="h-8" // Adjust height as needed
+    />
+  </Link>
+ </div>
+
 
           {/* Desktop Menu - Hidden on small screens */}
           <div className="hidden lg:flex lg:flex-grow lg:justify-between lg:items-center px-8">

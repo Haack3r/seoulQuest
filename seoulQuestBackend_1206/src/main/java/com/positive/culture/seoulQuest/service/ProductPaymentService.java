@@ -10,8 +10,11 @@ import java.util.List;
 
 @Transactional
 public interface ProductPaymentService {
-    //결제 정보 저장
+    // 결제 정보 저장
     public void paymentDone(Payment payment, OrderDTO orderdto);
 
     public List<OrderPaymentDTO> getOrderPaymentInfo(Member member);
+
+    // Fetch all reservations for admin
+    List<OrderDTO> getAllOrders();
 }

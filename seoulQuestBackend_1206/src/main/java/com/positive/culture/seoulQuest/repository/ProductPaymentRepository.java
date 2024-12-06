@@ -1,6 +1,7 @@
 package com.positive.culture.seoulQuest.repository;
 
 import com.positive.culture.seoulQuest.domain.Member;
+import com.positive.culture.seoulQuest.domain.ProductOrder;
 import com.positive.culture.seoulQuest.domain.ProductPayment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,6 @@ public interface ProductPaymentRepository extends JpaRepository<ProductPayment, 
     List<ProductPayment> findByMemberEmail(String email);
 
     List<ProductPayment> findBypPaymentMember(Member member);
+
+    ProductPayment findByProductOrder(ProductOrder productOrder);
 }

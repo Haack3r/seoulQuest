@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const host = API_SERVER_HOST;
 
-const ReservationItemComponent = ({ rino, tname, tprice, tdate, tno, tqty, tfiles, changeReservation, email, maxCapacity, availableCapacity }) => {
+const ReservationItemComponent = ({ rino, tname, tprice, tdate, tno, tqty, tfiles, changeReservation, email, maxCapacity ,availableCapacity}) => {
     console.log("여기는 Reservation Items");
 
 
@@ -15,7 +15,7 @@ const ReservationItemComponent = ({ rino, tname, tprice, tdate, tno, tqty, tfile
         // 수량이 최대 인원수를 초과하지 않도록 제한
         if (newQty > availableCapacity || newQty < 0) return; 
 
-        changeReservation({ email, rino, tno, tdate, tqty: newQty, maxCapacity, availableCapacity });
+        changeReservation({ email, rino, tno, tdate, tqty: newQty, maxCapacity,availableCapacity });
     };
 
  

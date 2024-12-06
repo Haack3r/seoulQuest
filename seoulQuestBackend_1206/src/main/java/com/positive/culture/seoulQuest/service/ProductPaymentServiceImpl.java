@@ -2,11 +2,11 @@ package com.positive.culture.seoulQuest.service;
 
 import com.positive.culture.seoulQuest.domain.*;
 
+import com.positive.culture.seoulQuest.dto.CartItemListDTO;
 import com.positive.culture.seoulQuest.dto.OrderDTO;
 import com.positive.culture.seoulQuest.dto.OrderPaymentDTO;
 import com.positive.culture.seoulQuest.dto.OrderPaymentItemDTO;
 import com.positive.culture.seoulQuest.repository.*;
-
 
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
@@ -31,40 +31,40 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
-    //결제 정보를 저장하고, order엔티티의 status를 complete으로 변경함.
-    //쿠폰 사용 저장
+    // 결제 정보를 저장하고, order엔티티의 status를 complete으로 변경함.
+    // 쿠폰 사용 저장
     @Override
     public void paymentDone(Payment paymentResponse, OrderDTO orderdto) {
 
-        try{
+        try {
             String paymentEmail = paymentResponse.getBuyerEmail();
             Member paymentMember = memberRepository.findByEmail(paymentEmail).orElseThrow();
 
             Long orderId = orderdto.getOrderId();
-            System.out.println("orderId"+orderId);
+            System.out.println("orderId" + orderId);
             ProductOrder productOrder = productOrderRepository.findById(orderId).orElseThrow();
 
-            //1. order엔티티의 paymentStatus 변경
+            // 1. order엔티티의 paymentStatus 변경
             productOrder.changePaymentStatus(paymentResponse.getStatus());
             productOrderRepository.save(productOrder);
 
-            //2. User가 사용한 쿠폰을 조회하고 사용날짜를 오늘 날짜로 변경
+            // 2. User가 사용한 쿠폰을 조회하고 사용날짜를 오늘 날짜로 변경
             String usedCouponName = orderdto.getUsedCoupon();
             UserCoupon usedCoupon = null;
 
-            if(usedCouponName !=null){
-                //유저가 사용한 쿠폰 조회
-                usedCoupon =
-                        userCouponRepository.findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(paymentEmail,usedCouponName);
+            if (usedCouponName != null) {
+                // 유저가 사용한 쿠폰 조회
+                usedCoupon = userCouponRepository
+                        .findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(paymentEmail, usedCouponName);
 
-                //사용한 쿠폰의 날짜를 변경
-                if(usedCoupon != null){
+                // 사용한 쿠폰의 날짜를 변경
+                if (usedCoupon != null) {
                     usedCoupon.ChangeUseDate(LocalDate.now());
                     userCouponRepository.save(usedCoupon);
                 }
             }
 
-            //3. 결제정보 저장
+            // 3. 결제정보 저장
             ProductPayment payment = ProductPayment.builder()
                     .pPaymentMember(paymentMember)
                     .totalPrice(orderdto.getTotalPrice())
@@ -75,14 +75,14 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
                     .build();
             productPaymentRepository.save(payment);
 
-            //4. 해당 유저의 카트를 조회하여, cart에 들어있는 cartitem들 중 결제 완료된 item들은 삭제
+            // 4. 해당 유저의 카트를 조회하여, cart에 들어있는 cartitem들 중 결제 완료된 item들은 삭제
             Cart cart = cartRepository.getCartOfMember(paymentEmail).orElseThrow();
 
-            List<Long> pnoList = orderdto.getPorderItems().stream().map(i->i.getPno()).toList();
+            List<Long> pnoList = orderdto.getPorderItems().stream().map(i -> i.getPno()).toList();
             cartItemRepository.deleteByCartCnoAndProductPnoIn(cart.getCno(), pnoList);
 
-            //5.paymentItem 저장
-            //  결제 테이블에 결제내역 저장, product 수량 변경
+            // 5.paymentItem 저장
+            // 결제 테이블에 결제내역 저장, product 수량 변경
             orderdto.getPorderItems().forEach(i -> {
                 // 상품 수량 차감
                 Product product = productRepository.findById(i.getPno()).orElseThrow();
@@ -122,7 +122,8 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
                     // 3. 결제 내역에서 Order 엔티티 관련 정보 가져오기
                     ProductOrder productOrder = productPayment.getProductOrder();
                     if (productOrder == null) {
-                        throw new IllegalArgumentException("ProductOrder not found for payment ID: " + productPayment.getPPaymentId());
+                        throw new IllegalArgumentException(
+                                "ProductOrder not found for payment ID: " + productPayment.getPPaymentId());
                     }
 
                     // 4. OrderPaymentDTO 빌드
@@ -132,7 +133,7 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
                             .city(productOrder.getCity())
                             .street(productOrder.getStreet())
                             .zipCode(productOrder.getZipcode())
-                            .fullName(productOrder.getRecipientLastName()+" "+productOrder.getRecipientFirstName())
+                            .fullName(productOrder.getRecipientLastName() + " " + productOrder.getRecipientFirstName())
                             .phoneNumber(productOrder.getContactNumber())
                             .paymentDate(productPayment.getPaymentDate().toInstant()
                                     .atZone(ZoneId.systemDefault())
@@ -146,14 +147,14 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
                             .build();
 
                     // 5. 결제 항목(ProductPaymentItem)을 OrderPaymentItemDTO로 매핑
-                    List<OrderPaymentItemDTO> paymentItems = productPaymentItemRepository.findByProductPayment(productPayment)
+                    List<OrderPaymentItemDTO> paymentItems = productPaymentItemRepository
+                            .findByProductPayment(productPayment)
                             .stream()
                             .map(productPaymentItem -> OrderPaymentItemDTO.builder()
                                     .pname(productPaymentItem.getPname())
                                     .pqty(productPaymentItem.getPPaymentQty())
                                     .pprice(productPaymentItem.getPprice())
-                                    .build()
-                            )
+                                    .build())
                             .toList();
 
                     // 6. OrderPaymentDTO에 결제 항목 리스트 설정
@@ -167,16 +168,15 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
         return orderPaymentDTOList;
     }
 
-
     // 결제 실패 시 처리 로직
-    public void handlePaymentFailure(Payment paymentResponse,OrderDTO orderdto) {
+    public void handlePaymentFailure(Payment paymentResponse, OrderDTO orderdto) {
         String paymentEmail = paymentResponse.getBuyerEmail();
         Long orderId = orderdto.getOrderId();
         ProductOrder productOrder = productOrderRepository.findById(orderId).orElseThrow();
 
         String usedCouponName = orderdto.getUsedCoupon();
-        UserCoupon usedCoupon =
-                userCouponRepository.findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(paymentEmail,usedCouponName);
+        UserCoupon usedCoupon = userCouponRepository
+                .findFirstByCouponOwnerEmailAndCouponCouponNameAndUseDateIsNull(paymentEmail, usedCouponName);
 
         if (usedCoupon != null) {
             usedCoupon.ChangeUseDate(null); // 사용날짜를 null로 되돌려 쿠폰을 사용하지 않은 상태로 복구
@@ -189,4 +189,36 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
 
     }
 
+    @Override
+    public List<OrderDTO> getAllOrders() {
+        // 1. 모든 주문 조회 repository 가 JPA 이므로 기본적으로 CRUD 메서드 가능
+        List<ProductOrder> productOrders = productOrderRepository.findAll();
+
+        return productOrders.stream().map(order -> {
+            ProductPayment payment = productPaymentRepository.findByProductOrder(order);
+
+            List<CartItemListDTO> porderItems = productPaymentItemRepository.findByProductPayment(payment)
+                    .stream()
+                    .map(item -> CartItemListDTO.builder()
+                            .pno(item.getProduct().getPno())
+                            .pname(item.getPname())
+                            .pprice(item.getPprice())
+                            .pqty(item.getPPaymentQty())
+                            .build())
+                    .toList();
+
+            return OrderDTO.builder()
+                    .orderId(order.getPOrderId())
+                    .firstname(order.getRecipientFirstName())
+                    .lastname(order.getRecipientLastName())
+                    .phoneNumber(order.getContactNumber())
+                    .country(order.getCountry())
+                    .totalPrice(order.getTotalPrice())
+                    .paymentDate(payment != null
+                            ? payment.getPaymentDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                            : null)
+                    .porderItems(porderItems)
+                    .build();
+        }).toList();
+    }
 }

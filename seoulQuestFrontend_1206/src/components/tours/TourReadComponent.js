@@ -72,6 +72,7 @@ const TourReadComponent = ({ tno }) => {
     if (selectedDate) {
       getAvailableCapacity(tno, selectedDate).then((data) => {
         console.log(data)
+        setTour({...tour, availableCapacity: availableCapacity})
         setAvailableCapacity(data)
       });
     }
@@ -95,7 +96,6 @@ const TourReadComponent = ({ tno }) => {
   );
 
   const handleAddToCart = () => {
-    console.log("카트" , availableCapacity)
     if (!selectedDate || selectedQuantity <= 0) {
       window.alert("Please select a valid date and quantity.");
       return;

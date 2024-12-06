@@ -7,8 +7,10 @@ const PaymentDetails = ({
   shippingFee
 }) => {
  
-  const totalPayment = Math.max(
-    calculateSelectedItemsPrice() + shippingFee - discountAmount,100
+  const totalPayment = 
+  Math.max(
+    calculateSelectedItemsPrice() + shippingFee - discountAmount
+    ,100
   );
 
   console.log("totalPayment",totalPayment)

@@ -55,11 +55,11 @@ const ReservationComponent = ({availableCapacity}) => {
                         {reservationItems.length > 0 ? (
                             reservationItems.map((titem) => (
                                 <ReservationItemComponent
-                                    availableCapacity={availableCapacity}
                                     email={loginState.email}
                                     {...titem}
                                     key={titem.rino}
                                     changeReservation={changeReservation}
+                                    availableCapacity={availableCapacity}
                                 />
                             ))
                         ) : (

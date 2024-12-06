@@ -113,18 +113,6 @@ export const AdminRoute = ({ children }) => {
 }
 
 // Admin API 함수들
-/* -------------------------- ORDER ------------------------------*/
-
-export const fetchOrders = async () => {
-    try {
-        const res = await jwtAxios.get(`${host}/admin/order`)
-        console.log("주문 체크 응답", res)
-        return res.data
-    } catch (error) {
-        console.log("주문 체크 오류", error)
-        throw error
-    }
-}
 
 /* -------------------------- PRODUCT ------------------------------*/
 
@@ -354,6 +342,19 @@ export const modifyTour = async (tno, formData) => {
             response: error.response?.data
         });
         throw error;
+    }
+}
+
+/* -------------------------- ORDER ------------------------------*/
+
+export const fetchOrders = async () => {
+    try {
+        const res = await jwtAxios.get(`${host}/admin/order/list`)
+        console.log("주문 체크 응답", res)
+        return res.data
+    } catch (error) {
+        console.log("주문 체크 오류", error)
+        throw error
     }
 }
 

@@ -13,6 +13,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -38,6 +39,13 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender mailSender;
+
+    @Value("${admin.name}")
+    private String adminName;
+
+    //구글 정책상 admin email을 지정해도 spring.mail.username 으로 사용됨.
+    @Value("${spring.mail.username}")
+    private String mailUsername;
 
     @Override
     public MemberDTO getKakaoMember(String accessToken) {
@@ -170,10 +178,15 @@ public class MemberServiceImpl implements MemberService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(toEmail);
+            helper.setFrom(String.format("%s <%s>", adminName, mailUsername));
             helper.setSubject("Your Temporary Password");
-            helper.setText(
-                    "Hello,\n\nYour temporary password is: " + tempPassword + "\n\nPlease change it after logging in.",
-                    true);
+            // HTML 형식으로 이메일 내용 작성
+            String emailContent = String.format(
+                    "Hello,<br><br>Your temporary password is: <b>%s</b><br><br>Please change it after logging in.",
+                    tempPassword
+            );
+
+            helper.setText(emailContent, true); // HTML 형식으로 설정
 
             mailSender.send(message);
             log.info("Temporary password email sent to: " + toEmail);
