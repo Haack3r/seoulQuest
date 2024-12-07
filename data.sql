@@ -14,7 +14,7 @@ drop table tbl_cart_item;
 drop table tbl_category;
 drop table tbl_tours;
 drop table tbl_reservation_item;
-drop table product_product_image_list;
+drop table product_image_list;
 
 select * from member_member_role_list;
 select * from tbl_member;
@@ -22,7 +22,12 @@ select * from tbl_product;
 select * from tbl_category;
 select * from tbl_tours;
 select * from tbl_tour_date;
+<<<<<<< HEAD
 select * from product_product_image_list;
+=======
+select * from product_image_list;
+select * from tour_image_list;
+>>>>>>> e2aea7187c74fc0b18c724f5db87ccb389d9f2c5
 
 select m.*,mrl.member_role_list as role from tbl_member m
 left join member_member_role_list mrl on m.member_id = mrl.member_id
@@ -39,6 +44,7 @@ ORDER BY CAST(m.id AS SIGNED); /* 이게 진짜 member with role list 코드 */
 
 SELECT *
 FROM tbl_tours t
+<<<<<<< HEAD
 LEFT JOIN tbl_tour_date td ON t.tno = td.tour_date_id
 ORDER BY CAST(t.tno AS SIGNED); /* tour 코드 */
 
@@ -46,6 +52,16 @@ SELECT *
 FROM tbl_product p
 LEFT JOIN tbl_category tc ON p.pno = tc.category_id
 ORDER BY CAST(p.pno AS SIGNED); /* ｐｒｏｄｕｃｔ 코드 */
+=======
+LEFT JOIN tbl_tour_date td ON t.tno = td.tour_tno
+LEFT JOIN tbl_category c ON t.category_id = c.category_id
+ORDER BY CAST(t.tno AS SIGNED);
+
+select *
+from tbl_product p
+left join tbl_category tc on p.category_id = tc.category_id
+order by cast(p.pno as signed);
+>>>>>>> e2aea7187c74fc0b18c724f5db87ccb389d9f2c5
 
 SELECT 
     m.member_id,
