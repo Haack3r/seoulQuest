@@ -65,6 +65,7 @@ const NUTourReadComponent = ({ tno }) => {
     useEffect(() => {
       console.log(selectedDate)
       if (selectedDate) {
+        setSelectedQuantity(0);
         getAvailableCapacity(tno, selectedDate).then((data) => {
           console.log(data)
           setAvailableCapacity(data)
@@ -181,7 +182,7 @@ const NUTourReadComponent = ({ tno }) => {
                 </label>
                 <input
                   type="number"
-                  min={1}
+                  min="0"
                   max={availableCapacity}
                   value={selectedQuantity}
                   onChange={(e) => setSelectedQuantity(Number(e.target.value))}

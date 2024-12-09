@@ -24,8 +24,8 @@ const initState = {
 const host = API_SERVER_HOST;
 
 const ReadComponent = ({ pno }) => {
+
   const [product, setProduct] = useState(initState);
-  const [fetching, setFetching] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [cartVisible, setCartVisible] = useState(false);
   const [selectedQuantity, setSelectedQuantity] = useState(0);
@@ -45,11 +45,9 @@ const ReadComponent = ({ pno }) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setFetching(true);
     // Product 데이터 가져오기
     getOne(pno).then((productData) => {
         setProduct(productData);
-        setFetching(false);
     });
     console.log(product)
     // Review 데이터 가져오기
@@ -62,22 +60,44 @@ const ReadComponent = ({ pno }) => {
   }, [pno, refresh]);
 
   const handleAddToCart = () => {
-    if (!selectedQuantity) {
-      alert('Please select a quantity.');
+
+      // 재고가 0일 경우 처리
+    if (product.pqty === 0) {
+      alert("This product is out of stock.");
       return;
     }
 
-    const existingItem = cartItems.find((item) => item.pno === product.pno);
-    if (existingItem) {
-      if (!window.confirm('This item is already in the cart. Do you want to add it again?')) return;
+    if (!selectedQuantity) {
+      alert("Please select a quantity.");
+      return;
     }
-
-    changeCart({
-      email: loginState.email,
-      pno: product.pno,
-      pqty: selectedQuantity + (existingItem?.pqty || 0),
-    });
-
+  
+    const existingItem = cartItems.find((item) => item.pno === product.pno);
+    const currentQuantity = existingItem?.pqty || 0; // 현재 카트에 담긴 수량 (값이 없는 경우 0 할당)
+    const totalQuantity = currentQuantity + selectedQuantity; // 현재 수량 + 새로 추가하려는 수량
+  
+    // stock을 초과할 경우 가능한 수량만 추가
+    if (totalQuantity > product.pqty) {
+      const maxAddable = product.pqty - currentQuantity; // 추가할 수 있는 최대 수량
+      if (maxAddable > 0) {
+        alert(`You can only add ${maxAddable} more of this product.`);
+        changeCart({
+          email: loginState.email,
+          pno: product.pno,
+          pqty: currentQuantity + maxAddable,
+        });
+      } else {
+        alert(`You already have the maximum quantity of ${product.pqty} in your cart.`);
+      }
+    } else {
+      // stock 초과가 아니면 정상적으로 추가
+      changeCart({
+        email: loginState.email,
+        pno: product.pno,
+        pqty: totalQuantity,
+      });
+    }
+  
     setCartVisible(true);
   };
 
@@ -170,12 +190,13 @@ const ReadComponent = ({ pno }) => {
             <input
               type="number"
               id="quantity"
-              min="1"
+              min="0"
               max={product.pqty}
               value={selectedQuantity}
               onChange={(e) => setSelectedQuantity(Number(e.target.value))}
               className="border rounded-lg p-2 w-20"
             />
+            {product.pqty ? '': <p className='text-red-600 font-semibold'>out of stock</p>}
           </div>
 
           {/* Action Buttons */}
@@ -231,7 +252,7 @@ const ReadComponent = ({ pno }) => {
         className={`fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${cartVisible ? 'translate-x-0' : 'translate-x-full'
           } transition-transform duration-300`}
       >
-        <CartComponent stockQty={product.pqty} />
+        <CartComponent/>
       </div>
       {/* Reviews Section */}
       <div className="mt-5">

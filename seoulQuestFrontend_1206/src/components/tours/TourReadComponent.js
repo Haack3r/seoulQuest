@@ -22,12 +22,11 @@ const initState = {
   uploadFileNames: [],
   tdate: [],
   maxCapacity: 0,
-  availableCapacity: 0,
+  // availableCapacity: 0,
 };
 
 const TourReadComponent = ({ tno }) => {
   const [tour, setTour] = useState(initState);
-  const [fetching, setFetching] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedQuantity, setSelectedQuantity] = useState(0);
   const [currentImage, setCurrentImage] = useState(0);
@@ -41,6 +40,8 @@ const TourReadComponent = ({ tno }) => {
   const [availableCapacity, setAvailableCapacity] = useState(0);
   const { loginState } = useCustomLogin();
 
+  console.log(reservationItems)
+
   const calculateAverage = (reviews) => {
     if (reviews.length === 0) return 0;
     const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
@@ -48,12 +49,10 @@ const TourReadComponent = ({ tno }) => {
   };
 
   useEffect(() => {
-    // Fetch tour data
     window.scrollTo(0, 0);
-    setFetching(true);
     getOne(tno).then((data) => {
       setTour(data);
-      setFetching(false);
+      console.log(tour)
     });
 
     console.log(tour)
@@ -70,9 +69,11 @@ const TourReadComponent = ({ tno }) => {
 
   useEffect(() => {
     if (selectedDate) {
+      setSelectedQuantity(0);
+      setCartVisible(false)
       getAvailableCapacity(tno, selectedDate).then((data) => {
         console.log(data)
-        setTour({...tour, availableCapacity: availableCapacity})
+        setTour({...tour, availableCapacity: data})
         setAvailableCapacity(data)
       });
     }
@@ -96,17 +97,69 @@ const TourReadComponent = ({ tno }) => {
   );
 
   const handleAddToCart = () => {
-    if (!selectedDate || selectedQuantity <= 0) {
-      window.alert("Please select a valid date and quantity.");
+    if (availableCapacity === 0) {
+      alert("This tour is fully booked.");
       return;
     }
-    changeReservation({
-      email: loginState.email,
-      tno,
-      tqty: selectedQuantity,
-      tdate: selectedDate,
-    });
-    setCartVisible(true); // Automatically show the cart
+  
+    if (!selectedDate || selectedQuantity <= 0) {
+      alert("Please select a valid date and quantity.");
+      return;
+    }
+  
+    const existingItem = reservationItems.find((item) => item.tno === tour.tno);
+  
+    // 추가 가능 수량 계산 함수
+    const calculateMaxAddable = (capacity, currentQty) => capacity - currentQty;
+  
+    // 장바구니 업데이트 함수
+    const updateCart = (quantity, date) => {
+      changeReservation({
+        email: loginState.email,
+        tno: tour.tno,
+        tqty: quantity,
+        tdate: date,
+      });
+      setCartVisible(true);
+    };
+  
+    // 새로운 투어 추가
+    if (!existingItem) {
+      if (selectedQuantity > availableCapacity) {
+        alert(`You can only add up to ${availableCapacity} for this tour.`);
+        return;
+      }
+      updateCart(selectedQuantity, selectedDate);
+      return;
+    }
+  
+    const currentQuantity = existingItem.tqty || 0;
+    const totalQuantity = currentQuantity + selectedQuantity;
+  
+    // 같은 날짜의 경우
+    if (selectedDate === existingItem.tdate) {
+      const maxAddable = calculateMaxAddable(existingItem.availableCapacity, currentQuantity);
+  
+      if (totalQuantity > existingItem.availableCapacity) {
+        if (maxAddable > 0) {
+          alert(`You can only add ${maxAddable} more of this tour.`);
+          updateCart(currentQuantity + maxAddable, selectedDate);
+        } else {
+          alert(`You already have the maximum quantity of ${existingItem.availableCapacity} in your cart.`);
+        }
+      } else {
+        updateCart(totalQuantity, selectedDate);
+      }
+    } else {
+      // 날짜 변경 처리
+      if (window.confirm("Would you like to change to a different date?")) {
+        if (selectedQuantity > availableCapacity) {
+          alert(`You can only add up to ${availableCapacity} for the selected date.`);
+        } else {
+          updateCart(selectedQuantity, selectedDate);
+        }
+      }
+    }
   };
 
   const handleAddToFavorites = async () => {
@@ -207,7 +260,7 @@ const TourReadComponent = ({ tno }) => {
               </label>
               <input
                 type="number"
-                min={1}
+                min="0"
                 max={availableCapacity}
                 value={selectedQuantity}
                 onChange={(e) => setSelectedQuantity(Number(e.target.value))}
@@ -304,7 +357,7 @@ const TourReadComponent = ({ tno }) => {
           cartVisible ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300`}
       >
-        <ReservationComponent availableCapacity={availableCapacity} />
+        <ReservationComponent />
       </div>
       {/* Reviews Section */}
       <div className="mt-5">

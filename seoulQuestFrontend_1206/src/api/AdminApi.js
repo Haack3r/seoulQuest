@@ -6,7 +6,7 @@ import { getCookie } from "../util/cookieUtil"
 import axios from "axios"
 import { transform } from "framer-motion"
 
-const host = `http://localhost:8080/api`
+const host = `http://hyeri.wn7.com/api`
 
 // const memberInfo = getCookie("member");
 
@@ -466,8 +466,7 @@ export const fetchCoupons = async () => {
 //     }
 // };
 
-/* -------------------------- Customer------------------------------*/
-
+/*--------------------------- CUSTOMER ------------------------------*/
 export const getCustomerList = async () => {
     try {
         console.log("고객 목록 조회 시작");
@@ -480,5 +479,43 @@ export const getCustomerList = async () => {
             alert("관리자 권한이 필요합니다.");
         }
         throw error;
+    }
+};
+
+export const getCustomerOrders = async (email) => {
+    try {
+        const response = await jwtAxios.get(`${host}/admin/customer/orders/${email}`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
+        console.log("주문 데이터 응답:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("주문 데이터 조회 실패:", error);
+        if (error.response?.status === 401) {
+            console.error("인증 에러 - 토큰을 확인하세요");
+        }
+        return [];
+    }
+};
+
+export const getCustomerReservations = async (email) => {
+    try {
+        const response = await jwtAxios.get(`${host}/admin/customer/reservations/${email}`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
+        console.log("예약 데이터 응답:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("예약 데이터 조회 실패:", error);
+        if (error.response?.status === 401) {
+            console.error("인증 에러 - 토큰을 확인하세요");
+        }
+        return [];
     }
 };

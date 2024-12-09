@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const CartComponent = ({stockQty}) => {
+const CartComponent = () => {
     const navigate = useNavigate();
     const { isLogin, loginState } = useCustomLogin();
     const { refreshCart, cartItems, changeCart } = useCustomCart();
@@ -58,7 +58,6 @@ const CartComponent = ({stockQty}) => {
                                         key={item.cino}
                                         changeCart={changeCart}
                                         email={loginState.email}
-                                        stockQty={stockQty}
                                     />
                                 ))}
                             </ul>

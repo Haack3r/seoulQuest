@@ -104,11 +104,15 @@ const AdminCouponComponents = () => {
       title: '쿠폰 보유 회원 목록',
       key: 'userCouponList',
       render: (_, record) => (
-        <Button type="link" onClick={() => showModal(record.userCouponList)}>
-          보기
-        </Button>
+        record.userCouponList && record.userCouponList.length > 0 ? (
+          <Button type="link" onClick={() => showModal(record.userCouponList)}>
+            보기
+          </Button>
+        ) : (
+          <span>쿠폰 보유 회원 목록이 없습니다.</span>
+        )
       ),
-    },
+    }
   ];
 
   const userColumns = [

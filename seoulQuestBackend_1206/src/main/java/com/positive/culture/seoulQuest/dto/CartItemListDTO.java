@@ -21,6 +21,7 @@ public class CartItemListDTO {
     private int pprice;
     private int pqty;
     private int shippingFee;
+    private int stock;
 
     private String pfiles;
 }

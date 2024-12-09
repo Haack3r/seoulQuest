@@ -16,8 +16,8 @@ const ReviewsSection = ({ refresh,
   const [selectedReview, setSelectedReview] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const { isLogin,loginState } = useCustomLogin();
-  
 
+  console.log(reviews)
   // Update layout on window resize
   React.useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -78,7 +78,7 @@ const closeModal = () => {
         <div className="flex space-x-4 overflow-hidden w-full">
           {reviews &&reviews.slice(currentIndex, currentIndex + reviewsPerSlide).map((review) => (
             <div
-              key={review.id}
+              key={review.prid || review.trid}
               className="relative bg-white rounded-lg shadow-md p-4 w-full lg:w-1/2 border border-gray-200"
               onClick={() => openModal(review)} 
             >

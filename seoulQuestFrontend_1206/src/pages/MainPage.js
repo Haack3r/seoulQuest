@@ -11,6 +11,7 @@ import EntryPage from './EntryPage';
 import ProcessSteps from './../layouts/ProcessSteps';
 
 const MainPage = () => {
+  window.scrollTo(0, 0); 
     return (
       <>
     <BasicLayout>

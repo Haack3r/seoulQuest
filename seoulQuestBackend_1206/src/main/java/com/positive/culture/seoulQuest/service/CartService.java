@@ -30,6 +30,7 @@ public interface CartService {
                 .pprice(i.getProduct().getPprice())
                 .pqty(i.getPqty())
                 .shippingFee(i.getProduct().getShippingFee())
+                .stock(i.getProduct().getPqty())
                 .build()).toList();
 
         return cartItemListDTOs;

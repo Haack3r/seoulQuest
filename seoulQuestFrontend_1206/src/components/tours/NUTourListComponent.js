@@ -136,7 +136,7 @@ const NUTourListComponent = () => {
                 {/* Image with Heart Icon */}
                 <div className="relative w-full max-w-xs h-52 overflow-hidden">
                   <img
-                    src={`${host}/api/tours/view/s_${tour.uploadFileNames[0]}`}
+                    src={`${host}/api/tours/view/${tour.uploadFileNames[0]}`}
                     alt={tour.tname}
                     className="w-full h-full object-cover opacity-80 hover:opacity-90"
                   />

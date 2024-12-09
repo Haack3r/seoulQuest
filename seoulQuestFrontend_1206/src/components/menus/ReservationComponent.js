@@ -6,7 +6,7 @@ import ReservationItemComponent from "../cartAndReservation/ReservationItemCompo
 import { useNavigate } from "react-router-dom";
 
 
-const ReservationComponent = ({availableCapacity}) => {
+const ReservationComponent = () => {
     const { isLogin, loginState } = useCustomLogin();
     const { refreshReservation, reservationItems, changeReservation } = useCustomReservation();
     const navigate = useNavigate();
@@ -59,7 +59,6 @@ const ReservationComponent = ({availableCapacity}) => {
                                     {...titem}
                                     key={titem.rino}
                                     changeReservation={changeReservation}
-                                    availableCapacity={availableCapacity}
                                 />
                             ))
                         ) : (

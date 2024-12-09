@@ -213,7 +213,7 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 결제 성공시 paymentRecord엔티티에 저장
+    // 결제 성공시 Productpayment엔티티에 저장
     @PostMapping("/payment/{imp_uid}")
     public IamportResponse<Payment> validateIamport(@PathVariable String imp_uid, @RequestBody OrderDTO orderDTO)
             throws IamportResponseException, IOException {

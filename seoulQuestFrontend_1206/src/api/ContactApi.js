@@ -1,6 +1,6 @@
 import jwtAxios from "../util/jwtUtil"
 
-export const API_SERVER_HOST = "http://localhost:8080"
+export const API_SERVER_HOST = "http://hyeri.wn7.com"
 const prefix = `${API_SERVER_HOST}/api/contact`
 
 // 문의사항 등록 (ContactRequestDTO 구조에 맞춤)

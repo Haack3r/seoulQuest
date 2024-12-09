@@ -67,8 +67,7 @@ const PaymentMethodAndCoupon = ({
           )}
         </select>
         <p className="text-xs text-gray-500 mt-2">
-          * Please note that the minimum payment amount must be at least{" "}
-          <span className="font-semibold">100 KRW</span> after applying the coupon.
+          * Please note that the minimum payment amount may vary depending on the card issuer.
         </p>
         <hr className="border-t border-gray-400 my-5" />
       </div>

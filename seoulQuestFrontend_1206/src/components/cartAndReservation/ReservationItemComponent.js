@@ -1,21 +1,21 @@
 import React from 'react';
 import { API_SERVER_HOST } from '../../api/reviewApi';
-import { UserOutlined, DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { Link } from 'react-router-dom';
 
 const host = API_SERVER_HOST;
 
-const ReservationItemComponent = ({ rino, tname, tprice, tdate, tno, tqty, tfiles, changeReservation, email, maxCapacity ,availableCapacity}) => {
+const ReservationItemComponent = ({ rino, tname, tprice, tdate, tno, tqty, tfiles, changeReservation, email,availableCapacity}) => {
     console.log("여기는 Reservation Items");
 
 
     const handleClickQty = (amount) => {
-        const newQty = tqty + amount;
+        // const newQty = tqty + amount;
         
-        // 수량이 최대 인원수를 초과하지 않도록 제한
-        if (newQty > availableCapacity || newQty < 0) return; 
+        // // 수량이 최대 인원수를 초과하지 않도록 제한
+        // if (newQty > availableCapacity || newQty < 0) return; 
 
-        changeReservation({ email, rino, tno, tdate, tqty: newQty, maxCapacity,availableCapacity });
+        changeReservation({ email, rino, tno, tdate, tqty: tqty + amount , availableCapacity });
     };
 
  

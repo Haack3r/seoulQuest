@@ -8,6 +8,7 @@ import com.positive.culture.seoulQuest.dto.OrderPaymentDTO;
 import com.positive.culture.seoulQuest.dto.OrderPaymentItemDTO;
 import com.positive.culture.seoulQuest.repository.*;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,6 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
             Member paymentMember = memberRepository.findByEmail(paymentEmail).orElseThrow();
 
             Long orderId = orderdto.getOrderId();
-            System.out.println("orderId" + orderId);
             ProductOrder productOrder = productOrderRepository.findById(orderId).orElseThrow();
 
             // 1. order엔티티의 paymentStatus 변경
@@ -191,8 +191,11 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
 
     @Override
     public List<OrderDTO> getAllOrders() {
-        // 1. 모든 주문 조회 repository 가 JPA 이므로 기본적으로 CRUD 메서드 가능
-        List<ProductOrder> productOrders = productOrderRepository.findAll();
+        QProductOrder qProductOrder = QProductOrder.productOrder;
+
+        BooleanExpression expression = qProductOrder.paymentStatus.eq("paid");
+
+        List<ProductOrder> productOrders = (List<ProductOrder>) productOrderRepository.findAll(expression);
 
         return productOrders.stream().map(order -> {
             ProductPayment payment = productPaymentRepository.findByProductOrder(order);

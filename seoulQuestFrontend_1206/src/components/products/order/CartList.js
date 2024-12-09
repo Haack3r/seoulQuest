@@ -20,7 +20,6 @@ const CartList = ({ porderItems, selectedItems, handleToggleSelect, host , shipp
           />
           <div className="flex-grow-1">
             <p className="font-semibold text-gray-700">{item.pname}</p>
-            {/* {item.shippingFee === 0 && ( <Badge */}
             <Badge
             count= {item.shippingFee ? `shippingFee ₩${item.shippingFee}`: "Free Shipping"}
             style={{
@@ -30,7 +29,6 @@ const CartList = ({ porderItems, selectedItems, handleToggleSelect, host , shipp
               borderRadius: "5px",
             }}
             />
-          {/* />)} */}
           </div>
           <div className="flex flex-col items-end mt-5 ml-auto mr-7">
             <Badge count={`₩${item.pprice.toLocaleString()}`} style={{ backgroundColor: "#52c41a" }}>

@@ -131,12 +131,13 @@ const NUReadComponent = ({ pno }) => {
             <input
               type="number"
               id="quantity"
-              min="1"
+              min="0"
               max={product.pqty}
               value={selectedQuantity}
               onChange={(e) => setSelectedQuantity(Number(e.target.value))}
               className="border rounded-lg p-2 w-20"
             />
+            {product.pqty ? '': <p className='text-red-600 font-semibold'>out of stock</p>}
           </div>
 
           {/* Action Buttons */}
