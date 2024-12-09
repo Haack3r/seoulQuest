@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {API_SERVER_HOST, getTourItemReview, putTourOne, deleteTourOne,} from "../../api/reviewApi";
+import { API_SERVER_HOST, getTourItemReview, putTourOne, deleteTourOne, } from "../../api/reviewApi";
 import ReviewsSection from "../review/ReviewsSection";
 import { HeartIcon, ShoppingCart } from "lucide-react";
 import { Calendar, Popover, Badge } from "antd";
-import { UserOutlined, CalendarOutlined,StarFilled, StarOutlined } from "@ant-design/icons";
+import { UserOutlined, CalendarOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 import ReservationComponent from "../menus/ReservationComponent";
 import useCustomReservation from "../../hooks/useCustomReservation";
 import useCustomLogin from "../../hooks/useCustomLogin";
-import {getOne } from "../../api/tourApi";
+import { getOne } from "../../api/tourApi";
 import TourDetails from "./TourDetails";
 import useCustomTourFav from "../../hooks/useCustomTourFav";
 import { getAvailableCapacity } from "../../api/nuTourApi";
@@ -18,7 +18,7 @@ const initState = {
   categoryName: "",
   tdesc: "",
   tprice: 0,
-  taddress: '', 
+  taddress: '',
   uploadFileNames: [],
   tdate: [],
   maxCapacity: 0,
@@ -52,20 +52,13 @@ const TourReadComponent = ({ tno }) => {
     window.scrollTo(0, 0);
     getOne(tno).then((data) => {
       setTour(data);
-      console.log(tour)
     });
 
-    console.log(tour)
-
-    // Review 데이터 가져오기
-    console.log(loginState.email);
     getTourItemReview(tno).then((reviews) => {
-        console.log(reviews);
-        setReviews(reviews);
-        setReviewAvg(calculateAverage(reviews))
+      setReviews(reviews);
+      setReviewAvg(calculateAverage(reviews))
     });
- 
-  }, [tno,refresh]);
+  }, [tno, refresh]);
 
   useEffect(() => {
     if (selectedDate) {
@@ -73,12 +66,12 @@ const TourReadComponent = ({ tno }) => {
       setCartVisible(false)
       getAvailableCapacity(tno, selectedDate).then((data) => {
         console.log(data)
-        setTour({...tour, availableCapacity: data})
+        setTour({ ...tour, availableCapacity: data })
         setAvailableCapacity(data)
       });
     }
-  }, [selectedDate, tno]);  
-  
+  }, [selectedDate, tno]);
+
   const calendarContent = (
     <div style={{ width: 300 }}>
       <Calendar
@@ -86,7 +79,7 @@ const TourReadComponent = ({ tno }) => {
         onSelect={(e) => setSelectedDate(e.format("YYYY-MM-DD"))} //문자열로 포맷
         disabledDate={(current) =>
           !tour.tdate.some(
-            (date) => date === current.format("YYYY-MM-DD") 
+            (date) => date === current.format("YYYY-MM-DD")
           )
         }
       />
@@ -101,17 +94,17 @@ const TourReadComponent = ({ tno }) => {
       alert("This tour is fully booked.");
       return;
     }
-  
+
     if (!selectedDate || selectedQuantity <= 0) {
       alert("Please select a valid date and quantity.");
       return;
     }
-  
+
     const existingItem = reservationItems.find((item) => item.tno === tour.tno);
-  
+
     // 추가 가능 수량 계산 함수
     const calculateMaxAddable = (capacity, currentQty) => capacity - currentQty;
-  
+
     // 장바구니 업데이트 함수
     const updateCart = (quantity, date) => {
       changeReservation({
@@ -122,7 +115,7 @@ const TourReadComponent = ({ tno }) => {
       });
       setCartVisible(true);
     };
-  
+
     // 새로운 투어 추가
     if (!existingItem) {
       if (selectedQuantity > availableCapacity) {
@@ -132,14 +125,14 @@ const TourReadComponent = ({ tno }) => {
       updateCart(selectedQuantity, selectedDate);
       return;
     }
-  
+
     const currentQuantity = existingItem.tqty || 0;
     const totalQuantity = currentQuantity + selectedQuantity;
-  
+
     // 같은 날짜의 경우
     if (selectedDate === existingItem.tdate) {
       const maxAddable = calculateMaxAddable(existingItem.availableCapacity, currentQuantity);
-  
+
       if (totalQuantity > existingItem.availableCapacity) {
         if (maxAddable > 0) {
           alert(`You can only add ${maxAddable} more of this tour.`);
@@ -200,9 +193,8 @@ const TourReadComponent = ({ tno }) => {
                 <button
                   key={index}
                   onClick={() => setCurrentImage(index)}
-                  className={`w-16 h-16 md:w-20 md:h-20 overflow-hidden ${
-                    currentImage === index ? "ring-2 ring-blue-500" : ""
-                  }`}
+                  className={`w-16 h-16 md:w-20 md:h-20 overflow-hidden ${currentImage === index ? "ring-2 ring-blue-500" : ""
+                    }`}
                 >
                   <img
                     src={`${API_SERVER_HOST}/api/tours/view/${image}`}
@@ -221,14 +213,14 @@ const TourReadComponent = ({ tno }) => {
             {tour.tname}
           </h1>
           <div className="flex items-center mb-4">
-          {[...Array(5)].map((_, star) => 
+            {[...Array(5)].map((_, star) =>
             (
-            <span key={star}>
-              {reviewAvg >= star+1 ? (
-                        <StarFilled className="text-yellow-400 text-xl" />
-                    ) : (
-                        <StarOutlined className="text-gray-300 text-xl" />
-                    )}
+              <span key={star}>
+                {reviewAvg >= star + 1 ? (
+                  <StarFilled className="text-yellow-400 text-xl" />
+                ) : (
+                  <StarOutlined className="text-gray-300 text-xl" />
+                )}
               </span>
             )
             )}
@@ -270,23 +262,24 @@ const TourReadComponent = ({ tno }) => {
             </div>
           </div>
 
-            {/* 실제 예약 가능 인원 정보 */}
+          {/* 실제 예약 가능 인원 정보 */}
           <div className="p-2 rounded-lg flex justify-end items-center space-x-3">
             <div className="text-sm text-gray-600 flex items-center">
               <span>Available</span>
               <Badge
-                count={selectedDate? availableCapacity > 0
-                      ? availableCapacity
-                      : "Full"
-                    : "Select a Date"
+                count={selectedDate ? availableCapacity > 0
+                  ? availableCapacity
+                  : "Full"
+                  : "Select a Date"
                 }
-                style={{backgroundColor: !selectedDate
+                style={{
+                  backgroundColor: !selectedDate
                     ? "#d9d9d9"
                     : availableCapacity > 0
-                    ? "#14b8a6" 
-                    : "#ef4444", 
+                      ? "#14b8a6"
+                      : "#ef4444",
                   color: "white",
-                  marginLeft: "5px", 
+                  marginLeft: "5px",
                 }}
               />
             </div>
@@ -295,7 +288,7 @@ const TourReadComponent = ({ tno }) => {
               <Badge
                 count={tour.maxCapacity}
                 style={{
-                  backgroundColor: "#3b82f6", 
+                  backgroundColor: "#3b82f6",
                   color: "white",
                   marginLeft: "5px",
                 }}
@@ -353,9 +346,8 @@ const TourReadComponent = ({ tno }) => {
 
       {/* Reservation Drawer */}
       <div
-        className={`z-50 fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${
-          cartVisible ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300`}
+        className={`z-50 fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${cartVisible ? "translate-x-0" : "translate-x-full"
+          } transition-transform duration-300`}
       >
         <ReservationComponent />
       </div>

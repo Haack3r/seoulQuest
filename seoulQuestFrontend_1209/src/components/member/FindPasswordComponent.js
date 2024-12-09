@@ -20,12 +20,8 @@ const FindPasswordComponent = () => {
         setIsLoading(true); 
         findPassword(userInfo)
             .then((data) => {
-                console.log("안녕");
-                console.log("data:", data);
-
                 if (data !== "No value present") {
                     setUserInfo(data);
-                    console.log(data)
                     setIsModalOpen(true);
                 } else {
                     alert("check your details.");
@@ -37,7 +33,7 @@ const FindPasswordComponent = () => {
                 alert("An error occurred. Please try again later.");
             })
             .finally(() => {
-                setIsLoading(false); // 로딩 종료
+                setIsLoading(false); 
             });
     };
 

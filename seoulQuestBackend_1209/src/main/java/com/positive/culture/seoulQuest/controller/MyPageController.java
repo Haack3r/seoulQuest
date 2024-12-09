@@ -54,32 +54,15 @@ public class MyPageController {
 //        암호화된 비밀번호는 update문을 통해 db에 임시 비밀번호를 넣어준다 .
 
     @PostMapping("/findpassword")
-    public ResponseEntity<UserDTO> findPassword(@RequestBody UserDTO dto) {
-        System.out.println(dto);
-        String email = dto.getEmail();
-        String phoneNumber = String.join("-",
-                dto.getPhoneNumber1(),
-                dto.getPhoneNumber2(),
-                dto.getPhoneNumber3()
-        );
-        Member member = memberService.findPasswordAndSendEmail(email, phoneNumber);
-        UserDTO newUserDTO = memberService.entityToUserDTOforMypage(member);
+    public ResponseEntity<UserDTO> findPassword(@RequestBody UserDTO userDTO) {
+        UserDTO newUserDTO = memberService.findPasswordAndSendEmail(userDTO);
         return new ResponseEntity<>(newUserDTO, HttpStatus.OK);
     }
 
 
     @PostMapping("/findemail")
-    public ResponseEntity<UserDTO> findEmail(@RequestBody UserDTO dto) {
-        System.out.println(dto);
-        String firstname= dto.getFirstname();
-        String lastname = dto.getLastname();
-
-        String phoneNumber = String.join("-",
-                dto.getPhoneNumber1(),
-                dto.getPhoneNumber2(),
-                dto.getPhoneNumber3()
-        );
-        Member member = memberService.findEmail(firstname,lastname, phoneNumber);
+    public ResponseEntity<UserDTO> findEmail(@RequestBody UserDTO userDTO) {
+        Member member = memberService.findEmail(userDTO);
         UserDTO newUserDTO = memberService.entityToUserDTOforMypage(member);
         return new ResponseEntity<>(newUserDTO, HttpStatus.OK);
     }

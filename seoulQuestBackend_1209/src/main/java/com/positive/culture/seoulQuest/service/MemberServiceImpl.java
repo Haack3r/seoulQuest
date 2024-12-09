@@ -145,13 +145,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findPasswordAndSendEmail(String email, String phoneNumber) {
+    public UserDTO findPasswordAndSendEmail(UserDTO userDTO) {
+        String email = userDTO.getEmail();
+        String phoneNumber = String.join("-",
+                userDTO.getPhoneNumber1(),
+                userDTO.getPhoneNumber2(),
+                userDTO.getPhoneNumber3()
+        );
 
         Member member = memberRepository.findByEmailAndPhoneNumber(email, phoneNumber).orElseThrow();
 
         // 1. 임시 비밀번호 생성
         String tempPassword = makeTempPassword();
-        log.info("Temporary Password: " + tempPassword);
 
         // 2. 임시 비밀번호 저장
         member.changePw(passwordEncoder.encode(tempPassword));
@@ -160,12 +165,23 @@ public class MemberServiceImpl implements MemberService {
         // 3. 이메일 발송
         sendTemporaryPasswordEmail(member.getEmail(), tempPassword);
 
-        return member;
+        UserDTO newUserDTO = entityToUserDTOforMypage(member);
+
+        return newUserDTO;
     }
 
     @Override
-    public Member findEmail(String firstname, String lastname, String phonenumber) {
-        Member member = memberRepository.findByFirstnameAndLastnameAndPhoneNumber(firstname, lastname, phonenumber)
+    public Member findEmail(UserDTO userDTO) {
+        String firstname= userDTO.getFirstname();
+        String lastname = userDTO.getLastname();
+
+        String phoneNumber = String.join("-",
+                userDTO.getPhoneNumber1(),
+                userDTO.getPhoneNumber2(),
+                userDTO.getPhoneNumber3()
+        );
+
+        Member member = memberRepository.findByFirstnameAndLastnameAndPhoneNumber(firstname, lastname, phoneNumber)
                 .orElseThrow();
         log.info(member);
 
