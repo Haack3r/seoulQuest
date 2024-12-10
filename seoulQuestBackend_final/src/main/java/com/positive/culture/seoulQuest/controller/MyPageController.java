@@ -39,13 +39,8 @@ public class MyPageController {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/info")
     public UserDTO getInfo(Principal principal){
-        System.out.println("principal:"+principal);
         String email = principal.getName();
-        Member member = memberService.findByEmail(email).orElseThrow();
-        System.out.println("member: " + member);
-        UserDTO userDTO = memberService.entityToUserDTOforMypage(member);
-        System.out.println(userDTO);
-
+        UserDTO userDTO = memberService.findByEmailforUserInfo(email);
         return userDTO;
     }
 

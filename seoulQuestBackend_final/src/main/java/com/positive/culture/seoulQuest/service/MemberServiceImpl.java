@@ -82,6 +82,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public UserDTO findByEmailforUserInfo(String email) {
+        Member member = memberRepository.findByEmail(email).orElseThrow();
+        UserDTO userDTO = entityToUserDTOforMypage(member);
+        return userDTO;
+    }
+
+    @Override
     public Optional<Member> findByNickname(String nickName) {
         System.out.println("서비스  nickname:" + nickName);
         return memberRepository.findByNickName(nickName);
