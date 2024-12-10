@@ -145,6 +145,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+//    public UserDTO findPasswordAndSendEmail(UserDTO userDTO) {
     public UserDTO findPasswordAndSendEmail(UserDTO userDTO) {
         String email = userDTO.getEmail();
         String phoneNumber = String.join("-",
@@ -171,7 +172,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findEmail(UserDTO userDTO) {
+    public UserDTO findEmail(UserDTO userDTO) {
         String firstname= userDTO.getFirstname();
         String lastname = userDTO.getLastname();
 
@@ -185,7 +186,9 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow();
         log.info(member);
 
-        return member;
+        UserDTO newUserDTO = entityToUserDTOforMypage(member);
+
+        return newUserDTO;
     }
 
     private void sendTemporaryPasswordEmail(String toEmail, String tempPassword) {

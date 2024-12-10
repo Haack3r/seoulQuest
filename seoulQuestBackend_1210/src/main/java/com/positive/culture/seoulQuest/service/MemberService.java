@@ -28,9 +28,10 @@ public interface MemberService {
 
     //비밀번호찾기
     UserDTO findPasswordAndSendEmail(UserDTO userDTO);
+//    void findPasswordAndSendEmail(UserDTO userDTO);
 
     //이메일찾기
-    Member findEmail(UserDTO userDTO);
+    UserDTO findEmail(UserDTO userDTO);
 
     default MemberDTO entityToDTO(Member member) {
         MemberDTO dto = new MemberDTO(
