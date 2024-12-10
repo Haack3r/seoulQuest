@@ -48,9 +48,9 @@ public class MyPageController {
 //        email 에 6자리 비밀번호 보내주고
 //        암호화된 비밀번호는 update문을 통해 db에 임시 비밀번호를 넣어준다 .
     @PostMapping("/findpassword")
-    public ResponseEntity<UserDTO> findPassword(@RequestBody UserDTO userDTO) {
-        UserDTO newUserDTO = memberService.findPasswordAndSendEmail(userDTO);
-        return new ResponseEntity<>(newUserDTO, HttpStatus.OK);
+    public ResponseEntity<String> findPassword(@RequestBody UserDTO userDTO) {
+        String email = memberService.findPasswordAndSendEmail(userDTO);
+        return new ResponseEntity<>(email, HttpStatus.OK);
     }
 
     @PostMapping("/findemail")

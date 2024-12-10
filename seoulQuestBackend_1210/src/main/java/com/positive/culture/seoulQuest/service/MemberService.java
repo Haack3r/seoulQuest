@@ -30,7 +30,7 @@ public interface MemberService {
     UserDTO findByEmailforUserInfo(String email);
 
     //비밀번호찾기
-    UserDTO findPasswordAndSendEmail(UserDTO userDTO);
+    String findPasswordAndSendEmail(UserDTO userDTO);
 
     //이메일찾기
     UserDTO findEmail(UserDTO userDTO);

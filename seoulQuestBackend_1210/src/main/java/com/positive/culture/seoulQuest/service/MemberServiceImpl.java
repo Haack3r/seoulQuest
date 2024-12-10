@@ -152,8 +152,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-//    public UserDTO findPasswordAndSendEmail(UserDTO userDTO) {
-    public UserDTO findPasswordAndSendEmail(UserDTO userDTO) {
+    public String findPasswordAndSendEmail(UserDTO userDTO) {
         String email = userDTO.getEmail();
         String phoneNumber = String.join("-",
                 userDTO.getPhoneNumber1(),
@@ -173,9 +172,7 @@ public class MemberServiceImpl implements MemberService {
         // 3. 이메일 발송
         sendTemporaryPasswordEmail(member.getEmail(), tempPassword);
 
-        UserDTO newUserDTO = entityToUserDTOforMypage(member);
-
-        return newUserDTO;
+        return member.getEmail();
     }
 
     @Override
@@ -212,7 +209,7 @@ public class MemberServiceImpl implements MemberService {
                     tempPassword
             );
 
-            helper.setText(emailContent, true); // HTML 형식으로 설정
+            helper.setText(emailContent, true);
 
             mailSender.send(message);
             log.info("Temporary password email sent to: " + toEmail);
