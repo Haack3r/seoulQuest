@@ -229,7 +229,7 @@ const EditProfileComponent = () => {
         <section className="space-y-4">
           <h3 className="text-l font-semibold text-gray-800">Password</h3>
           <div>
-            <label className="block text-gray-600 mb-1">New Password / Current Password</label>
+            <label className="block text-gray-600 mb-1">Current Password or New Password</label>
             <input
               className="w-full p-3 border border-gray-300 rounded"
               name="password"
@@ -237,7 +237,7 @@ const EditProfileComponent = () => {
               value={userInfo.password}
               onChange={handleChange}
               autoComplete="new-password"
-              placeholder="Enter Your New Password or Current Password"
+              placeholder="Enter your current password or new password to confirm the changes."
               required
             />
           </div>
@@ -250,7 +250,7 @@ const EditProfileComponent = () => {
               value={userInfo.matchingPassword}
               onChange={handleChange}
               autoComplete="new-password"
-              placeholder="Re-enter Your New Password or Current Password"
+              placeholder="Re-enter your current password or your new password."
               required
             />
           </div>

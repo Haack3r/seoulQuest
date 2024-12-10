@@ -34,7 +34,6 @@ public class Member {
     @Embedded
     private Address address;
 
-
     @ElementCollection
     @Builder.Default
     @Enumerated(EnumType.STRING)

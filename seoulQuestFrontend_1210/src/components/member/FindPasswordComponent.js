@@ -21,7 +21,7 @@ const FindPasswordComponent = () => {
         findPassword(userInfo)
             .then((data) => {
                 if (data !== "No value present") {
-                    setUserInfo({email:data.email});
+                    setUserInfo({email:data});
                     setIsModalOpen(true);
                 } else {
                     alert("check your details.");
@@ -54,8 +54,9 @@ const FindPasswordComponent = () => {
                 <div className="text-center text-lg font-bold text-gray-500">Loading...</div>
             ) : (
                 // Input Fields
-                <div className="w-full max-w-md space-y-4">
-                    <div className="space-y-2">
+                <div className="w-full max-w-md">
+                    <form id="findPasswordForm" className="space-y-4">
+                    <div>
                         <label className="block text-gray-600 mb-1" htmlFor="email">Email</label>
                         <input
                             type="text"
@@ -64,11 +65,12 @@ const FindPasswordComponent = () => {
                             onChange={handleChange}
                             value={userInfo.email}
                             className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            required
                         />
                     </div>
 
                     {/* Phone Number Field */}
-                    <div className="space-y-2">
+                    <div>
                         <label className="block text-gray-600 mb-1" htmlFor="phoneNumber1">Phone Number</label>
                         <div className="flex space-x-2">
                             <input
@@ -116,11 +118,12 @@ const FindPasswordComponent = () => {
                         {/* Submit Button */}
                         <Button
                             className="w-full p-4 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-800 transition duration-300"
-                            onClick={findPasswordHandler}
+                            onSubmit={findPasswordHandler}
                         >
                             Next
                         </Button>
                     </div>
+                    </form>
 
                     {/* Footer Links */}
                     <div className="mt-6 text-center text-sm text-gray-500">

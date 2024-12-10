@@ -26,9 +26,11 @@ public interface MemberService {
     Member save(UserDTO dto);
     void modifyInfo(UserDTO dto);
 
+    // 회원 정보 조회
+    UserDTO findByEmailforUserInfo(String email);
+
     //비밀번호찾기
-    UserDTO findPasswordAndSendEmail(UserDTO userDTO);
-//    void findPasswordAndSendEmail(UserDTO userDTO);
+    String findPasswordAndSendEmail(UserDTO userDTO);
 
     //이메일찾기
     UserDTO findEmail(UserDTO userDTO);
