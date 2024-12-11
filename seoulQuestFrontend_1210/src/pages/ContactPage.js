@@ -55,6 +55,7 @@ const ContactPage = () => {
 
   // Detect screen size for responsiveness
   useEffect(() => {
+    window.scrollTo(0, 0);
     const updateScreenSize = () => {
       setIsSmallScreen(window.innerWidth < 768);
     };

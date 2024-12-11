@@ -45,14 +45,14 @@ const refreshJWT = async (accessToken, refreshToken) => {
 // Request Interceptor
 jwtAxios.interceptors.request.use(
   (config) => {
-    console.log("=== Request Interceptor 시작 ===");
+    // console.log("=== Request Interceptor 시작 ===");
     const memberInfo = getCookie("member");
-    console.log("Cookie에서 가져온 memberInfo:", memberInfo);
+    // console.log("Cookie에서 가져온 memberInfo:", memberInfo);
 
     const parsedMemberInfo = typeof memberInfo === 'string'
       ? JSON.parse(memberInfo)
       : memberInfo;
-    console.log("파싱된 memberInfo:", parsedMemberInfo);
+    // console.log("파싱된 memberInfo:", parsedMemberInfo);
 
     if (!memberInfo) {
       console.log("멤버 정보 없음");
@@ -60,9 +60,9 @@ jwtAxios.interceptors.request.use(
     }
 
     const { accessToken } = parsedMemberInfo;
-    console.log("사용할 Access Token:", accessToken);
+    // console.log("사용할 Access Token:", accessToken);
     config.headers.Authorization = `Bearer ${accessToken}`;
-    console.log("Request Interceptor - Final headers:", config.headers);
+    // console.log("Request Interceptor - Final headers:", config.headers);
     return config;
   },
   (error) => {
@@ -74,7 +74,7 @@ jwtAxios.interceptors.request.use(
 // Response Interceptor
 jwtAxios.interceptors.response.use(
   async (res) => {
-    console.log("=== Response Interceptor 시작 ===");
+    // console.log("=== Response Interceptor 시작 ===");
 
     // 응답 데이터 표준화
     const data = res.data?.data || res.data;

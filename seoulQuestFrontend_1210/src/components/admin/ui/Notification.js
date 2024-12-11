@@ -46,6 +46,16 @@ const NotificationMenu = () => {
           vertical: 'top',
           horizontal: 'right',
         }}
+        keepMounted={true}
+        disableScrollLock={true}
+        PopoverClasses={{
+          root: { 'notification-popover': 'fixed' }
+        }}
+        PaperProps={{
+          style: {
+            marginTop: '13px',
+          },
+        }}
       >
         <List sx={{ width: '300px', maxWidth: 360 }}>
           {/* 첫 번째 알림 */}
@@ -93,7 +103,7 @@ const NotificationMenu = () => {
           </MenuItem>
         </List>
       </Menu>
-    </div>
+    </div >
   );
 };
 

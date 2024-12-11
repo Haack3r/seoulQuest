@@ -62,14 +62,14 @@ const BasicMenu = () => {
 
           {/* Centered Logo */}
           <div className="flex-grow flex justify-center lg:justify-start">
-  <Link to={"/"} className="flex items-center">
-    <img
-      src={require("../../images/Seoulhwa.png")} // Adjust the path if necessary
-      alt="logo"
-      className="h-8" // Adjust height as needed
-    />
-  </Link>
- </div>
+            <Link to={"/"} className="flex items-center">
+              <img
+                src={require("../../images/Seoulhwa.png")} // Adjust the path if necessary
+                alt="logo"
+                className="h-8" // Adjust height as needed
+              />
+            </Link>
+          </div>
 
 
           {/* Desktop Menu - Hidden on small screens */}
@@ -90,11 +90,11 @@ const BasicMenu = () => {
               </Link>
               <Link to="/about/" className="menu-animation-color">
                 About
-                          </Link>
-                          {loginState.email ? <Link to="/contact/" className="menu-animation-color">
+              </Link>
+              {loginState.email ? <Link to="/contact/" className="menu-animation-color">
                 Contact
-              </Link>: ""}
-              
+              </Link> : ""}
+
             </nav>
 
             {/* Right section with login/sign-up or cart/logout */}

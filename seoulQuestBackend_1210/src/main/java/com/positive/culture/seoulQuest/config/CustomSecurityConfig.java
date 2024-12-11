@@ -93,7 +93,7 @@ public class CustomSecurityConfig {
                                                 "/api/tours/available",
                                                 "/api/review/products/list/{pno}",
                                                 "/api/review/tours/list/{tno}"
-                                                 )
+                                )
                                 .permitAll()// Allow unauthenticated access
                                 .requestMatchers(
                                                 HttpMethod.OPTIONS,
@@ -109,14 +109,6 @@ public class CustomSecurityConfig {
                                                 "/api/user/tours/mapData",
                                                 "/api/user/tours/by-address")
                                 .permitAll()
-                                // .requestMatchers(HttpMethod.GET, "/api/admin/product/**").hasRole("ADMIN")
-                                // .requestMatchers(HttpMethod.POST, "/api/admin/product/**").hasRole("ADMIN")
-                                // .requestMatchers(HttpMethod.PUT, "/api/admin/product/**").hasRole("ADMIN")
-                                // .requestMatchers(HttpMethod.DELETE, "/api/admin/product/**").hasRole("ADMIN")
-                                // .requestMatchers(HttpMethod.HEAD, "/api/admin/product/**").hasRole("ADMIN")
-                                // .requestMatchers(HttpMethod.OPTIONS,
-                                // "/api/admin/product/**")
-                                // .hasRole("ADMIN")
                                 .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                                 .anyRequest().authenticated());
 
@@ -199,6 +191,7 @@ public class CustomSecurityConfig {
                 // 클라이언트에게 노출할 헤더 설정
                 configuration.setExposedHeaders(Arrays.asList(
                                 "Authorization", // JWT 토큰
+                                "Content-Type",
                                 "X-Total-Count", // 페이징 정보
                                 "Content-Disposition" // 파일 다운로드
                 ));
