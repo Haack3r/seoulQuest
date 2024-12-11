@@ -2,8 +2,10 @@ package com.positive.culture.seoulQuest.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +43,9 @@ public class Product {
     private LocalDate updateAt; // 수정 일자
 
     private boolean delFlag; // 상품 삭제여부
+    @CreationTimestamp
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime regDate;
 
     // 실행시 , 자동으로 product_image_list table이 생성됨.
     // 하나의 엔티티가 여러개의 VO(값타입 객체)를 담을때 사용, 자동으로 이에 해당하는 테이블이 생성됨
