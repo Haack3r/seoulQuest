@@ -23,7 +23,7 @@ const FavTourComponent = ({ tno, ftino, tname, tprice, uploadFileNames, handleDe
             <Link to={`/user/tours/read/${tno}?page=1&size=10`} className="w-1/3">
                 <img
                     className="w-full h-24 object-cover rounded-lg shadow-md"
-                    src={`${host}/api/tours/view/s_${uploadFileNames}`}
+                    src={`${host}/api/tours/view/s_${uploadFileNames[0]}`}
                     alt={tname}
                 />
             </Link>

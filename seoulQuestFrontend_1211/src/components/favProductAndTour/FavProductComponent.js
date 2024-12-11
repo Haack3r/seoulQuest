@@ -24,7 +24,7 @@ const FavProductComponent = ({ pno, fino, pname, pprice, uploadFileNames, handle
             <Link to={`/user/products/read/${pno}?page=1&size=10`} className="w-1/3">
                 <img
                     className="w-full h-24 object-cover rounded-lg shadow-md"
-                    src={`${host}/api/products/view/s_${uploadFileNames}`}
+                    src={`${host}/api/products/view/s_${uploadFileNames[0]}`}
                     alt={pname}
                 />
             </Link>

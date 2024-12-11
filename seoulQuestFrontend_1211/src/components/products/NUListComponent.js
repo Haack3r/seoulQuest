@@ -84,7 +84,7 @@ const NUListComponent = () => {
     <div className="py-12">
       <section className="px-4 max-w-6xl mx-auto">
         <h2 className="mb-10 text-3xl font-bold text-center text-gray-800 tracking-wide uppercase">
-          Artisan Treasures
+          Our Products
         </h2>
 
         {/* Search Bar with Category Dropdown */}

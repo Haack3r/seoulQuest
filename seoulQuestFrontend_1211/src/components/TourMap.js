@@ -151,8 +151,8 @@ const TourMap = () => {
     {/* Spot Image */}
     {selectedSpot.uploadFileNames && selectedSpot.uploadFileNames.length > 0 ? (
       <img
-        className="w-1/3 lg:w-full h-40 lg:h-auto object-cover"
-        src={`/api/user/tours/view/${selectedSpot.uploadFileNames[0]}`}
+        className="w-1/3 lg:w-full h-40 lg:h-auto object-cover opacity-80"
+        src={`/api/tours/view/${selectedSpot.uploadFileNames[0]}`}
         alt="Tour Spot"
       />
     ) : (
