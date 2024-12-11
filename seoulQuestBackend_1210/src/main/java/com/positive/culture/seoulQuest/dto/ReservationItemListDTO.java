@@ -19,7 +19,6 @@ public class ReservationItemListDTO {
     private String tname;
     private int tprice;
     private int tqty;
-    private int availableCapacity;
 
     private String tfiles;
     private LocalDate tdate;

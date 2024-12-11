@@ -7,9 +7,9 @@ import PaymentDetails from "./PaymentDetails";
 import PaymentMethodAndCoupon from "./PaymentMethodAndCoupon";
 import CartList from "./CartList";
 import { useNavigate } from "react-router-dom";
-import useCustomLogin from "../../../hooks/useCustomLogin";
 
 const host = API_SERVER_HOST;
+
 const initState = {
   porderItems: [],
   coupons: [],
@@ -30,7 +30,7 @@ const initState = {
 };
 
 const OrderComponent = () => {
-  const {  refreshCart, cartItems } = useCustomCart();
+  const { cartItems } = useCustomCart();
   const [orderInfo, setOrderInfo] = useState({ ...initState });
   const [existOrderInfo, setExistOrderInfo] = useState({ ...initState });
   const [selectedCoupon, setSelectedCoupon] = useState("");
@@ -39,44 +39,7 @@ const OrderComponent = () => {
   const [selectedItems, setSelectedItems] = useState(new Set());
   const [isEditing, setIsEditing] = useState(false);
   const [shippingFee, setShippingFee] = useState(0);
-  const { isLogin } = useCustomLogin();
   const navigate = useNavigate();
-
-  // 공통 함수: 선택한 아이템 가격 계산
-  const calculateSelectedItemsPrice = () =>
-    [...selectedItems].reduce(
-      (total, index) =>
-        total + cartItems[index].pprice * cartItems[index].pqty,
-      0
-    );
-
-  // 공통 함수: 할인된 가격 계산
-  const calculateDiscountedPrice = (discount = 0) => {
-    const selectedItemsPrice = calculateSelectedItemsPrice();
-    const finalPrice = selectedItemsPrice + calculateShippingFee() - discount;
-    setDiscountedPrice(finalPrice);
-    setOrderInfo((prev) => ({ ...prev, totalPrice: finalPrice }));
-  };
-
-  // 공통 함수: 배송비 계산
-  const calculateShippingFee = () => {
-    if (selectedItems.size > 0) {
-      const selectedShippingFees = [...selectedItems].map(
-        (index) => cartItems[index].shippingFee
-      );
-      return Math.min(...selectedShippingFees);
-    }
-    return 0;
-  };
-
-  // 카트 아이템 중 계산할 아이템만 선택
-  const handleToggleSelect = (index) => {
-    setSelectedItems((prev) => {
-      const updated = new Set(prev);
-      updated.has(index) ? updated.delete(index) : updated.add(index);
-      return updated;
-    });
-  };
 
   const handleEditModeToggle = () => {
     if (!isEditing) {
@@ -85,71 +48,128 @@ const OrderComponent = () => {
     setIsEditing(!isEditing);
   };
 
+  useEffect(() => {
+    const appliedCoupon = orderInfo.coupons.find(
+      (coupon) => coupon.couponName === selectedCoupon
+    );
+    calculateDiscountedPrice(appliedCoupon ? appliedCoupon.discount : 0);
+  }, [selectedItems, selectedCoupon]);
+
+  useEffect(() => {
+    getOrderInfo().then((data) => {
+      const existOrderInfo = { ...data, porderItems: cartItems };
+      setOrderInfo(existOrderInfo);
+      setExistOrderInfo(existOrderInfo);
+    });
+  }, [cartItems, isEditing]);
+
+  useEffect(() => {
+    const selectedItemsPrice = calculateSelectedItemsPrice();
+    setDiscountedPrice(selectedItemsPrice + shippingFee);
+  }, [selectedItems]);
+
+  useEffect(() => {
+    if (selectedItems.size > 0) {
+      const selectedShippingFees = [...selectedItems].map((index) => cartItems[index].shippingFee);
+      const minShippingFee = Math.min(...selectedShippingFees);
+      setShippingFee(minShippingFee);
+    } else {
+      setShippingFee(0);
+    }
+  }, [selectedItems, cartItems]);
+
+  useEffect(() => {
+    const allItems = new Set(cartItems.map((_, index) => index));
+    setSelectedItems(allItems);
+  }, [cartItems]);
+
   const handleChange = (e) => {
-    setOrderInfo({...orderInfo , [e.target.name]: e.target.value });
+    setOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
+  };
+
+  const handleToggleSelect = (index) => {
+    setSelectedItems((prevSelected) => {
+      const updatedSelected = new Set(prevSelected);
+      if (updatedSelected.has(index)) {
+        updatedSelected.delete(index);
+      } else {
+        updatedSelected.add(index);
+      }
+      return updatedSelected;
+    });
+  };
+
+  const calculateSelectedItemsPrice = () => {
+    let total = 0;
+    selectedItems.forEach((index) => {
+      total += cartItems[index].pprice * cartItems[index].pqty;
+    });
+    return total;
+  };
+
+  const calculateDiscountedPrice = (discount = 0) => {
+    const selectedItemsPrice = calculateSelectedItemsPrice();
+    let discountPrice = selectedItemsPrice + shippingFee - discount;
+    setDiscountedPrice(Math.max(discountPrice, 100));
+    setOrderInfo({ ...orderInfo, totalPrice: discountPrice });
   };
 
   const handleCouponSelect = (e) => {
     const couponName = e.target.value;
     setSelectedCoupon(couponName);
 
-    const selectedCouponObj = orderInfo.coupons.find(
+    const selectedCoupon = orderInfo.coupons.find(
       (coupon) => coupon.couponName === couponName
     );
-    const discount = selectedCouponObj ? selectedCouponObj.discount : 0;
-    setDiscountAmount(discount);
-    calculateDiscountedPrice(discount);
+
+    if (selectedCoupon) {
+      setDiscountAmount(selectedCoupon.discount);
+      calculateDiscountedPrice(selectedCoupon.discount);
+    } else {
+      setDiscountAmount(0);
+      calculateDiscountedPrice();
+    }
   };
 
   const handleClickPaymentMethod = (e) => {
-    setOrderInfo((prev) => ({ ...prev, paymentMethod: e.target.value }));
+    setOrderInfo({ ...orderInfo, paymentMethod: e.target.value });
   };
 
   const handleClickBuyNow = () => {
+    if (!window.IMP) return alert("Failed to load payment SDK.");
+
+    const { IMP } = window;
+    IMP.init("imp82511880");
+
     const selectedOrderItems = orderInfo.porderItems.filter((_, index) =>
       selectedItems.has(index)
     );
-
-    if (selectedOrderItems.length === 0) {
-      alert("Please select at least one item to order.");
-      return;
-    }
 
     const filteredOrderInfo = {
       ...orderInfo,
       porderItems: selectedOrderItems,
       usedCoupon: selectedCoupon,
-      totalPrice: discountedPrice > 0? discountedPrice : 0 ,
+      totalPrice: discountedPrice,
     };
 
-    //쿠폰을 적용한 총 금액이 0보다 작을 경우, 결제창을 띄우지 않고 주문 결제 정보만 저장.
-    if(filteredOrderInfo.totalPrice <= 0 && selectedOrderItems.length !== 0 ){
-      console.log("filteredOrderInfo.totalPrice",filteredOrderInfo.totalPrice)
-      postOrderInfo(filteredOrderInfo).then((data)=>{
-        console.log("주문, 결제 완료" ,data)
-      })
-     
-      alert("Payment completed successfully!");
-      navigate("/");
-      return
+    if (calculateSelectedItemsPrice() === 0) {
+      alert("Please select at least one item to order.");
+      return;
     }
 
     if (filteredOrderInfo.paymentMethod) {
-      if (!window.IMP) return alert("Failed to load payment SDK.");
-
-      const { IMP } = window;
-      IMP.init("imp82511880");
-
       postOrderInfo(filteredOrderInfo).then((data) => {
-        const orderInfoWithOrderId = { ...filteredOrderInfo, 
-          orderId: data.orderId };
+        const orderInfoWithOrderId = {
+          ...filteredOrderInfo,
+          orderId: data.orderId,
+        };
 
         IMP.request_pay(
           {
             pg: "html5_inicis",
             pay_method: orderInfoWithOrderId.paymentMethod,
             merchant_uid: `order_${new Date().getTime()}`,
-            name: selectedOrderItems.map((item) => item.pname).join(", "),
+            name: orderInfoWithOrderId.porderItems.map((item) => item.pname).join(", "),
             amount: orderInfoWithOrderId.totalPrice,
             buyer_email: orderInfoWithOrderId.email,
             buyer_name: `${orderInfoWithOrderId.firstname} ${orderInfoWithOrderId.lastname}`,
@@ -159,12 +179,13 @@ const OrderComponent = () => {
           },
           async (rsp) => {
             if (rsp.success) {
+              const impUid = rsp.imp_uid;
               try {
-                await postPayInfo(orderInfoWithOrderId, rsp.imp_uid);
-                alert("Payment completed successfully! Redirecting to main...");
+                await postPayInfo(orderInfoWithOrderId, impUid);
+                alert("Payment completed successfully!");
                 navigate("/");
               } catch {
-                alert("Payment failed. Redirecting to cart...");
+                alert("Payment failed.");
                 navigate("/cart");
               }
             } else {
@@ -179,33 +200,6 @@ const OrderComponent = () => {
     }
   };
 
-  useEffect(() => {
-    if (isLogin) {
-        refreshCart();
-    }
-  }, [isLogin]);
-
-  useEffect(() => {
-    getOrderInfo().then((data) => {
-      const updatedOrderInfo = { ...data, 
-        porderItems: cartItems ,
-        paymentMethod : orderInfo.paymentMethod
-      };
-      setOrderInfo(updatedOrderInfo);
-      setExistOrderInfo(updatedOrderInfo);
-    });
-  }, [cartItems, isEditing]);
-
-  useEffect(() => {
-    setShippingFee(calculateShippingFee());
-    calculateDiscountedPrice(discountAmount);
-  }, [selectedItems, cartItems]);
-
-  useEffect(() => {
-    const allItems = new Set(cartItems.map((_, index) => index));
-    setSelectedItems(allItems);
-  }, [cartItems]);
-
   return (
     <div className="min-h-screen p-5 lg:p-10 flex flex-col items-center mt-10 bg-gray-100">
       <h1 className="text-xl lg:text-2xl font-bold text-gray-800 mb-4 lg:mb-8">
@@ -213,6 +207,7 @@ const OrderComponent = () => {
       </h1>
 
       <div className="w-full max-w-6xl grid lg:grid-cols-3 gap-6">
+        {/* Left Section */}
         <div className="lg:col-span-2 space-y-8">
           <CartList
             porderItems={orderInfo.porderItems}
@@ -231,19 +226,20 @@ const OrderComponent = () => {
               />
               <PaymentMethodAndCoupon
                 selectedCoupon={selectedCoupon}
-                orderInfo={orderInfo}
                 handleCouponSelect={handleCouponSelect}
                 handleClickPaymentMethod={handleClickPaymentMethod}
+                orderInfo={orderInfo}
               />
             </div>
           </div>
         </div>
+
+        {/* Right Section */}
         <div>
           <PaymentDetails
             calculateSelectedItemsPrice={calculateSelectedItemsPrice}
+            discountAmount={discountAmount}
             handleClickBuyNow={handleClickBuyNow}
-            discountAmount={discountAmount} //할인 쿠폰 금액
-            totalPrice={discountedPrice}  //최종 결제 금액
             shippingFee={shippingFee}
           />
         </div>

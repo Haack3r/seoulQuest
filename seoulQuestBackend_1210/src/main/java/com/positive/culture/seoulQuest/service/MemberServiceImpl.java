@@ -13,7 +13,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -39,13 +38,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender mailSender;
-
-    @Value("${admin.name}")
-    private String adminName;
-
-    //구글 정책상 admin email을 지정해도 spring.mail.username 으로 사용됨.
-    @Value("${spring.mail.username}")
-    private String mailUsername;
 
     @Override
     public MemberDTO getKakaoMember(String accessToken) {
@@ -79,13 +71,6 @@ public class MemberServiceImpl implements MemberService {
         System.out.println("서비스  email:" + email);
 
         return memberRepository.findByEmail(email);
-    }
-
-    @Override
-    public UserDTO findByEmailforUserInfo(String email) {
-        Member member = memberRepository.findByEmail(email).orElseThrow();
-        UserDTO userDTO = entityToUserDTOforMypage(member);
-        return userDTO;
     }
 
     @Override
@@ -152,18 +137,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String findPasswordAndSendEmail(UserDTO userDTO) {
-        String email = userDTO.getEmail();
-        String phoneNumber = String.join("-",
-                userDTO.getPhoneNumber1(),
-                userDTO.getPhoneNumber2(),
-                userDTO.getPhoneNumber3()
-        );
+    public Member findPasswordAndSendEmail(String email, String phoneNumber) {
 
         Member member = memberRepository.findByEmailAndPhoneNumber(email, phoneNumber).orElseThrow();
 
         // 1. 임시 비밀번호 생성
         String tempPassword = makeTempPassword();
+        log.info("Temporary Password: " + tempPassword);
 
         // 2. 임시 비밀번호 저장
         member.changePw(passwordEncoder.encode(tempPassword));
@@ -172,27 +152,16 @@ public class MemberServiceImpl implements MemberService {
         // 3. 이메일 발송
         sendTemporaryPasswordEmail(member.getEmail(), tempPassword);
 
-        return member.getEmail();
+        return member;
     }
 
     @Override
-    public UserDTO findEmail(UserDTO userDTO) {
-        String firstname= userDTO.getFirstname();
-        String lastname = userDTO.getLastname();
-
-        String phoneNumber = String.join("-",
-                userDTO.getPhoneNumber1(),
-                userDTO.getPhoneNumber2(),
-                userDTO.getPhoneNumber3()
-        );
-
-        Member member = memberRepository.findByFirstnameAndLastnameAndPhoneNumber(firstname, lastname, phoneNumber)
+    public Member findEmail(String firstname, String lastname, String phonenumber) {
+        Member member = memberRepository.findByFirstnameAndLastnameAndPhoneNumber(firstname, lastname, phonenumber)
                 .orElseThrow();
         log.info(member);
 
-        UserDTO newUserDTO = entityToUserDTOforMypage(member);
-
-        return newUserDTO;
+        return member;
     }
 
     private void sendTemporaryPasswordEmail(String toEmail, String tempPassword) {
@@ -201,15 +170,10 @@ public class MemberServiceImpl implements MemberService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(toEmail);
-            helper.setFrom(String.format("%s <%s>", adminName, mailUsername));
             helper.setSubject("Your Temporary Password");
-            // HTML 형식으로 이메일 내용 작성
-            String emailContent = String.format(
-                    "Hello,<br><br>Your temporary password is: <b>%s</b><br><br>Please change it after logging in.",
-                    tempPassword
-            );
-
-            helper.setText(emailContent, true);
+            helper.setText(
+                    "Hello,\n\nYour temporary password is: " + tempPassword + "\n\nPlease change it after logging in.",
+                    true);
 
             mailSender.send(message);
             log.info("Temporary password email sent to: " + toEmail);

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product> {
@@ -51,6 +52,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
             "where pil.product_pno = :pno and pil.file_name = :fileName", nativeQuery = true)
     void deleteProductImage(@Param("pno") Long pno, @Param("fileName") String fileName);
 
+    // 특정 기간 동안 등록된 상품 수 조회
+    long countByRegDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     /*
      * ------------------------AI 추천 쿼리문( 써도 되고 안 써도 되고

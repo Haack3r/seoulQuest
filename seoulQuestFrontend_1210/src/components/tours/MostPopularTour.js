@@ -43,7 +43,6 @@ const MostPopularTour = () => {
     }
   }, []);
 
-  console.log(tours)
 
   if (loading) {
     return <div className="text-center mt-12">Loading popular tours...</div>;

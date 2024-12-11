@@ -14,5 +14,6 @@ public interface TourPaymentRepository extends JpaRepository<TourPayment, Long> 
     List<TourPayment> findByMemberEmail(String email);
 
     List<TourPayment> findBytPaymentMember(Member member);
+
     TourPayment findByTourOrder(TourOrder tourOrder);
 }

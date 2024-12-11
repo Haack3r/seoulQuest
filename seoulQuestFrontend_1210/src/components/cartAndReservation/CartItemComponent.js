@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const host = API_SERVER_HOST;
 
-const CartItemComponent = ({ cino, pname, pprice, pno, pqty, pfiles, changeCart, email , stock}) => {
+const CartItemComponent = ({ cino, pname, pprice, pno, pqty, pfiles, changeCart, email }) => {
     const handleCLickQty = (amount) => {
         changeCart({ email, cino, pno, pqty: pqty + amount });
     };
@@ -54,10 +54,7 @@ const CartItemComponent = ({ cino, pname, pprice, pno, pqty, pfiles, changeCart,
                     <span className="text-gray-700 font-medium">{pqty}</span>
                     <button
                         onClick={() => handleCLickQty(1)}
-                        disabled={pqty >= stock} // 최대 수량에 도달하면 비활성화
-                            className={`px-3 py-1 rounded-md ${
-                                pqty >= stock ? "bg-gray-300 text-gray-400" : "text-gray-700 bg-gray-200 hover:bg-gray-300"
-                            }`}
+                        className="px-3 py-1 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
                     >
                         +
                     </button>

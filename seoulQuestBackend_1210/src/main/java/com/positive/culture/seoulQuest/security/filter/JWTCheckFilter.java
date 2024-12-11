@@ -61,7 +61,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/api/tours/{pno}"))
             return true;
 
-        //readPage에서 review경로는 체크 하지 않음.
+        // readPage에서 review경로는 체크 하지 않음.
         if (path.matches("/api/review/tours/list/\\d+"))
             return true;
         if (path.matches("/api/review/products/list/\\d+"))
@@ -90,7 +90,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         if (path.startsWith("/upload/"))
             return true;
-
 
         if (path.equals("/api/mypage/findpassword") || path.equals("/api/mypage/findemail")) {
             return true;

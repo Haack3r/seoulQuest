@@ -8,7 +8,6 @@ import com.positive.culture.seoulQuest.dto.MemberDTO;
 import com.positive.culture.seoulQuest.dto.MemberModifyDTO;
 import com.positive.culture.seoulQuest.dto.UserDTO;
 import jakarta.transaction.Transactional;
-import org.apache.catalina.User;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,14 +25,10 @@ public interface MemberService {
     Member save(UserDTO dto);
     void modifyInfo(UserDTO dto);
 
-    // 회원 정보 조회
-    UserDTO findByEmailforUserInfo(String email);
-
     //비밀번호찾기
-    String findPasswordAndSendEmail(UserDTO userDTO);
-
+    Member findPasswordAndSendEmail(String email, String password);
     //이메일찾기
-    UserDTO findEmail(UserDTO userDTO);
+    Member findEmail(String firstname, String lastname, String phonenumber);
 
     default MemberDTO entityToDTO(Member member) {
         MemberDTO dto = new MemberDTO(

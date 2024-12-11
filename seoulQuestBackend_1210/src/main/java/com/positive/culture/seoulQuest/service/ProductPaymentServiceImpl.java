@@ -7,7 +7,6 @@ import com.positive.culture.seoulQuest.dto.OrderDTO;
 import com.positive.culture.seoulQuest.dto.OrderPaymentDTO;
 import com.positive.culture.seoulQuest.dto.OrderPaymentItemDTO;
 import com.positive.culture.seoulQuest.repository.*;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +41,7 @@ public class ProductPaymentServiceImpl implements ProductPaymentService {
             Member paymentMember = memberRepository.findByEmail(paymentEmail).orElseThrow();
 
             Long orderId = orderdto.getOrderId();
+            System.out.println("orderId" + orderId);
             ProductOrder productOrder = productOrderRepository.findById(orderId).orElseThrow();
 
             // 1. order엔티티의 paymentStatus 변경

@@ -31,15 +31,18 @@ public class TourOrder {
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime orderDate;
 
-    //실제 예약 정보, 기존 회원 정보와는 다를 수 있음.
+    // 실제 예약 정보, 기존 회원 정보와는 다를 수 있음.
     private String firstName;
     private String lastName;
 
     private String phoneNumber;
     private String country;
 
-    public void changeTotalPrice(int totalPrice){this.totalPrice = totalPrice;}
-    public void changePaymentStatus(String paymentStatus){
+    public void changeTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void changePaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 }

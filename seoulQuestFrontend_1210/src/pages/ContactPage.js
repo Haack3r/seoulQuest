@@ -55,6 +55,7 @@ const ContactPage = () => {
 
   // Detect screen size for responsiveness
   useEffect(() => {
+    window.scrollTo(0, 0);
     const updateScreenSize = () => {
       setIsSmallScreen(window.innerWidth < 768);
     };
@@ -81,11 +82,12 @@ const ContactPage = () => {
     e.preventDefault();
     try {
       const contactData = { ...formData };
-      await postAdd(contactData);
-      alert('Your inquiry has been successfully sent');
+      const result = await postAdd(contactData);
+      setMessage('Your inquiry sent successfully.');
+      setIsError(false);
       setFormData({ name: '', email: '', inquiry: '' });
     } catch (error) {
-      setMessage('Failed to send your inquiry. Please try again');
+      setMessage('Failed to send your inquiry. Please try again.');
       setIsError(true);
     }
   };
@@ -103,8 +105,9 @@ const ContactPage = () => {
         </h1>
 
         <div
-          className={`max-w-[1200px] mx-auto ${isSmallScreen ? 'flex flex-col' : 'grid grid-cols-2'
-            } gap-10`}
+          className={`max-w-[1200px] mx-auto ${
+            isSmallScreen ? 'flex flex-col' : 'grid grid-cols-2'
+          } gap-10`}
         >
           {/* FAQ Section */}
           <div className="bg-white rounded-2xl p-8 shadow-lg">
@@ -116,25 +119,29 @@ const ContactPage = () => {
               {faqData.map((faq, index) => (
                 <div
                   key={index}
-                  className={`mb-2 bg-gray-50 rounded-lg ${openIndex === index && isSmallScreen ? 'shadow-md' : ''
-                    }`}
+                  className={`mb-2 bg-gray-50 rounded-lg ${
+                    openIndex === index && isSmallScreen ? 'shadow-md' : ''
+                  }`}
                 >
                   <button
                     onClick={() => toggleFaq(index)}
-                    className={`w-full px-5 py-4 text-left ${openIndex === index ? 'bg-stone-500 text-white' : 'bg-gray-50 text-gray-800'
-                      } flex justify-between items-center`}
+                    className={`w-full px-5 py-4 text-left ${
+                      openIndex === index ? 'bg-stone-500 text-white' : 'bg-gray-50 text-gray-800'
+                    } flex justify-between items-center`}
                   >
                     {faq.question}
                     <span
-                      className={`transform transition-transform ${openIndex === index ? 'rotate-180' : 'rotate-0'
-                        }`}
+                      className={`transform transition-transform ${
+                        openIndex === index ? 'rotate-180' : 'rotate-0'
+                      }`}
                     >
                       ▼
                     </span>
                   </button>
                   <div
-                    className={`transition-all duration-300 overflow-hidden ${openIndex === index ? 'p-5 max-h-96' : 'max-h-0'
-                      }`}
+                    className={`transition-all duration-300 overflow-hidden ${
+                      openIndex === index ? 'p-5 max-h-96' : 'max-h-0'
+                    }`}
                   >
                     {faq.answer}
                   </div>
@@ -147,8 +154,8 @@ const ContactPage = () => {
           <div className="bg-white rounded-2xl p-8 shadow-lg">
             <h2 className="text-2xl text-gray-800 mb-8 text-center">Contact Us</h2>
             <p className="text-gray-600 text-base text-center mb-8">
-              If you have any questions or inquiries, please leave us and we will respond quickly
-            </p>
+                                If you have any questions or inquiries, please leave us and we will respond quickly
+                            </p>
             <form onSubmit={handleSubmit}>
               <div className="mb-5">
                 <label htmlFor="name" className="block mb-2 text-gray-800 font-medium">
@@ -160,8 +167,7 @@ const ContactPage = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Please enter your name"
-                  className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm"
+                  className="w-full px-3 py-3 border border-gray-200 rounded-lg"
                 />
               </div>
               <div className="mb-5">
@@ -174,8 +180,7 @@ const ContactPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Please enter the email address you would like to receive a reply from"
-                  className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm"
+                  className="w-full px-3 py-3 border border-gray-200 rounded-lg"
                 />
               </div>
               <div className="mb-5">
@@ -187,14 +192,14 @@ const ContactPage = () => {
                   name="inquiry"
                   value={formData.inquiry}
                   onChange={handleChange}
-                  placeholder="Please fill out your inquiry in detail and we will respond quickly"
-                  className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm"
+                  className="w-full px-3 py-3 border border-gray-200 rounded-lg"
                 ></textarea>
               </div>
               {message && (
                 <div
-                  className={`mb-5 p-3 rounded-lg ${isError ? 'bg-red-50 text-red-500' : 'bg-green-50 text-green-500'
-                    }`}
+                  className={`mb-5 p-3 rounded-lg ${
+                    isError ? 'bg-red-50 text-red-500' : 'bg-green-50 text-green-500'
+                  }`}
                 >
                   {message}
                 </div>

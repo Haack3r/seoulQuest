@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Card, Space, Input, Select, message, Modal } from 'antd';
+import { Table, Button, Card, Drawer, Space, Input, Select, message, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { fetchCoupons } from '../../api/AdminApi'; // Import API call
+import { fetchCoupons, changeActive } from '../../api/AdminApi'; // Import API call
+import dayjs from 'dayjs';
 
 const { Option } = Select;
 
 const AdminCouponComponents = () => {
   const [coupons, setCoupons] = useState([]);
   const [filteredCoupons, setFilteredCoupons] = useState([]);
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState([]);
+  const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [searchType, setSearchType] = useState('all'); // Default search type
   const [searchValue, setSearchValue] = useState('');
-  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility
-  const [selectedCouponUsers, setSelectedCouponUsers] = useState([]); // Users for modal
+  const [active, setActive] = useState(false);
 
-  // Fetch coupon data from API
+  //Fetch coupon data from API
   const loadCoupons = async () => {
     setLoading(true);
     try {
@@ -32,6 +35,30 @@ const AdminCouponComponents = () => {
     loadCoupons();
   }, []);
 
+  //   const handleClickIsActive = async (couponId) => {
+  //     setLoading(true);
+  //     try {
+  //         // 서버로 쿠폰 ID 전송
+  //         await changeActive(couponId);
+
+  //         // 서버 요청 성공 시, 쿠폰 상태 업데이트
+  //         const updatedCoupons = coupons.map((coupon) =>
+  //             coupon.couponId === couponId
+  //                 ? { ...coupon, isActive: !coupon.isActive } // 상태 토글
+  //                 : coupon
+  //         );
+  //         setCoupons(updatedCoupons);
+  //         setFilteredCoupons(updatedCoupons); // 필터링된 목록 업데이트
+
+  //         message.success('쿠폰 활성화 상태가 변경되었습니다.');
+  //     } catch (error) {
+  //         message.error('쿠폰 활성화 상태 변경에 실패했습니다.');
+  //     } finally {
+  //         setLoading(false);
+  //     }
+  // };
+
+
   // Handle Search and Filter
   useEffect(() => {
     const filtered = coupons.filter((coupon) => {
@@ -39,37 +66,28 @@ const AdminCouponComponents = () => {
       const removeHyphenValue = searchValue.split('-').join('');
       const removeWonAndCommaValue = searchValue.split('₩').join('').split(',').join('');
 
-      // Filter status
-      const matchesStatus =
-        filterStatus === 'all'
-          ? true
-          : filterStatus === 'active'
-          ? coupon.isActive
-          : !coupon.isActive;
+      //필터 상태에 따른 조건
+      const matchesStatus = filterStatus === 'all' || filterStatus === ''
+        ? true //모든 쿠폰 포함
+        : filterStatus === 'active'
+          ? coupon.isActive //활성화된 쿠폰만
+          : !coupon.isActive; //비활성화된 쿠폰만
 
-      // Search condition
+      //검색어에 따른 조건
       const matchesSearch =
+        `${coupon.couponId}`.includes(searchValue) ||
         `${coupon.couponName}`.toLowerCase().includes(lowerValue) ||
         `${coupon.discount}`.includes(removeWonAndCommaValue) ||
         `${coupon.expirationDate}`.split('-').join('').includes(removeHyphenValue);
+      // ||
+      // (lowerValue === 'active' && coupon.isActive) ||
+      // (lowerValue === 'inactive' && !coupon.isActive);
 
       return matchesStatus && matchesSearch;
     });
 
     setFilteredCoupons(filtered);
   }, [searchValue, filterStatus, coupons]);
-
-  // Show Modal with selected coupon's users
-  const showModal = (userCouponList) => {
-    setSelectedCouponUsers(userCouponList || []); // Set users or empty array
-    setIsModalVisible(true); // Show modal
-  };
-
-  // Hide Modal
-  const hideModal = () => {
-    setIsModalVisible(false);
-    setSelectedCouponUsers([]);
-  };
 
   const columns = [
     {
@@ -92,45 +110,34 @@ const AdminCouponComponents = () => {
       title: '만기일',
       dataIndex: 'expirationDate',
       key: 'expirationDate',
-      render: (date) => (date ? date : '결제 정보 없음'),
+      render: (date) =>
+        date ? date
+          // dayjs(date).format('YYYY-MM-DD') 
+          : '결제 정보 없음',
     },
     {
-      title: '쿠폰 활성화 상태',
+      title: '쿠폰 활성화 여부',
       dataIndex: 'isActive',
       key: 'isActive',
-      render: (isActive) => (isActive ? 'Active' : 'Inactive'),
-    },
-    {
-      title: '쿠폰 보유 회원 목록',
-      key: 'userCouponList',
-      render: (_, record) => (
-        record.userCouponList && record.userCouponList.length > 0 ? (
-          <Button type="link" onClick={() => showModal(record.userCouponList)}>
-            보기
+      render: (isActive, record) =>
+      (
+        <Space>
+          <Button
+            className='p-1 w-20'
+          //   onClick ={handleClickIsActive(record.couponId)}
+          >
+            {isActive ? "Active" : "Inactive"}
           </Button>
-        ) : (
-          <span>쿠폰 보유 회원 목록이 없습니다.</span>
-        )
+        </Space>
       ),
-    }
-  ];
-
-  const userColumns = [
-    {
-      title: '이메일',
-      dataIndex: 'email',
-      key: 'email',
     },
+    //추가 구현해야함
     {
-      title: '회원 이름',
-      dataIndex: 'userName',
-      key: 'userName',
-    },
-    {
-      title: '사용 날짜',
-      dataIndex: 'useDate',
-      key: 'useDate',
-      render: (useDate) => (useDate ? useDate : '미사용'),
+      title: '쿠폰 보유 사용자 목록',
+      dataIndex: 'userCouponList',
+      key: 'userCouponList',
+      render: (list) =>
+        list ? list : '쿠폰 보유 사용자 목록',
     },
   ];
 
@@ -140,7 +147,7 @@ const AdminCouponComponents = () => {
         <Space>
           {/* Search Type Selector */}
           <Select
-            defaultValue="쿠폰 활성화 상태"
+            defaultValue=""
             style={{
               width: 150,
               height: 34,
@@ -156,7 +163,7 @@ const AdminCouponComponents = () => {
 
           {/* Search Input */}
           <Input
-            placeholder="쿠폰 검색 (쿠폰명, 할인금액, 만기일)"
+            placeholder="쿠폰 검색 (번호, 이름, 할인금액, 만기일)"
             prefix={<SearchOutlined />}
             onChange={(e) => setSearchValue(e.target.value)}
             style={{
@@ -172,31 +179,12 @@ const AdminCouponComponents = () => {
 
       {/* Reservations Table */}
       <Table
-        pagination={{
-          position: ['bottomLeft'],
-          pageSize: 10,
-          showQuickJumper: true,
-        }}
         columns={columns}
         dataSource={filteredCoupons}
         rowKey="couponId"
         loading={loading}
       />
 
-      {/* Modal for Coupon Users */}
-      <Modal
-        title="쿠폰 보유 회원 목록"
-        visible={isModalVisible}
-        onCancel={hideModal}
-        footer={null} // No footer buttons
-      >
-        <Table
-          columns={userColumns}
-          dataSource={selectedCouponUsers}
-          rowKey="email"
-          pagination={false} // Disable pagination for modal
-        />
-      </Modal>
     </div>
   );
 };

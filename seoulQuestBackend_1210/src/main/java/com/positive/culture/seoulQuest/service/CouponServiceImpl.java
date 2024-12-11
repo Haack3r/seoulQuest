@@ -5,14 +5,12 @@ import com.positive.culture.seoulQuest.domain.Member;
 import com.positive.culture.seoulQuest.domain.UserCoupon;
 import com.positive.culture.seoulQuest.dto.CouponDTO;
 import com.positive.culture.seoulQuest.dto.OrderDTO;
-import com.positive.culture.seoulQuest.dto.UserCouponDTO;
 import com.positive.culture.seoulQuest.repository.CouponRepository;
 import com.positive.culture.seoulQuest.repository.MemberRepository;
 import com.positive.culture.seoulQuest.repository.UserCouponRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -81,7 +79,6 @@ public class CouponServiceImpl implements CouponService {
                 .filter(coupon ->
                         // Filter out coupons that are expired
                         LocalDate.now().isBefore(coupon.getExpireDate()) &&
-                                coupon.isActive() &&
                                 // Exclude coupons that are already used by this user
                                 !usedCouponIds.contains(coupon.getCouponId())
                 )
@@ -162,27 +159,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<CouponDTO> getCouponList() {
         List<Coupon> coupons = couponRepository.findAll();
-
-        List<CouponDTO> couponDTOList = coupons.stream().map(coupon->{
-            CouponDTO couponDTO = convertToDTO(coupon);
-
-            List<UserCoupon> userCoupons = userCouponRepository.findByCoupon(coupon);
-
-            List<UserCouponDTO> userCouponDTOs = userCoupons.stream()
-                    .map(userCoupon-> {
-//                        UserCouponDTO userCouponDTO =
-                         return  UserCouponDTO.builder()
-                                .email(userCoupon.getCouponOwner().getEmail())
-                                .userName(userCoupon.getCouponOwner().getFirstname()+" "+userCoupon.getCouponOwner().getLastname())
-                                .useDate(userCoupon.getUseDate())
-                                .build();
-                    }).toList();
-
-            couponDTO.setUserCouponList(userCouponDTOs);
-            return couponDTO;
-        }).toList();
-
-        return couponDTOList;
+        return coupons.stream().map(this::convertToDTO).toList();
     }
 
 

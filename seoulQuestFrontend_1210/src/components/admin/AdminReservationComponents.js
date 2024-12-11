@@ -61,14 +61,14 @@ const AdminReservationComponents = () => {
         searchType === 'reservationId'
           ? `${item.orderId}`.toLowerCase().includes(lowerValue)
           : searchType === 'customerName'
-          ? `${item.firstname} ${item.lastname}`.toLowerCase().includes(lowerValue)
-          : searchType === 'tourName'
-          ? item.torderItems.some((order) =>
-              order.tname.toLowerCase().includes(lowerValue)
-            )
-          : searchType === 'paymentDate'
-          ? dayjs(item.paymentDate).format('YYYY-MM-DD').includes(lowerValue)
-          : false;
+            ? `${item.firstname} ${item.lastname}`.toLowerCase().includes(lowerValue)
+            : searchType === 'tourName'
+              ? item.torderItems.some((order) =>
+                order.tname.toLowerCase().includes(lowerValue)
+              )
+              : searchType === 'paymentDate'
+                ? dayjs(item.paymentDate).format('YYYY-MM-DD').includes(lowerValue)
+                : false;
 
       return searchType === 'all' ? matchesAllFields : matchesSpecificField;
     });
@@ -173,59 +173,59 @@ const AdminReservationComponents = () => {
 
       {/* Reservation Details Drawer */}
       <Drawer
-  title="예약 상세 정보"
-  placement="right"
-  onClose={() => setDrawerVisible(false)}
-  visible={drawerVisible}
-  width={400}
->
-  {selectedReservation && (
-    <div>
-      {/* Reservation ID */}
-      <p>
-        <strong>예약 번호:</strong> {selectedReservation.orderId}
-      </p>
+        title="예약 상세 정보"
+        placement="right"
+        onClose={() => setDrawerVisible(false)}
+        visible={drawerVisible}
+        width={400}
+      >
+        {selectedReservation && (
+          <div>
+            {/* Reservation ID */}
+            <p>
+              <strong>예약 번호:</strong> {selectedReservation.orderId}
+            </p>
 
-      {/* Customer Details */}
-      <p>
-        <strong>고객명:</strong> {selectedReservation.firstname} {selectedReservation.lastname}
-      </p>
-      <p>
-        <strong>연락처:</strong> {selectedReservation.phoneNumber}
-      </p>
-      <p>
-        <strong>국가:</strong> {selectedReservation.country}
-      </p>
+            {/* Customer Details */}
+            <p>
+              <strong>고객명:</strong> {selectedReservation.firstname} {selectedReservation.lastname}
+            </p>
+            <p>
+              <strong>연락처:</strong> {selectedReservation.phoneNumber}
+            </p>
+            <p>
+              <strong>국가:</strong> {selectedReservation.country}
+            </p>
 
-      {/* Payment and Order Info */}
-      <p>
-        <strong>결제 상태:</strong> {selectedReservation.paymentStatus}
-      </p>
-      <p>
-        <strong>결제 날짜:</strong>{' '}
-        {selectedReservation.paymentDate
-          ? dayjs(selectedReservation.paymentDate).format('YYYY-MM-DD HH:mm:ss')
-          : '결제 정보 없음'}
-      </p>
-      <p>
-        <strong>총 금액:</strong> ₩{selectedReservation.totalPrice.toLocaleString()}
-      </p>
+            {/* Payment and Order Info */}
+            <p>
+              <strong>결제 상태:</strong> {selectedReservation.paymentStatus}
+            </p>
+            <p>
+              <strong>결제 날짜:</strong>{' '}
+              {selectedReservation.paymentDate
+                ? dayjs(selectedReservation.paymentDate).format('YYYY-MM-DD HH:mm:ss')
+                : '결제 정보 없음'}
+            </p>
+            <p>
+              <strong>총 금액:</strong> ₩{selectedReservation.totalPrice.toLocaleString()}
+            </p>
 
-      {/* Tour/Products List */}
-      <p>
-        <strong>예약된 상품:</strong>
-      </p>
-      <ul>
-        {selectedReservation.torderItems.map((item, idx) => (
-          <li key={idx}>
-            {item.tname} - ₩{item.tprice.toLocaleString()} x {item.tqty} (날짜:{' '}
-            {dayjs(item.tdate).format('YYYY-MM-DD')})
-          </li>
-        ))}
-      </ul>
-    </div>
-  )}
-</Drawer>
+            {/* Tour/Products List */}
+            <p>
+              <strong>예약된 상품:</strong>
+            </p>
+            <ul>
+              {selectedReservation.torderItems.map((item, idx) => (
+                <li key={idx}>
+                  {item.tname} - ₩{item.tprice.toLocaleString()} x {item.tqty} (날짜:{' '}
+                  {dayjs(item.tdate).format('YYYY-MM-DD')})
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </Drawer>
 
     </div>
   );

@@ -190,10 +190,12 @@ const AdminBasicMenu = () => {
               {/* <Link to={'/'} */}
               <Link
                 to={'/'}
-                className="text-2xl font-semibold tracking-wide text-gray-900">
-                Seoul
-                <span className="text-red-800">Culture</span>
-                <span className="text-blue-900">Quest</span>
+                className="flex items-center">
+                <img
+                  src={require("../../../images/Seoulhwa.png")} // Adjust the path if necessary
+                  alt="logo"
+                  className="h-8" // Adjust height as needed
+                />
               </Link>
             </div>
             {/* <div className='hidden lg:flex lg:flex-grow lg:justify-between lg:items-center px-8'> */}

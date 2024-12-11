@@ -68,8 +68,8 @@ export const checkAdminRole = async () => {
             ? JSON.parse(memberInfo)
             : memberInfo;
 
-        console.log("memberInfo:", memberInfo)
-        console.log("parsed memberInfo:", parsedMemberInfo)
+        // console.log("memberInfo:", memberInfo)
+        // console.log("parsed memberInfo:", parsedMemberInfo)
 
         if (!parsedMemberInfo.role ||
             !parsedMemberInfo.role.includes("ADMIN")) {
@@ -81,7 +81,7 @@ export const checkAdminRole = async () => {
             timeout: 5000
         })
 
-        console.log("권한 체크 응답", res) // 응답 확인 로그
+        // console.log("권한 체크 응답", res) // 응답 확인 로그
 
         return res.data
     } catch (error) {
@@ -111,8 +111,6 @@ export const AdminRoute = ({ children }) => {
     if (loading) return <Loader2 />
     return isAdmin ? children : null
 }
-
-// Admin API 함수들
 
 /* -------------------------- PRODUCT ------------------------------*/
 
@@ -363,10 +361,10 @@ export const fetchOrders = async () => {
 export const fetchReservations = async () => {
     try {
         const res = await jwtAxios.get(`${host}/admin/reservation/list`)
-        console.log("상품 체크 응답", res)
+        console.log("예약 체크 응답", res)
         return res.data
     } catch (error) {
-        console.log("상품 체크 오류", error)
+        console.log("예약 체크 오류", error)
         throw error
     }
 }
@@ -449,24 +447,24 @@ export const fetchCoupons = async () => {
     }
 };
 
-//추후 구현
-// export const changeActive = async (couponId) => {
-//     try {
+export const changeActive = async (couponId) => {
+    try {
 
-//         // jwtAxios 사용
-//         const response = await jwtAxios.post(
-//             `${host}/admin/changeactive/${couponId}`,
-//         );
+        // jwtAxios 사용
+        const response = await jwtAxios.post(
+            `${host}/admin/changeactive/${couponId}`,
+        );
 
-//         console.log('Response:', response);
-//         return response.data;
-//     } catch (error) {
-//         console.error('상품 등록 실패:', error);
-//         throw error;
-//     }
-// };
+        console.log('Response:', response);
+        return response.data;
+    } catch (error) {
+        console.error('상품 등록 실패:', error);
+        throw error;
+    }
+};
 
-/*--------------------------- CUSTOMER ------------------------------*/
+/* -------------------------- Customer------------------------------*/
+
 export const getCustomerList = async () => {
     try {
         console.log("고객 목록 조회 시작");
@@ -482,40 +480,59 @@ export const getCustomerList = async () => {
     }
 };
 
-export const getCustomerOrders = async (email) => {
+/* -------------------------- Dashboard ------------------------------*/
+export const fetchDashboardStats = async () => {
     try {
-        const response = await jwtAxios.get(`${host}/admin/customer/orders/${email}`, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        });
-        console.log("주문 데이터 응답:", response.data);
-        return response.data;
+        console.log('대시보드 통계 요청 시작');
+        const response = await jwtAxios.get(`${host}/admin/dashboard/statistics`);
+        console.log('대시보드 통계 응답:', response.data);
+        
+        return {
+            totalRevenue: response.data?.totalRevenue || 0,
+            tourCount: response.data?.tourCount || 0,
+            productCount: response.data?.productCount || 0,
+            revenueGrowth: response.data?.revenueGrowth || 0
+        };
     } catch (error) {
-        console.error("주문 데이터 조회 실패:", error);
-        if (error.response?.status === 401) {
-            console.error("인증 에러 - 토큰을 확인하세요");
-        }
-        return [];
+        console.error('대시보드 통계 조회 에러:', error);
+        return {
+            totalRevenue: 0,
+            tourCount: 0,
+            productCount: 0,
+            revenueGrowth: 0
+        };
     }
 };
 
-export const getCustomerReservations = async (email) => {
+// fetchTopItems도 같은 방식으로 단순화
+export const fetchTopItems = async () => {
     try {
-        const response = await jwtAxios.get(`${host}/admin/customer/reservations/${email}`, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        });
-        console.log("예약 데이터 응답:", response.data);
-        return response.data;
+        console.log('인기 항목 요청 시작');
+        
+        const productsPromise = jwtAxios.get(`${host}/admin/dashboard/top-products`);
+        const toursPromise = jwtAxios.get(`${host}/admin/dashboard/top-tours`);
+        
+        const [productsResponse, toursResponse] = await Promise.all([
+            productsPromise,
+            toursPromise
+        ]);
+
+        console.log('상품 응답:', productsResponse.data);
+        console.log('투어 응답:', toursResponse.data);
+
+        return {
+            products: productsResponse.data || [],
+            tours: toursResponse.data || []
+        };
     } catch (error) {
-        console.error("예약 데이터 조회 실패:", error);
-        if (error.response?.status === 401) {
-            console.error("인증 에러 - 토큰을 확인하세요");
+        console.error('인기 항목 데이터 로딩 실패:', error);
+        if (error.response) {
+            console.error('에러 응답:', error.response.data);
+            console.error('에러 상태:', error.response.status);
         }
-        return [];
+        return {
+            products: [],
+            tours: []
+        };
     }
 };

@@ -41,9 +41,12 @@ public class ProductOrder {
     private String country;
     private String zipcode;
 
-    public void changePaymentStatus(String paymentStatus){
+    public void changeTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void changePaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
-    public void changeTotalPrice(int totalPrice){this.totalPrice = totalPrice;}
 
 }

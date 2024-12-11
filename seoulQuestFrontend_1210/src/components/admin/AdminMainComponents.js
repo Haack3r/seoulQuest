@@ -10,6 +10,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Settings, Search, Calendar, Users, Bell } from "lucide-react";
+import { fetchDashboardStats, fetchTopItems } from "../../api/AdminApi";
+
+const host = "http://localhost:8080/api";
 
 const weeklyData = [
   { name: "월", tours: 80, products: 60, revenue: 320 },
@@ -31,7 +34,7 @@ const CircularProgress = ({ value, total, color, size = 64 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const progress = (value / total) * 100;
-  const offset = circumference - (progress / 100) * circumference;
+  const offset = progress >= 100 ? 0 : circumference - (progress / 100) * circumference;
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
@@ -78,6 +81,15 @@ const CircularProgress = ({ value, total, color, size = 64 }) => {
 
 const AdminMainComponents = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth >= 1280);
+  const [statistics, setStatistics] = useState({
+    totalRevenue: 0,
+    tourCount: 0,
+    productCount: 0,
+    revenueGrowth: 0,
+    topSellingProducts: [],
+    topReservedTours: []
+  });
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth >= 1280);
@@ -86,6 +98,62 @@ const AdminMainComponents = () => {
     window.addEventListener("resize", handleResize);
     return () => window.addEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      try {
+        // 기본 통계 데이터 로드
+        const statsData = await fetchDashboardStats();
+        setStatistics(statsData);
+
+        const topItemsData = await fetchTopItems();
+        setStatistics(prevStats => ({
+          ...prevStats,
+          topSellingProducts: topItemsData.products || [],
+          topReservedTours: topItemsData.tours || []
+        }));
+      } catch (error) {
+        console.error('대시보드 데이터 로드 실패:', error);
+      }
+    };
+
+    loadDashboardData();
+  }, []);
+
+  const renderTopItems = () => {
+    // null 체크 추가
+    const { topReservedTours = [], topSellingProducts = [] } = statistics || {};
+
+    return (
+      <div className="space-y-4">
+        {topReservedTours.map((tour, index) => (
+          <div key={`tour-${index}`} className="bg-orange-100 p-4 rounded-xl">
+            <div className="flex justify-between items-center">
+              <span className="text-2xl font-bold">{tour?.reservationCount || 0}건</span>
+              <div className="w-12 h-6 bg-white rounded-full flex items-center justify-center">
+                <Calendar size={16} className="text-orange-500" />
+              </div>
+            </div>
+            <p className="font-medium">{tour?.tourName || '이름 없음'}</p>
+            <p className="text-sm text-gray-500">이번 주 예약</p>
+          </div>
+        ))}
+
+        {topSellingProducts.map((product, index) => (
+          <div key={`product-${index}`} className="bg-blue-100 p-4 rounded-xl">
+            <div className="flex justify-between items-center">
+              <span className="text-2xl font-bold">{product?.salesCount || 0}개</span>
+              <div className="w-12 h-6 bg-white rounded-full flex items-center justify-center">
+                <Users size={16} className="text-blue-500" />
+              </div>
+            </div>
+            <p className="font-medium">{product.productName}</p>
+            <p className="text-sm text-gray-500">이번 주 판매</p>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -112,17 +180,17 @@ const AdminMainComponents = () => {
         <div className="grid xl:grid-cols-3 lg:grid-cols-2 gap-6 mb-8">
           <div className="bg-white p-6 rounded-xl">
             <div className="flex justify-between items-center">
-              {" "}
-              {/* items-start를 items-center로 변경 */}
               <div>
                 <h3 className="text-gray-500 mb-2">총 매출액</h3>
-                <p className="text-3xl font-bold">5,672만원</p>
-                <p className="text-green-500 text-sm">+24% 증가</p>
+                <p className="text-3xl font-bold">
+                  {statistics.totalRevenue ? `${(statistics.totalRevenue).toLocaleString()}원` : '0원'}
+                </p>
+                <p className="text-green-500 text-sm">
+                  {isNaN(statistics.revenueGrowth) ? '0% 증가' : `+${statistics.revenueGrowth.toFixed(2)}% 증가`}
+                </p>
               </div>
               <div className="ml-4">
-                {" "}
-                {/* 여백 추가 */}
-                <CircularProgress value={24} total={100} color="#3B82F6" />
+                <CircularProgress value={isNaN(statistics.revenueGrowth) ? 0 : statistics.revenueGrowth} total={100} color="#3B82F6" />
               </div>
             </div>
           </div>
@@ -130,7 +198,9 @@ const AdminMainComponents = () => {
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="text-gray-500 mb-2">투어 예약</h3>
-                <p className="text-3xl font-bold">3,045건</p>
+                <p className="text-3xl font-bold">
+                  {statistics.tourCount ? `${statistics.tourCount}건` : '0건'}
+                </p>
                 <p className="text-yellow-500 text-sm">+40% 증가</p>
               </div>
               <div className="ml-4">
@@ -142,7 +212,9 @@ const AdminMainComponents = () => {
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="text-gray-500 mb-2">상품 판매</h3>
-                <p className="text-3xl font-bold">1,055개</p>
+                <p className="text-3xl font-bold">
+                  {statistics.productCount ? `${statistics.productCount}개` : '0개'}
+                </p>
                 <p className="text-green-500 text-sm">+16% 증가</p>
               </div>
               <div className="ml-4">
@@ -213,27 +285,7 @@ const AdminMainComponents = () => {
           </div>
 
           <div className="space-y-4">
-            <div className="bg-orange-100 p-4 rounded-xl">
-              <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold">95건</span>
-                <div className="w-12 h-6 bg-white rounded-full flex items-center justify-center">
-                  <Calendar size={16} className="text-orange-500" />
-                </div>
-              </div>
-              <p className="font-medium">한강 야경 투어</p>
-              <p className="text-sm text-gray-500">이번 주 예약</p>
-            </div>
-
-            <div className="bg-blue-100 p-4 rounded-xl">
-              <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold">80개</span>
-                <div className="w-12 h-6 bg-white rounded-full flex items-center justify-center">
-                  <Users size={16} className="text-blue-500" />
-                </div>
-              </div>
-              <p className="font-medium">명동 기념품 세트</p>
-              <p className="text-sm text-gray-500">이번 주 판매</p>
-            </div>
+            {renderTopItems()}
           </div>
         </div>
 

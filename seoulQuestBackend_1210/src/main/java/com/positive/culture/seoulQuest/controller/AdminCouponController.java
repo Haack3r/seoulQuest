@@ -24,8 +24,12 @@ public class AdminCouponController {
     @GetMapping("/list")
     public List<CouponDTO> couponDTOList(){return couponService.getCouponList();}
 
-    //쿠폰 active/inactive - 추후 구현
+    //쿠폰 등록
+
+    //쿠폰 active/inactive
 //    @PostMapping("/changeactive/{couponId}")
 //    public boolean changeActive(@Par)
+
+    //쿠폰 삭제
 
 }

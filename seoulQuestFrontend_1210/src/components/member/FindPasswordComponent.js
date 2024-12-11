@@ -20,8 +20,12 @@ const FindPasswordComponent = () => {
         setIsLoading(true); 
         findPassword(userInfo)
             .then((data) => {
+                console.log("안녕");
+                console.log("data:", data);
+
                 if (data !== "No value present") {
-                    setUserInfo({email:data});
+                    setUserInfo(data);
+                    console.log(data)
                     setIsModalOpen(true);
                 } else {
                     alert("check your details.");
@@ -33,7 +37,7 @@ const FindPasswordComponent = () => {
                 alert("An error occurred. Please try again later.");
             })
             .finally(() => {
-                setIsLoading(false); 
+                setIsLoading(false); // 로딩 종료
             });
     };
 
@@ -54,9 +58,8 @@ const FindPasswordComponent = () => {
                 <div className="text-center text-lg font-bold text-gray-500">Loading...</div>
             ) : (
                 // Input Fields
-                <div className="w-full max-w-md">
-                    <form id="findPasswordForm" className="space-y-4">
-                    <div>
+                <div className="w-full max-w-md space-y-4">
+                    <div className="space-y-2">
                         <label className="block text-gray-600 mb-1" htmlFor="email">Email</label>
                         <input
                             type="text"
@@ -65,12 +68,11 @@ const FindPasswordComponent = () => {
                             onChange={handleChange}
                             value={userInfo.email}
                             className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
-                            required
                         />
                     </div>
 
                     {/* Phone Number Field */}
-                    <div>
+                    <div className="space-y-2">
                         <label className="block text-gray-600 mb-1" htmlFor="phoneNumber1">Phone Number</label>
                         <div className="flex space-x-2">
                             <input
@@ -118,12 +120,11 @@ const FindPasswordComponent = () => {
                         {/* Submit Button */}
                         <Button
                             className="w-full p-4 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-800 transition duration-300"
-                            onSubmit={findPasswordHandler}
+                            onClick={findPasswordHandler}
                         >
                             Next
                         </Button>
                     </div>
-                    </form>
 
                     {/* Footer Links */}
                     <div className="mt-6 text-center text-sm text-gray-500">
@@ -159,16 +160,10 @@ const FindPasswordComponent = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 w-full max-w-md text-center">
-                        <div className="text-2xl font-bold text-gray-700 mb-5 w-full">Your temporary password has been sent to "{userInfo.email}".</div>
-                        <Button
-                            onClick={()=> navigate("/member/login")}
-                            className="mt-1 px-4 py-2 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-800 transition duration-300"
-                        >
-                            Go to Login
-                        </Button>
+                        <div className="text-2xl font-bold text-gray-700 mb-4 w-full">Your temporary password has been sent to your email.</div>
                         <Button
                             onClick={closeModal}
-                            className="mt-1 px-4 py-2 ml-2 bg-gray-400 text-white font-bold rounded-lg hover:bg-gray-500 transition duration-300"
+                            className="mt-6 px-4 py-2 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-800 transition duration-300"
                         >
                             Close
                         </Button>

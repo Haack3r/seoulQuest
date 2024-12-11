@@ -4,12 +4,14 @@ const PaymentDetails = ({
   calculateSelectedItemsPrice,
   discountAmount,
   handleClickBuyNow,
-  shippingFee,
-  totalPrice
+  shippingFee
 }) => {
-  console.log("totalPrice", totalPrice)
-  console.log("discountAmount",discountAmount)
-  console.log("shippingFee",shippingFee)
+ 
+  const totalPayment = Math.max(
+    calculateSelectedItemsPrice() + shippingFee - discountAmount,100
+  );
+
+  console.log("totalPayment",totalPayment)
 
   return (
     <div className="sticky top-20 p-6 bg-white rounded-xl shadow-md">
@@ -24,18 +26,12 @@ const PaymentDetails = ({
       </div>
       <div className="flex justify-between mb-4 text-blue-400">
         <p>Discount Amount</p>
-        {calculateSelectedItemsPrice() + shippingFee < discountAmount?
-            <p>- ₩{(calculateSelectedItemsPrice() + shippingFee).toLocaleString()}</p> 
-          : <p>- ₩{discountAmount.toLocaleString()}</p>
-        }
+        <p>- ₩{discountAmount.toLocaleString()}</p>
       </div>
       <hr className="border-t border-gray-400 my-4" />
       <div className="flex justify-between text-lg font-semibold text-gray-900">
         <p>Total Payment</p>
-        {totalPrice >= 0 ? 
-          <p>₩{totalPrice.toLocaleString()}</p>
-          : <p>₩ 0</p>
-          }
+        <p>₩{totalPayment.toLocaleString()}</p>
       </div>
 
       {/* 상품 추가 안내 메시지 */}
@@ -45,10 +41,10 @@ const PaymentDetails = ({
         </p>
       )}
 
-      {/* 카드사마다 최소 결제 금액이 다를 수 있다는 안내 메시지 */}
-      {0 < totalPrice && totalPrice < 100 &&  (
+      {/* 100원 이상만 결제 가능하다는 안내 메시지 */}
+      {totalPayment === 100 && (
         <p className="text-sm text-gray-500 mt-2">
-          The minimum payment amount may vary depending on the card issuer.
+          The minimum payment amount is 100 KRW.
         </p>
       )}
 

@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -19,7 +17,4 @@ public class CouponDTO {
     private int discount;
     private LocalDate expirationDate;
     private Boolean isActive;
-
-    @Builder.Default
-    private List<UserCouponDTO> userCouponList = new ArrayList<>();
 }
