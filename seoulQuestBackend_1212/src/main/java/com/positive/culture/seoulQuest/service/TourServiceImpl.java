@@ -54,13 +54,16 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public List<TourDTO> getTopReservedTours(int limit) {
-        return tourPaymentItemRepository.findTopReservedTours().stream()
+        List<Object[]> topTours = tourPaymentItemRepository.findTopReservedTours();
+
+        return topTours.stream()
                 .limit(limit) // Limit the results
-                .map(obj -> TourDTO.builder()
-                        .tno((Long) obj[0]) // Tour ID
-                        .tname((String) obj[1]) // Tour Name
-                        .tprice(((Number) obj[2]).intValue()) // Tour Price
-                        .build())
+                .map(obj -> {
+                    Long tno = (Long) obj[0];
+                    Tour tour = tourRepository.findById(tno).orElseThrow();
+                    TourDTO tourDTO = entityChangeDTO(tour, tour.getCategory());
+                    return tourDTO;
+                })
                 .collect(Collectors.toList());
     }
 

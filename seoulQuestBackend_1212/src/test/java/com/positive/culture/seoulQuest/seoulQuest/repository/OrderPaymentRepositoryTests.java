@@ -70,7 +70,7 @@ public class OrderPaymentRepositoryTests {
                     .country(member.getAddress().getCountry())
                     .zipcode(member.getAddress().getZipCode())
                     .orderDate(LocalDateTime.now())
-                    .paymentStatus("pending")
+                    .paymentStatus("paid")
                     .build();
 
             productOrderRepository.save(order);

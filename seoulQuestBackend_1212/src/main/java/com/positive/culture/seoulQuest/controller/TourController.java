@@ -103,6 +103,7 @@ public class TourController {
 
 
     @Autowired
+
     private TourRepository tourRepository;
 
     @GetMapping("/mapData")

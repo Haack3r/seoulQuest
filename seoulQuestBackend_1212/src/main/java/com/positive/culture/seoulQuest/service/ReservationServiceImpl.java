@@ -3,10 +3,7 @@ package com.positive.culture.seoulQuest.service;
 import com.positive.culture.seoulQuest.domain.*;
 import com.positive.culture.seoulQuest.dto.ReservationItemDTO;
 import com.positive.culture.seoulQuest.dto.ReservationItemListDTO;
-import com.positive.culture.seoulQuest.repository.MemberRepository;
-import com.positive.culture.seoulQuest.repository.ReservationItemRepository;
-import com.positive.culture.seoulQuest.repository.ReservationRepository;
-import com.positive.culture.seoulQuest.repository.TourRepository;
+import com.positive.culture.seoulQuest.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private final MemberRepository memberRepository;
 
+    @Autowired
+    private final TourOrderRepository tourOrderRepository;
 
     @Override
     public List<ReservationItemListDTO> addOrModify(ReservationItemDTO reservationItemDTO) {
@@ -42,9 +41,9 @@ public class ReservationServiceImpl implements ReservationService {
         int tqty = reservationItemDTO.getTqty();
         LocalDate tdate = reservationItemDTO.getTdate();
 
-        System.out.println("rino: " + rino + ", email: " + email + ", tno: " + tno + ", tqty: " + tqty +", tDate : " + tdate);
+        System.out.println("rino: " + rino + ", email: " + email + ", tno: " + tno + ", tqty: " + tqty + ", tDate : " + tdate);
 
-        if(rino!= null){
+        if (rino != null) {
             Optional<ReservationItem> ReservationItemResult = reservationItemRepository.findById(rino);
             ReservationItem reservationItem = ReservationItemResult.orElseThrow();
 
@@ -61,10 +60,10 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservationItem = reservationItemRepository.getItemOfTno(email, tno);
 
-        if(reservationItem == null){
+        if (reservationItem == null) {
             Tour tour = tourRepository.findById(tno).orElseThrow();
             reservationItem = ReservationItem.builder().tour(tour).reservation(reservation).tqty(tqty).tdate(tdate).build();
-        }else{
+        } else {
             log.info("원래 있던 예약날짜 : " + reservationItem.getTdate());
             reservationItem.changeTourQuantity(tqty);
 
@@ -81,15 +80,15 @@ public class ReservationServiceImpl implements ReservationService {
     private Reservation getReservation(String email) {
         Reservation reservation = null;
 
-        Optional<Reservation> result =  reservationRepository.getReservationOfMember(email);
-        if(result.isEmpty()) {
+        Optional<Reservation> result = reservationRepository.getReservationOfMember(email);
+        if (result.isEmpty()) {
             log.info("Reservation of the member is not exist!");
 
             Member member = memberRepository.findByEmail(email).orElseThrow();
             Reservation tempReservation = Reservation.builder().owner(member).build();
 
             reservation = reservationRepository.save(tempReservation);
-        }else{
+        } else {
             reservation = result.get();
         }
         return reservation;

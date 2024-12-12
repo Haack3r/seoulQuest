@@ -206,7 +206,7 @@ public class TourPaymentServiceImpl implements TourPaymentService {
         System.out.println("Fetching all reservations for admin");
 
         // Fetch all tour orders
-        List<TourOrder> tourOrders = tourOrderRepository.findAll();
+        List<TourOrder> tourOrders = tourOrderRepository.findByPaid();
 
         return tourOrders.stream().map(order -> {
             // Fetch corresponding payment for the order
