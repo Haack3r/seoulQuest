@@ -1,0 +1,116 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #ffffff;
+  color: #fff;
+}
+
+.brand {
+  font-size: 1.5em;
+}
+
+.navLinks {
+  list-style-type: none;
+  display: flex;
+  gap: 15px;
+}
+
+.navLinks li {
+  position: relative; /* 하위 메뉴를 위한 상대 위치 설정 */
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navLinks li:hover {
+  color: #2e2d2d; /* hover 시 텍스트 색상 변경 */
+}
+
+.navLinks li:hover .dropdown {
+  display: block; /* hover 시 하위 메뉴 보이기 */
+}
+
+.dropdown {
+  display: none; /* 기본적으로 숨김 */
+  position: absolute;
+  top: 100%; /* 부모 li 바로 아래에 위치 */
+  left: 0;
+  background: rgba(255, 255, 255, 0.8); /* 투명한 흰색 배경 */
+  color: #2e2d2d; /* 텍스트 색상 변경 */
+  padding: 10px 0;
+  list-style-type: none;
+  min-width: 150px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown li {
+  padding: 10px 20px;
+  white-space: nowrap; /* 긴 텍스트 줄바꿈 방지 */
+}
+
+.dropdown li:hover {
+  background: #c9c8c8;
+  color: #f0a500; /* hover 시 하위 메뉴 항목의 색상 변경 */
+}
+
+@media (max-width: 1024px) {
+    /* Hide desktop links on small screens */
+    .lg\:hidden {
+      display: block !important;
+    }
+  
+    /* Style the mobile menu items */
+    .flex-col .text-gray-600 {
+      font-size: 1rem;
+      
+      padding: 8px 0;
+      /* border-bottom: 1px solid #e5e7eb; */
+    }
+}
+/* Add this CSS rule for the mobile menu */
+.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between items */
+    background: rgba(255, 255, 255, 0.9); /* Transparent white background */
+    padding: 20px; /* Padding around the menu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
+    z-index: 1000; /* Ensure it stays above other content */
+  }
+  
+  .nounderline {
+    text-decoration: none;
+  }
+  .menu-animation-color {
+    position: relative;
+    display: inline-block;
+    color: #979393; /* Initial color */
+    text-decoration: none;
+    /* text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3); Subtle shadow */
+    letter-spacing: -0.05em; /* Condensed letter spacing */
+    transition: letter-spacing 0.5s ease, color 0.5s ease;
+  }
+  
+  .menu-animation-color:hover {
+    color: #424241; /* Bright color on hover */
+    letter-spacing: 0.1em; /* Expand spacing on hover */
+  }
+  
+  .menu-animation-color::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .menu-animation-color:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
