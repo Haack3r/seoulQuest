@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { API_SERVER_HOST, getProductItemReview } from '../../api/reviewApi';
-import ReviewsSection from '../review/ReviewsSection';
-import { ShoppingCart } from 'lucide-react';
-import {StarFilled, StarOutlined } from "@ant-design/icons";
-import useCustomLogin from '../../hooks/useCustomLogin';
-import { getOneNU } from '../../api/nuProductApi';
-import { useNavigate } from 'react-router-dom';
-import ProductPolicy from './ProductPolicy';
+import { ShoppingCart, HeartIcon } from 'lucide-react';
 import { Badge } from 'antd';
+import CartComponent from '../menus/CartComponent';
+import useCustomCart from '../../hooks/useCustomCart';
+import useCustomLogin from '../../hooks/useCustomLogin';
+import { getOne } from '../../api/productsApi';
+import useCustomFav from '../../hooks/useCustomFav';
+import ReviewsSection from '../review/ReviewsSection';
+import { API_SERVER_HOST, deleteProductOne, putProductOne, getProductItemReview } from '../../api/reviewApi';
+import { StarFilled, StarOutlined } from '@ant-design/icons';
+import ProductPolicy from './ProductPolicy';
+import { useEffect, useState } from 'react';
 
 const initState = {
   pno: 0,
@@ -16,45 +18,39 @@ const initState = {
   pprice: 0,
   pqty: 0,
   shippingFee:0,
-  uploadFileNames: []
+  uploadFileNames: [],
 };
+
 const host = API_SERVER_HOST;
 
-const NUReadComponent = ({ pno }) => {
-  // const { moveToList, moveToModify, page, size } = useCustomMove();
+const ReadComponent = ({ pno }) => {
+
   const [product, setProduct] = useState(initState);
-  const [fetching, setFetching] = useState(false);
-  const [currentImage, setCurrentImage] = useState(0)
-  const { loginState } = useCustomLogin();
+  const [currentImage, setCurrentImage] = useState(0);
+  const [cartVisible, setCartVisible] = useState(false);
   const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const { changeCart, cartItems } = useCustomCart();
+  const { loginState } = useCustomLogin();
+  const { favItems, changeFav, refreshFav } = useCustomFav();
   const [reviewAvg, setReviewAvg] = useState(0)
   const [reviews, setReviews] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(false)
   const [detailsVisible, setDetailsVisible] = useState(false);
-  const navigate = useNavigate();
 
   const calculateAverage = (reviews) => {
     if (reviews.length === 0) return 0;
     const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
-    return sum / reviews.length;
+    const avg = sum / reviews.length; 
+    return Number(avg.toFixed(1));
   };
-
-  const handleClickAddCart = () => {
-    const answer = window.confirm("Please log in first to purchase the product.")
-    if(answer){
-      navigate('/member/login')
-    }
-    return
-  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setFetching(true);
-    getOneNU(pno).then(data => {
-      setProduct(data);
-      setFetching(false);
+    // Product 데이터 가져오기
+    getOne(pno).then((productData) => {
+        setProduct(productData);
     });
-
+    console.log(product)
     // Review 데이터 가져오기
     console.log(loginState.email);
     getProductItemReview(pno).then((reviews) => {
@@ -62,7 +58,71 @@ const NUReadComponent = ({ pno }) => {
         setReviews(reviews);
         setReviewAvg(calculateAverage(reviews))
     });
-  }, [pno,refresh]);
+  }, [pno, refresh]);
+
+  const handleAddToCart = () => {
+
+      // 재고가 0일 경우 처리
+    if (product.pqty === 0) {
+      alert("This product is out of stock.");
+      return;
+    }
+
+    if (!selectedQuantity) {
+      alert("Please select a quantity.");
+      return;
+    }
+  
+    const existingItem = cartItems.find((item) => item.pno === product.pno);
+    const currentQuantity = existingItem?.pqty || 0; // 현재 카트에 담긴 수량 (값이 없는 경우 0 할당)
+    const totalQuantity = currentQuantity + selectedQuantity; // 현재 수량 + 새로 추가하려는 수량
+  
+    // stock을 초과할 경우 가능한 수량만 추가
+    if (totalQuantity > product.pqty) {
+      const maxAddable = product.pqty - currentQuantity; // 추가할 수 있는 최대 수량
+      if (maxAddable > 0) {
+        alert(`You can only add ${maxAddable} more of this product.`);
+        changeCart({
+          email: loginState.email,
+          pno: product.pno,
+          pqty: currentQuantity + maxAddable,
+        });
+      } else {
+        alert(`You already have the maximum quantity of ${product.pqty} in your cart.`);
+      }
+    } else {
+      // stock 초과가 아니면 정상적으로 추가
+      changeCart({
+        email: loginState.email,
+        pno: product.pno,
+        pqty: totalQuantity,
+      });
+    }
+  
+    setCartVisible(true);
+  };
+
+  const handleAddToFavorites = async () => {
+    if (!loginState.email) {
+      alert('Please log in to add favorites.');
+      return;
+    }
+
+    const isAlreadyFavorite = favItems.some((item) => item.pno === product.pno);
+    if (isAlreadyFavorite) {
+      alert('You already liked this product!');
+      return;
+    }
+
+    try {
+      await changeFav({ email: loginState.email, pno: product.pno });
+      alert('Product added to favorites!');
+      refreshFav();
+    } catch (error) {
+      console.error('Failed to add favorite:', error);
+      alert('Could not add to favorites. Please try again.');
+    }
+  };
 
   return (
     <div className="min-h-screen py-12 px-6 lg:px-32 relative">
@@ -96,9 +156,9 @@ const NUReadComponent = ({ pno }) => {
 
         {/* Right Section: Product Details */}
         <div className="lg:w-1/2 space-y-6">
-          <h1 className="text-4xl font-light text-gray-900">{product.pname}</h1>
+          <h1 className="text-2xl md:text-4xl font-light text-gray-900">{product.pname}</h1>
           <div className="flex items-center space-x-2">
-           {[...Array(5)].map((_, star) => 
+            {[...Array(5)].map((_, star) => 
             (
             <span key={star}>
               {reviewAvg >= star+1 ? (
@@ -143,11 +203,18 @@ const NUReadComponent = ({ pno }) => {
           {/* Action Buttons */}
           <div className="flex space-x-4">
             <button
-              onClick={handleClickAddCart}
+              onClick={handleAddToCart}
               className="flex-1 bg-stone-400 hover:bg-stone-600 text-white py-3 rounded-lg flex items-center justify-center"
             >
               <ShoppingCart className="mr-2" />
               Add to Cart
+            </button>
+            <button
+              onClick={handleAddToFavorites}
+              className="flex-1 border text-gray-700 p-1 rounded-lg flex items-center justify-center hover:bg-gray-100"
+            >
+              <HeartIcon className=" text-red-500" />
+              Add to Favorites
             </button>
           </div>
 
@@ -169,16 +236,36 @@ const NUReadComponent = ({ pno }) => {
         </div>
       </div>
 
+      {/* Cart Toggle Button */}
+      <div className="fixed top-24 right-10">
+        <Badge count={cartItems.length} offset={[0, 10]}>
+          <button
+            onClick={() => setCartVisible(!cartVisible)}
+            className="bg-stone-400 hover:bg-stone-600 text-white p-3 rounded-full shadow-lg flex items-center justify-center"
+          >
+            <ShoppingCart className="h-6 w-6" />
+          </button>
+        </Badge>
+      </div>
+
+      {/* Cart Drawer */}
+      <div
+        className={`fixed top-0 right-0 h-[70%] w-96 mt-40 p-6 overflow-auto transform ${cartVisible ? 'translate-x-0' : 'translate-x-full'
+          } transition-transform duration-300`}
+      >
+        <CartComponent/>
+      </div>
       {/* Reviews Section */}
       <div className="mt-5">
-        <ReviewsSection
+        <ReviewsSection 
             refresh={refresh}
             setRefresh={setRefresh}
             reviews={reviews}
-          />
+            putOne={putProductOne} 
+            deleteOne={deleteProductOne}/>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NUReadComponent;
+export default ReadComponent;

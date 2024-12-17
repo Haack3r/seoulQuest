@@ -39,7 +39,8 @@ const NUTourReadComponent = ({ tno }) => {
     const calculateAverage = (reviews) => {
       if (reviews.length === 0) return 0;
       const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
-      return sum / reviews.length;
+      const avg = sum / reviews.length; 
+      return Number(avg.toFixed(1));
     };
   
     useEffect(() => {

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Button from "../ui/Button";
 import { useNavigate } from 'react-router-dom';
-import { findEmail } from '../../api/myPageApi';
+import { findPassword } from '../../api/myPageApi';
 
-const initState = { firstname: '',lastname:'', phoneNumber1: '', phoneNumber2: '', phoneNumber3: '' };
+const initState = { email: '', phoneNumber1: '', phoneNumber2: '', phoneNumber3: '' };
 
-const FindEmailComponent = () => {
+const FindPasswordComponent = () => {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState({ ...initState });
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,15 +16,12 @@ const FindEmailComponent = () => {
         setUserInfo({ ...userInfo, [name]: value });
     };
 
-    const findEmailHandler = () => {
-        setIsLoading(true);
-        findEmail(userInfo)
+    const findPasswordHandler = () => {
+        setIsLoading(true); 
+        findPassword(userInfo)
             .then((data) => {
-                console.log("안녕");
-                console.log("data:", data);
-
                 if (data !== "No value present") {
-                    setUserInfo(data);
+                    setUserInfo({email:data});
                     setIsModalOpen(true);
                 } else {
                     alert("check your details.");
@@ -32,7 +29,7 @@ const FindEmailComponent = () => {
                 }
             })
             .catch((error) => {
-                console.error("Error finding Email:", error);
+                console.error("Error finding password:", error);
                 alert("An error occurred. Please try again later.");
             })
             .finally(() => {
@@ -40,12 +37,16 @@ const FindEmailComponent = () => {
             });
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-4 mt-10">
             {/* Logo and Header */}
             <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-700">Seoul Quest</h1>
-                <p className="text-lg text-gray-600 mt-2">Please enter the details for which you want to find the email.</p>
+                <h1 className="text-3xl font-bold text-gray-700">Seoulhwa</h1>
+                <p className="text-lg text-gray-600 mt-2">Please enter the details for which you want to find the password.</p>
             </div>
 
             {/* 로딩 상태 표시 */}
@@ -53,30 +54,23 @@ const FindEmailComponent = () => {
                 <div className="text-center text-lg font-bold text-gray-500">Loading...</div>
             ) : (
                 // Input Fields
-                <div className="w-full max-w-md space-y-4">
-                    <div className="space-y-2">
-                        <label className="block text-gray-600 mb-1" htmlFor="firstname">First Name</label>
+                <div className="w-full max-w-md">
+                    <form id="findPasswordForm" className="space-y-4">
+                    <div>
+                        <label className="block text-gray-600 mb-1" htmlFor="email">Email</label>
                         <input
                             type="text"
-                            name="firstname"
-                            placeholder="Enter Your First Name"
+                            name="email"
+                            placeholder="Seoulhwa Email"
                             onChange={handleChange}
-                            value={userInfo.firstname}
+                            value={userInfo.email}
                             className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            required
                         />
-                        <label className="block text-gray-600 mb-1" htmlFor="lastname">Last Name</label>
-                        <input
-                            type="text"
-                            name="lastname"
-                            placeholder="Enter Your Last Name"
-                            onChange={handleChange}
-                            value={userInfo.lastname}
-                            className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
-                        />
-                        </div>
+                    </div>
 
                     {/* Phone Number Field */}
-                    <div className="space-y-2">
+                    <div>
                         <label className="block text-gray-600 mb-1" htmlFor="phoneNumber1">Phone Number</label>
                         <div className="flex space-x-2">
                             <input
@@ -124,20 +118,21 @@ const FindEmailComponent = () => {
                         {/* Submit Button */}
                         <Button
                             className="w-full p-4 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-800 transition duration-300"
-                            onClick={findEmailHandler}
+                            onSubmit={findPasswordHandler}
                         >
                             Next
                         </Button>
                     </div>
+                    </form>
 
                     {/* Footer Links */}
                     <div className="mt-6 text-center text-sm text-gray-500">
-                        Forgot your Password ?{' '}
+                        Forgot your Email ?{' '}
                         <button 
                             className="text-gray-700 font-bold underline hover:text-gray-900"
-                            onClick={() => navigate('/member/findpassword')} 
+                            onClick={() => navigate('/member/findemail')} 
                         >
-                            Find Password
+                            Find Email
                         </button>
                     </div>
 
@@ -147,7 +142,7 @@ const FindEmailComponent = () => {
                             className="text-gray-500 hover:text-gray-700"
                             onClick={() => navigate('/')} 
                         >
-                            SeoulQuest
+                            Seoulhwa
                         </button>
                         <p className='pr-2 pl-2'>|</p>
                         <button 
@@ -164,27 +159,24 @@ const FindEmailComponent = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 w-full max-w-md text-center">
-                        <div className="text-2xl font-bold text-gray-700 mb-4 w-full">
-                            We found your account ID!
-                        </div>
-                        <p className="text-gray-600 mb-4">
-                            Your account ID (email address) is:
-                        </p>
-                        <p className="text-lg font-semibold text-gray-800 mb-6">
-                            {userInfo.email}
-                        </p>
+                        <div className="text-2xl font-bold text-gray-700 mb-5 w-full">Your temporary password has been sent to "{userInfo.email}".</div>
                         <Button
-                            onClick={()=> navigate('/member/login')}
-                            className="mt-6 px-4 py-2 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-800 transition duration-300"
+                            onClick={()=> navigate("/member/login")}
+                            className="mt-1 px-4 py-2 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-800 transition duration-300"
                         >
                             Go to Login
+                        </Button>
+                        <Button
+                            onClick={closeModal}
+                            className="mt-1 px-4 py-2 ml-2 bg-gray-400 text-white font-bold rounded-lg hover:bg-gray-500 transition duration-300"
+                        >
+                            Close
                         </Button>
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
 
-export default FindEmailComponent;
+export default FindPasswordComponent;
