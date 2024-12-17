@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.positive.culture.seoulQuest.seoulQuest.repository.MemberRepositoryTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-12-13T07:57:58" hostname="User -2024AJPQU" time="1.204">
+  <properties/>
+  <testcase name="testIns()" classname="com.positive.culture.seoulQuest.seoulQuest.repository.MemberRepositoryTests" time="1.204"/>
+  <system-out><![CDATA[16:57:49.270 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.positive.culture.seoulQuest.seoulQuest.repository.MemberRepositoryTests]: MemberRepositoryTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:57:49.381 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.positive.culture.seoulQuest.SeoulQuestApplication for test class com.positive.culture.seoulQuest.seoulQuest.repository.MemberRepositoryTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.4)
+
+2024-12-13T16:57:49.723+09:00  INFO 8372 --- [seoulQuest] [    Test worker] c.p.c.s.s.r.MemberRepositoryTests        : Starting MemberRepositoryTests using Java 17.0.11 with PID 8372 (started by Administrator in E:\pbg\seoulQuest\seoulQuestBackend_1211)
+2024-12-13T16:57:49.724+09:00  INFO 8372 --- [seoulQuest] [    Test worker] c.p.c.s.s.r.MemberRepositoryTests        : No active profile set, falling back to 1 default profile: "default"
+2024-12-13T16:57:50.347+09:00  INFO 8372 --- [seoulQuest] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-13T16:57:50.459+09:00  INFO 8372 --- [seoulQuest] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 106 ms. Found 21 JPA repository interfaces.
+2024-12-13T16:57:50.885+09:00  INFO 8372 --- [seoulQuest] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-13T16:57:50.935+09:00  INFO 8372 --- [seoulQuest] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-13T16:57:50.968+09:00  INFO 8372 --- [seoulQuest] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-13T16:57:51.258+09:00  INFO 8372 --- [seoulQuest] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-13T16:57:51.287+09:00  INFO 8372 --- [seoulQuest] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-13T16:57:51.531+09:00  INFO 8372 --- [seoulQuest] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@50b38342
+2024-12-13T16:57:51.533+09:00  INFO 8372 --- [seoulQuest] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-13T16:57:52.594+09:00  INFO 8372 --- [seoulQuest] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    create table member_member_role_list (
+        member_id bigint not null,
+        member_role_list enum ('ADMIN','USER')
+    ) engine=InnoDB
+Hibernate: 
+    create table product_product_image_list (
+        product_pno bigint not null,
+        file_name varchar(255),
+        ord integer
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_cart (
+        cno bigint not null auto_increment,
+        member_owner bigint,
+        primary key (cno)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_cart_item (
+        cino bigint not null auto_increment,
+        pqty integer not null,
+        cart_cno bigint,
+        product_pno bigint not null,
+        primary key (cino)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_category (
+        category_id bigint not null auto_increment,
+        category_name varchar(255),
+        category_type varchar(255),
+        primary key (category_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_contact (
+        id bigint not null auto_increment,
+        created_at datetime(6),
+        email varchar(200) not null,
+        inquiry varchar(1000) not null,
+        name varchar(100) not null,
+        reply varchar(1000),
+        status varchar(255) not null,
+        temp_reply varchar(1000),
+        updated_at datetime(6),
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_coupon (
+        coupon_id bigint not null auto_increment,
+        coupon_name varchar(255),
+        discount integer not null,
+        expire_date date,
+        is_active bit not null,
+        primary key (coupon_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_favorite_product (
+        id bigint not null auto_increment,
+        created_at datetime(6) not null,
+        member_id bigint not null,
+        product_id bigint not null,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_favorite_tour (
+        tid bigint not null auto_increment,
+        created_at datetime(6) not null,
+        member_id bigint not null,
+        tour_id bigint not null,
+        primary key (tid)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_member (
+        id bigint not null auto_increment,
+        city varchar(255),
+        country varchar(255),
+        state varchar(255),
+        street varchar(255),
+        zip_code varchar(255),
+        birthday date,
+        email varchar(255),
+        firstname varchar(255),
+        lastname varchar(255),
+        nick_name varchar(255),
+        password varchar(255),
+        phone_number varchar(255),
+        social bit not null,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_product (
+        pno bigint not null auto_increment,
+        create_at date,
+        del_flag bit not null,
+        pdesc longtext,
+        pname varchar(255),
+        pprice integer not null,
+        pqty integer not null,
+        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null,
+        shipping_fee integer not null,
+        update_at date,
+        category_id bigint,
+        primary key (pno)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_product_order (
+        p_order_id bigint not null auto_increment,
+        city varchar(255),
+        contact_number varchar(255),
+        country varchar(255),
+        order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null,
+        payment_status varchar(255),
+        recipient_first_name varchar(255),
+        recipient_last_name varchar(255),
+        state varchar(255),
+        street varchar(255),
+        total_price integer not null,
+        zipcode varchar(255),
+        member_id bigint,
+        primary key (p_order_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_product_payment (
+        p_payment_id bigint not null auto_increment,
+        payment_date datetime(6),
+        payment_method varchar(255),
+        total_price integer not null,
+        member_id bigint,
+        p_order_id bigint,
+        user_coupon_id bigint,
+        primary key (p_payment_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_product_payment_item (
+        p_payment_item_id bigint not null auto_increment,
+        p_payment_qty integer not null,
+        pname varchar(255),
+        pprice integer not null,
+        pno bigint,
+        p_payment_id bigint,
+        primary key (p_payment_item_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_product_review (
+        prid bigint not null auto_increment,
+        posted_date date,
+        rating integer not null,
+        review_content longtext,
+        title varchar(255),
+        member_id bigint,
+        pno bigint,
+        payment_item_id bigint,
+        primary key (prid)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_reservation (
+        rno bigint not null auto_increment,
+        member_owner bigint,
+        primary key (rno)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_reservation_item (
+        rino bigint not null auto_increment,
+        tdate date,
+        tqty integer not null,
+        reservation_rno bigint,
+        tour_tno bigint not null,
+        primary key (rino)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_tour_order (
+        t_order_id bigint not null auto_increment,
+        country varchar(255),
+        first_name varchar(255),
+        last_name varchar(255),
+        order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null,
+        payment_status varchar(255),
+        phone_number varchar(255),
+        total_price integer not null,
+        member_id bigint,
+        primary key (t_order_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_tour_payment (
+        t_payment_id bigint not null auto_increment,
+        payment_date datetime(6),
+        payment_method varchar(255),
+        total_price integer not null,
+        member_id bigint,
+        t_order_id bigint,
+        user_coupon_id bigint,
+        primary key (t_payment_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_tour_payment_item (
+        t_payment_item_id bigint not null auto_increment,
+        t_payment_qty integer not null,
+        tdate date,
+        tname varchar(255),
+        tprice integer not null,
+        tno bigint,
+        t_payment_id bigint,
+        primary key (t_payment_item_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_tour_review (
+        trid bigint not null auto_increment,
+        posted_date date,
+        rating integer not null,
+        review_content longtext,
+        title varchar(255),
+        member_id bigint,
+        tno bigint,
+        payment_item_id bigint,
+        primary key (trid)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_tours (
+        tno bigint not null auto_increment,
+        create_at date,
+        del_flag bit not null,
+        max_capacity integer not null,
+        taddress varchar(255),
+        tdesc longtext,
+        tname varchar(255),
+        tprice integer not null,
+        update_at date,
+        category_id bigint,
+        primary key (tno)
+    ) engine=InnoDB
+Hibernate: 
+    create table tbl_user_coupon (
+        user_coupon_id bigint not null auto_increment,
+        use_date date,
+        coupon_id bigint,
+        member_id bigint,
+        primary key (user_coupon_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table tour_image_list (
+        tour_tno bigint not null,
+        file_name varchar(255),
+        ord integer
+    ) engine=InnoDB
+Hibernate: 
+    create table tour_tour_date_list (
+        tour_tno bigint not null,
+        available_capacity integer,
+        tdate date
+    ) engine=InnoDB
+Hibernate: 
+    create index idx_cart_email 
+       on tbl_cart (member_owner)
+Hibernate: 
+    alter table tbl_cart 
+       drop index UK4x59g5i516ao54rb4tnf1x85d
+Hibernate: 
+    alter table tbl_cart 
+       add constraint UK4x59g5i516ao54rb4tnf1x85d unique (member_owner)
+Hibernate: 
+    create index idx_cartitem_cart 
+       on tbl_cart_item (cart_cno)
+Hibernate: 
+    create index idx_cartitem_pno_cart 
+       on tbl_cart_item (product_pno, cart_cno)
+Hibernate: 
+    alter table tbl_member 
+       drop index UK6823ylpoh1w8qpfq52g2sw9u6
+Hibernate: 
+    alter table tbl_member 
+       add constraint UK6823ylpoh1w8qpfq52g2sw9u6 unique (firstname)
+Hibernate: 
+    alter table tbl_product_payment 
+       drop index UK2uppof9g172ryaiex78fbqpuo
+Hibernate: 
+    alter table tbl_product_payment 
+       add constraint UK2uppof9g172ryaiex78fbqpuo unique (p_order_id)
+Hibernate: 
+    alter table tbl_product_payment 
+       drop index UKfk5217q68vi8ndllq5h9d7cq7
+Hibernate: 
+    alter table tbl_product_payment 
+       add constraint UKfk5217q68vi8ndllq5h9d7cq7 unique (user_coupon_id)
+Hibernate: 
+    alter table tbl_product_review 
+       drop index UKtmjx2pe3nvon3281kdk2epndx
+Hibernate: 
+    alter table tbl_product_review 
+       add constraint UKtmjx2pe3nvon3281kdk2epndx unique (payment_item_id)
+Hibernate: 
+    create index idx_reservation_email 
+       on tbl_reservation (member_owner)
+Hibernate: 
+    alter table tbl_reservation 
+       drop index UK3gwxwycdwtstake270p1iwxlj
+Hibernate: 
+    alter table tbl_reservation 
+       add constraint UK3gwxwycdwtstake270p1iwxlj unique (member_owner)
+Hibernate: 
+    create index idx_reservationitem_reservation 
+       on tbl_reservation_item (reservation_rno)
+Hibernate: 
+    create index idx_reservation_tno_reservation 
+       on tbl_reservation_item (tour_tno, reservation_rno)
+Hibernate: 
+    alter table tbl_tour_payment 
+       drop index UKpa6fcc9qldc8kg99ud242w2cl
+Hibernate: 
+    alter table tbl_tour_payment 
+       add constraint UKpa6fcc9qldc8kg99ud242w2cl unique (t_order_id)
+Hibernate: 
+    alter table tbl_tour_payment 
+       drop index UKsfolbl5iblnirrgdle0mqy0wv
+Hibernate: 
+    alter table tbl_tour_payment 
+       add constraint UKsfolbl5iblnirrgdle0mqy0wv unique (user_coupon_id)
+Hibernate: 
+    alter table tbl_tour_review 
+       drop index UKtfmt0i9ds7iwy1l27ohwc6ded
+Hibernate: 
+    alter table tbl_tour_review 
+       add constraint UKtfmt0i9ds7iwy1l27ohwc6ded unique (payment_item_id)
+Hibernate: 
+    alter table tbl_user_coupon 
+       drop index UKebum6is2rnathyhpqvswy96ux
+Hibernate: 
+    alter table tbl_user_coupon 
+       add constraint UKebum6is2rnathyhpqvswy96ux unique (coupon_id, member_id)
+Hibernate: 
+    alter table member_member_role_list 
+       add constraint FK5beq8f0lj1yod9yjtdvh56rni 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table product_product_image_list 
+       add constraint FK6xlb7arbx9hqxlq7miaaqw6tu 
+       foreign key (product_pno) 
+       references tbl_product (pno)
+Hibernate: 
+    alter table tbl_cart 
+       add constraint FK9mxpnofsgxg2t9bcum2gvd43p 
+       foreign key (member_owner) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_cart_item 
+       add constraint FKem31i0jytusbded0v2wvnntyw 
+       foreign key (cart_cno) 
+       references tbl_cart (cno)
+Hibernate: 
+    alter table tbl_cart_item 
+       add constraint FKs7vg62w3nq7igdxgssq1u0biw 
+       foreign key (product_pno) 
+       references tbl_product (pno)
+Hibernate: 
+    alter table tbl_favorite_product 
+       add constraint FKj8snfew4vjs373ffjvp0odps7 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_favorite_product 
+       add constraint FKp3t5iwfhfceb8h45iqrcp0vwi 
+       foreign key (product_id) 
+       references tbl_product (pno)
+Hibernate: 
+    alter table tbl_favorite_tour 
+       add constraint FK6owx3hnbg0upwl9vimg1sr0tw 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_favorite_tour 
+       add constraint FK1c2qjcd771wmw9n7urrplrq3s 
+       foreign key (tour_id) 
+       references tbl_tours (tno)
+Hibernate: 
+    alter table tbl_product 
+       add constraint FKfq7110lh85cseoy13cgni7pet 
+       foreign key (category_id) 
+       references tbl_category (category_id)
+Hibernate: 
+    alter table tbl_product_order 
+       add constraint FK7v496efqdp0j1olc5a50h5ex3 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_product_payment 
+       add constraint FK6n6j6nvowh31bksaluaw1teyb 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_product_payment 
+       add constraint FKnug8d8hu3e19nlnqp1flo52nw 
+       foreign key (p_order_id) 
+       references tbl_product_order (p_order_id)
+Hibernate: 
+    alter table tbl_product_payment 
+       add constraint FKllyidvlj7745wev9yc1r9o18r 
+       foreign key (user_coupon_id) 
+       references tbl_user_coupon (user_coupon_id)
+Hibernate: 
+    alter table tbl_product_payment_item 
+       add constraint FK70gm8mqcy1ohmcnjbfkhe130q 
+       foreign key (pno) 
+       references tbl_product (pno)
+Hibernate: 
+    alter table tbl_product_payment_item 
+       add constraint FKlgfbmntuktdb0u5r7ynnt2sbu 
+       foreign key (p_payment_id) 
+       references tbl_product_payment (p_payment_id)
+Hibernate: 
+    alter table tbl_product_review 
+       add constraint FKd4c2m9lwtnnlid0sxglkjuht 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_product_review 
+       add constraint FKel707yewhyssjrw7rtqg3hsi8 
+       foreign key (pno) 
+       references tbl_product (pno)
+Hibernate: 
+    alter table tbl_product_review 
+       add constraint FKq4k27aj1ksr90jnksk09t5ols 
+       foreign key (payment_item_id) 
+       references tbl_product_payment_item (p_payment_item_id)
+Hibernate: 
+    alter table tbl_reservation 
+       add constraint FKmkt813cxggnd4qx4ak2i0wr1e 
+       foreign key (member_owner) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_reservation_item 
+       add constraint FKof46co8s5317s5ky2ymwls9or 
+       foreign key (reservation_rno) 
+       references tbl_reservation (rno)
+Hibernate: 
+    alter table tbl_reservation_item 
+       add constraint FK1oc27f6gx9v2ugcrms9e3c4c5 
+       foreign key (tour_tno) 
+       references tbl_tours (tno)
+Hibernate: 
+    alter table tbl_tour_order 
+       add constraint FKm4x9wxanphs5o754w4h4l0ufw 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_tour_payment 
+       add constraint FK7rva9htofixivf52c2vrp1lb0 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_tour_payment 
+       add constraint FK1nvghrdgnrkjcx5fy9p7mpe48 
+       foreign key (t_order_id) 
+       references tbl_tour_order (t_order_id)
+Hibernate: 
+    alter table tbl_tour_payment 
+       add constraint FKikj8an95tsk2mjlo3gdc8qltx 
+       foreign key (user_coupon_id) 
+       references tbl_user_coupon (user_coupon_id)
+Hibernate: 
+    alter table tbl_tour_payment_item 
+       add constraint FK4o71jdkx3ip573u71pe9f86bw 
+       foreign key (tno) 
+       references tbl_tours (tno)
+Hibernate: 
+    alter table tbl_tour_payment_item 
+       add constraint FKpcfkg0tb4s0yjw1jr8wa3ukf8 
+       foreign key (t_payment_id) 
+       references tbl_tour_payment (t_payment_id)
+Hibernate: 
+    alter table tbl_tour_review 
+       add constraint FK8pgevi3bsotad13s55fwrcyit 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tbl_tour_review 
+       add constraint FKmulgwticq9otm87wsm3fjs7qh 
+       foreign key (tno) 
+       references tbl_tours (tno)
+Hibernate: 
+    alter table tbl_tour_review 
+       add constraint FKshtwxbfhqct6rgijb5huvmupo 
+       foreign key (payment_item_id) 
+       references tbl_tour_payment_item (t_payment_item_id)
+Hibernate: 
+    alter table tbl_tours 
+       add constraint FK9y7f3jgm8gxyxdps5u9rlo7v0 
+       foreign key (category_id) 
+       references tbl_category (category_id)
+Hibernate: 
+    alter table tbl_user_coupon 
+       add constraint FKnfi9emaaoaogeqvc9as74m5co 
+       foreign key (coupon_id) 
+       references tbl_coupon (coupon_id)
+Hibernate: 
+    alter table tbl_user_coupon 
+       add constraint FK109dncten0vywf1rltm7qmbqa 
+       foreign key (member_id) 
+       references tbl_member (id)
+Hibernate: 
+    alter table tour_image_list 
+       add constraint FK2nuwb30jmsqu8478bipaj4n7s 
+       foreign key (tour_tno) 
+       references tbl_tours (tno)
+Hibernate: 
+    alter table tour_tour_date_list 
+       add constraint FKniq81t04agr3bevu4d4cja4m2 
+       foreign key (tour_tno) 
+       references tbl_tours (tno)
+2024-12-13T16:57:56.472+09:00  INFO 8372 --- [seoulQuest] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-13T16:57:56.810+09:00  INFO 8372 --- [seoulQuest] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-13T16:57:57.554+09:00  INFO 8372 --- [seoulQuest] [    Test worker] c.p.c.seoulQuest.util.CustomFileUtil     : =======================================
+2024-12-13T16:57:57.555+09:00  INFO 8372 --- [seoulQuest] [    Test worker] c.p.c.seoulQuest.util.CustomFileUtil     : E:\pbg\seoulQuest\seoulQuestBackend_1211\upload
+2024-12-13T16:57:57.835+09:00  WARN 8372 --- [seoulQuest] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-13T16:57:57.865+09:00  INFO 8372 --- [seoulQuest] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-12-13T16:57:57.904+09:00  INFO 8372 --- [seoulQuest] [    Test worker] c.p.c.s.config.CustomSecurityConfig      : ----security config----
+2024-12-13T16:57:58.129+09:00 DEBUG 8372 --- [seoulQuest] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JWTCheckFilter, UsernamePasswordAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2024-12-13T16:57:58.331+09:00  WARN 8372 --- [seoulQuest] [    Test worker] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2024-12-13T16:57:58.435+09:00  INFO 8372 --- [seoulQuest] [    Test worker] c.p.c.s.s.r.MemberRepositoryTests        : Started MemberRepositoryTests in 8.894 seconds (process running for 9.917)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        tbl_member
+        (city, country, state, street, zip_code, birthday, email, firstname, lastname, nick_name, password, phone_number, social) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        member_member_role_list
+        (member_id, member_role_list) 
+    values
+        (?, ?)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
