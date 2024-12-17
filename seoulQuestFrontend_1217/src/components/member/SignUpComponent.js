@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import Button from "../ui/Button";
 import { registerMember, checkEmail, checkNickname } from "../../api/memberApi";
 import { Link, useNavigate } from "react-router-dom"; 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { enUS } from "date-fns/locale"; // English locale
+
 
 const initState = {
   firstname: "",
@@ -34,12 +38,27 @@ const SignUpComponent = () => {
     setSignUpParam({ ...signUpParam, [e.target.name]: e.target.value });
   };
 
+  const handleBirthdayChange = (date) => {
+    const formattedDate = date ? date.toISOString().split("T")[0] : "";
+    setSignUpParam({ ...signUpParam, birthday: formattedDate });
+  };
+
   const handleClickSignUp = async (e) => {
     e.preventDefault();
+  
+    // Check if any field in signUpParam is empty
+    for (const key in signUpParam) {
+      if (!signUpParam[key].trim()) {
+        alert(`Please fill in all fields. The "${key}" field is required.`);
+        return; // Stop the function execution if any field is empty
+      }
+    }
+  
     if (signUpParam.password !== signUpParam.confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
+  
     setIsLoading(true);
     try {
       await registerMember(signUpParam);
@@ -53,12 +72,21 @@ const SignUpComponent = () => {
       setIsLoading(false);
     }
   };
+  
 
   const checkEmailAvailability = async () => {
+    // Email format validation using regex
+    const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
+    if (!emailRegex.test(signUpParam.email)) {
+      alert("Please enter a valid email address (e.g., 123@domain.com)");
+      return; // Stop the function if email format is invalid
+    }
+  
+    // Existing logic remains intact
     setIsCheckingEmail(true);
     try {
       const response = await checkEmail(signUpParam.email);
-      setIsEmailAvailable(response.includes("가입가능"));
+      setIsEmailAvailable(response.includes("This email is available"));
       alert(response);
     } catch (error) {
       console.error("Error checking email availability:", error);
@@ -68,8 +96,15 @@ const SignUpComponent = () => {
       setIsCheckingEmail(false);
     }
   };
-
+  
   const checkNicknameAvailability = async () => {
+    // Nickname validation: Check if nickname is empty
+    if (!signUpParam.nickName.trim()) {
+      alert("Please enter a valid nickname before checking availability.");
+      return; // Stop the function if nickname is empty
+    }
+  
+    // Existing logic remains intact
     setIsCheckingNickname(true);
     try {
       const response = await checkNickname(signUpParam.nickName);
@@ -83,6 +118,7 @@ const SignUpComponent = () => {
       setIsCheckingNickname(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
@@ -158,6 +194,8 @@ const SignUpComponent = () => {
               value={signUpParam.email}
               onChange={handleChange}
               placeholder="Email"
+              pattern="^[^@]+@[^@]+\.[^@]+$" // Regex for basic email validation
+              title="Please enter a valid email address (e.g., 123@domain.com)"
               required
             />
             <button
@@ -175,9 +213,13 @@ const SignUpComponent = () => {
             <input
               className="w-1/3 p-2 border border-gray-300 rounded text-sm"
               name="phoneNumber1"
-              type="tel"
+              type="number"
+              inputMode="numeric"
               value={signUpParam.phoneNumber1}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.slice(0, 3); // Limit to 3 digits
+                setSignUpParam({ ...signUpParam, phoneNumber1: value });
+              }}
               placeholder="010"
               required
             />
@@ -185,9 +227,13 @@ const SignUpComponent = () => {
             <input
               className="w-1/3 p-2 border border-gray-300 rounded text-sm"
               name="phoneNumber2"
-              type="tel"
+              type="number"
+              inputMode="numeric"
               value={signUpParam.phoneNumber2}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.slice(0, 4); // Limit to 4 digits
+                setSignUpParam({ ...signUpParam, phoneNumber2: value });
+              }}
               placeholder="0000"
               required
             />
@@ -196,10 +242,29 @@ const SignUpComponent = () => {
               className="w-1/3 p-2 border border-gray-300 rounded text-sm"
               name="phoneNumber3"
               type="tel"
+              inputMode="numeric"
               value={signUpParam.phoneNumber3}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.slice(0, 4); // Limit to 4 digits
+                setSignUpParam({ ...signUpParam, phoneNumber3: value });
+              }}
               placeholder="0000"
               required
+            />
+          </div>
+          {/* Birthday Input */}
+          <div className="w-full">
+            <DatePicker
+              className="w-full p-2 border border-gray-300 rounded text-sm"
+              wrapperClassName="w-full" // Ensures the wrapper is full width
+              selected={signUpParam.birthday ? new Date(signUpParam.birthday) : null}
+              onChange={handleBirthdayChange}
+              dateFormat="yyyy-MM-dd"
+              locale={enUS}
+              placeholderText="Birthday"
+              maxDate={new Date()}
+              showYearDropdown
+              scrollableYearDropdown
             />
           </div>
 

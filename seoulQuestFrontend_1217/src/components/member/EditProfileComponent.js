@@ -161,7 +161,44 @@ const EditProfileComponent = () => {
             </Button>
           </div>
         </section>
-
+    {/* Phone Number Section */}
+    <section className="space-y-4">
+          <h3 className="text-l font-semibold text-gray-800">Phone Number</h3>
+          <div className="flex space-x-2">
+            <input
+              className="w-1/3 p-3 border border-gray-300 rounded"
+              name="phoneNumber1"
+              type="tel"
+              value={userInfo.phoneNumber1}
+              onChange={handleChange}
+              placeholder="010"
+              maxLength="3"
+              required
+            />
+            <span className="text-lg font-bold mt-2">-</span>
+            <input
+              className="w-1/3 p-3 border border-gray-300 rounded"
+              name="phoneNumber2"
+              type="tel"
+              value={userInfo.phoneNumber2}
+              onChange={handleChange}
+              placeholder="0000"
+              maxLength="4"
+              required
+            />
+            <span className="text-lg font-bold mt-2">-</span>
+            <input
+              className="w-1/3 p-3 border border-gray-300 rounded"
+              name="phoneNumber3"
+              type="tel"
+              value={userInfo.phoneNumber3}
+              onChange={handleChange}
+              placeholder="0000"
+              maxLength="4"
+              required
+            />
+          </div>
+        </section>                                    
         {/* Address Section */}
         <section className="space-y-6">
           <h3 className="text-l font-semibold text-gray-800">Address</h3>

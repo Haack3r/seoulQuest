@@ -36,10 +36,10 @@ public class SignUpController {
             // 会員が存在する場合
             String e = member.get().getEmail(); // メールアドレスを取得
             System.out.println(e);
-            return new ResponseEntity<>("이미 회원이 존재하므로 가입불가", HttpStatus.OK);
+            return new ResponseEntity<>("This email is already taken", HttpStatus.OK);
         } else {
             // 会員が存在しない場合
-            return new ResponseEntity<>("회원가입가능", HttpStatus.OK);
+            return new ResponseEntity<>("This email is available", HttpStatus.OK);
         }
 
     }
@@ -64,7 +64,7 @@ public class SignUpController {
     public ResponseEntity<String> showSignUpForm(@RequestBody UserDTO dto) {
         System.out.println("회원 등록 controller : " + dto);
         Member member = memberService.save(dto);
-        return new ResponseEntity<>("회원등록 완료", HttpStatus.OK);
+        return new ResponseEntity<>("Registration successful", HttpStatus.OK);
     }
 
 
