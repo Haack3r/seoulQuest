@@ -61,7 +61,7 @@ public class ContactServiceImpl implements ContactService {
 
         helper.setTo(contact.getEmail());
         helper.setFrom(String.format("%s <%s>", adminName, adminEmail));
-        helper.setSubject("[SeoulCultureQuest] 문의가 접수되었습니다");
+        helper.setSubject("[Seoulhwa] 문의가 접수되었습니다");
 
         String emailContent = String.format(
                 "%s님,\n\n" +
